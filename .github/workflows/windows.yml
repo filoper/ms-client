@@ -1,0 +1,146 @@
+name: Windows
+
+on:
+  push:
+    paths-ignore:
+    - 'docs/**'
+    - '**.md'
+    branches: [master, dev, dev/**]
+  pull_request:
+    paths-ignore:
+    - 'docs/**'
+    - '**.md'
+    branches: [master, dev, dev/**]
+    
+env:
+  BUILD_TYPE: Release
+  INSTALL_LOCATION: ${{github.workspace}}/.local
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: ${{env.INSTALL_LOCATION}}
+        key: ${{runner.os}}-dependencies
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@v1
+      
+    #- name: Set system environment variables
+    #  run: .github/workflows/winenv.bat
+
+    - name: Install Openal-soft
+      run: |
+        mkdir thirdparty
+        cd thirdparty
+        git clone https://github.com/kcat/openal-soft
+        cd openal-soft
+        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION"
+        cmake --build build --config "$env:BUILD_TYPE"
+        cmake --install build --config "$env:BUILD_TYPE"
+
+    - name: Install Alure
+      run: |
+        cd thirdparty
+        git clone https://github.com/kcat/alure
+        cd alure
+        cmake -Bbuild -GNinja -DCMAKE_PREFIX_PATH="$env:INSTALL_LOCATION" -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION"
+        cmake --build build --config "$env:BUILD_TYPE"
+      # cmake --install build --config "$env:BUILD_TYPE"
+
+    - name: Install lz4
+      run: |
+        cd thirdparty
+        Invoke-WebRequest -Uri https://github.com/lz4/lz4/releases/download/v1.9.2/lz4_win64_v1_9_2.zip -OutFile lz4.zip
+        Expand-Archive ./lz4.zip -DestinationPath ./lz4
+        Remove-Item lz4.zip
+        ls lz4/dll
+        echo ----
+        ls  lz4/static
+       # $content = Get-Content -Path 'Makefile'
+       # $content = $content -replace 'BUILD_STATIC:=yes', 'BUILD_STATIC:=yes`nCC = cl.exe'
+       # $content | Set-Content -Path 'Makefile'
+       # make all
+
+    - name: Install Nx library
+      run: |
+        cd thirdparty
+        ls
+        mkdir NoLifeNx
+        cd NoLifeNx
+        git clone https://github.com/lain3d/NoLifeNx nlnx
+        cd nlnx
+        $content = Get-Content -Path 'CMakeLists.txt'
+        $content = $content.replace('/../../lz4/lib)', '/../../lz4/include)')
+        $content = $content.replace('/../../lz4/lib/liblz4.a)', '/../../lz4/dll/liblz4.lib)')
+        $content | Set-Content -Path 'CMakeLists.txt'
+        $content_check = Get-Content -Path 'CMakeLists.txt'
+        echo $content_check
+        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
+        cmake --build build --config "$env:BUILD_TYPE"
+        ls build
+       # cmake --install build --config "$env:BUILD_TYPE"
+
+    - name: Install Freetype
+      run: |
+        cd thirdparty
+        Invoke-WebRequest -Uri https://github.com/ubawurinna/freetype-windows-binaries/archive/v2.10.2.zip -OutFile freetype.zip
+        Expand-Archive ./freetype.zip -DestinationPath ./freetype
+        Remove-Item freetype.zip
+
+    - name: Install Glad
+      run: |
+        cd thirdparty
+        git clone https://github.com/Dav1dde/glad.git
+        cd glad
+        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
+        cmake --build build --config "$env:BUILD_TYPE"
+       # cmake --install build --config "$env:BUILD_TYPE"
+
+    - name: Install glfw
+      run: |
+        cd thirdparty
+        git clone https://github.com/glfw/glfw 
+        cd glfw
+        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
+        cmake --build build --config "$env:BUILD_TYPE"
+        ls build/src
+      # cmake --install build --config "$env:BUILD_TYPE"
+
+    - name: Install Asio
+      run: |
+        cd thirdparty
+        git clone https://github.com/chriskohlhoff/asio.git
+
+    - name: Install Stb
+      run: |
+        cd thirdparty
+        git clone https://github.com/nothings/stb.git
+
+    - name: Install GoogleTest
+      run: |
+        cd thirdparty
+        git clone https://github.com/google/googletest.git --branch release-1.10.0
+        cd googletest
+        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE" -Dgtest_force_shared_crt=1
+        cmake --build build --config "$env:BUILD_TYPE"
+        cmake --build build --target install --config "$env:BUILD_TYPE"
+
+    - name: Configure
+      run: | 
+        cmake -Bbuild -GNinja -DCMAKE_PREFIX_PATH="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE" -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DENABLE_CODE_COVERAGE=1 -DBOOST_ROOT="$env:BOOST_ROOT_1_72_0"
+
+    - name: Build
+      run: cmake --build build --config "$env:BUILD_TYPE"
+    
+    - name: Run tests
+      run: |
+        cd build
+        ctest -C $BUILD_TYPE -VV

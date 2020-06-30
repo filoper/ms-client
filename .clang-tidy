@@ -1,0 +1,4 @@
+Checks: '*,-modernize-use-trailing-return-type,-fuchsia-*'
+WarningsAsErrors: '*'
+HeaderFilterRegex: ''
+FormatStyle: file

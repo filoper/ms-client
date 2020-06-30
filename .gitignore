@@ -1,0 +1,61 @@
+/.vs
+/.vscode
+/x64
+.DS_store
+
+CMakeCache.*
+CMakeFiles/*
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
+# Visual Studio 2017 auto generated files
+Generated\ Files/
+
+*.nx
+*.aps
+*.log
+*.tlog
+
+Settings
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+clagnd
+.clangd
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+[Bb]uild/*
+CMakeCache.*
+CMakeFiles/*
+[Tt]esting/*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# deps
+thirdparty**
+
+.vagrant/

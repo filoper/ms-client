@@ -8,6 +8,12 @@ endif()
 
 project(msclient)
 
+# Set project options
+include(cmake/StandardSettings.cmake)
+include(cmake/Utils.cmake)
+include(cmake/Doxygen.cmake)
+include(cmake/CompilerWarnings.cmake)
+
 set(CMAKE_CXX_STANDARD 20)
 
 if (APPLE)
@@ -228,6 +234,11 @@ add_executable(msclient
     MapleStory.cpp
     Audio/membuf.cpp 
 )
+
+set_project_warnings(${PROJECT_NAME})
+
+# Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)
+add_clang_format_target()
 
 TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/include)
 TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/stb)

@@ -42,7 +42,7 @@ enum Type {
 };
 
 extern const EnumMap<Type, const char *> messages;
-};  // namespace Messages
+}  // namespace Messages
 
 class InChatMessage {
 public:

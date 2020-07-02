@@ -41,5 +41,5 @@ constexpr std::array<const char *, NUM_FILES> filenames = {
 // Initialize NX
 // When successful test if the UI file is the correct version
 Error init();
-};  // namespace NxFiles
+}  // namespace NxFiles
 }  // namespace ms

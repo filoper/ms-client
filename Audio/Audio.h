@@ -46,7 +46,7 @@ public:
         if (stream->fail()) {
             throw std::runtime_error("Failed to create stream.");
         }
-        return std::move(stream);
+        return stream;
     }
 };
 

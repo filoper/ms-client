@@ -44,5 +44,5 @@ enum Type {
 };
 
 Type by_value(int32_t value);
-};  // namespace Weapon
+}  // namespace Weapon
 }  // namespace ms

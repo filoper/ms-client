@@ -78,5 +78,5 @@ Id baseof(Id value);
 Id secondof(Id value);
 
 extern const EnumMap<Id, std::string> names;
-};  // namespace Stance
+}  // namespace Stance
 }  // namespace ms

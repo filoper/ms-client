@@ -61,5 +61,5 @@ enum Id : int16_t {
 Id by_id(size_t id);
 
 constexpr Enumeration<Id> values;
-};  // namespace EquipSlot
+}  // namespace EquipSlot
 }  // namespace ms

@@ -47,5 +47,5 @@ int32_t value_of(Id value);
 
 constexpr Enumeration<Id> values;
 extern const char *names[Id::LENGTH];
-};  // namespace EquipStat
+}  // namespace EquipStat
 }  // namespace ms

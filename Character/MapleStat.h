@@ -49,5 +49,5 @@ enum Id {
 Id by_id(size_t id);
 
 extern const EnumMap<Id, int32_t> codes;
-};  // namespace MapleStat
+}  // namespace MapleStat
 }  // namespace ms

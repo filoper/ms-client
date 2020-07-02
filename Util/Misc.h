@@ -41,7 +41,7 @@ template<typename T>
 inline T or_zero(const std::string &str) {
     return or_default<T>(str, T(0));
 }
-};  // namespace string_conversion
+}  // namespace string_conversion
 
 namespace string_format {
 // Format a number string so that each 3 decimal points
@@ -53,7 +53,7 @@ std::string extend_id(int32_t id, size_t length);
 
 // Cut off a string at a specified length with an ellipsis
 void format_with_ellipsis(Text &input, size_t length);
-};  // namespace string_format
+}  // namespace string_format
 
 namespace bytecode {
 // Check if a bit mask contains the specified value

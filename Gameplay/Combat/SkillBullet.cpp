@@ -27,27 +27,27 @@ Animation RegularBullet::get(const Char &, int32_t bulletid) const {
 }
 
 SingleBullet::SingleBullet(nl::node src) {
-    ball = src["ball"];
+    ball_ = src["ball"];
 }
 
 Animation SingleBullet::get(const Char &, int32_t) const {
-    return ball.animation;
+    return ball_.animation;
 }
 
 BySkillLevelBullet::BySkillLevelBullet(nl::node src, int32_t id) {
-    skillid = id;
+    skill_id_ = id;
 
     for (auto sub : src["level"]) {
         auto level = string_conversion::or_zero<int32_t>(sub.name());
-        bullets[level] = sub["ball"];
+        bullets_[level] = sub["ball"];
     }
 }
 
 Animation BySkillLevelBullet::get(const Char &user, int32_t) const {
-    int32_t level = user.get_skilllevel(skillid);
-    auto iter = bullets.find(level);
+    int32_t level = user.get_skilllevel(skill_id_);
+    auto iter = bullets_.find(level);
 
-    if (iter != bullets.end())
+    if (iter != bullets_.end())
         return iter->second.animation;
     else
         return {};

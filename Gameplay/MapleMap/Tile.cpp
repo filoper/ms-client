@@ -23,19 +23,19 @@
 namespace ms {
 Tile::Tile(nl::node src, const std::string &ts) {
     nl::node dsrc = nl::nx::map["Tile"][ts][src["u"]][src["no"]];
-    texture = Texture(nl::nx::map["Tile"][ts][src["u"]][src["no"]]);
-    pos = Point<int16_t>(src["x"], src["y"]);
-    z = dsrc["z"];
+    texture_ = Texture(nl::nx::map["Tile"][ts][src["u"]][src["no"]]);
+    pos_ = Point<int16_t>(src["x"], src["y"]);
+    z_ = dsrc["z"];
 
-    if (z == 0)
-        z = dsrc["zM"];
+    if (z_ == 0)
+        z_ = dsrc["zM"];
 }
 
 void Tile::draw(Point<int16_t> viewpos) const {
-    texture.draw(pos + viewpos);
+    texture_.draw(pos_ + viewpos);
 }
 
 uint8_t Tile::getz() const {
-    return z;
+    return z_;
 }
 }  // namespace ms

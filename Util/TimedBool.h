@@ -26,49 +26,49 @@ namespace ms {
 class TimedBool {
 public:
     TimedBool() {
-        value = false;
-        delay = 0;
-        last = 0;
+        value_ = false;
+        delay_ = 0;
+        last_ = 0;
     }
 
-    explicit operator bool() const { return value; }
+    explicit operator bool() const { return value_; }
 
     void set_for(int64_t millis) {
-        last = millis;
-        delay = millis;
-        value = true;
+        last_ = millis;
+        delay_ = millis;
+        value_ = true;
     }
 
     void update() { update(Constants::TIMESTEP); }
 
     void update(uint16_t timestep) {
-        if (value) {
-            if (timestep >= delay) {
-                value = false;
-                delay = 0;
+        if (value_) {
+            if (timestep >= delay_) {
+                value_ = false;
+                delay_ = 0;
             } else {
-                delay -= timestep;
+                delay_ -= timestep;
             }
         }
     }
 
     void operator=(bool b) {
-        value = b;
-        delay = 0;
-        last = 0;
+        value_ = b;
+        delay_ = 0;
+        last_ = 0;
     }
 
-    bool operator==(bool b) const { return value == b; }
+    bool operator==(bool b) const { return value_ == b; }
 
-    bool operator!=(bool b) const { return value != b; }
+    bool operator!=(bool b) const { return value_ != b; }
 
     float alpha() const {
-        return 1.0f - static_cast<float>(static_cast<float>(delay) / last);
+        return 1.0f - static_cast<float>(static_cast<float>(delay_) / last_);
     }
 
 private:
-    int64_t last;
-    int64_t delay;
-    bool value;
+    int64_t last_;
+    int64_t delay_;
+    bool value_;
 };
 }  // namespace ms

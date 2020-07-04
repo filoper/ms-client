@@ -54,13 +54,13 @@ public:
     Loot find_loot_at(Point<int16_t> playerpos);
 
 private:
-    MapObjects drops;
+    MapObjects drops_;
 
     enum MesoIcon { BRONZE, GOLD, BUNDLE, BAG, NUM_ICONS };
 
-    std::array<Animation, MesoIcon::NUM_ICONS> mesoicons;
-    bool lootenabled;
+    std::array<Animation, MesoIcon::NUM_ICONS> meso_icons_;
+    bool loot_enabled_;
 
-    std::queue<DropSpawn> spawns;
+    std::queue<DropSpawn> spawns_;
 };
 }  // namespace ms

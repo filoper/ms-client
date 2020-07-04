@@ -61,72 +61,72 @@ UIItemInventory::UIItemInventory(const Inventory &invent) :
     nl::node tabdis = Tab["disabled"];
 
     nl::node close = nl::nx::ui["Basic.img"]["BtClose3"];
-    buttons[Buttons::BT_CLOSE] = std::make_unique<MapleButton>(close);
+    buttons_[Buttons::BT_CLOSE] = std::make_unique<MapleButton>(close);
 
-    buttons[Buttons::BT_TAB_EQUIP] =
+    buttons_[Buttons::BT_TAB_EQUIP] =
         std::make_unique<TwoSpriteButton>(tabdis["0"], taben["0"]);
-    buttons[Buttons::BT_TAB_USE] =
+    buttons_[Buttons::BT_TAB_USE] =
         std::make_unique<TwoSpriteButton>(tabdis["1"], taben["1"]);
-    buttons[Buttons::BT_TAB_ETC] =
+    buttons_[Buttons::BT_TAB_ETC] =
         std::make_unique<TwoSpriteButton>(tabdis["2"], taben["2"]);
-    buttons[Buttons::BT_TAB_SETUP] =
+    buttons_[Buttons::BT_TAB_SETUP] =
         std::make_unique<TwoSpriteButton>(tabdis["3"], taben["3"]);
-    buttons[Buttons::BT_TAB_CASH] =
+    buttons_[Buttons::BT_TAB_CASH] =
         std::make_unique<TwoSpriteButton>(tabdis["4"], taben["4"]);
 
-    buttons[Buttons::BT_COIN] = std::make_unique<MapleButton>(Item["BtCoin3"]);
-    buttons[Buttons::BT_POINT] =
+    buttons_[Buttons::BT_COIN] = std::make_unique<MapleButton>(Item["BtCoin3"]);
+    buttons_[Buttons::BT_POINT] =
         std::make_unique<MapleButton>(Item["BtPoint0"]);
-    buttons[Buttons::BT_GATHER] =
+    buttons_[Buttons::BT_GATHER] =
         std::make_unique<MapleButton>(Item["BtGather3"]);
-    buttons[Buttons::BT_SORT] = std::make_unique<MapleButton>(Item["BtSort3"]);
-    buttons[Buttons::BT_FULL] = std::make_unique<MapleButton>(Item["BtFull3"]);
-    buttons[Buttons::BT_SMALL] =
+    buttons_[Buttons::BT_SORT] = std::make_unique<MapleButton>(Item["BtSort3"]);
+    buttons_[Buttons::BT_FULL] = std::make_unique<MapleButton>(Item["BtFull3"]);
+    buttons_[Buttons::BT_SMALL] =
         std::make_unique<MapleButton>(Item["BtSmall3"]);
-    buttons[Buttons::BT_POT] = std::make_unique<MapleButton>(Item["BtPot3"]);
-    buttons[Buttons::BT_UPGRADE] =
+    buttons_[Buttons::BT_POT] = std::make_unique<MapleButton>(Item["BtPot3"]);
+    buttons_[Buttons::BT_UPGRADE] =
         std::make_unique<MapleButton>(Item["BtUpgrade3"]);
-    buttons[Buttons::BT_APPRAISE] =
+    buttons_[Buttons::BT_APPRAISE] =
         std::make_unique<MapleButton>(Item["BtAppraise3"]);
-    buttons[Buttons::BT_EXTRACT] =
+    buttons_[Buttons::BT_EXTRACT] =
         std::make_unique<MapleButton>(Item["BtExtract3"]);
-    buttons[Buttons::BT_DISASSEMBLE] =
+    buttons_[Buttons::BT_DISASSEMBLE] =
         std::make_unique<MapleButton>(Item["BtDisassemble3"]);
-    buttons[Buttons::BT_TOAD] = std::make_unique<MapleButton>(Item["BtToad3"]);
+    buttons_[Buttons::BT_TOAD] = std::make_unique<MapleButton>(Item["BtToad3"]);
 
-    buttons[Buttons::BT_COIN_SM] =
+    buttons_[Buttons::BT_COIN_SM] =
         std::make_unique<MapleButton>(Item["BtCoin4"]);
-    buttons[Buttons::BT_POINT_SM] =
+    buttons_[Buttons::BT_POINT_SM] =
         std::make_unique<MapleButton>(Item["BtPoint1"]);
-    buttons[Buttons::BT_GATHER_SM] =
+    buttons_[Buttons::BT_GATHER_SM] =
         std::make_unique<MapleButton>(Item["BtGather4"]);
-    buttons[Buttons::BT_SORT_SM] =
+    buttons_[Buttons::BT_SORT_SM] =
         std::make_unique<MapleButton>(Item["BtSort4"]);
-    buttons[Buttons::BT_FULL_SM] =
+    buttons_[Buttons::BT_FULL_SM] =
         std::make_unique<MapleButton>(Item["BtFull4"]);
-    buttons[Buttons::BT_SMALL_SM] =
+    buttons_[Buttons::BT_SMALL_SM] =
         std::make_unique<MapleButton>(Item["BtSmall4"]);
-    buttons[Buttons::BT_POT_SM] = std::make_unique<MapleButton>(Item["BtPot4"]);
-    buttons[Buttons::BT_UPGRADE_SM] =
+    buttons_[Buttons::BT_POT_SM] = std::make_unique<MapleButton>(Item["BtPot4"]);
+    buttons_[Buttons::BT_UPGRADE_SM] =
         std::make_unique<MapleButton>(Item["BtUpgrade4"]);
-    buttons[Buttons::BT_APPRAISE_SM] =
+    buttons_[Buttons::BT_APPRAISE_SM] =
         std::make_unique<MapleButton>(Item["BtAppraise4"]);
-    buttons[Buttons::BT_EXTRACT_SM] =
+    buttons_[Buttons::BT_EXTRACT_SM] =
         std::make_unique<MapleButton>(Item["BtExtract4"]);
-    buttons[Buttons::BT_DISASSEMBLE_SM] =
+    buttons_[Buttons::BT_DISASSEMBLE_SM] =
         std::make_unique<MapleButton>(Item["BtDisassemble4"]);
-    buttons[Buttons::BT_TOAD_SM] =
+    buttons_[Buttons::BT_TOAD_SM] =
         std::make_unique<MapleButton>(Item["BtToad4"]);
-    buttons[Buttons::BT_CASHSHOP] =
+    buttons_[Buttons::BT_CASHSHOP] =
         std::make_unique<MapleButton>(Item["BtCashshop"]);
 
-    buttons[Buttons::BT_POT]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_POT_SM]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_EXTRACT]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_EXTRACT_SM]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_DISASSEMBLE]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_DISASSEMBLE_SM]->set_state(Button::State::DISABLED);
-    buttons[button_by_tab(tab)]->set_state(Button::State::PRESSED);
+    buttons_[Buttons::BT_POT]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_POT_SM]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_EXTRACT]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_EXTRACT_SM]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_DISASSEMBLE]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_DISASSEMBLE_SM]->set_state(Button::State::DISABLED);
+    buttons_[button_by_tab(tab)]->set_state(Button::State::PRESSED);
 
     mesolabel =
         Text(Text::Font::A11M, Text::Alignment::RIGHT, Color::Name::BLACK);
@@ -166,22 +166,22 @@ UIItemInventory::UIItemInventory(const Inventory &invent) :
 void UIItemInventory::draw(float alpha) const {
     UIElement::draw_sprites(alpha);
 
-    Point<int16_t> mesolabel_pos = position + Point<int16_t>(127, 262);
-    Point<int16_t> maplepointslabel_pos = position + Point<int16_t>(159, 279);
+    Point<int16_t> mesolabel_pos = position_ + Point<int16_t>(127, 262);
+    Point<int16_t> maplepointslabel_pos = position_ + Point<int16_t>(159, 279);
 
     if (full_enabled) {
-        full_backgrnd.draw(position);
-        full_backgrnd2.draw(position);
-        full_backgrnd3.draw(position);
+        full_backgrnd.draw(position_);
+        full_backgrnd2.draw(position_);
+        full_backgrnd3.draw(position_);
 
         mesolabel.draw(mesolabel_pos + Point<int16_t>(3, 70));
         maplepointslabel.draw(maplepointslabel_pos + Point<int16_t>(181, 53));
     } else {
-        backgrnd.draw(position);
-        backgrnd2.draw(position);
-        backgrnd3.draw(position);
+        backgrnd.draw(position_);
+        backgrnd2.draw(position_);
+        backgrnd3.draw(position_);
 
-        slider.draw(position + Point<int16_t>(0, 1));
+        slider.draw(position_ + Point<int16_t>(0, 1));
 
         mesolabel.draw(mesolabel_pos);
         maplepointslabel.draw(maplepointslabel_pos);
@@ -201,24 +201,24 @@ void UIItemInventory::draw(float alpha) const {
             auto &icon = icons.at(i);
 
             if (icon && i >= firstslot && i <= lastslot)
-                icon->draw(position + slotpos);
+                icon->draw(position_ + slotpos);
         } else {
             if (i > numslots && i <= lastslot)
-                disabled.draw(position + slotpos);
+                disabled.draw(position_ + slotpos);
         }
     }
 
     int16_t bulletslot = inventory.get_bulletslot();
 
     if (tab == InventoryType::Id::USE && is_visible(bulletslot))
-        projectile.draw(position + get_slotpos(bulletslot));
+        projectile.draw(position_ + get_slotpos(bulletslot));
 
     if (tab == newtab) {
-        newitemtab.draw(position + get_tabpos(newtab), alpha);
+        newitemtab.draw(position_ + get_tabpos(newtab), alpha);
 
         if (is_visible(newslot))
             newitemslot.draw(
-                position + get_slotpos(newslot) + Point<int16_t>(1, 1),
+                position_ + get_slotpos(newslot) + Point<int16_t>(1, 1),
                 alpha);
     }
 
@@ -320,8 +320,8 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
         uint16_t row = slotrange.at(tab).first / COLUMNS;
         slider.setrows(row, 6, 1 + inventory.get_slotmax(tab) / COLUMNS);
 
-        buttons[button_by_tab(oldtab)]->set_state(Button::State::NORMAL);
-        buttons[button_by_tab(tab)]->set_state(Button::State::PRESSED);
+        buttons_[button_by_tab(oldtab)]->set_state(Button::State::NORMAL);
+        buttons_[button_by_tab(tab)]->set_state(Button::State::PRESSED);
 
         load_icons();
         set_sort(false);
@@ -331,7 +331,7 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
 }
 
 void UIItemInventory::doubleclick(Point<int16_t> cursorpos) {
-    int16_t slot = slot_by_position(cursorpos - position);
+    int16_t slot = slot_by_position(cursorpos - position_);
 
     if (icons.count(slot) && is_visible(slot)) {
         if (int32_t item_id = inventory.get_item_id(tab, slot)) {
@@ -351,7 +351,7 @@ void UIItemInventory::doubleclick(Point<int16_t> cursorpos) {
 }
 
 bool UIItemInventory::send_icon(const Icon &icon, Point<int16_t> cursorpos) {
-    int16_t slot = slot_by_position(cursorpos - position);
+    int16_t slot = slot_by_position(cursorpos - position_);
 
     if (slot > 0) {
         int32_t item_id = inventory.get_item_id(tab, slot);
@@ -378,13 +378,13 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
                                            Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(pressed, cursorpos);
 
-    if (dragged) {
+    if (dragged_) {
         clear_tooltip();
 
         return dstate;
     }
 
-    Point<int16_t> cursor_relative = cursorpos - position;
+    Point<int16_t> cursor_relative = cursorpos - position_;
 
     if (!full_enabled && slider.isenabled()) {
         Cursor::State sstate = slider.send_cursor(cursor_relative, pressed);
@@ -513,27 +513,27 @@ void UIItemInventory::set_sort(bool enabled) {
 
     if (full_enabled) {
         if (sort_enabled) {
-            buttons[Buttons::BT_SORT]->set_active(false);
-            buttons[Buttons::BT_SORT_SM]->set_active(true);
-            buttons[Buttons::BT_GATHER]->set_active(false);
-            buttons[Buttons::BT_GATHER_SM]->set_active(false);
+            buttons_[Buttons::BT_SORT]->set_active(false);
+            buttons_[Buttons::BT_SORT_SM]->set_active(true);
+            buttons_[Buttons::BT_GATHER]->set_active(false);
+            buttons_[Buttons::BT_GATHER_SM]->set_active(false);
         } else {
-            buttons[Buttons::BT_SORT]->set_active(false);
-            buttons[Buttons::BT_SORT_SM]->set_active(false);
-            buttons[Buttons::BT_GATHER]->set_active(false);
-            buttons[Buttons::BT_GATHER_SM]->set_active(true);
+            buttons_[Buttons::BT_SORT]->set_active(false);
+            buttons_[Buttons::BT_SORT_SM]->set_active(false);
+            buttons_[Buttons::BT_GATHER]->set_active(false);
+            buttons_[Buttons::BT_GATHER_SM]->set_active(true);
         }
     } else {
         if (sort_enabled) {
-            buttons[Buttons::BT_SORT]->set_active(true);
-            buttons[Buttons::BT_SORT_SM]->set_active(false);
-            buttons[Buttons::BT_GATHER]->set_active(false);
-            buttons[Buttons::BT_GATHER_SM]->set_active(false);
+            buttons_[Buttons::BT_SORT]->set_active(true);
+            buttons_[Buttons::BT_SORT_SM]->set_active(false);
+            buttons_[Buttons::BT_GATHER]->set_active(false);
+            buttons_[Buttons::BT_GATHER_SM]->set_active(false);
         } else {
-            buttons[Buttons::BT_SORT]->set_active(false);
-            buttons[Buttons::BT_SORT_SM]->set_active(false);
-            buttons[Buttons::BT_GATHER]->set_active(true);
-            buttons[Buttons::BT_GATHER_SM]->set_active(false);
+            buttons_[Buttons::BT_SORT]->set_active(false);
+            buttons_[Buttons::BT_SORT_SM]->set_active(false);
+            buttons_[Buttons::BT_GATHER]->set_active(true);
+            buttons_[Buttons::BT_GATHER_SM]->set_active(false);
         }
     }
 }
@@ -550,7 +550,7 @@ void UIItemInventory::clear_new() {
 void UIItemInventory::toggle_active() {
     UIElement::toggle_active();
 
-    if (!active) {
+    if (!active_) {
         clear_new();
         clear_tooltip();
     }
@@ -735,46 +735,46 @@ void UIItemInventory::set_full(bool enabled) {
     full_enabled = enabled;
 
     if (full_enabled) {
-        dimension = bg_full_dimensions;
+        dimension_ = bg_full_dimensions;
 
-        buttons[Buttons::BT_FULL]->set_active(false);
-        buttons[Buttons::BT_FULL_SM]->set_active(false);
-        buttons[Buttons::BT_SMALL]->set_active(false);
-        buttons[Buttons::BT_SMALL_SM]->set_active(true);
+        buttons_[Buttons::BT_FULL]->set_active(false);
+        buttons_[Buttons::BT_FULL_SM]->set_active(false);
+        buttons_[Buttons::BT_SMALL]->set_active(false);
+        buttons_[Buttons::BT_SMALL_SM]->set_active(true);
     } else {
-        dimension = bg_dimensions;
+        dimension_ = bg_dimensions;
 
-        buttons[Buttons::BT_FULL]->set_active(true);
-        buttons[Buttons::BT_FULL_SM]->set_active(false);
-        buttons[Buttons::BT_SMALL]->set_active(false);
-        buttons[Buttons::BT_SMALL_SM]->set_active(false);
+        buttons_[Buttons::BT_FULL]->set_active(true);
+        buttons_[Buttons::BT_FULL_SM]->set_active(false);
+        buttons_[Buttons::BT_SMALL]->set_active(false);
+        buttons_[Buttons::BT_SMALL_SM]->set_active(false);
     }
 
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
     int16_t adj_x = full_enabled ? 20 : 22;
-    buttons[Buttons::BT_CLOSE]->set_position(
-        Point<int16_t>(dimension.x() - adj_x, 6));
+    buttons_[Buttons::BT_CLOSE]->set_position(
+        Point<int16_t>(dimension_.x() - adj_x, 6));
 
-    buttons[Buttons::BT_COIN]->set_active(!enabled);
-    buttons[Buttons::BT_POINT]->set_active(!enabled);
-    buttons[Buttons::BT_POT]->set_active(!enabled);
-    buttons[Buttons::BT_UPGRADE]->set_active(!enabled);
-    buttons[Buttons::BT_APPRAISE]->set_active(!enabled);
-    buttons[Buttons::BT_EXTRACT]->set_active(!enabled);
-    buttons[Buttons::BT_DISASSEMBLE]->set_active(!enabled);
-    buttons[Buttons::BT_TOAD]->set_active(!enabled);
-    buttons[Buttons::BT_CASHSHOP]->set_active(!enabled);
+    buttons_[Buttons::BT_COIN]->set_active(!enabled);
+    buttons_[Buttons::BT_POINT]->set_active(!enabled);
+    buttons_[Buttons::BT_POT]->set_active(!enabled);
+    buttons_[Buttons::BT_UPGRADE]->set_active(!enabled);
+    buttons_[Buttons::BT_APPRAISE]->set_active(!enabled);
+    buttons_[Buttons::BT_EXTRACT]->set_active(!enabled);
+    buttons_[Buttons::BT_DISASSEMBLE]->set_active(!enabled);
+    buttons_[Buttons::BT_TOAD]->set_active(!enabled);
+    buttons_[Buttons::BT_CASHSHOP]->set_active(!enabled);
 
-    buttons[Buttons::BT_COIN_SM]->set_active(enabled);
-    buttons[Buttons::BT_POINT_SM]->set_active(enabled);
-    buttons[Buttons::BT_POT_SM]->set_active(enabled);
-    buttons[Buttons::BT_UPGRADE_SM]->set_active(enabled);
-    buttons[Buttons::BT_APPRAISE_SM]->set_active(enabled);
-    buttons[Buttons::BT_EXTRACT_SM]->set_active(enabled);
-    buttons[Buttons::BT_DISASSEMBLE_SM]->set_active(enabled);
-    buttons[Buttons::BT_TOAD_SM]->set_active(enabled);
-    buttons[Buttons::BT_CASHSHOP]->set_active(enabled);
+    buttons_[Buttons::BT_COIN_SM]->set_active(enabled);
+    buttons_[Buttons::BT_POINT_SM]->set_active(enabled);
+    buttons_[Buttons::BT_POT_SM]->set_active(enabled);
+    buttons_[Buttons::BT_UPGRADE_SM]->set_active(enabled);
+    buttons_[Buttons::BT_APPRAISE_SM]->set_active(enabled);
+    buttons_[Buttons::BT_EXTRACT_SM]->set_active(enabled);
+    buttons_[Buttons::BT_DISASSEMBLE_SM]->set_active(enabled);
+    buttons_[Buttons::BT_TOAD_SM]->set_active(enabled);
+    buttons_[Buttons::BT_CASHSHOP]->set_active(enabled);
 
     set_sort(sort_enabled);
     load_icons();

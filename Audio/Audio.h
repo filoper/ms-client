@@ -34,15 +34,15 @@
 
 class FileFactory final : public alure::FileIOFactory {
 private:
-    std::unordered_map<std::string, membuf *> *audiodb;
+    std::unordered_map<std::string, membuf *> *audiodb_;
 
 public:
     FileFactory(std::unordered_map<std::string, membuf *> *audiodb_in) :
-        audiodb(audiodb_in) {}
+        audiodb_(audiodb_in) {}
 
     alure::UniquePtr<std::istream> openFile(
         const alure::String &name) noexcept override {
-        auto stream = alure::MakeUnique<std::istream>(audiodb->at(name));
+        auto stream = alure::MakeUnique<std::istream>(audiodb_->at(name));
         if (stream->fail()) {
             throw std::runtime_error("Failed to create stream.");
         }
@@ -103,7 +103,7 @@ public:
     static bool set_sfxvolume(uint8_t volume);
 
 private:
-    size_t id;
+    size_t id_;
 
     static size_t add_sound(nl::node src);
 
@@ -115,11 +115,11 @@ private:
 
     static std::string format_id(int32_t itemid);
 
-    static EnumMap<Name, size_t> soundids;
-    static std::unordered_map<std::string, size_t> itemids;
-    alure::Source sound_src;
-    static size_t source_inc;
-    static alure::Source sound_srcs[100];
+    static EnumMap<Name, size_t> soundids_;
+    static std::unordered_map<std::string, size_t> itemids_;
+    alure::Source sound_src_;
+    static size_t source_inc_;
+    static alure::Source sound_srcs_[100];
 };
 
 class Music {
@@ -137,13 +137,13 @@ public:
     static void update_context();
 
 private:
-    std::string path;
-    static std::unordered_map<std::string, membuf *> audiodb;
-    static alure::DeviceManager devMgr;
-    static alure::Device dev;
-    static alure::Context ctx;
-    static alure::Source music_src;
-    static alure::Buffer music_buff;
+    std::string path_;
+    static std::unordered_map<std::string, membuf *> audiodb_;
+    static alure::DeviceManager dev_mngr_;
+    static alure::Device dev_;
+    static alure::Context ctx_;
+    static alure::Source music_src_;
+    static alure::Buffer music_buff_;
 
     friend Sound;
 };

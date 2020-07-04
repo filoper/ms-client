@@ -38,8 +38,8 @@ public:
     uint8_t getz() const;
 
 private:
-    Texture texture;
-    Point<int16_t> pos;
-    uint8_t z;
+    Texture texture_;
+    Point<int16_t> pos_;
+    uint8_t z_;
 };
 }  // namespace ms

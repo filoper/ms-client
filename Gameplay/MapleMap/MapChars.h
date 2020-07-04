@@ -56,8 +56,8 @@ public:
     Optional<OtherChar> get_char(int32_t cid);
 
 private:
-    MapObjects chars;
+    MapObjects chars_;
 
-    std::queue<CharSpawn> spawns;
+    std::queue<CharSpawn> spawns_;
 };
 }  // namespace ms

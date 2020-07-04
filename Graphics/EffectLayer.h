@@ -50,23 +50,23 @@ private:
     class Effect {
     public:
         Effect(const Animation &a, const DrawArgument &args, float s) :
-            sprite(a, args),
-            speed(s) {}
+            sprite_(a, args),
+            speed_(s) {}
 
         void draw(Point<int16_t> position, float alpha) const {
-            sprite.draw(position, alpha);
+            sprite_.draw(position, alpha);
         }
 
         bool update() {
-            return sprite.update(
-                static_cast<uint16_t>(Constants::TIMESTEP * speed));
+            return sprite_.update(
+                static_cast<uint16_t>(Constants::TIMESTEP * speed_));
         }
 
     private:
-        Sprite sprite;
-        float speed;
+        Sprite sprite_;
+        float speed_;
     };
 
-    std::map<int8_t, std::list<Effect>> effects;
+    std::map<int8_t, std::list<Effect>> effects_;
 };
 }  // namespace ms

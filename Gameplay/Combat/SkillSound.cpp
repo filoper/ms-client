@@ -24,15 +24,15 @@ namespace ms {
 SingleSkillSound::SingleSkillSound(std::string strid) {
     nl::node soundsrc = nl::nx::sound["Skill.img"][strid];
 
-    usesound = soundsrc["Use"];
-    hitsound = soundsrc["Hit"];
+    use_sound_ = soundsrc["Use"];
+    hit_sound_ = soundsrc["Hit"];
 }
 
 void SingleSkillSound::play_use() {
-    usesound.play();
+    use_sound_.play();
 }
 
 void SingleSkillSound::play_hit() {
-    hitsound.play();
+    hit_sound_.play();
 }
 }  // namespace ms

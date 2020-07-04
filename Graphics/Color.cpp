@@ -22,15 +22,15 @@
 
 namespace ms {
 const float *Color::data() const {
-    return rgba.data();
+    return rgba_.data();
 }
 
 Color::underlying_t::const_iterator Color::begin() const {
-    return rgba.begin();
+    return rgba_.begin();
 }
 
 Color::underlying_t::const_iterator Color::end() const {
-    return rgba.end();
+    return rgba_.end();
 }
 
 Color Color::blend(const Color &other, float alpha) const {

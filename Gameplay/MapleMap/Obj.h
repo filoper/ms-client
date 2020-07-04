@@ -37,9 +37,9 @@ public:
     uint8_t getz() const;
 
 private:
-    Animation animation;
-    Point<int16_t> pos;
-    uint8_t z;
-    bool flip;
+    Animation animation_;
+    Point<int16_t> pos_;
+    uint8_t z_;
+    bool flip_;
 };
 }  // namespace ms

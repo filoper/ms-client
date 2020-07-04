@@ -37,9 +37,9 @@ UIStatsInfo::UIStatsInfo(const CharStats &st) :
     nl::node abilityTitle = detail["abilityTitle"];
     nl::node metierLine = detail["metierLine"];
 
-    sprites.emplace_back(main["backgrnd"]);
-    sprites.emplace_back(main["backgrnd2"]);
-    sprites.emplace_back(main["backgrnd3"]);
+    sprites_.emplace_back(main["backgrnd"]);
+    sprites_.emplace_back(main["backgrnd2"]);
+    sprites_.emplace_back(main["backgrnd3"]);
 
     textures_detail.emplace_back(detail["backgrnd"]);
     textures_detail.emplace_back(detail["backgrnd2"]);
@@ -55,49 +55,49 @@ UIStatsInfo::UIStatsInfo(const CharStats &st) :
     inner_ability[true] = metierLine["activated"]["0"];
     inner_ability[false] = metierLine["disabled"]["0"];
 
-    buttons[Buttons::BT_CLOSE] =
+    buttons_[Buttons::BT_CLOSE] =
         std::make_unique<MapleButton>(close, Point<int16_t>(190, 6));
-    buttons[Buttons::BT_HP] = std::make_unique<MapleButton>(main["BtHpUp"]);
-    buttons[Buttons::BT_MP] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_HP] = std::make_unique<MapleButton>(main["BtHpUp"]);
+    buttons_[Buttons::BT_MP] = std::make_unique<MapleButton>(
         main["BtHpUp"],
         Point<int16_t>(0,
                        18));  // TODO: "BtMpUp" not Working
-    buttons[Buttons::BT_STR] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_STR] = std::make_unique<MapleButton>(
         main["BtHpUp"],
         Point<int16_t>(0,
                        87));  // TODO: "BtStrUp" not working
-    buttons[Buttons::BT_DEX] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_DEX] = std::make_unique<MapleButton>(
         main["BtHpUp"],
         Point<int16_t>(0,
                        105));  // TODO: "BtDexUp" not working
-    buttons[Buttons::BT_INT] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_INT] = std::make_unique<MapleButton>(
         main["BtHpUp"],
         Point<int16_t>(0,
                        123));  // TODO: "BtIntUp" not working
-    buttons[Buttons::BT_LUK] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_LUK] = std::make_unique<MapleButton>(
         main["BtHpUp"],
         Point<int16_t>(0,
                        141));  // TODO: "BtLukUp" not working
-    buttons[Buttons::BT_AUTO] = std::make_unique<MapleButton>(main["BtAuto"]);
-    buttons[Buttons::BT_HYPERSTATOPEN] =
+    buttons_[Buttons::BT_AUTO] = std::make_unique<MapleButton>(main["BtAuto"]);
+    buttons_[Buttons::BT_HYPERSTATOPEN] =
         std::make_unique<MapleButton>(main["BtHyperStatOpen"]);
-    buttons[Buttons::BT_HYPERSTATCLOSE] =
+    buttons_[Buttons::BT_HYPERSTATCLOSE] =
         std::make_unique<MapleButton>(main["BtHyperStatClose"]);
-    buttons[Buttons::BT_DETAILOPEN] =
+    buttons_[Buttons::BT_DETAILOPEN] =
         std::make_unique<MapleButton>(main["BtDetailOpen"]);
-    buttons[Buttons::BT_DETAILCLOSE] =
+    buttons_[Buttons::BT_DETAILCLOSE] =
         std::make_unique<MapleButton>(main["BtDetailClose"]);
-    buttons[Buttons::BT_ABILITY] =
+    buttons_[Buttons::BT_ABILITY] =
         std::make_unique<MapleButton>(detail["BtAbility"],
                                       Point<int16_t>(212, 0));
-    buttons[Buttons::BT_DETAIL_DETAILCLOSE] =
+    buttons_[Buttons::BT_DETAIL_DETAILCLOSE] =
         std::make_unique<MapleButton>(detail["BtHpUp"], Point<int16_t>(212, 0));
 
-    buttons[Buttons::BT_HYPERSTATOPEN]->set_active(false);
-    buttons[Buttons::BT_DETAILCLOSE]->set_active(false);
-    buttons[Buttons::BT_ABILITY]->set_active(false);
-    buttons[Buttons::BT_ABILITY]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_DETAIL_DETAILCLOSE]->set_active(false);
+    buttons_[Buttons::BT_HYPERSTATOPEN]->set_active(false);
+    buttons_[Buttons::BT_DETAILCLOSE]->set_active(false);
+    buttons_[Buttons::BT_ABILITY]->set_active(false);
+    buttons_[Buttons::BT_ABILITY]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_DETAIL_DETAILCLOSE]->set_active(false);
 
     update_ap();
 
@@ -168,7 +168,7 @@ UIStatsInfo::UIStatsInfo(const CharStats &st) :
     update_stat(MapleStat::Id::JOB);
     update_stat(MapleStat::Id::FAME);
 
-    dimension = Point<int16_t>(212, 318);
+    dimension_ = Point<int16_t>(212, 318);
     showdetail = false;
 }
 
@@ -176,7 +176,7 @@ void UIStatsInfo::draw(float alpha) const {
     UIElement::draw_sprites(alpha);
 
     if (showdetail) {
-        Point<int16_t> detail_pos(position + Point<int16_t>(212, 0));
+        Point<int16_t> detail_pos(position_ + Point<int16_t>(212, 0));
 
         textures_detail[0].draw(detail_pos + Point<int16_t>(0, -1));
         textures_detail[1].draw(detail_pos);
@@ -193,7 +193,7 @@ void UIStatsInfo::draw(float alpha) const {
     size_t last = showdetail ? StatLabel::NUM_LABELS : StatLabel::NUM_NORMAL;
 
     for (size_t i = 0; i < last; i++) {
-        Point<int16_t> labelpos = position + statoffsets[i];
+        Point<int16_t> labelpos = position_ + statoffsets[i];
 
         if (i >= StatLabel::NUM_NORMAL)
             labelpos.shift_x(213);
@@ -217,7 +217,7 @@ bool UIStatsInfo::is_in_range(Point<int16_t> cursorpos) const {
     else
         pos_adj = Point<int16_t>(0, 0);
 
-    auto bounds = Rectangle<int16_t>(position, position + dimension + pos_adj);
+    auto bounds = Rectangle<int16_t>(position_, position_ + dimension_ + pos_adj);
     return bounds.contains(cursorpos);
 }
 
@@ -374,10 +374,10 @@ void UIStatsInfo::send_apup(MapleStat::Id stat) const {
 void UIStatsInfo::set_detail(bool enabled) {
     showdetail = enabled;
 
-    buttons[Buttons::BT_DETAILOPEN]->set_active(!enabled);
-    buttons[Buttons::BT_DETAILCLOSE]->set_active(enabled);
-    buttons[Buttons::BT_ABILITY]->set_active(enabled);
-    buttons[Buttons::BT_DETAIL_DETAILCLOSE]->set_active(enabled);
+    buttons_[Buttons::BT_DETAILOPEN]->set_active(!enabled);
+    buttons_[Buttons::BT_DETAILCLOSE]->set_active(enabled);
+    buttons_[Buttons::BT_ABILITY]->set_active(enabled);
+    buttons_[Buttons::BT_DETAIL_DETAILCLOSE]->set_active(enabled);
 }
 
 void UIStatsInfo::update_ap() {
@@ -386,7 +386,7 @@ void UIStatsInfo::update_ap() {
         nowap ? Button::State::NORMAL : Button::State::DISABLED;
 
     for (int i = Buttons::BT_HP; i <= Buttons::BT_AUTO; i++)
-        buttons[i]->set_state(newstate);
+        buttons_[i]->set_state(newstate);
 
     hasap = nowap;
 }

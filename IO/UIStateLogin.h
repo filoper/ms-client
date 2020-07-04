@@ -86,11 +86,11 @@ private:
     void emplace(Args &&... args);
 
     EnumMap<UIElement::Type, UIElement::UPtr, UIElement::Type::NUM_TYPES>
-        elements;
-    UIElement::Type focused;
+        elements_;
+    UIElement::Type focused_;
 
-    TextTooltip tetooltip;
-    Optional<Tooltip> tooltip;
-    Tooltip::Parent tooltipparent;
+    TextTooltip te_tooltip_;
+    Optional<Tooltip> tooltip_;
+    Tooltip::Parent tooltip_parent_;
 };
 }  // namespace ms

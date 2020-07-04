@@ -34,8 +34,8 @@ UIQuestLog::UIQuestLog(const QuestLog &ql) :
 
     nl::node backgrnd = list["backgrnd"];
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(list["backgrnd2"]);
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(list["backgrnd2"]);
 
     notice_sprites.emplace_back(list["notice0"]);
     notice_sprites.emplace_back(list["notice1"]);
@@ -44,18 +44,18 @@ UIQuestLog::UIQuestLog(const QuestLog &ql) :
     nl::node taben = list["Tab"]["enabled"];
     nl::node tabdis = list["Tab"]["disabled"];
 
-    buttons[Buttons::TAB0] =
+    buttons_[Buttons::TAB0] =
         std::make_unique<TwoSpriteButton>(tabdis["0"], taben["0"]);
-    buttons[Buttons::TAB1] =
+    buttons_[Buttons::TAB1] =
         std::make_unique<TwoSpriteButton>(tabdis["1"], taben["1"]);
-    buttons[Buttons::TAB2] =
+    buttons_[Buttons::TAB2] =
         std::make_unique<TwoSpriteButton>(tabdis["2"], taben["2"]);
-    buttons[Buttons::CLOSE] =
+    buttons_[Buttons::CLOSE] =
         std::make_unique<MapleButton>(close, Point<int16_t>(275, 6));
-    buttons[Buttons::SEARCH] = std::make_unique<MapleButton>(list["BtSearch"]);
-    buttons[Buttons::ALL_LEVEL] =
+    buttons_[Buttons::SEARCH] = std::make_unique<MapleButton>(list["BtSearch"]);
+    buttons_[Buttons::ALL_LEVEL] =
         std::make_unique<MapleButton>(list["BtAllLevel"]);
-    buttons[Buttons::MY_LOCATION] =
+    buttons_[Buttons::MY_LOCATION] =
         std::make_unique<MapleButton>(list["BtMyLocation"]);
 
     search_area = list["searchArea"];
@@ -65,7 +65,7 @@ UIQuestLog::UIQuestLog(const QuestLog &ql) :
     auto search_pos_adj = Point<int16_t>(29, 0);
     auto search_dim_adj = Point<int16_t>(-80, 0);
 
-    auto search_pos = position + search_area_origin + search_pos_adj;
+    auto search_pos = position_ + search_area_origin + search_pos_adj;
     auto search_dim = search_pos + search_area_dim + search_dim_adj;
 
     search = Textfield(Text::Font::A11M,
@@ -87,8 +87,8 @@ UIQuestLog::UIQuestLog(const QuestLog &ql) :
 
     change_tab(tab);
 
-    dimension = Texture(backgrnd).get_dimensions();
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    dimension_ = Texture(backgrnd).get_dimensions();
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 }
 
 void UIQuestLog::draw(float alpha) const {
@@ -98,26 +98,26 @@ void UIQuestLog::draw(float alpha) const {
 
     if (tab == Buttons::TAB0)
         notice_sprites[tab].draw(
-            position + notice_position + Point<int16_t>(9, 0),
+            position_ + notice_position + Point<int16_t>(9, 0),
             alpha);
     else if (tab == Buttons::TAB1)
         notice_sprites[tab].draw(
-            position + notice_position + Point<int16_t>(0, 0),
+            position_ + notice_position + Point<int16_t>(0, 0),
             alpha);
     else
         notice_sprites[tab].draw(
-            position + notice_position + Point<int16_t>(-10, 0),
+            position_ + notice_position + Point<int16_t>(-10, 0),
             alpha);
 
     if (tab != Buttons::TAB2) {
-        search_area.draw(position);
+        search_area.draw(position_);
         search.draw(Point<int16_t>(0, 0));
 
         if (search.get_state() == Textfield::State::NORMAL && search.empty())
-            placeholder.draw(position + Point<int16_t>(39, 51));
+            placeholder.draw(position_ + Point<int16_t>(39, 51));
     }
 
-    slider.draw(position + Point<int16_t>(126, 75));
+    slider.draw(position_ + Point<int16_t>(126, 75));
 
     UIElement::draw_buttons(alpha);
 }
@@ -170,10 +170,10 @@ void UIQuestLog::change_tab(uint16_t tabid) {
     tab = tabid;
 
     if (oldtab != tab) {
-        buttons[Buttons::TAB0 + oldtab]->set_state(Button::State::NORMAL);
-        buttons[Buttons::MY_LOCATION]->set_active(tab == Buttons::TAB0);
-        buttons[Buttons::ALL_LEVEL]->set_active(tab == Buttons::TAB0);
-        buttons[Buttons::SEARCH]->set_active(tab != Buttons::TAB2);
+        buttons_[Buttons::TAB0 + oldtab]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::MY_LOCATION]->set_active(tab == Buttons::TAB0);
+        buttons_[Buttons::ALL_LEVEL]->set_active(tab == Buttons::TAB0);
+        buttons_[Buttons::SEARCH]->set_active(tab != Buttons::TAB2);
 
         if (tab == Buttons::TAB2)
             search.set_state(Textfield::State::DISABLED);
@@ -181,6 +181,6 @@ void UIQuestLog::change_tab(uint16_t tabid) {
             search.set_state(Textfield::State::NORMAL);
     }
 
-    buttons[Buttons::TAB0 + tab]->set_state(Button::State::PRESSED);
+    buttons_[Buttons::TAB0 + tab]->set_state(Button::State::PRESSED);
 }
 }  // namespace ms

@@ -40,21 +40,21 @@ protected:
          int8_t mode,
          bool playerdrop);
 
-    Linear<float> opacity;
-    Linear<float> angle;
+    Linear<float> opacity_;
+    Linear<float> angle_;
 
 private:
     enum State { DROPPED, FLOATING, PICKEDUP };
 
-    int32_t owner;
-    int8_t pickuptype;
-    bool playerdrop;
+    int32_t owner_;
+    int8_t pickup_type_;
+    bool player_drop_;
 
-    const PhysicsObject *looter;
-    State state;
+    const PhysicsObject *looter_;
+    State state_;
 
-    Point<int16_t> dest;
-    double basey;
-    double moved;
+    Point<int16_t> dest_;
+    double base_y_;
+    double moved_;
 };
 }  // namespace ms

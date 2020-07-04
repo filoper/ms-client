@@ -34,7 +34,7 @@ public:
     Point<int16_t> getpos() const;
 
 private:
-    Point<int16_t> pos;
+    Point<int16_t> pos_;
 };
 
 class Ladder {
@@ -50,10 +50,10 @@ public:
     int16_t get_x() const;
 
 private:
-    int16_t x;
-    int16_t y1;
-    int16_t y2;
-    bool ladder;
+    int16_t x_;
+    int16_t y1_;
+    int16_t y2_;
+    bool ladder_;
 };
 
 class MapInfo {
@@ -78,19 +78,19 @@ public:
                                       bool upwards) const;
 
 private:
-    int32_t fieldlimit;
-    bool cloud;
-    std::string bgm;
-    std::string mapdesc;
-    std::string mapname;
-    std::string streetname;
-    std::string mapmark;
-    bool swim;
-    bool town;
-    bool hideminimap;
-    Range<int16_t> mapwalls;
-    Range<int16_t> mapborders;
-    std::vector<Seat> seats;
-    std::vector<Ladder> ladders;
+    int32_t field_limit_;
+    bool cloud_;
+    std::string bgm_;
+    std::string map_desc_;
+    std::string map_name_;
+    std::string street_name_;
+    std::string map_mark_;
+    bool swim_;
+    bool town_;
+    bool hide_minimap_;
+    Range<int16_t> map_walls_;
+    Range<int16_t> map_borders_;
+    std::vector<Seat> seats_;
+    std::vector<Ladder> ladders_;
 };
 }  // namespace ms

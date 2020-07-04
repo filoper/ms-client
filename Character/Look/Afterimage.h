@@ -41,9 +41,9 @@ public:
     Rectangle<int16_t> get_range() const;
 
 private:
-    Animation animation;
-    Rectangle<int16_t> range;
-    uint8_t firstframe;
-    bool displayed;
+    Animation animation_;
+    Rectangle<int16_t> range_;
+    uint8_t first_frame_;
+    bool displayed_;
 };
 }  // namespace ms

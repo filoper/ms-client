@@ -66,13 +66,13 @@ private:
     // Load a weapon from the game files
     WeaponData(int32_t id);
 
-    const EquipData &equipdata;
+    const EquipData &equip_data_;
 
-    Weapon::Type type;
-    bool twohanded;
-    uint8_t attackspeed;
-    uint8_t attack;
-    BoolPair<Sound> usesounds;
-    std::string afterimage;
+    Weapon::Type type_;
+    bool two_handed_;
+    uint8_t attack_speed_;
+    uint8_t attack_;
+    BoolPair<Sound> use_sounds_;
+    std::string after_image_;
 };
 }  // namespace ms

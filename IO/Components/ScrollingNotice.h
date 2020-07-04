@@ -34,10 +34,10 @@ public:
     void update();
 
 private:
-    ColorBox background;
-    Text notice;
-    Linear<double> xpos;
-    bool active;
-    int16_t width;
+    ColorBox background_;
+    Text notice_;
+    Linear<double> xpos_;
+    bool active_;
+    int16_t width_;
 };
 }  // namespace ms

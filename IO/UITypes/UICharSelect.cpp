@@ -112,12 +112,12 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
     nl::node map = nl::nx::map001["Back"]["login.img"];
     nl::node ani = map["ani"];
 
-    sprites.emplace_back(map["back"]["13"], Point<int16_t>(392, 297));
-    sprites.emplace_back(ani["17"], Point<int16_t>(151, 283));
-    sprites.emplace_back(ani["18"], Point<int16_t>(365, 252));
-    sprites.emplace_back(ani["19"], Point<int16_t>(191, 208));
-    sprites.emplace_back(Common["frame"], Point<int16_t>(400, 300));
-    sprites.emplace_back(Common["step"]["2"], Point<int16_t>(40, 0));
+    sprites_.emplace_back(map["back"]["13"], Point<int16_t>(392, 297));
+    sprites_.emplace_back(ani["17"], Point<int16_t>(151, 283));
+    sprites_.emplace_back(ani["18"], Point<int16_t>(365, 252));
+    sprites_.emplace_back(ani["19"], Point<int16_t>(191, 208));
+    sprites_.emplace_back(Common["frame"], Point<int16_t>(400, 300));
+    sprites_.emplace_back(Common["step"]["2"], Point<int16_t>(40, 0));
 
     burning_notice = Common["Burning"]["BurningNotice"];
     burning_count =
@@ -135,41 +135,41 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
 
     nametag = CharSelect["nameTag"];
 
-    buttons[Buttons::CHARACTER_SELECT] =
+    buttons_[Buttons::CHARACTER_SELECT] =
         std::make_unique<MapleButton>(CharSelect["BtSelect"],
                                       character_sel_pos);
-    buttons[Buttons::CHARACTER_NEW] =
+    buttons_[Buttons::CHARACTER_NEW] =
         std::make_unique<MapleButton>(CharSelect["BtNew"], character_new_pos);
-    buttons[Buttons::CHARACTER_DELETE] =
+    buttons_[Buttons::CHARACTER_DELETE] =
         std::make_unique<MapleButton>(CharSelect["BtDelete"],
                                       character_del_pos);
-    buttons[Buttons::PAGELEFT] =
+    buttons_[Buttons::PAGELEFT] =
         std::make_unique<MapleButton>(CharSelect["pageL"],
                                       Point<int16_t>(98, 491));
-    buttons[Buttons::PAGERIGHT] =
+    buttons_[Buttons::PAGERIGHT] =
         std::make_unique<MapleButton>(CharSelect["pageR"],
                                       Point<int16_t>(485, 491));
-    buttons[Buttons::CHANGEPIC] =
+    buttons_[Buttons::CHANGEPIC] =
         std::make_unique<MapleButton>(Common["BtChangePIC"],
                                       Point<int16_t>(0, 45));
-    buttons[Buttons::RESETPIC] =
+    buttons_[Buttons::RESETPIC] =
         std::make_unique<MapleButton>(Login["WorldSelect"]["BtResetPIC"],
                                       Point<int16_t>(0, 85));
-    buttons[Buttons::EDITCHARLIST] =
+    buttons_[Buttons::EDITCHARLIST] =
         std::make_unique<MapleButton>(CharSelect["EditCharList"]["BtCharacter"],
                                       Point<int16_t>(-1, 118));
-    buttons[Buttons::BACK] =
+    buttons_[Buttons::BACK] =
         std::make_unique<MapleButton>(Common["BtStart"],
                                       Point<int16_t>(0, 515));
 
     for (size_t i = 0; i < PAGESIZE; i++)
-        buttons[Buttons::CHARACTER_SLOT0 + i] =
+        buttons_[Buttons::CHARACTER_SLOT0 + i] =
             std::make_unique<AreaButton>(get_character_slot_pos(i, 105, 144),
                                          Point<int16_t>(50, 90));
 
     if (require_pic == 0) {
-        buttons[Buttons::CHANGEPIC]->set_active(false);
-        buttons[Buttons::RESETPIC]->set_active(false);
+        buttons_[Buttons::CHANGEPIC]->set_active(false);
+        buttons_[Buttons::RESETPIC]->set_active(false);
     }
 
     levelset = Charset(CharSelect["lv"], Charset::Alignment::CENTER);
@@ -216,18 +216,18 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
             .dispatch();
     }
 
-    dimension = Point<int16_t>(800, 600);
+    dimension_ = Point<int16_t>(800, 600);
 }
 
 void UICharSelect::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
-    version.draw(position + Point<int16_t>(707, 1));
-    charslot.draw(position + Point<int16_t>(589, 106 - charslot_y));
-    chatslotlabel.draw(position + Point<int16_t>(700, 110 - charslot_y));
+    version.draw(position_ + Point<int16_t>(707, 1));
+    charslot.draw(position_ + Point<int16_t>(589, 106 - charslot_y));
+    chatslotlabel.draw(position_ + Point<int16_t>(700, 110 - charslot_y));
 
     for (Sprite sprite : world_sprites)
-        sprite.draw(position, inter);
+        sprite.draw(position_, inter);
 
     std::string total = pad_number_with_leading_zero(page_count);
     std::string current = pad_number_with_leading_zero(selected_page + 1);
@@ -255,7 +255,7 @@ void UICharSelect::draw(float inter) const {
                 int8_t lvy = -115;
                 Point<int16_t> pos_adj = Point<int16_t>(668, 365);
 
-                charinfo.draw(position + charinfopos);
+                charinfo.draw(position_ + charinfopos);
 
                 std::string levelstr =
                     std::to_string(character_stats.stats[MapleStat::Id::LEVEL]);
@@ -300,23 +300,23 @@ void UICharSelect::draw(float inter) const {
     UIElement::draw_buttons(inter);
 
     if (tab_active)
-        tab.draw(position + tab_pos[tab_index]
+        tab.draw(position_ + tab_pos[tab_index]
                  + Point<int16_t>(0, tab_move_pos));
 
     if (burning_character) {
-        burning_notice.draw(position + Point<int16_t>(190, 502), inter);
-        burning_count.draw(position + Point<int16_t>(149, 464));
+        burning_notice.draw(position_ + Point<int16_t>(190, 502), inter);
+        burning_count.draw(position_ + Point<int16_t>(149, 464));
     }
 
-    pagebase.draw(position + pagepos);
+    pagebase.draw(position_ + pagepos);
     pagenumber.draw(current.substr(0, 1),
-                    position + pagepos + Point<int16_t>(pagenumberpos[0]));
+                    position_ + pagepos + Point<int16_t>(pagenumberpos[0]));
     pagenumber.draw(current.substr(1, 1),
-                    position + pagepos + Point<int16_t>(pagenumberpos[1]));
+                    position_ + pagepos + Point<int16_t>(pagenumberpos[1]));
     pagenumber.draw(total.substr(0, 1),
-                    position + pagepos + Point<int16_t>(pagenumberpos[2]));
+                    position_ + pagepos + Point<int16_t>(pagenumberpos[2]));
     pagenumber.draw(total.substr(1, 1),
-                    position + pagepos + Point<int16_t>(pagenumberpos[3]));
+                    position_ + pagepos + Point<int16_t>(pagenumberpos[3]));
 }
 
 void UICharSelect::update() {
@@ -361,9 +361,9 @@ void UICharSelect::update() {
 
 void UICharSelect::doubleclick(Point<int16_t> cursorpos) {
     uint16_t button_index = selected_character + Buttons::CHARACTER_SLOT0;
-    auto &btit = buttons[button_index];
+    auto &btit = buttons_[button_index];
 
-    if (btit->is_active() && btit->bounds(position).contains(cursorpos)
+    if (btit->is_active() && btit->bounds(position_).contains(cursorpos)
         && btit->get_state() == Button::State::NORMAL
         && button_index >= Buttons::CHARACTER_SLOT0)
         button_pressed(Buttons::CHARACTER_SELECT);
@@ -384,9 +384,9 @@ Cursor::State UICharSelect::send_cursor(bool clicked,
 
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
-    for (auto &btit : buttons) {
+    for (auto &btit : buttons_) {
         if (btit.second->is_active()
-            && btit.second->bounds(position).contains(cursorpos)) {
+            && btit.second->bounds(position_).contains(cursorpos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTONOVER).play();
 
@@ -424,7 +424,7 @@ void UICharSelect::send_key(int32_t keycode, bool pressed, bool escape) {
             if (tab_active) {
                 uint16_t btn_index = tab_map[tab_index];
 
-                auto &btn = buttons[btn_index];
+                auto &btn = buttons_[btn_index];
                 auto state = btn->get_state();
 
                 if (state != Button::State::DISABLED)
@@ -501,7 +501,7 @@ void UICharSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                 if (!tab_active) {
                     tab_active = true;
 
-                    if (!buttons[Buttons::CHARACTER_SELECT]->is_active())
+                    if (!buttons_[Buttons::CHARACTER_SELECT]->is_active())
                         tab_index++;
                 } else {
                     tab_index++;
@@ -515,14 +515,14 @@ void UICharSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                 tab_move = true;
                 tab_move_pos = 0;
 
-                auto &prev_btn = buttons[tab_map[prev_tab]];
+                auto &prev_btn = buttons_[tab_map[prev_tab]];
                 auto prev_state = prev_btn->get_state();
 
                 if (prev_state != Button::State::DISABLED)
                     prev_btn->set_state(Button::State::NORMAL);
 
                 if (tab_active) {
-                    auto &btn = buttons[tab_map[tab_index]];
+                    auto &btn = buttons_[tab_map[tab_index]];
                     auto state = btn->get_state();
 
                     if (state != Button::State::DISABLED)
@@ -763,17 +763,17 @@ void UICharSelect::update_buttons() {
         uint8_t index = i + selected_page * PAGESIZE;
 
         if (index < characters_count)
-            buttons[Buttons::CHARACTER_SLOT0 + i]->set_state(
+            buttons_[Buttons::CHARACTER_SLOT0 + i]->set_state(
                 Button::State::NORMAL);
         else
-            buttons[Buttons::CHARACTER_SLOT0 + i]->set_state(
+            buttons_[Buttons::CHARACTER_SLOT0 + i]->set_state(
                 Button::State::DISABLED);
     }
 
     if (characters_count >= slots)
-        buttons[Buttons::CHARACTER_NEW]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::CHARACTER_NEW]->set_state(Button::State::DISABLED);
     else
-        buttons[Buttons::CHARACTER_NEW]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::CHARACTER_NEW]->set_state(Button::State::NORMAL);
 
     bool character_found = false;
 
@@ -787,8 +787,8 @@ void UICharSelect::update_buttons() {
         }
     }
 
-    buttons[Buttons::CHARACTER_SELECT]->set_active(character_found);
-    buttons[Buttons::CHARACTER_DELETE]->set_state(
+    buttons_[Buttons::CHARACTER_SELECT]->set_active(character_found);
+    buttons_[Buttons::CHARACTER_DELETE]->set_state(
         character_found ? Button::State::NORMAL : Button::State::DISABLED);
 }
 

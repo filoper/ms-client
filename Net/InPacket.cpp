@@ -20,9 +20,9 @@
 
 namespace ms {
 InPacket::InPacket(const int8_t *recv, size_t length) {
-    bytes = recv;
-    top = length;
-    pos = 0;
+    bytes_ = recv;
+    top_ = length;
+    pos_ = 0;
 }
 
 bool InPacket::available() const {
@@ -30,14 +30,14 @@ bool InPacket::available() const {
 }
 
 size_t InPacket::length() const {
-    return top - pos;
+    return top_ - pos_;
 }
 
 void InPacket::skip(size_t count) {
     if (count > length())
-        throw PacketError("Stack underflow at " + std::to_string(pos));
+        throw PacketError("Stack underflow at " + std::to_string(pos_));
 
-    pos += count;
+    pos_ += count;
 }
 
 bool InPacket::read_bool() {

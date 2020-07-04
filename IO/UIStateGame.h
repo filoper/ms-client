@@ -87,7 +87,7 @@ public:
     UIElement *get_front(Point<int16_t> pos) override;
 
 private:
-    const CharStats &stats;
+    const CharStats &stats_;
 
     bool drop_icon(const Icon &icon, Point<int16_t> pos);
 
@@ -101,22 +101,22 @@ private:
     void emplace(Args &&... args);
 
     EnumMap<UIElement::Type, UIElement::UPtr, UIElement::Type::NUM_TYPES>
-        elements;
-    std::list<UIElement::Type> elementorder;
-    UIElement::Type focused;
-    UIElement *dragged;
+        elements_;
+    std::list<UIElement::Type> element_order_;
+    UIElement::Type focused_;
+    UIElement *dragged_;
 
-    EquipTooltip eqtooltip;
-    ItemTooltip ittooltip;
-    SkillTooltip sktooltip;
-    TextTooltip tetooltip;
-    MapTooltip matooltip;
-    Optional<Tooltip> tooltip;
-    Tooltip::Parent tooltipparent;
+    EquipTooltip eq_tooltip_;
+    ItemTooltip it_tooltip_;
+    SkillTooltip sk_tooltip_;
+    TextTooltip te_tooltip_;
+    MapTooltip ma_tooltip_;
+    Optional<Tooltip> tooltip_;
+    Tooltip::Parent tooltip_parent_;
 
-    Optional<Icon> draggedicon;
+    Optional<Icon> dragged_icon_;
 
-    std::map<Icon::IconType, UIElement::Type> icon_map = {
+    std::map<Icon::IconType, UIElement::Type> icon_map_ = {
         { Icon::IconType::NONE, UIElement::Type::NONE },
         { Icon::IconType::SKILL, UIElement::Type::SKILLBOOK },
         { Icon::IconType::EQUIP, UIElement::Type::EQUIPINVENTORY },

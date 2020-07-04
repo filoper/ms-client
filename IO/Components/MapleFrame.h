@@ -32,16 +32,16 @@ public:
     void draw(Point<int16_t> position, int16_t width, int16_t height) const;
 
 private:
-    Texture center;
-    Texture east;
-    Texture northeast;
-    Texture north;
-    Texture northwest;
-    Texture west;
-    Texture southwest;
-    Texture south;
-    Texture southeast;
-    int16_t xtile;
-    int16_t ytile;
+    Texture center_;
+    Texture east_;
+    Texture north_east_;
+    Texture north_;
+    Texture north_west_;
+    Texture west_;
+    Texture south_west_;
+    Texture south_;
+    Texture south_east_;
+    int16_t xtile_;
+    int16_t ytile_;
 };
 }  // namespace ms

@@ -29,14 +29,14 @@ ItemDrop::ItemDrop(int32_t oid,
                    bool pd,
                    const Texture &icn) :
     Drop(oid, owner, start, dest, type, mode, pd),
-    icon(icn),
-    itemid(iid) {}
+    icon_(icn),
+    item_id_(iid) {}
 
 void ItemDrop::draw(double viewx, double viewy, float alpha) const {
-    if (!active)
+    if (!active_)
         return;
 
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
-    icon.draw({ angle.get(alpha), absp, opacity.get(alpha) });
+    Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
+    icon_.draw({ angle_.get(alpha), absp, opacity_.get(alpha) });
 }
 }  // namespace ms

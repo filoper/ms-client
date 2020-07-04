@@ -34,9 +34,9 @@ public:
     void update();
 
 private:
-    ColorBox cover;
-    Linear<float> yscale;
-    float scalestep;
-    Type type;
+    ColorBox cover_;
+    Linear<float> yscale_;
+    float scale_step_;
+    Type type_;
 };
 }  // namespace ms

@@ -35,20 +35,20 @@ public:
                    int64_t expiration);
 
 private:
-    int32_t skill_id;
-    int16_t height;
-    int16_t width;
-    int16_t icon_offset;
-    int16_t level_offset;
-    Texture icon;
-    Texture required_icon;
+    int32_t skill_id_;
+    int16_t height_;
+    int16_t width_;
+    int16_t icon_offset_;
+    int16_t level_offset_;
+    Texture icon_;
+    Texture required_icon_;
 
-    Text name;
-    Text desc;
-    Text leveldesc;
-    MapleFrame frame;
-    ColorLine line;
-    ColorBox box;
-    Texture cover;
+    Text name_;
+    Text desc_;
+    Text level_desc_;
+    MapleFrame frame_;
+    ColorLine line_;
+    ColorBox box_;
+    Texture cover_;
 };
 }  // namespace ms

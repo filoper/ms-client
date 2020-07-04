@@ -128,19 +128,19 @@ private:
     // Get some hard-coded information
     int32_t flags_of(int32_t id) const;
 
-    std::unordered_map<int32_t, Stats> stats;
-    std::string element;
-    Weapon::Type reqweapon;
-    int32_t masterlevel;
-    int32_t flags;
-    bool passive;
-    bool invisible;
+    std::unordered_map<int32_t, Stats> stats_;
+    std::string element_;
+    Weapon::Type req_weapon_;
+    int32_t master_level_;
+    int32_t flags_;
+    bool passive_;
+    bool invisible_;
 
-    std::string name;
-    std::string desc;
-    std::unordered_map<int32_t, std::string> levels;
-    std::unordered_map<int32_t, int32_t> reqskills;
+    std::string name_;
+    std::string desc_;
+    std::unordered_map<int32_t, std::string> levels_;
+    std::unordered_map<int32_t, int32_t> req_skills_;
 
-    std::array<Texture, Icon::NUM_ICONS> icons;
+    std::array<Texture, Icon::NUM_ICONS> icons_;
 };
 }  // namespace ms

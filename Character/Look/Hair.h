@@ -48,11 +48,11 @@ public:
     const std::string &getcolor() const;
 
 private:
-    std::unordered_map<uint8_t, Texture> stances[Stance::Id::LENGTH]
+    std::unordered_map<uint8_t, Texture> stances_[Stance::Id::LENGTH]
                                                 [Layer::NUM_LAYERS];
-    std::string name;
-    std::string color;
+    std::string name_;
+    std::string color_;
 
-    static const std::unordered_map<std::string, Layer> layers_by_name;
+    static const std::unordered_map<std::string, Layer> layers_by_name_;
 };
 }  // namespace ms

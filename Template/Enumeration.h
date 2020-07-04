@@ -30,22 +30,22 @@ public:
 
     template<std::size_t... VS>
     constexpr Enumeration(std::index_sequence<VS...>) :
-        values { { static_cast<E>(VS)... } } {}
+        values_ { { static_cast<E>(VS)... } } {}
 
     constexpr Enumeration() : Enumeration(std::make_index_sequence<LENGTH> {}) {
         static_assert(std::is_enum<E>::value,
                       "Template parameter E for Enumeration must be an enum.");
     }
 
-    auto begin() const { return values.begin(); }
+    auto begin() const { return values_.begin(); }
 
-    auto end() const { return values.end(); }
+    auto end() const { return values_.end(); }
 
-    auto cbegin() const { return values.cbegin(); }
+    auto cbegin() const { return values_.cbegin(); }
 
-    auto cend() const { return values.cend(); }
+    auto cend() const { return values_.cend(); }
 
 private:
-    underlying_t values;
+    underlying_t values_;
 };
 }  // namespace ms

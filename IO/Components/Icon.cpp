@@ -25,49 +25,49 @@
 
 namespace ms {
 Icon::Icon(std::unique_ptr<Type> t, Texture tx, int16_t c) :
-    type(std::move(t)),
-    texture(tx),
-    count(c) {
-    texture.shift(Point<int16_t>(0, 32));
-    showcount = c > -1;
-    dragged = false;
+    type_(std::move(t)),
+    texture_(tx),
+    count_(c) {
+    texture_.shift(Point<int16_t>(0, 32));
+    show_count_ = c > -1;
+    dragged_ = false;
 }
 
 Icon::Icon() : Icon(std::make_unique<NullType>(), {}, -1) {}
 
 void Icon::draw(Point<int16_t> position) const {
-    float opacity = dragged ? 0.5f : 1.0f;
+    float opacity = dragged_ ? 0.5f : 1.0f;
     get_texture().draw(DrawArgument(position, opacity));
 
-    if (showcount) {
+    if (show_count_) {
         static const Charset countset =
             Charset(nl::nx::ui["Basic.img"]["ItemNo"],
                     Charset::Alignment::LEFT);
-        countset.draw(std::to_string(count), position + Point<int16_t>(0, 20));
+        countset.draw(std::to_string(count_), position + Point<int16_t>(0, 20));
     }
 }
 
 void Icon::dragdraw(Point<int16_t> cursorpos) const {
-    if (dragged && texture.is_valid())
-        texture.draw(DrawArgument(cursorpos - cursoroffset, 0.5f));
+    if (dragged_ && texture_.is_valid())
+        texture_.draw(DrawArgument(cursorpos - cursor_offset_, 0.5f));
 }
 
 void Icon::drop_on_stage() const {
-    type->drop_on_stage();
+    type_->drop_on_stage();
 }
 
 void Icon::drop_on_equips(EquipSlot::Id eqslot) const {
-    type->drop_on_equips(eqslot);
+    type_->drop_on_equips(eqslot);
 }
 
 bool Icon::drop_on_items(InventoryType::Id tab,
                          EquipSlot::Id eqslot,
                          int16_t slot,
                          bool equip) const {
-    if (!texture.is_valid())
+    if (!texture_.is_valid())
         return false;
 
-    bool remove_icon = type->drop_on_items(tab, eqslot, slot, equip);
+    bool remove_icon = type_->drop_on_items(tab, eqslot, slot, equip);
 
     if (remove_icon)
         Sound(Sound::Name::DRAGEND).play();
@@ -76,40 +76,40 @@ bool Icon::drop_on_items(InventoryType::Id tab,
 }
 
 void Icon::drop_on_bindings(Point<int16_t> cursorposition, bool remove) const {
-    type->drop_on_bindings(cursorposition, remove);
+    type_->drop_on_bindings(cursorposition, remove);
 }
 
 void Icon::start_drag(Point<int16_t> offset) {
-    cursoroffset = offset;
-    dragged = true;
+    cursor_offset_ = offset;
+    dragged_ = true;
 
     Sound(Sound::Name::DRAGSTART).play();
 }
 
 void Icon::reset() {
-    dragged = false;
+    dragged_ = false;
 }
 
 // Allows for Icon extensibility
 // Use this instead of referencing texture directly
 Texture Icon::get_texture() const {
-    return texture;
+    return texture_;
 }
 
 void Icon::set_count(int16_t c) {
-    count = c;
-    type->set_count(c);
+    count_ = c;
+    type_->set_count(c);
 }
 
 Icon::IconType Icon::get_type() {
-    return type->get_type();
+    return type_->get_type();
 }
 
 int16_t Icon::get_count() const {
-    return count;
+    return count_;
 }
 
 bool Icon::get_drag() {
-    return dragged;
+    return dragged_;
 }
 }  // namespace ms

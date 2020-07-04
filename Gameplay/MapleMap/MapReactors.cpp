@@ -23,44 +23,44 @@ void MapReactors::draw(Layer::Id layer,
                        double viewx,
                        double viewy,
                        float alpha) const {
-    reactors.draw(layer, viewx, viewy, alpha);
+    reactors_.draw(layer, viewx, viewy, alpha);
 }
 
 // Spawns all reactors to map with proper footholds
 void MapReactors::update(const Physics &physics) {
-    for (; !spawns.empty(); spawns.pop()) {
-        const ReactorSpawn &spawn = spawns.front();
+    for (; !spawns_.empty(); spawns_.pop()) {
+        const ReactorSpawn &spawn = spawns_.front();
 
         int32_t oid = spawn.get_oid();
 
-        if (auto reactor = reactors.get(oid))
+        if (auto reactor = reactors_.get(oid))
             reactor->makeactive();
         else
-            reactors.add(spawn.instantiate(physics));
+            reactors_.add(spawn.instantiate(physics));
     }
 
-    reactors.update(physics);
+    reactors_.update(physics);
 }
 
 void MapReactors::trigger(int32_t oid, int8_t state) {
-    if (Optional<Reactor> reactor = reactors.get(oid))
+    if (Optional<Reactor> reactor = reactors_.get(oid))
         reactor->set_state(state);
 }
 
 void MapReactors::spawn(ReactorSpawn &&spawn) {
-    spawns.emplace(std::move(spawn));
+    spawns_.emplace(std::move(spawn));
 }
 
 void MapReactors::remove(int32_t oid, int8_t state, Point<int16_t> position) {
-    if (Optional<Reactor> reactor = reactors.get(oid))
+    if (Optional<Reactor> reactor = reactors_.get(oid))
         reactor->destroy(state, position);
 }
 
 void MapReactors::clear() {
-    reactors.clear();
+    reactors_.clear();
 }
 
 MapObjects *MapReactors::get_reactors() {
-    return &reactors;
+    return &reactors_;
 }
 }  // namespace ms

@@ -106,11 +106,11 @@ public:
     double ground_below(double x) const;
 
 private:
-    uint16_t m_id;
-    uint16_t m_prev;
-    uint16_t m_next;
-    uint8_t m_layer;
-    Range<int16_t> m_horizontal;
-    Range<int16_t> m_vertical;
+    uint16_t m_id_;
+    uint16_t m_prev_;
+    uint16_t m_next_;
+    uint8_t m_layer_;
+    Range<int16_t> m_horizontal_;
+    Range<int16_t> m_vertical_;
 };
 }  // namespace ms

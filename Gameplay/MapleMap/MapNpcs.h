@@ -51,8 +51,8 @@ public:
                               Point<int16_t> viewpos);
 
 private:
-    MapObjects npcs;
+    MapObjects npcs_;
 
-    std::queue<NpcSpawn> spawns;
+    std::queue<NpcSpawn> spawns_;
 };
 }  // namespace ms

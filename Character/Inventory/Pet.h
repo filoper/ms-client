@@ -33,11 +33,11 @@ public:
         uint8_t fullness);
 
 private:
-    int32_t item_id;
-    int64_t expiration;
-    std::string petname;
-    uint8_t petlevel;
-    uint16_t closeness;
-    uint8_t fullness;
+    int32_t item_id_;
+    int64_t expiration_;
+    std::string pet_name_;
+    uint8_t pet_level_;
+    uint16_t closeness_;
+    uint8_t fullness_;
 };
 }  // namespace ms

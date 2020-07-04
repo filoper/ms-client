@@ -28,13 +28,13 @@ MesoDrop::MesoDrop(int32_t oid,
                    bool pd,
                    const Animation &icn) :
     Drop(oid, owner, start, dest, type, mode, pd),
-    icon(icn) {}
+    icon_(icn) {}
 
 void MesoDrop::draw(double viewx, double viewy, float alpha) const {
-    if (!active)
+    if (!active_)
         return;
 
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
-    icon.draw({ angle.get(alpha), absp, opacity.get(alpha) }, alpha);
+    Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
+    icon_.draw({ angle_.get(alpha), absp, opacity_.get(alpha) }, alpha);
 }
 }  // namespace ms

@@ -67,8 +67,8 @@ private:
     uint8_t gmul(uint8_t byte) const;
 
 #ifdef USE_CRYPTO
-    uint8_t sendiv[HEADER_LENGTH];
-    uint8_t recviv[HEADER_LENGTH];
+    uint8_t sendiv_[HEADER_LENGTH];
+    uint8_t recviv_[HEADER_LENGTH];
 #endif
 };
 }  // namespace ms

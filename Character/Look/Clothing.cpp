@@ -25,15 +25,15 @@
 #include "../../Data/WeaponData.h"
 
 namespace ms {
-Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
-    const EquipData &equipdata = EquipData::get(itemid);
+Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
+    const EquipData &equipdata = EquipData::get(item_id_);
 
-    eqslot = equipdata.get_eqslot();
+    eq_slot_ = equipdata.get_eqslot();
 
-    if (eqslot == EquipSlot::Id::WEAPON)
-        twohanded = WeaponData::get(itemid).is_twohanded();
+    if (eq_slot_ == EquipSlot::Id::WEAPON)
+        two_handed_ = WeaponData::get(item_id_).is_twohanded();
     else
-        twohanded = false;
+        two_handed_ = false;
 
     constexpr size_t NON_WEAPON_TYPES = 15;
     constexpr size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
@@ -50,7 +50,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
             Clothing::Layer::MEDAL };
 
     Clothing::Layer chlayer;
-    size_t index = (itemid / 10000) - 100;
+    size_t index = (item_id_ / 10000) - 100;
 
     if (index < NON_WEAPON_TYPES)
         chlayer = layers[index];
@@ -59,26 +59,26 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
     else
         chlayer = Clothing::Layer::CAPE;
 
-    std::string strid = "0" + std::to_string(itemid);
+    std::string strid = "0" + std::to_string(item_id_);
     std::string category = equipdata.get_itemdata().get_category();
     nl::node src = nl::nx::character[category][strid + ".img"];
     nl::node info = src["info"];
 
-    vslot = std::string(info["vslot"]);
+    vslot_ = std::string(info["vslot"]);
 
     switch (int32_t standno = info["stand"]) {
-        case 1: stand = Stance::Id::STAND1; break;
-        case 2: stand = Stance::Id::STAND2; break;
+        case 1: stand_ = Stance::Id::STAND1; break;
+        case 2: stand_ = Stance::Id::STAND2; break;
         default:
-            stand = twohanded ? Stance::Id::STAND2 : Stance::Id::STAND1;
+            stand_ = two_handed_ ? Stance::Id::STAND2 : Stance::Id::STAND1;
             break;
     }
 
     switch (int32_t walkno = info["walk"]) {
-        case 1: walk = Stance::Id::WALK1; break;
-        case 2: walk = Stance::Id::WALK2; break;
+        case 1: walk_ = Stance::Id::WALK1; break;
+        case 2: walk_ = Stance::Id::WALK2; break;
         default:
-            walk = twohanded ? Stance::Id::WALK2 : Stance::Id::WALK1;
+            walk_ = two_handed_ ? Stance::Id::WALK2 : Stance::Id::WALK1;
             break;
     }
 
@@ -105,9 +105,9 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
                 if (part == "mailArm") {
                     z = Clothing::Layer::MAILARM;
                 } else {
-                    auto sublayer_iter = sublayernames.find(zs);
+                    auto sublayer_iter = sub_layer_names_.find(zs);
 
-                    if (sublayer_iter != sublayernames.end())
+                    if (sublayer_iter != sub_layer_names_.end())
                         z = sublayer_iter->second;
                 }
 
@@ -124,7 +124,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
                 nl::node mapnode = partnode["map"];
                 Point<int16_t> shift;
 
-                switch (eqslot) {
+                switch (eq_slot_) {
                     case EquipSlot::Id::FACE: shift -= parentpos; break;
                     case EquipSlot::Id::SHOES:
                     case EquipSlot::Id::GLOVES:
@@ -152,7 +152,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
                         break;
                 }
 
-                stances[stance][z]
+                stances_[stance][z]
                     .emplace(frame, partnode)
                     ->second.shift(shift);
             }
@@ -161,52 +161,52 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
 
     static const std::unordered_set<int32_t> transparents = { 1002186 };
 
-    transparent = transparents.count(itemid) > 0;
+    transparent_ = transparents.count(item_id_) > 0;
 }
 
 void Clothing::draw(Stance::Id stance,
                     Layer layer,
                     uint8_t frame,
                     const DrawArgument &args) const {
-    auto range = stances[stance][layer].equal_range(frame);
+    auto range = stances_[stance][layer].equal_range(frame);
 
     for (auto iter = range.first; iter != range.second; ++iter)
         iter->second.draw(args);
 }
 
 bool Clothing::contains_layer(Stance::Id stance, Layer layer) const {
-    return !stances[stance][layer].empty();
+    return !stances_[stance][layer].empty();
 }
 
 bool Clothing::is_transparent() const {
-    return transparent;
+    return transparent_;
 }
 
 bool Clothing::is_twohanded() const {
-    return twohanded;
+    return two_handed_;
 }
 
 int32_t Clothing::get_id() const {
-    return itemid;
+    return item_id_;
 }
 
 Stance::Id Clothing::get_stand() const {
-    return stand;
+    return stand_;
 }
 
 Stance::Id Clothing::get_walk() const {
-    return walk;
+    return walk_;
 }
 
 EquipSlot::Id Clothing::get_eqslot() const {
-    return eqslot;
+    return eq_slot_;
 }
 
 const std::string &Clothing::get_vslot() const {
-    return vslot;
+    return vslot_;
 }
 
-const std::unordered_map<std::string, Clothing::Layer> Clothing::sublayernames
+const std::unordered_map<std::string, Clothing::Layer> Clothing::sub_layer_names_
     = {
           // WEAPON
           { "weaponOverHand", Clothing::Layer::WEAPON_OVER_HAND },

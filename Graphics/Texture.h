@@ -49,8 +49,8 @@ public:
 private:
     nl::node find_child(nl::node source, std::string link);
 
-    nl::bitmap bitmap;
-    Point<int16_t> origin;
-    Point<int16_t> dimensions;
+    nl::bitmap bitmap_;
+    Point<int16_t> origin_;
+    Point<int16_t> dimensions_;
 };
 }  // namespace ms

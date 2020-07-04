@@ -25,51 +25,51 @@ MapInfo::MapInfo(nl::node src, Range<int16_t> walls, Range<int16_t> borders) {
     nl::node info = src["info"];
 
     if (info["VRLeft"].data_type() == nl::node::type::integer) {
-        mapwalls = Range<int16_t>(info["VRLeft"], info["VRRight"]);
-        mapborders = Range<int16_t>(info["VRTop"], info["VRBottom"]);
+        map_walls_ = Range<int16_t>(info["VRLeft"], info["VRRight"]);
+        map_borders_ = Range<int16_t>(info["VRTop"], info["VRBottom"]);
     } else {
-        mapwalls = walls;
-        mapborders = borders;
+        map_walls_ = walls;
+        map_borders_ = borders;
     }
 
     std::string bgmpath = info["bgm"];
     size_t split = bgmpath.find('/');
-    bgm = bgmpath.substr(0, split) + ".img/" + bgmpath.substr(split + 1);
+    bgm_ = bgmpath.substr(0, split) + ".img/" + bgmpath.substr(split + 1);
 
-    cloud = info["cloud"].get_bool();
-    fieldlimit = info["fieldLimit"];
-    hideminimap = info["hideMinimap"].get_bool();
-    mapmark = std::string(info["mapMark"]);
-    swim = info["swim"].get_bool();
-    town = info["town"].get_bool();
+    cloud_ = info["cloud"].get_bool();
+    field_limit_ = info["fieldLimit"];
+    hide_minimap_ = info["hideMinimap"].get_bool();
+    map_mark_ = std::string(info["mapMark"]);
+    swim_ = info["swim"].get_bool();
+    town_ = info["town"].get_bool();
 
     for (auto seat : src["seat"])
-        seats.push_back(seat);
+        seats_.push_back(seat);
 
     for (auto ladder : src["ladderRope"])
-        ladders.push_back(ladder);
+        ladders_.push_back(ladder);
 }
 
 MapInfo::MapInfo() {}
 
 bool MapInfo::is_underwater() const {
-    return swim;
+    return swim_;
 }
 
 std::string MapInfo::get_bgm() const {
-    return bgm;
+    return bgm_;
 }
 
 Range<int16_t> MapInfo::get_walls() const {
-    return mapwalls;
+    return map_walls_;
 }
 
 Range<int16_t> MapInfo::get_borders() const {
-    return mapborders;
+    return map_borders_;
 }
 
 Optional<const Seat> MapInfo::findseat(Point<int16_t> position) const {
-    for (auto &seat : seats)
+    for (auto &seat : seats_)
         if (seat.inrange(position))
             return seat;
 
@@ -78,7 +78,7 @@ Optional<const Seat> MapInfo::findseat(Point<int16_t> position) const {
 
 Optional<const Ladder> MapInfo::findladder(Point<int16_t> position,
                                            bool upwards) const {
-    for (auto &ladder : ladders)
+    for (auto &ladder : ladders_)
         if (ladder.inrange(position, upwards))
             return ladder;
 
@@ -86,47 +86,47 @@ Optional<const Ladder> MapInfo::findladder(Point<int16_t> position,
 }
 
 Seat::Seat(nl::node src) {
-    pos = src;
+    pos_ = src;
 }
 
 bool Seat::inrange(Point<int16_t> position) const {
     auto hor = Range<int16_t>::symmetric(position.x(), 10);
     auto ver = Range<int16_t>::symmetric(position.y(), 10);
 
-    return hor.contains(pos.x()) && ver.contains(pos.y());
+    return hor.contains(pos_.x()) && ver.contains(pos_.y());
 }
 
 Point<int16_t> Seat::getpos() const {
-    return pos;
+    return pos_;
 }
 
 Ladder::Ladder(nl::node src) {
-    x = src["x"];
-    y1 = src["y1"];
-    y2 = src["y2"];
-    ladder = src["l"].get_bool();
+    x_ = src["x"];
+    y1_ = src["y1"];
+    y2_ = src["y2"];
+    ladder_ = src["l"].get_bool();
 }
 
 bool Ladder::is_ladder() const {
-    return ladder;
+    return ladder_;
 }
 
 bool Ladder::inrange(Point<int16_t> position, bool upwards) const {
     auto hor = Range<int16_t>::symmetric(position.x(), 10);
-    auto ver = Range<int16_t>(y1, y2);
+    auto ver = Range<int16_t>(y1_, y2_);
 
     int16_t y = upwards ? position.y() - 5 : position.y() + 5;
 
-    return hor.contains(x) && ver.contains(y);
+    return hor.contains(x_) && ver.contains(y);
 }
 
 bool Ladder::felloff(int16_t y, bool downwards) const {
     int16_t dy = downwards ? y + 5 : y - 5;
 
-    return dy > y2 || y + 5 < y1;
+    return dy > y2_ || y + 5 < y1_;
 }
 
 int16_t Ladder::get_x() const {
-    return x;
+    return x_;
 }
 }  // namespace ms

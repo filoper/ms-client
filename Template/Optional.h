@@ -28,25 +28,25 @@ public:
     template<typename R,
              typename = std::enable_if_t<std::is_base_of<R, T>::value
                                          || std::is_base_of<T, R>::value>>
-    constexpr Optional(R *r_val) : val(static_cast<T *>(r_val)) {}
+    constexpr Optional(R *r_val) : val_(static_cast<T *>(r_val)) {}
 
     template<typename R,
              typename = std::enable_if_t<std::is_base_of<R, T>::value
                                          || std::is_base_of<T, R>::value>>
     constexpr Optional(Optional<R> r_opt) : Optional(r_opt.get()) {}
-    constexpr Optional(T *p) : val(p) {}
-    constexpr Optional(T &p) : val(&p) {}
-    constexpr Optional() : val(nullptr) {}
+    constexpr Optional(T *p) : val_(p) {}
+    constexpr Optional(T &p) : val_(&p) {}
+    constexpr Optional() : val_(nullptr) {}
 
-    explicit operator bool() const { return val != nullptr; }
+    explicit operator bool() const { return val_ != nullptr; }
 
-    T *get() const { return val; }
+    T *get() const { return val_; }
 
-    T *operator->() const { return val; }
+    T *operator->() const { return val_; }
 
-    T &operator*() const { return *val; }
+    T &operator*() const { return *val_; }
 
 private:
-    T *val;
+    T *val_;
 };
 }  // namespace ms

@@ -44,7 +44,7 @@ public:
     Point<int16_t> get_dimensions() const;
 
 private:
-    Animation animation;
-    DrawArgument stateargs;
+    Animation animation_;
+    DrawArgument state_args_;
 };
 }  // namespace ms

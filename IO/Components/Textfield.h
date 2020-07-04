@@ -70,19 +70,19 @@ private:
 
     bool belowlimit() const;
 
-    Text textlabel;
-    std::string text;
-    Text marker;
-    bool showmarker;
-    uint16_t elapsed;
-    size_t markerpos;
-    Rectangle<int16_t> bounds;
-    Point<int16_t> parentpos;
-    size_t limit;
-    int8_t crypt;
-    State state;
+    Text text_label_;
+    std::string text_;
+    Text marker_;
+    bool show_marker_;
+    uint16_t elapsed_;
+    size_t marker_pos_;
+    Rectangle<int16_t> bounds_;
+    Point<int16_t> parent_pos_;
+    size_t limit_;
+    int8_t crypt_;
+    State state_;
 
-    std::map<int32_t, std::function<void(void)>> callbacks;
-    std::function<void(std::string)> onreturn;
+    std::map<int32_t, std::function<void(void)>> callbacks_;
+    std::function<void(std::string)> onreturn_;
 };
 }  // namespace ms

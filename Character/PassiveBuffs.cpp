@@ -80,49 +80,49 @@ void BerserkBuff::apply_to(CharStats &stats, nl::node level) const {
 
 PassiveBuffs::PassiveBuffs() {
     // Beginner
-    buffs[SkillId::Id::ANGEL_BLESSING] = std::make_unique<AngelBlessingBuff>();
+    buffs_[SkillId::Id::ANGEL_BLESSING] = std::make_unique<AngelBlessingBuff>();
 
     // Fighter
-    buffs[SkillId::Id::SWORD_MASTERY_FIGHTER] = std::make_unique<
+    buffs_[SkillId::Id::SWORD_MASTERY_FIGHTER] = std::make_unique<
         WeaponMasteryBuff<Weapon::Type::SWORD_1H, Weapon::Type::SWORD_2H>>();
-    buffs[SkillId::Id::AXE_MASTERY] = std::make_unique<
+    buffs_[SkillId::Id::AXE_MASTERY] = std::make_unique<
         WeaponMasteryBuff<Weapon::Type::AXE_1H, Weapon::Type::AXE_2H>>();
 
     // Crusader
 
     // Hero
-    buffs[SkillId::Id::ACHILLES_HERO] = std::make_unique<AchillesBuff>();
+    buffs_[SkillId::Id::ACHILLES_HERO] = std::make_unique<AchillesBuff>();
 
     // Page
-    buffs[SkillId::Id::SWORD_MASTERY_FIGHTER] = std::make_unique<
+    buffs_[SkillId::Id::SWORD_MASTERY_FIGHTER] = std::make_unique<
         WeaponMasteryBuff<Weapon::Type::SWORD_1H, Weapon::Type::SWORD_2H>>();
-    buffs[SkillId::Id::BW_MASTERY] = std::make_unique<
+    buffs_[SkillId::Id::BW_MASTERY] = std::make_unique<
         WeaponMasteryBuff<Weapon::Type::MACE_1H, Weapon::Type::MACE_2H>>();
 
     // White Knight
 
     // Paladin
-    buffs[SkillId::Id::ACHILLES_PALADIN] = std::make_unique<AchillesBuff>();
+    buffs_[SkillId::Id::ACHILLES_PALADIN] = std::make_unique<AchillesBuff>();
 
     // Spearman
-    buffs[SkillId::Id::SPEAR_MASTERY] =
+    buffs_[SkillId::Id::SPEAR_MASTERY] =
         std::make_unique<WeaponMasteryBuff<Weapon::Type::SPEAR>>();
-    buffs[SkillId::Id::PA_MASTERY] =
+    buffs_[SkillId::Id::PA_MASTERY] =
         std::make_unique<WeaponMasteryBuff<Weapon::Type::POLEARM>>();
 
     // Dragon Knight
 
     // Dark Knight
-    buffs[SkillId::Id::ACHILLES_DK] = std::make_unique<AchillesBuff>();
-    buffs[SkillId::Id::BERSERK] = std::make_unique<BerserkBuff>();
+    buffs_[SkillId::Id::ACHILLES_DK] = std::make_unique<AchillesBuff>();
+    buffs_[SkillId::Id::BERSERK] = std::make_unique<BerserkBuff>();
 }
 
 void PassiveBuffs::apply_buff(CharStats &stats,
                               int32_t skill_id,
                               int32_t skill_level) const {
-    auto iter = buffs.find(skill_id);
+    auto iter = buffs_.find(skill_id);
 
-    if (iter == buffs.end())
+    if (iter == buffs_.end())
         return;
 
     bool wrong_job = !stats.get_job().can_use(skill_id);

@@ -37,15 +37,15 @@ UIChannel::UIChannel() : UIDragElement<PosCHANNEL>() {
     nl::node backgrnd = Channel["backgrnd"];
     Texture bg = backgrnd;
 
-    sprites.emplace_back(backgrnd, Point<int16_t>(1, 0));
-    sprites.emplace_back(Channel["backgrnd2"]);
-    sprites.emplace_back(Channel["backgrnd3"]);
-    sprites.emplace_back(Channel["world"][selected_world],
+    sprites_.emplace_back(backgrnd, Point<int16_t>(1, 0));
+    sprites_.emplace_back(Channel["backgrnd2"]);
+    sprites_.emplace_back(Channel["backgrnd3"]);
+    sprites_.emplace_back(Channel["world"][selected_world],
                          Point<int16_t>(16, 30));
 
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(Channel["BtCancel"]);
-    buttons[Buttons::CHANGE] =
+    buttons_[Buttons::CHANGE] =
         std::make_unique<MapleButton>(Channel["BtChange"],
                                       Point<int16_t>(-20, 0));
 
@@ -63,7 +63,7 @@ UIChannel::UIChannel() : UIDragElement<PosCHANNEL>() {
 
         ch.emplace_back(Channel["ch"][i],
                         Point<int16_t>(19 + 70 * x, 60 + 20 * y));
-        buttons[Buttons::CH + i] = std::make_unique<AreaButton>(
+        buttons_[Buttons::CH + i] = std::make_unique<AreaButton>(
             Point<int16_t>(11 + 70 * x, 55 + 20 * y),
             channel[true].get_dimensions());
 
@@ -77,25 +77,25 @@ UIChannel::UIChannel() : UIDragElement<PosCHANNEL>() {
         x++;
     }
 
-    dimension = bg.get_dimensions();
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    dimension_ = bg.get_dimensions();
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 }
 
 void UIChannel::draw(float inter) const {
     UIElement::draw(inter);
 
     if (current_channel == selected_channel) {
-        channel[true].draw(DrawArgument(position.x() + selected_channel_x,
-                                        position.y() + selected_channel_y));
+        channel[true].draw(DrawArgument(position_.x() + selected_channel_x,
+                                        position_.y() + selected_channel_y));
     } else {
-        channel[true].draw(DrawArgument(position.x() + selected_channel_x,
-                                        position.y() + selected_channel_y));
-        channel[false].draw(DrawArgument(position.x() + current_channel_x,
-                                         position.y() + current_channel_y));
+        channel[true].draw(DrawArgument(position_.x() + selected_channel_x,
+                                        position_.y() + selected_channel_y));
+        channel[false].draw(DrawArgument(position_.x() + current_channel_x,
+                                         position_.y() + current_channel_y));
     }
 
     for (auto &sprite : ch)
-        sprite.draw(position, inter);
+        sprite.draw(position_, inter);
 }
 
 void UIChannel::update() {
@@ -182,30 +182,30 @@ void UIChannel::send_key(int32_t keycode, bool pressed, bool escape) {
 Cursor::State UIChannel::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged)
+    if (dragged_)
         return dstate;
 
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
     for (size_t i = 0; i < channel_count + Buttons::CH; i++) {
-        if (buttons[i]->is_active()
-            && buttons[i]->bounds(position).contains(cursorpos)) {
-            if (buttons[i]->get_state() == Button::State::NORMAL) {
+        if (buttons_[i]->is_active()
+            && buttons_[i]->bounds(position_).contains(cursorpos)) {
+            if (buttons_[i]->get_state() == Button::State::NORMAL) {
                 if (i < Buttons::CH) {
                     Sound(Sound::Name::BUTTONOVER).play();
 
-                    buttons[i]->set_state(Button::State::MOUSEOVER);
+                    buttons_[i]->set_state(Button::State::MOUSEOVER);
                     ret = Cursor::State::CANCLICK;
                 } else {
-                    buttons[i]->set_state(Button::State::MOUSEOVER);
+                    buttons_[i]->set_state(Button::State::MOUSEOVER);
                     ret = Cursor::State::IDLE;
                 }
-            } else if (buttons[i]->get_state() == Button::State::MOUSEOVER) {
+            } else if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
                     if (i < Buttons::CH)
                         Sound(Sound::Name::BUTTONCLICK).play();
 
-                    buttons[i]->set_state(button_pressed(i));
+                    buttons_[i]->set_state(button_pressed(i));
 
                     ret = Cursor::State::IDLE;
                 } else {
@@ -215,8 +215,8 @@ Cursor::State UIChannel::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                         ret = Cursor::State::IDLE;
                 }
             }
-        } else if (buttons[i]->get_state() == Button::State::MOUSEOVER) {
-            buttons[i]->set_state(Button::State::NORMAL);
+        } else if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
+            buttons_[i]->set_state(Button::State::NORMAL);
         }
     }
 

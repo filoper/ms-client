@@ -21,36 +21,36 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-EquipData::EquipData(int32_t id) : itemdata(ItemData::get(id)) {
+EquipData::EquipData(int32_t id) : item_data_(ItemData::get(id)) {
     std::string strid = "0" + std::to_string(id);
-    std::string category = itemdata.get_category();
+    std::string category = item_data_.get_category();
     nl::node src = nl::nx::character[category][strid + ".img"]["info"];
 
-    cash = src["cash"].get_bool();
-    tradeblock = src["tradeBlock"].get_bool();
-    slots = src["tuc"];
+    cash_ = src["cash"].get_bool();
+    trade_block_ = src["tradeBlock"].get_bool();
+    slots_ = src["tuc"];
 
-    reqstats[MapleStat::Id::LEVEL] = src["reqLevel"];
-    reqstats[MapleStat::Id::JOB] = src["reqJob"];
-    reqstats[MapleStat::Id::STR] = src["reqSTR"];
-    reqstats[MapleStat::Id::DEX] = src["reqDEX"];
-    reqstats[MapleStat::Id::INT] = src["reqINT"];
-    reqstats[MapleStat::Id::LUK] = src["reqLUK"];
-    defstats[EquipStat::Id::STR] = src["incSTR"];
-    defstats[EquipStat::Id::DEX] = src["incDEX"];
-    defstats[EquipStat::Id::INT] = src["incINT"];
-    defstats[EquipStat::Id::LUK] = src["incLUK"];
-    defstats[EquipStat::Id::WATK] = src["incPAD"];
-    defstats[EquipStat::Id::WDEF] = src["incPDD"];
-    defstats[EquipStat::Id::MAGIC] = src["incMAD"];
-    defstats[EquipStat::Id::MDEF] = src["incMDD"];
-    defstats[EquipStat::Id::HP] = src["incMHP"];
-    defstats[EquipStat::Id::MP] = src["incMMP"];
-    defstats[EquipStat::Id::ACC] = src["incACC"];
-    defstats[EquipStat::Id::AVOID] = src["incEVA"];
-    defstats[EquipStat::Id::HANDS] = src["incHANDS"];
-    defstats[EquipStat::Id::SPEED] = src["incSPEED"];
-    defstats[EquipStat::Id::JUMP] = src["incJUMP"];
+    req_stats_[MapleStat::Id::LEVEL] = src["reqLevel"];
+    req_stats_[MapleStat::Id::JOB] = src["reqJob"];
+    req_stats_[MapleStat::Id::STR] = src["reqSTR"];
+    req_stats_[MapleStat::Id::DEX] = src["reqDEX"];
+    req_stats_[MapleStat::Id::INT] = src["reqINT"];
+    req_stats_[MapleStat::Id::LUK] = src["reqLUK"];
+    def_stats_[EquipStat::Id::STR] = src["incSTR"];
+    def_stats_[EquipStat::Id::DEX] = src["incDEX"];
+    def_stats_[EquipStat::Id::INT] = src["incINT"];
+    def_stats_[EquipStat::Id::LUK] = src["incLUK"];
+    def_stats_[EquipStat::Id::WATK] = src["incPAD"];
+    def_stats_[EquipStat::Id::WDEF] = src["incPDD"];
+    def_stats_[EquipStat::Id::MAGIC] = src["incMAD"];
+    def_stats_[EquipStat::Id::MDEF] = src["incMDD"];
+    def_stats_[EquipStat::Id::HP] = src["incMHP"];
+    def_stats_[EquipStat::Id::MP] = src["incMMP"];
+    def_stats_[EquipStat::Id::ACC] = src["incACC"];
+    def_stats_[EquipStat::Id::AVOID] = src["incEVA"];
+    def_stats_[EquipStat::Id::HANDS] = src["incHANDS"];
+    def_stats_[EquipStat::Id::SPEED] = src["incSPEED"];
+    def_stats_[EquipStat::Id::JUMP] = src["incJUMP"];
 
     constexpr size_t NON_WEAPON_TYPES = 15;
     constexpr size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
@@ -75,8 +75,8 @@ EquipData::EquipData(int32_t id) : itemdata(ItemData::get(id)) {
             EquipSlot::Id::MEDAL
         };
 
-        type = types[index];
-        eqslot = equipslots[index];
+        type_ = types[index];
+        eq_slot_ = equipslots[index];
     } else if (index >= WEAPON_OFFSET && index < WEAPON_OFFSET + WEAPON_TYPES) {
         constexpr char *types[WEAPON_TYPES] = { "ONE-HANDED SWORD",
                                                 "ONE-HANDED AXE",
@@ -100,16 +100,16 @@ EquipData::EquipData(int32_t id) : itemdata(ItemData::get(id)) {
                                                 "GUN" };
 
         size_t weaponindex = index - WEAPON_OFFSET;
-        type = types[weaponindex];
-        eqslot = EquipSlot::Id::WEAPON;
+        type_ = types[weaponindex];
+        eq_slot_ = EquipSlot::Id::WEAPON;
     } else {
-        type = "CASH";
-        eqslot = EquipSlot::Id::NONE;
+        type_ = "CASH";
+        eq_slot_ = EquipSlot::Id::NONE;
     }
 }
 
 bool EquipData::is_valid() const {
-    return itemdata.is_valid();
+    return item_data_.is_valid();
 }
 
 EquipData::operator bool() const {
@@ -117,26 +117,26 @@ EquipData::operator bool() const {
 }
 
 bool EquipData::is_weapon() const {
-    return eqslot == EquipSlot::Id::WEAPON;
+    return eq_slot_ == EquipSlot::Id::WEAPON;
 }
 
 int16_t EquipData::get_reqstat(MapleStat::Id stat) const {
-    return reqstats[stat];
+    return req_stats_[stat];
 }
 
 int16_t EquipData::get_defstat(EquipStat::Id stat) const {
-    return defstats[stat];
+    return def_stats_[stat];
 }
 
 EquipSlot::Id EquipData::get_eqslot() const {
-    return eqslot;
+    return eq_slot_;
 }
 
 const std::string &EquipData::get_type() const {
-    return type;
+    return type_;
 }
 
 const ItemData &EquipData::get_itemdata() const {
-    return itemdata;
+    return item_data_;
 }
 }  // namespace ms

@@ -47,9 +47,9 @@ private:
     // Load a bullet from the game files.
     BulletData(int32_t id);
 
-    const ItemData &itemdata;
+    const ItemData &item_data_;
 
-    Animation bullet;
-    int16_t watk;
+    Animation bullet_;
+    int16_t watk_;
 };
 }  // namespace ms

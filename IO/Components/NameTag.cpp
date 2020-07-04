@@ -20,28 +20,28 @@
 
 namespace ms {
 NameTag::NameTag(nl::node src, Text::Font f, std::string n) {
-    name = OutlinedText(f,
+    name_ = OutlinedText(f,
                         Text::Alignment::CENTER,
                         Color::Name::EAGLE,
                         Color::Name::JAMBALAYA);
-    name.change_text(n);
+    name_.change_text(n);
 
-    textures[false].push_back(src["0"]["0"]);
-    textures[false].push_back(src["0"]["1"]);
-    textures[false].push_back(src["0"]["2"]);
-    textures[true].push_back(src["1"]["0"]);
-    textures[true].push_back(src["1"]["1"]);
-    textures[true].push_back(src["1"]["2"]);
+    textures_[false].push_back(src["0"]["0"]);
+    textures_[false].push_back(src["0"]["1"]);
+    textures_[false].push_back(src["0"]["2"]);
+    textures_[true].push_back(src["1"]["0"]);
+    textures_[true].push_back(src["1"]["1"]);
+    textures_[true].push_back(src["1"]["2"]);
 
-    selected = false;
+    selected_ = false;
 }
 
 void NameTag::draw(Point<int16_t> position) const {
     position = position + Point<int16_t>(1, 2);
 
-    auto &tag = textures[selected];
+    auto &tag = textures_[selected_];
 
-    int16_t width = name.width();
+    int16_t width = name_.width();
     auto startpos = position - Point<int16_t>(6 + width / 2, -1);
 
     tag[0].draw(startpos);
@@ -49,15 +49,15 @@ void NameTag::draw(Point<int16_t> position) const {
                              Point<int16_t>(width, 0)));
     tag[2].draw(DrawArgument(startpos + Point<int16_t>(width + 6, 0)));
 
-    name.draw(position);
+    name_.draw(position);
 }
 
 void NameTag::set_selected(bool s) {
-    selected = s;
+    selected_ = s;
 
     if (s)
-        name.change_color(Color::Name::WHITE);
+        name_.change_color(Color::Name::WHITE);
     else
-        name.change_color(Color::Name::EAGLE);
+        name_.change_color(Color::Name::EAGLE);
 }
 }  // namespace ms

@@ -46,7 +46,7 @@ public:
     void apply(Char &target, Attack::Type atype) const override;
 
 private:
-    std::string action;
+    std::string action_;
 };
 
 class TwoHandedAction : public SkillAction {
@@ -56,7 +56,7 @@ public:
     void apply(Char &target, Attack::Type atype) const override;
 
 private:
-    BoolPair<std::string> actions;
+    BoolPair<std::string> actions_;
 };
 
 class ByLevelAction : public SkillAction {
@@ -66,7 +66,7 @@ public:
     void apply(Char &target, Attack::Type atype) const override;
 
 private:
-    std::map<int32_t, std::string> actions;
-    int32_t skillid;
+    std::map<int32_t, std::string> actions_;
+    int32_t skill_id_;
 };
 }  // namespace ms

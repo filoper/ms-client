@@ -39,35 +39,35 @@ UICharInfo::UICharInfo(int32_t cid) :
     nl::node backgrnd = character["backgrnd"];
 
     /// Main Window
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(character["backgrnd2"]);
-    sprites.emplace_back(character["name"]);
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(character["backgrnd2"]);
+    sprites_.emplace_back(character["name"]);
 
     Point<int16_t> backgrnd_dim = Texture(backgrnd).get_dimensions();
     Point<int16_t> close_dimensions = Point<int16_t>(backgrnd_dim.x() - 21, 6);
 
-    buttons[Buttons::BtClose] =
+    buttons_[Buttons::BtClose] =
         std::make_unique<MapleButton>(close, close_dimensions);
-    buttons[Buttons::BtCollect] =
+    buttons_[Buttons::BtCollect] =
         std::make_unique<MapleButton>(character["BtCollect"]);
-    buttons[Buttons::BtDamage] =
+    buttons_[Buttons::BtDamage] =
         std::make_unique<MapleButton>(character["BtDamage"]);
-    buttons[Buttons::BtFamily] =
+    buttons_[Buttons::BtFamily] =
         std::make_unique<MapleButton>(character["BtFamily"]);
-    buttons[Buttons::BtItem] =
+    buttons_[Buttons::BtItem] =
         std::make_unique<MapleButton>(character["BtItem"]);
-    buttons[Buttons::BtParty] =
+    buttons_[Buttons::BtParty] =
         std::make_unique<MapleButton>(character["BtParty"]);
-    buttons[Buttons::BtPersonality] =
+    buttons_[Buttons::BtPersonality] =
         std::make_unique<MapleButton>(character["BtPersonality"]);
-    buttons[Buttons::BtPet] = std::make_unique<MapleButton>(character["BtPet"]);
-    buttons[Buttons::BtPopDown] =
+    buttons_[Buttons::BtPet] = std::make_unique<MapleButton>(character["BtPet"]);
+    buttons_[Buttons::BtPopDown] =
         std::make_unique<MapleButton>(character["BtPopDown"]);
-    buttons[Buttons::BtPopUp] =
+    buttons_[Buttons::BtPopUp] =
         std::make_unique<MapleButton>(character["BtPopUp"]);
-    buttons[Buttons::BtRide] =
+    buttons_[Buttons::BtRide] =
         std::make_unique<MapleButton>(character["BtRide"]);
-    buttons[Buttons::BtTrad] =
+    buttons_[Buttons::BtTrad] =
         std::make_unique<MapleButton>(character["BtTrad"]);
 
     name = Text(Text::Font::A12M, Text::Alignment::CENTER, Color::Name::WHITE);
@@ -79,8 +79,8 @@ UICharInfo::UICharInfo(int32_t cid) :
         Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
 
     // TODO: Check if player has a mount or pet, disable if they don't
-    buttons[Buttons::BtPet]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BtRide]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BtPet]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BtRide]->set_state(Button::State::DISABLED);
 
     /// Farm
     nl::node farm = UserInfo["farm"];
@@ -91,14 +91,14 @@ UICharInfo::UICharInfo(int32_t cid) :
     farm_dim = Texture(farm_backgrnd).get_dimensions();
     farm_adj = Point<int16_t>(-farm_dim.x(), 0);
 
-    sprites.emplace_back(farm_backgrnd, farm_adj);
-    sprites.emplace_back(farm["backgrnd2"], farm_adj);
-    sprites.emplace_back(farm["default"], farm_adj);
-    sprites.emplace_back(farm["cover"], farm_adj);
+    sprites_.emplace_back(farm_backgrnd, farm_adj);
+    sprites_.emplace_back(farm["backgrnd2"], farm_adj);
+    sprites_.emplace_back(farm["default"], farm_adj);
+    sprites_.emplace_back(farm["cover"], farm_adj);
 
-    buttons[Buttons::BtFriend] =
+    buttons_[Buttons::BtFriend] =
         std::make_unique<MapleButton>(farm["btFriend"], farm_adj);
-    buttons[Buttons::BtVisit] =
+    buttons_[Buttons::BtVisit] =
         std::make_unique<MapleButton>(farm["btVisit"], farm_adj);
 
     farm_name =
@@ -137,9 +137,9 @@ UICharInfo::UICharInfo(int32_t cid) :
 
     default_medal = collect["icon1"];
 
-    buttons[Buttons::BtArrayGet] =
+    buttons_[Buttons::BtArrayGet] =
         std::make_unique<MapleButton>(collect["BtArrayGet"], bottom_window_adj);
-    buttons[Buttons::BtArrayName] =
+    buttons_[Buttons::BtArrayName] =
         std::make_unique<MapleButton>(collect["BtArrayName"],
                                       bottom_window_adj);
 
@@ -162,9 +162,9 @@ UICharInfo::UICharInfo(int32_t cid) :
     damage_sprites.emplace_back(damage["backgrnd2"], bottom_window_adj);
     damage_sprites.emplace_back(damage["backgrnd3"], bottom_window_adj);
 
-    buttons[Buttons::BtFAQ] =
+    buttons_[Buttons::BtFAQ] =
         std::make_unique<MapleButton>(damage["BtFAQ"], bottom_window_adj);
-    buttons[Buttons::BtRegist] =
+    buttons_[Buttons::BtRegist] =
         std::make_unique<MapleButton>(damage["BtRegist"], bottom_window_adj);
 
     damage_dimensions = Texture(damage_backgrnd).get_dimensions();
@@ -183,8 +183,8 @@ UICharInfo::UICharInfo(int32_t cid) :
     item_dimensions = Texture(item_backgrnd).get_dimensions();
 #pragma endregion
 
-    dimension = backgrnd_dim;
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    dimension_ = backgrnd_dim;
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
     target_character = Stage::get().get_character(cid).get();
 
@@ -195,16 +195,16 @@ void UICharInfo::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
     for (size_t i = 0; i < Buttons::BtArrayGet; i++)
-        if (const auto button = buttons.at(i).get())
-            button->draw(position);
+        if (const auto button = buttons_.at(i).get())
+            button->draw(position_);
 
     /// Main Window
     int16_t row_height = 18;
-    Point<int16_t> text_pos = position + Point<int16_t>(153, 65);
+    Point<int16_t> text_pos = position_ + Point<int16_t>(153, 65);
 
-    target_character->draw_preview(position + Point<int16_t>(63, 129), inter);
+    target_character->draw_preview(position_ + Point<int16_t>(63, 129), inter);
 
-    name.draw(position + Point<int16_t>(59, 131));
+    name.draw(position_ + Point<int16_t>(59, 131));
     level.draw(text_pos + Point<int16_t>(0, row_height * 0));
     job.draw(text_pos + Point<int16_t>(0, row_height * 1));
     fame.draw(text_pos + Point<int16_t>(0, row_height * 2));
@@ -213,7 +213,7 @@ void UICharInfo::draw(float inter) const {
     alliance.draw(text_pos + Point<int16_t>(0, row_height * 4));
 
     /// Farm
-    Point<int16_t> farm_pos = position + farm_adj;
+    Point<int16_t> farm_pos = position_ + farm_adj;
 
     if (is_loading)
         loading.draw(farm_pos, inter);
@@ -224,52 +224,52 @@ void UICharInfo::draw(float inter) const {
     /// Personality
     if (personality_enabled) {
         for (Sprite sprite : personality_sprites)
-            sprite.draw(position, inter);
+            sprite.draw(position_, inter);
 
         bool show_personality = (target_character->get_level() >= 30);
 
         for (Sprite sprite : personality_sprites_enabled[show_personality])
-            sprite.draw(position, inter);
+            sprite.draw(position_, inter);
     }
 
     /// Collect
     if (collect_enabled) {
         for (Sprite sprite : collect_sprites)
-            sprite.draw(position, inter);
+            sprite.draw(position_, inter);
 
         for (size_t i = 0; i < 15; i++) {
             div_t div = std::div(i, 5);
             default_medal.draw(
-                position + bottom_window_adj + Point<int16_t>(61, 66)
+                position_ + bottom_window_adj + Point<int16_t>(61, 66)
                     + Point<int16_t>(38 * div.rem, 38 * div.quot),
                 inter);
         }
 
         for (size_t i = Buttons::BtArrayGet; i < Buttons::BtFAQ; i++)
-            if (const auto button = buttons.at(i).get())
-                button->draw(position);
+            if (const auto button = buttons_.at(i).get())
+                button->draw(position_);
 
         Point<int16_t> text_pos = Point<int16_t>(121, 8);
 
-        medal_text.draw(position + bottom_window_adj + text_pos);
-        medal_total.draw(position + bottom_window_adj + text_pos
+        medal_text.draw(position_ + bottom_window_adj + text_pos);
+        medal_total.draw(position_ + bottom_window_adj + text_pos
                          + Point<int16_t>(0, 19));
     }
 
     /// Damage
     if (damage_enabled) {
         for (Sprite sprite : damage_sprites)
-            sprite.draw(position, inter);
+            sprite.draw(position_, inter);
 
-        for (size_t i = Buttons::BtFAQ; i < buttons.size(); i++)
-            if (const auto button = buttons.at(i).get())
-                button->draw(position);
+        for (size_t i = Buttons::BtFAQ; i < buttons_.size(); i++)
+            if (const auto button = buttons_.at(i).get())
+                button->draw(position_);
     }
 
     /// Item
     if (item_enabled)
         for (Sprite sprite : item_sprites)
-            sprite.draw(position, inter);
+            sprite.draw(position_, inter);
 }
 
 void UICharInfo::update() {
@@ -309,10 +309,10 @@ Button::State UICharInfo::button_pressed(uint16_t buttonid) {
 
 bool UICharInfo::is_in_range(Point<int16_t> cursorpos) const {
     Rectangle<int16_t> bounds =
-        Rectangle<int16_t>(position, position + dimension);
+        Rectangle<int16_t>(position_, position_ + dimension_);
 
     Rectangle<int16_t> farm_bounds =
-        Rectangle<int16_t>(position, position + farm_dim);
+        Rectangle<int16_t>(position_, position_ + farm_dim);
     farm_bounds.shift(farm_adj);
 
     Rectangle<int16_t> bottom_bounds =
@@ -325,24 +325,24 @@ bool UICharInfo::is_in_range(Point<int16_t> cursorpos) const {
 
     if (personality_enabled) {
         bottom_bounds =
-            Rectangle<int16_t>(position, position + personality_dimensions);
+            Rectangle<int16_t>(position_, position_ + personality_dimensions);
         bottom_bounds.shift(bottom_window_adj);
     }
 
     if (collect_enabled) {
         bottom_bounds =
-            Rectangle<int16_t>(position, position + collect_dimensions);
+            Rectangle<int16_t>(position_, position_ + collect_dimensions);
         bottom_bounds.shift(bottom_window_adj);
     }
 
     if (damage_enabled) {
         bottom_bounds =
-            Rectangle<int16_t>(position, position + damage_dimensions);
+            Rectangle<int16_t>(position_, position_ + damage_dimensions);
         bottom_bounds.shift(bottom_window_adj);
     }
 
     if (item_enabled) {
-        right_bounds = Rectangle<int16_t>(position, position + item_dimensions);
+        right_bounds = Rectangle<int16_t>(position_, position_ + item_dimensions);
         right_bounds.shift(right_window_adj);
     }
 
@@ -369,10 +369,10 @@ void UICharInfo::update_stats(int32_t character_id,
     int32_t player_id = Stage::get().get_player().get_oid();
 
     if (character_id == player_id) {
-        buttons[Buttons::BtParty]->set_state(Button::State::DISABLED);
-        buttons[Buttons::BtPopDown]->set_state(Button::State::DISABLED);
-        buttons[Buttons::BtPopUp]->set_state(Button::State::DISABLED);
-        buttons[Buttons::BtFriend]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BtParty]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BtPopDown]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BtPopUp]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BtFriend]->set_state(Button::State::DISABLED);
     }
 
     Job character_job = Job(job_id);

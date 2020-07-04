@@ -61,8 +61,8 @@ public:
 protected:
     MapObject(int32_t oid, Point<int16_t> position = {});
 
-    PhysicsObject phobj;
-    int32_t oid;
-    bool active;
+    PhysicsObject phobj_;
+    int32_t oid_;
+    bool active_;
 };
 }  // namespace ms

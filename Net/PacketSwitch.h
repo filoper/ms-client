@@ -51,7 +51,7 @@ private:
     // Maximum number of handlers needed
     static constexpr const size_t NUM_HANDLERS = 500;
 
-    std::unique_ptr<PacketHandler> handlers[NUM_HANDLERS];
+    std::unique_ptr<PacketHandler> handlers_[NUM_HANDLERS];
 
     // Register a handler for the specified opcode
     template<size_t O, typename T, typename... Args>
@@ -61,10 +61,10 @@ private:
         static_assert(std::is_base_of<PacketHandler, T>::value,
                       "Error: Packet handlers must derive from PacketHandler");
 
-        if (handlers[O])
+        if (handlers_[O])
             warn(MSG_REREGISTER, O);
 
-        handlers[O] = std::make_unique<T>(std::forward<Args>(args)...);
+        handlers_[O] = std::make_unique<T>(std::forward<Args>(args)...);
     }
 };
 }  // namespace ms

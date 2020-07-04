@@ -1,16 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
+//	This file is part of the continued Journey MMORPG client // 	Copyright
+//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
 //																				//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
+//// 	it under the terms of the GNU Affero General Public License as published
+///by / 	the Free Software Foundation, either version 3 of the License, or //
+///(at
+// your option) any later version.											//
 //																				//
 //	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
+// WITHOUT ANY WARRANTY; without even the implied warranty of				//
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
+//Affero General Public License for more details.							//
 //																				//
 //	You should have received a copy of the GNU Affero General Public License
 //// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
@@ -112,13 +113,13 @@ public:
                            float yscale,
                            float opacity,
                            float angle) :
-        pos(position),
-        center(center),
-        stretch(stretch),
-        xscale(xscale),
-        yscale(yscale),
-        color(1.0f, 1.0f, 1.0f, opacity),
-        angle(angle) {}
+        pos_(position),
+        center_(center),
+        stretch_(stretch),
+        xscale_(xscale),
+        yscale_(yscale),
+        color_(1.0f, 1.0f, 1.0f, opacity),
+        angle_(angle) {}
 
     constexpr DrawArgument(Point<int16_t> position,
                            Point<int16_t> center,
@@ -127,82 +128,81 @@ public:
                            float yscale,
                            Color color,
                            float angle) :
-        pos(position),
-        center(center),
-        stretch(stretch),
-        xscale(xscale),
-        yscale(yscale),
-        color(color),
-        angle(angle) {}
+        pos_(position),
+        center_(center),
+        stretch_(stretch),
+        xscale_(xscale),
+        yscale_(yscale),
+        color_(color),
+        angle_(angle) {}
 
-    constexpr Point<int16_t> getpos() const { return pos; }
+    constexpr Point<int16_t> getpos() const { return pos_; }
 
-    constexpr Point<int16_t> getstretch() const { return stretch; }
+    constexpr Point<int16_t> getstretch() const { return stretch_; }
 
-    constexpr float get_xscale() const { return xscale; }
+    constexpr float get_xscale() const { return xscale_; }
 
-    constexpr float get_yscale() const { return yscale; }
+    constexpr float get_yscale() const { return yscale_; }
 
-    constexpr const Color &get_color() const { return color; }
+    constexpr const Color &get_color() const { return color_; }
 
-    constexpr float get_angle() const { return angle; }
+    constexpr float get_angle() const { return angle_; }
 
     constexpr DrawArgument operator+(Point<int16_t> argpos) const {
-        return { pos + argpos, center + argpos, stretch, xscale,
-                 yscale,       color,           angle };
+        return { pos_ + argpos, center_ + argpos, stretch_, xscale_,
+                 yscale_,       color_,          angle_ };
     }
 
     constexpr DrawArgument operator+(float argopc) const {
-        return {
-            pos, center, stretch, xscale, yscale, color.a() * argopc, angle
-        };
+        return { pos_,  center_, stretch_, xscale_, yscale_, color_.a() * argopc,
+                 angle_ };
     }
 
     constexpr DrawArgument operator+(const DrawArgument &o) const {
-        return { pos + o.pos,       center + o.center, stretch + o.stretch,
-                 xscale * o.xscale, yscale * o.yscale, color * o.color,
-                 angle + o.angle };
+        return { pos_ + o.pos_,       center_ + o.center_, stretch_ + o.stretch_,
+                 xscale_ * o.xscale_, yscale_ * o.yscale_, color_ * o.color_,
+                 angle_+ o.angle_ };
     }
 
     constexpr DrawArgument operator-(const DrawArgument &o) const {
-        return { pos - o.pos,       center - o.center, stretch - o.stretch,
-                 xscale / o.xscale, yscale / o.yscale, color / o.color,
-                 angle - o.angle };
+        return { pos_ - o.pos_,       center_ - o.center_, stretch_ - o.stretch_,
+                 xscale_ / o.xscale_, yscale_ / o.yscale_, color_ / o.color_,
+                 angle_- o.angle_ };
     }
 
     Rectangle<int16_t> get_rectangle(Point<int16_t> origin,
                                      Point<int16_t> dimensions) const {
-        int16_t w = stretch.x();
+        int16_t w = stretch_.x();
 
         if (w == 0)
             w = dimensions.x();
 
-        int16_t h = stretch.y();
+        int16_t h = stretch_.y();
 
         if (h == 0)
             h = dimensions.y();
 
-        Point<int16_t> rlt = pos - center - origin;
+        Point<int16_t> rlt = pos_ - center_ - origin;
         int16_t rl = rlt.x();
         int16_t rr = rlt.x() + w;
         int16_t rt = rlt.y();
         int16_t rb = rlt.y() + h;
-        int16_t cx = center.x();
-        int16_t cy = center.y();
+        int16_t cx = center_.x();
+        int16_t cy = center_.y();
 
-        return { cx + static_cast<int16_t>(xscale * rl),
-                 cx + static_cast<int16_t>(xscale * rr),
-                 cy + static_cast<int16_t>(yscale * rt),
-                 cy + static_cast<int16_t>(yscale * rb) };
+        return { cx + static_cast<int16_t>(xscale_ * rl),
+                 cx + static_cast<int16_t>(xscale_ * rr),
+                 cy + static_cast<int16_t>(yscale_ * rt),
+                 cy + static_cast<int16_t>(yscale_ * rb) };
     }
 
 private:
-    Point<int16_t> pos;
-    Point<int16_t> center;
-    Point<int16_t> stretch;
-    float xscale;
-    float yscale;
-    float angle;
-    Color color;
+    Point<int16_t> pos_;
+    Point<int16_t> center_;
+    Point<int16_t> stretch_;
+    float xscale_;
+    float yscale_;
+    float angle_;
+    Color color_;
 };
 }  // namespace ms

@@ -33,21 +33,21 @@ public:
     bool set_item(int32_t itemid);
 
 private:
-    int32_t itemid;
-    int16_t fillwidth;
-    int16_t fillheight;
-    int16_t descdelta;
-    Texture itemicon;
+    int32_t item_id_;
+    int16_t fill_width_;
+    int16_t fill_height_;
+    int16_t desc_delta_;
+    Texture item_icon_;
 
-    Text name;
-    Text desc;
-    Text qual;
-    MapleFrame frame;
-    Texture cover;
-    Texture base;
-    Texture itemcover;
-    BoolPair<Texture> type;
-    bool untradable;
-    bool unique;
+    Text name_;
+    Text desc_;
+    Text qual_;
+    MapleFrame frame_;
+    Texture cover_;
+    Texture base_;
+    Texture item_cover_;
+    BoolPair<Texture> type_;
+    bool untradable_;
+    bool unique_;
 };
 }  // namespace ms

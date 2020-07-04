@@ -31,7 +31,7 @@ public:
     void add_card(int16_t, int8_t);
 
 private:
-    int32_t cover;
-    std::map<int16_t, int8_t> cards;
+    int32_t cover_;
+    std::map<int16_t, int8_t> cards_;
 };
 }  // namespace ms

@@ -172,23 +172,23 @@ protected:
     // Get a speed modifier for the current stance.
     float get_stancespeed() const;
 
-    CharLook look;
-    CharLook look_preview;
-    PetLook pets[3];
+    CharLook look_;
+    CharLook look_preview_;
+    PetLook pets_[3];
 
-    State state;
-    bool attacking;
-    bool facing_right;
+    State state_;
+    bool attacking_;
+    bool facing_right_;
 
 private:
-    Text namelabel;
-    ChatBalloon chatballoon;
-    EffectLayer effects;
-    Afterimage afterimage;
-    TimedBool invincible;
-    TimedBool ironbody;
-    std::list<DamageNumber> damagenumbers;
+    Text name_label_;
+    ChatBalloon chat_balloon_;
+    EffectLayer effects_;
+    Afterimage after_image_;
+    TimedBool invincible_;
+    TimedBool iron_body_;
+    std::list<DamageNumber> damage_numbers_;
 
-    static EnumMap<CharEffect::Id, Animation> chareffects;
+    static EnumMap<CharEffect::Id, Animation> char_effects_;
 };
 }  // namespace ms

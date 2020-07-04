@@ -21,36 +21,36 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-WeaponData::WeaponData(int32_t equipid) : equipdata(EquipData::get(equipid)) {
+WeaponData::WeaponData(int32_t equipid) : equip_data_(EquipData::get(equipid)) {
     int32_t prefix = equipid / 10000;
-    type = Weapon::by_value(prefix);
-    twohanded = (prefix == Weapon::STAFF)
+    type_ = Weapon::by_value(prefix);
+    two_handed_ = (prefix == Weapon::STAFF)
                 || (prefix >= Weapon::SWORD_2H && prefix <= Weapon::POLEARM)
                 || (prefix == Weapon::CROSSBOW);
 
     nl::node src = nl::nx::character["Weapon"]["0" + std::to_string(equipid)
                                                + ".img"]["info"];
 
-    attackspeed = static_cast<uint8_t>(src["attackSpeed"]);
-    attack = static_cast<uint8_t>(src["attack"]);
+    attack_speed_ = static_cast<uint8_t>(src["attackSpeed"]);
+    attack_ = static_cast<uint8_t>(src["attack"]);
 
     nl::node soundsrc = nl::nx::sound["Weapon.img"][src["sfx"]];
 
     bool twosounds = soundsrc["Attack2"].data_type() == nl::node::type::audio;
 
     if (twosounds) {
-        usesounds[false] = soundsrc["Attack"];
-        usesounds[true] = soundsrc["Attack2"];
+        use_sounds_[false] = soundsrc["Attack"];
+        use_sounds_[true] = soundsrc["Attack2"];
     } else {
-        usesounds[false] = soundsrc["Attack"];
-        usesounds[true] = soundsrc["Attack"];
+        use_sounds_[false] = soundsrc["Attack"];
+        use_sounds_[true] = soundsrc["Attack"];
     }
 
-    afterimage = std::string(src["afterImage"]);
+    after_image_ = std::string(src["afterImage"]);
 }
 
 bool WeaponData::is_valid() const {
-    return equipdata.is_valid();
+    return equip_data_.is_valid();
 }
 
 WeaponData::operator bool() const {
@@ -58,19 +58,19 @@ WeaponData::operator bool() const {
 }
 
 bool WeaponData::is_twohanded() const {
-    return twohanded;
+    return two_handed_;
 }
 
 uint8_t WeaponData::get_speed() const {
-    return attackspeed;
+    return attack_speed_;
 }
 
 uint8_t WeaponData::get_attack() const {
-    return attack;
+    return attack_;
 }
 
 std::string WeaponData::getspeedstring() const {
-    switch (attackspeed) {
+    switch (attack_speed_) {
         case 1: return "FAST (1)";
         case 2: return "FAST (2)";
         case 3: return "FAST (3)";
@@ -85,25 +85,25 @@ std::string WeaponData::getspeedstring() const {
 }
 
 uint8_t WeaponData::get_attackdelay() const {
-    if (type == Weapon::NONE)
+    if (type_ == Weapon::NONE)
         return 0;
     else
-        return 50 - 25 / attackspeed;
+        return 50 - 25 / attack_speed_;
 }
 
 Weapon::Type WeaponData::get_type() const {
-    return type;
+    return type_;
 }
 
 Sound WeaponData::get_usesound(bool degenerate) const {
-    return usesounds[degenerate];
+    return use_sounds_[degenerate];
 }
 
 const std::string &WeaponData::get_afterimage() const {
-    return afterimage;
+    return after_image_;
 }
 
 const EquipData &WeaponData::get_equipdata() const {
-    return equipdata;
+    return equip_data_;
 }
 }  // namespace ms

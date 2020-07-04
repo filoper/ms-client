@@ -22,10 +22,10 @@ namespace ms {
 Cryptography::Cryptography(const int8_t *handshake) {
 #ifdef USE_CRYPTO
     for (size_t i = 0; i < HEADER_LENGTH; i++)
-        sendiv[i] = handshake[i + 7];
+        sendiv_[i] = handshake[i + 7];
 
     for (size_t i = 0; i < HEADER_LENGTH; i++)
-        recviv[i] = handshake[i + 11];
+        recviv_[i] = handshake[i + 11];
 #endif
 }
 
@@ -35,13 +35,13 @@ Cryptography::~Cryptography() {}
 void Cryptography::encrypt(int8_t *bytes, size_t length) {
 #ifdef USE_CRYPTO
     mapleencrypt(bytes, length);
-    aesofb(bytes, length, sendiv);
+    aesofb(bytes, length, sendiv_);
 #endif
 }
 
 void Cryptography::decrypt(int8_t *bytes, size_t length) {
 #ifdef USE_CRYPTO
-    aesofb(bytes, length, recviv);
+    aesofb(bytes, length, recviv_);
     mapledecrypt(bytes, length);
 #endif
 }
@@ -50,7 +50,7 @@ void Cryptography::create_header(int8_t *buffer, size_t length) const {
 #ifdef USE_CRYPTO
     static const uint8_t MAPLEVERSION = 83;
 
-    size_t a = ((sendiv[3] << 8) | sendiv[2]) ^ MAPLEVERSION;
+    size_t a = ((sendiv_[3] << 8) | sendiv_[2]) ^ MAPLEVERSION;
     size_t b = a ^ length;
 
     buffer[0] = static_cast<int8_t>(a % 0x100);

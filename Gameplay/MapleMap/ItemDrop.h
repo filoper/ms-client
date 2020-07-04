@@ -37,7 +37,7 @@ public:
     void draw(double viewx, double viewy, float alpha) const override;
 
 private:
-    const Texture &icon;
-    int32_t itemid;
+    const Texture &icon_;
+    int32_t item_id_;
 };
 }  // namespace ms

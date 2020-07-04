@@ -42,7 +42,7 @@ public:
     int16_t getw(int8_t character) const;
 
 private:
-    std::unordered_map<int8_t, Texture> chars;
-    Alignment alignment;
+    std::unordered_map<int8_t, Texture> chars_;
+    Alignment alignment_;
 };
 }  // namespace ms

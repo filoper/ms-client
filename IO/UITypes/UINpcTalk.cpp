@@ -45,34 +45,34 @@ UINpcTalk::UINpcTalk() :
 
     min_height = 8 * fill.height() + 14;
 
-    buttons[Buttons::ALLLEVEL] =
+    buttons_[Buttons::ALLLEVEL] =
         std::make_unique<MapleButton>(UtilDlgEx["BtAllLevel"]);
-    buttons[Buttons::CLOSE] =
+    buttons_[Buttons::CLOSE] =
         std::make_unique<MapleButton>(UtilDlgEx["BtClose"]);
-    buttons[Buttons::MYLEVEL] =
+    buttons_[Buttons::MYLEVEL] =
         std::make_unique<MapleButton>(UtilDlgEx["BtMyLevel"]);
-    buttons[Buttons::NEXT] = std::make_unique<MapleButton>(UtilDlgEx["BtNext"]);
+    buttons_[Buttons::NEXT] = std::make_unique<MapleButton>(UtilDlgEx["BtNext"]);
 
     // TODO: Replace when _inlink is fixed
     // buttons[Buttons::NO] = std::make_unique<MapleButton>(UtilDlgEx["BtNo"]);
 
     nl::node Quest = UIWindow2["Quest"];
 
-    buttons[Buttons::NO] = std::make_unique<MapleButton>(Quest["BtNo"]);
-    buttons[Buttons::OK] = std::make_unique<MapleButton>(UtilDlgEx["BtOK"]);
-    buttons[Buttons::PREV] = std::make_unique<MapleButton>(UtilDlgEx["BtPrev"]);
-    buttons[Buttons::QAFTER] =
+    buttons_[Buttons::NO] = std::make_unique<MapleButton>(Quest["BtNo"]);
+    buttons_[Buttons::OK] = std::make_unique<MapleButton>(UtilDlgEx["BtOK"]);
+    buttons_[Buttons::PREV] = std::make_unique<MapleButton>(UtilDlgEx["BtPrev"]);
+    buttons_[Buttons::QAFTER] =
         std::make_unique<MapleButton>(UtilDlgEx["BtQAfter"]);
-    buttons[Buttons::QCNO] = std::make_unique<MapleButton>(UtilDlgEx["BtQCNo"]);
-    buttons[Buttons::QCYES] =
+    buttons_[Buttons::QCNO] = std::make_unique<MapleButton>(UtilDlgEx["BtQCNo"]);
+    buttons_[Buttons::QCYES] =
         std::make_unique<MapleButton>(UtilDlgEx["BtQCYes"]);
-    buttons[Buttons::QGIVEUP] =
+    buttons_[Buttons::QGIVEUP] =
         std::make_unique<MapleButton>(UtilDlgEx["BtQGiveup"]);
-    buttons[Buttons::QNO] = std::make_unique<MapleButton>(UtilDlgEx["BtQNo"]);
-    buttons[Buttons::QSTART] =
+    buttons_[Buttons::QNO] = std::make_unique<MapleButton>(UtilDlgEx["BtQNo"]);
+    buttons_[Buttons::QSTART] =
         std::make_unique<MapleButton>(UtilDlgEx["BtQStart"]);
-    buttons[Buttons::QYES] = std::make_unique<MapleButton>(UtilDlgEx["BtQYes"]);
-    buttons[Buttons::YES] = std::make_unique<MapleButton>(UtilDlgEx["BtYes"]);
+    buttons_[Buttons::QYES] = std::make_unique<MapleButton>(UtilDlgEx["BtQYes"]);
+    buttons_[Buttons::YES] = std::make_unique<MapleButton>(UtilDlgEx["BtYes"]);
 
     name = Text(Text::Font::A11M, Text::Alignment::CENTER, Color::Name::WHITE);
 
@@ -89,7 +89,7 @@ UINpcTalk::UINpcTalk() :
 }
 
 void UINpcTalk::draw(float inter) const {
-    Point<int16_t> drawpos = position;
+    Point<int16_t> drawpos = position_;
     top.draw(drawpos);
     drawpos.shift_y(top.height());
     fill.draw(DrawArgument(drawpos, Point<int16_t>(0, height)));
@@ -100,7 +100,7 @@ void UINpcTalk::draw(float inter) const {
     UIElement::draw(inter);
 
     int16_t speaker_y = (top.height() + height + bottom.height()) / 2;
-    Point<int16_t> speaker_pos = position + Point<int16_t>(22, 11 + speaker_y);
+    Point<int16_t> speaker_pos = position_ + Point<int16_t>(22, 11 + speaker_y);
     Point<int16_t> center_pos =
         speaker_pos + Point<int16_t>(nametag.width() / 2, 0);
 
@@ -109,14 +109,14 @@ void UINpcTalk::draw(float inter) const {
     name.draw(center_pos + Point<int16_t>(0, -4));
 
     if (show_slider) {
-        int16_t text_min_height = position.y() + top.height() - 1;
+        int16_t text_min_height = position_.y() + top.height() - 1;
         text.draw(
-            position + Point<int16_t>(162, 19 - offset * 400),
+            position_ + Point<int16_t>(162, 19 - offset * 400),
             Range<int16_t>(text_min_height, text_min_height + height - 18));
-        slider.draw(position);
+        slider.draw(position_);
     } else {
         int16_t y_adj = height - min_height;
-        text.draw(position + Point<int16_t>(166, 48 - y_adj));
+        text.draw(position_ + Point<int16_t>(166, 48 - y_adj));
     }
 }
 
@@ -223,7 +223,7 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
 }
 
 Cursor::State UINpcTalk::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    Point<int16_t> cursor_relative = cursorpos - position;
+    Point<int16_t> cursor_relative = cursorpos - position_;
 
     if (show_slider && slider.isenabled())
         if (Cursor::State sstate = slider.send_cursor(cursor_relative, clicked))
@@ -362,30 +362,30 @@ void UINpcTalk::change_text(int32_t npcid,
         }
     }
 
-    for (auto &button : buttons) {
+    for (auto &button : buttons_) {
         button.second->set_active(false);
         button.second->set_state(Button::State::NORMAL);
     }
 
     int16_t y_cord = height + 48;
 
-    buttons[Buttons::CLOSE]->set_position(Point<int16_t>(9, y_cord));
-    buttons[Buttons::CLOSE]->set_active(true);
+    buttons_[Buttons::CLOSE]->set_position(Point<int16_t>(9, y_cord));
+    buttons_[Buttons::CLOSE]->set_active(true);
 
     switch (type) {
         case TalkType::SENDOK:
-            buttons[Buttons::OK]->set_position(Point<int16_t>(471, y_cord));
-            buttons[Buttons::OK]->set_active(true);
+            buttons_[Buttons::OK]->set_position(Point<int16_t>(471, y_cord));
+            buttons_[Buttons::OK]->set_active(true);
             break;
         case TalkType::SENDYESNO: {
             Point<int16_t> yes_position = Point<int16_t>(389, y_cord);
 
-            buttons[Buttons::YES]->set_position(yes_position);
-            buttons[Buttons::YES]->set_active(true);
+            buttons_[Buttons::YES]->set_position(yes_position);
+            buttons_[Buttons::YES]->set_active(true);
 
-            buttons[Buttons::NO]->set_position(yes_position
+            buttons_[Buttons::NO]->set_position(yes_position
                                                + Point<int16_t>(65, 0));
-            buttons[Buttons::NO]->set_active(true);
+            buttons_[Buttons::NO]->set_active(true);
             break;
         }
         case TalkType::SENDNEXT:
@@ -397,7 +397,7 @@ void UINpcTalk::change_text(int32_t npcid,
         default: break;
     }
 
-    position = Point<int16_t>(400 - top.width() / 2, 240 - height / 2);
-    dimension = Point<int16_t>(top.width(), height + 120);
+    position_ = Point<int16_t>(400 - top.width() / 2, 240 - height / 2);
+    dimension_ = Point<int16_t>(top.width(), height + 120);
 }
 }  // namespace ms

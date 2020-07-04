@@ -57,14 +57,14 @@ public:
                          uint16_t bullets) const override;
 
 private:
-    std::unique_ptr<SkillAction> action;
-    std::unique_ptr<SkillBullet> bullet;
-    std::unique_ptr<SkillSound> sound;
-    std::unique_ptr<SkillUseEffect> useeffect;
-    std::unique_ptr<SkillHitEffect> hiteffect;
+    std::unique_ptr<SkillAction> action_;
+    std::unique_ptr<SkillBullet> bullet_;
+    std::unique_ptr<SkillSound> sound_;
+    std::unique_ptr<SkillUseEffect> use_effect_;
+    std::unique_ptr<SkillHitEffect> hit_effect_;
 
-    int32_t skillid;
-    bool overregular;
-    bool projectile;
+    int32_t skill_id_;
+    bool over_regular_;
+    bool projectile_;
 };
 }  // namespace ms

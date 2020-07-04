@@ -63,7 +63,7 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
                             break;
                     }
 
-                    stances[stance][layer]
+                    stances_[stance][layer]
                         .emplace(frame, partnode)
                         .first->second.shift(shift);
                 }
@@ -73,7 +73,7 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
                 Point<int16_t> shift
                     = drawinfo.get_head_position(stance, frame);
 
-                stances[stance][Body::Layer::HEAD]
+                stances_[stance][Body::Layer::HEAD]
                     .emplace(frame, headsfnode)
                     .first->second.shift(shift);
             }
@@ -87,29 +87,29 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
             "",      "",    "",     "Grey", "Pink", "Red" };
 
     size_t index = skin;
-    name = (index < NUM_SKINTYPES) ? skintypes[index] : "";
+    name_ = (index < NUM_SKINTYPES) ? skintypes[index] : "";
 }
 
 void Body::draw(Stance::Id stance,
                 Layer layer,
                 uint8_t frame,
                 const DrawArgument &args) const {
-    auto frameit = stances[stance][layer].find(frame);
+    auto frameit = stances_[stance][layer].find(frame);
 
-    if (frameit == stances[stance][layer].end())
+    if (frameit == stances_[stance][layer].end())
         return;
 
     frameit->second.draw(args);
 }
 
 const std::string &Body::get_name() const {
-    return name;
+    return name_;
 }
 
 Body::Layer Body::layer_by_name(const std::string &name) {
-    auto layer_iter = layers_by_name.find(name);
+    auto layer_iter = layers_by_name_.find(name);
 
-    if (layer_iter == layers_by_name.end()) {
+    if (layer_iter == layers_by_name_.end()) {
         if (name != "")
             std::cout << "Unknown Body::Layer name: [" << name << "]"
                       << std::endl;
@@ -120,7 +120,7 @@ Body::Layer Body::layer_by_name(const std::string &name) {
     return layer_iter->second;
 }
 
-const std::unordered_map<std::string, Body::Layer> Body::layers_by_name
+const std::unordered_map<std::string, Body::Layer> Body::layers_by_name_
     = { { "body", Body::Layer::BODY },
         { "backBody", Body::Layer::BODY },
         { "arm", Body::Layer::ARM },

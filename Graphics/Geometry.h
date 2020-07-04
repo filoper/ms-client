@@ -52,10 +52,10 @@ public:
     void draw(const DrawArgument &args) const;
 
 private:
-    int16_t width;
-    int16_t height;
-    Color::Name color;
-    float opacity;
+    int16_t width_;
+    int16_t height_;
+    Color::Name color_;
+    float opacity_;
 };
 
 class ColorLine : public Geometry {
@@ -73,9 +73,9 @@ public:
     void draw(const DrawArgument &args) const;
 
 private:
-    int16_t width;
-    Color::Name color;
-    float opacity;
+    int16_t width_;
+    Color::Name color_;
+    float opacity_;
 };
 
 class MobHpBar : public Geometry {

@@ -87,8 +87,8 @@ public:
     MapObjects *get_mobs();
 
 private:
-    MapObjects mobs;
+    MapObjects mobs_;
 
-    std::queue<MobSpawn> spawns;
+    std::queue<MobSpawn> spawns_;
 };
 }  // namespace ms

@@ -28,28 +28,28 @@ const double FLYFRICTION = 0.05;
 const double SWIMFRICTION = 0.08;
 
 Physics::Physics(nl::node src) {
-    fht = src;
+    fh_tree_ = src;
 }
 
 Physics::Physics() {}
 
 void Physics::move_object(PhysicsObject &phobj) const {
     // Determine which platform the object is currently on
-    fht.update_fh(phobj);
+    fh_tree_.update_fh(phobj);
 
     // Use the appropriate physics for the terrain the object is on
     switch (phobj.type) {
         case PhysicsObject::Type::NORMAL:
             move_normal(phobj);
-            fht.limit_movement(phobj);
+            fh_tree_.limit_movement(phobj);
             break;
         case PhysicsObject::Type::FLYING:
             move_flying(phobj);
-            fht.limit_movement(phobj);
+            fh_tree_.limit_movement(phobj);
             break;
         case PhysicsObject::Type::SWIMMING:
             move_swimming(phobj);
-            fht.limit_movement(phobj);
+            fh_tree_.limit_movement(phobj);
             break;
         case PhysicsObject::Type::FIXATED:
         default: break;
@@ -134,12 +134,12 @@ void Physics::move_swimming(PhysicsObject &phobj) const {
 }
 
 Point<int16_t> Physics::get_y_below(Point<int16_t> position) const {
-    int16_t ground = fht.get_y_below(position);
+    int16_t ground = fh_tree_.get_y_below(position);
 
     return Point<int16_t>(position.x(), ground - 1);
 }
 
 const FootholdTree &Physics::get_fht() const {
-    return fht;
+    return fh_tree_;
 }
 }  // namespace ms

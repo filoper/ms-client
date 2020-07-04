@@ -23,7 +23,7 @@
 namespace ms {
 Texture::Texture(nl::node src) {
     if (src.data_type() == nl::node::type::bitmap) {
-        origin = src["origin"];
+        origin_ = src["origin"];
 
         std::string source = src["source"];
         std::string _outlink = src["_outlink"];
@@ -52,10 +52,10 @@ Texture::Texture(nl::node src) {
             }
         }
 
-        bitmap = src;
-        dimensions = Point<int16_t>(bitmap.width(), bitmap.height());
+        bitmap_ = src;
+        dimensions_ = Point<int16_t>(bitmap_.width(), bitmap_.height());
 
-        GraphicsGL::get().addbitmap(bitmap);
+        GraphicsGL::get().addbitmap(bitmap_);
     }
 }
 
@@ -64,39 +64,39 @@ Texture::Texture() {}
 Texture::~Texture() {}
 
 void Texture::draw(const DrawArgument &args) const {
-    size_t id = bitmap.id();
+    size_t id = bitmap_.id();
 
     if (id == 0)
         return;
 
-    GraphicsGL::get().draw(bitmap,
-                           args.get_rectangle(origin, dimensions),
+    GraphicsGL::get().draw(bitmap_,
+                           args.get_rectangle(origin_, dimensions_),
                            args.get_color(),
                            args.get_angle());
 }
 
 void Texture::shift(Point<int16_t> amount) {
-    origin -= amount;
+    origin_ -= amount;
 }
 
 bool Texture::is_valid() const {
-    return bitmap.id() > 0;
+    return bitmap_.id() > 0;
 }
 
 int16_t Texture::width() const {
-    return dimensions.x();
+    return dimensions_.x();
 }
 
 int16_t Texture::height() const {
-    return dimensions.y();
+    return dimensions_.y();
 }
 
 Point<int16_t> Texture::get_origin() const {
-    return origin;
+    return origin_;
 }
 
 Point<int16_t> Texture::get_dimensions() const {
-    return dimensions;
+    return dimensions_;
 }
 
 nl::node Texture::find_child(nl::node source, std::string link) {

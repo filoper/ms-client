@@ -32,9 +32,9 @@ public:
     bool set_text(std::string text);
 
 private:
-    MapleFrame frame;
-    Texture cover;
-    std::string text;
-    Text text_label;
+    MapleFrame frame_;
+    Texture cover_;
+    std::string text_;
+    Text text_label_;
 };
 }  // namespace ms

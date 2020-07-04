@@ -69,14 +69,14 @@ public:
     Stance get_stance() const;
 
 private:
-    int32_t itemid;
-    std::string name;
-    int32_t uniqueid;
-    Stance stance;
-    bool flip;
+    int32_t item_id_;
+    std::string name_;
+    int32_t unique_id_;
+    Stance stance_;
+    bool flip_;
 
-    EnumMap<Stance, Animation> animations;
-    PhysicsObject phobj;
-    Text namelabel;
+    EnumMap<Stance, Animation> animations_;
+    PhysicsObject phobj_;
+    Text name_label_;
 };
 }  // namespace ms

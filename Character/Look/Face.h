@@ -54,7 +54,7 @@ public:
 
     static Id byaction(size_t action);
 
-    static const EnumMap<Id, std::string> names;
+    static const EnumMap<Id, std::string> names_;
 };
 
 class Face {
@@ -89,7 +89,7 @@ private:
         }
     };
 
-    std::unordered_map<uint8_t, Frame> expressions[Expression::Id::LENGTH];
-    std::string name;
+    std::unordered_map<uint8_t, Frame> expressions_[Expression::Id::LENGTH];
+    std::string name_;
 };
 }  // namespace ms

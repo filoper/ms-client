@@ -28,33 +28,33 @@ uint16_t Button::get_selected() const {
 }
 
 void Button::set_position(Point<int16_t> pos) {
-    position = pos;
+    position_ = pos;
 }
 
 void Button::set_state(State s) {
     if (s == Button::State::IDENTITY)
         return;
 
-    state = s;
+    state_ = s;
 }
 
 void Button::set_active(bool a) {
-    active = a;
+    active_ = a;
 }
 
 void Button::toggle_pressed() {
-    pressed = !pressed;
+    pressed_ = !pressed_;
 }
 
 bool Button::is_active() const {
-    return active && state != Button::State::DISABLED;
+    return active_ && state_ != Button::State::DISABLED;
 }
 
 Button::State Button::get_state() const {
-    return state;
+    return state_;
 }
 
 bool Button::is_pressed() const {
-    return pressed;
+    return pressed_;
 }
 }  // namespace ms

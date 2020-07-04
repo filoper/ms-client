@@ -103,7 +103,7 @@ UIRaceSelect::UIRaceSelect() :
     class_isdisabled[Classes::ILLIUM] = true;
     class_isdisabled[Classes::ARK] = true;
 
-    sprites.emplace_back(Common["frame"], Point<int16_t>(400, 300));
+    sprites_.emplace_back(Common["frame"], Point<int16_t>(400, 300));
 
     back = RaceSelect["Back"]["1"]["0"];
     backZero = RaceSelect["Back"]["2"]["0"];
@@ -125,19 +125,19 @@ UIRaceSelect::UIRaceSelect() :
         class_title[i] = RaceSelect["Back3"][i]["0"];
     }
 
-    buttons[Buttons::BACK] =
+    buttons_[Buttons::BACK] =
         std::make_unique<MapleButton>(Common["BtStart"],
                                       Point<int16_t>(0, 515));
-    buttons[Buttons::MAKE] = std::make_unique<MapleButton>(RaceSelect["make"]);
-    buttons[Buttons::LEFT] =
+    buttons_[Buttons::MAKE] = std::make_unique<MapleButton>(RaceSelect["make"]);
+    buttons_[Buttons::LEFT] =
         std::make_unique<MapleButton>(RaceSelect["leftArrow"],
                                       Point<int16_t>(41, 458));
-    buttons[Buttons::RIGHT] =
+    buttons_[Buttons::RIGHT] =
         std::make_unique<MapleButton>(RaceSelect["rightArrow"],
                                       Point<int16_t>(718, 458));
 
     for (size_t i = 0; i <= Buttons::CLASS0; i++)
-        buttons[Buttons::CLASS0 + i] = std::make_unique<AreaButton>(
+        buttons_[Buttons::CLASS0 + i] = std::make_unique<AreaButton>(
             get_class_pos(i),
             class_normal[0][true].get_dimensions());
 
@@ -145,46 +145,46 @@ UIRaceSelect::UIRaceSelect() :
     selected_index = 0;
     selected_class = class_index[selected_index];
 
-    buttons[Buttons::LEFT]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::LEFT]->set_state(Button::State::DISABLED);
 
     Sound(Sound::Name::RACESELECT).play();
 }
 
 void UIRaceSelect::draw(float inter) const {
     if (selected_class == Classes::ZERO)
-        backZero.draw(position);
+        backZero.draw(position_);
     else
-        back.draw(position);
+        back.draw(position_);
 
     UIElement::draw_sprites(inter);
 
-    version.draw(position + Point<int16_t>(707, 1));
+    version.draw(position_ + Point<int16_t>(707, 1));
 
     if (selected_class == Classes::KANNA || selected_class == Classes::CHASE) {
         if (selected_class == Classes::ZERO)
-            class_details_backgroundZero.draw(position);
+            class_details_backgroundZero.draw(position_);
         else
-            class_details_background.draw(position);
+            class_details_background.draw(position_);
 
-        class_background[selected_class].draw(position);
+        class_background[selected_class].draw(position_);
     } else {
-        class_background[selected_class].draw(position);
+        class_background[selected_class].draw(position_);
 
         if (selected_class == Classes::ZERO)
-            class_details_backgroundZero.draw(position);
+            class_details_backgroundZero.draw(position_);
         else
-            class_details_background.draw(position);
+            class_details_background.draw(position_);
     }
 
-    class_details[selected_class].draw(position);
-    class_title[selected_class].draw(position);
+    class_details[selected_class].draw(position_);
+    class_title[selected_class].draw(position_);
 
     for (const auto &node : hotlist) {
         if (node.get_integer() == selected_class) {
             if (selected_class == Classes::ZERO)
-                hotlabelZero.draw(position, inter);
+                hotlabelZero.draw(position_, inter);
             else
-                hotlabel.draw(position, inter);
+                hotlabel.draw(position_, inter);
 
             break;
         }
@@ -192,7 +192,7 @@ void UIRaceSelect::draw(float inter) const {
 
     for (const auto &node : newlist) {
         if (node.get_integer() == selected_class) {
-            newlabel.draw(position, inter);
+            newlabel.draw(position_, inter);
             break;
         }
     }
@@ -201,21 +201,21 @@ void UIRaceSelect::draw(float inter) const {
         Point<int16_t> button_pos = get_class_pos(i);
 
         class_isdisabled[class_index[i]]
-            ? class_disabled[class_index[i]][mouseover[i]].draw(position
+            ? class_disabled[class_index[i]][mouseover[i]].draw(position_
                                                                 + button_pos)
-            : class_normal[class_index[i]][mouseover[i]].draw(position
+            : class_normal[class_index[i]][mouseover[i]].draw(position_
                                                               + button_pos);
 
         for (const auto &node : hotlist) {
             if (node.get_integer() == class_index[i]) {
-                hotbtn.draw(position + button_pos, inter);
+                hotbtn.draw(position_ + button_pos, inter);
                 break;
             }
         }
 
         for (const auto &node : newlist) {
             if (node.get_integer() == selected_class) {
-                newbtn.draw(position + button_pos, inter);
+                newbtn.draw(position_ + button_pos, inter);
                 break;
             }
         }
@@ -223,7 +223,7 @@ void UIRaceSelect::draw(float inter) const {
 
     UIElement::draw_buttons(inter);
 
-    back_ani.draw(position, inter);
+    back_ani.draw(position_, inter);
 }
 
 void UIRaceSelect::update() {
@@ -236,9 +236,9 @@ void UIRaceSelect::update() {
     newbtn.update();
 
     if (selected_class == Classes::ZERO)
-        buttons[Buttons::MAKE]->set_position(position + posZero);
+        buttons_[Buttons::MAKE]->set_position(position_ + posZero);
     else
-        buttons[Buttons::MAKE]->set_position(position + pos);
+        buttons_[Buttons::MAKE]->set_position(position_ + pos);
 
     back_ani.update();
 
@@ -271,9 +271,9 @@ void UIRaceSelect::update() {
 
 Cursor::State UIRaceSelect::send_cursor(bool clicked,
                                         Point<int16_t> cursorpos) {
-    for (auto &btit : buttons) {
+    for (auto &btit : buttons_) {
         if (btit.second->is_active()
-            && btit.second->bounds(position).contains(cursorpos)) {
+            && btit.second->bounds(position_).contains(cursorpos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTONOVER).play();
 
@@ -308,11 +308,11 @@ void UIRaceSelect::send_key(int32_t keycode, bool pressed, bool escape) {
             show_charselect();
         } else if (keycode == KeyAction::Id::LEFT
                    || keycode == KeyAction::Id::DOWN) {
-            if (buttons[Buttons::LEFT]->get_state() == Button::State::NORMAL)
+            if (buttons_[Buttons::LEFT]->get_state() == Button::State::NORMAL)
                 button_pressed(Buttons::LEFT);
         } else if (keycode == KeyAction::Id::RIGHT
                    || keycode == KeyAction::Id::UP) {
-            if (buttons[Buttons::RIGHT]->get_state() == Button::State::NORMAL)
+            if (buttons_[Buttons::RIGHT]->get_state() == Button::State::NORMAL)
                 button_pressed(Buttons::RIGHT);
         } else if (keycode == KeyAction::Id::RETURN) {
             button_pressed(Buttons::MAKE);
@@ -457,7 +457,7 @@ void UIRaceSelect::select_class(uint8_t index) {
             auto button_index = std::distance(class_index, previous_itr);
 
             mouseover[previous_index - index_shift] = false;
-            buttons[button_index + Buttons::CLASS0]->set_state(
+            buttons_[button_index + Buttons::CLASS0]->set_state(
                 Button::State::NORMAL);
         }
 
@@ -476,14 +476,14 @@ void UIRaceSelect::select_class(uint8_t index) {
     }
 
     if (selected_index > 0)
-        buttons[Buttons::LEFT]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::LEFT]->set_state(Button::State::NORMAL);
     else
-        buttons[Buttons::LEFT]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::LEFT]->set_state(Button::State::DISABLED);
 
     if (selected_index < CLASS_COUNT - 2)
-        buttons[Buttons::RIGHT]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::RIGHT]->set_state(Button::State::NORMAL);
     else
-        buttons[Buttons::RIGHT]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::RIGHT]->set_state(Button::State::DISABLED);
 }
 
 void UIRaceSelect::show_charselect() {

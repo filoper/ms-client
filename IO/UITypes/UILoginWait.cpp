@@ -31,15 +31,15 @@ UILoginWait::UILoginWait(std::function<void()> okhandler) :
     nl::node Loading = nl::nx::ui["Login.img"]["Notice"]["Loading"];
     nl::node backgrnd = Loading["backgrnd"];
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(Loading["circle"], Point<int16_t>(127, 70));
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(Loading["circle"], Point<int16_t>(127, 70));
 
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(Loading["BtCancel"],
                                       Point<int16_t>(101, 106));
 
-    position = Point<int16_t>(276, 229);
-    dimension = Texture(backgrnd).get_dimensions();
+    position_ = Point<int16_t>(276, 229);
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 UIElement::Type UILoginWait::get_type() const {

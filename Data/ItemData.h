@@ -82,18 +82,18 @@ private:
 
     int8_t get_item_gender(int32_t itemid) const;
 
-    BoolPair<Texture> icons;
-    int32_t itemid;
-    int32_t price;
-    int8_t gender;
-    std::string name;
-    std::string desc;
-    std::string category;
+    BoolPair<Texture> icons_;
+    int32_t item_id_;
+    int32_t price_;
+    int8_t gender_;
+    std::string name_;
+    std::string desc_;
+    std::string category_;
 
-    bool valid;
+    bool valid_;
     bool untradable;
-    bool unique;
-    bool unsellable;
-    bool cashitem;
+    bool unique_;
+    bool unsellable_;
+    bool cash_item_;
 };
 }  // namespace ms

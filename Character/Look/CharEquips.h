@@ -74,8 +74,8 @@ public:
     int32_t get_weapon() const;
 
 private:
-    EnumMap<EquipSlot::Id, const Clothing *> clothes;
+    EnumMap<EquipSlot::Id, const Clothing *> clothes_;
 
-    static std::unordered_map<int32_t, Clothing> cloth_cache;
+    static std::unordered_map<int32_t, Clothing> cloth_cache_;
 };
 }  // namespace ms

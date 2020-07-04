@@ -30,7 +30,7 @@ protected:
     AttackHandler(Attack::Type type);
 
 private:
-    Attack::Type type;
+    Attack::Type type_;
 };
 
 class CloseAttackHandler : public AttackHandler {

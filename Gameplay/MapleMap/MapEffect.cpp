@@ -23,25 +23,25 @@
 #include "../../Constants.h"
 
 namespace ms {
-MapEffect::MapEffect(std::string path) : active(false) {
+MapEffect::MapEffect(std::string path) : active_(false) {
     nl::node Effect = nl::nx::map["Effect.img"];
 
-    effect = Effect.resolve(path);
+    effect_ = Effect.resolve(path);
 
     int16_t width = Constants::Constants::get().get_viewwidth();
 
-    position = Point<int16_t>(width / 2, 250);
+    position_ = Point<int16_t>(width / 2, 250);
 }
 
 MapEffect::MapEffect() {}
 
 void MapEffect::draw() const {
-    if (!active)
-        effect.draw(position, 1.0f);
+    if (!active_)
+        effect_.draw(position_, 1.0f);
 }
 
 void MapEffect::update() {
-    if (!active)
-        active = effect.update(6);
+    if (!active_)
+        active_ = effect_.update(6);
 }
 }  // namespace ms

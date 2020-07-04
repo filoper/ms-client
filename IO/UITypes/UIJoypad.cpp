@@ -33,12 +33,12 @@ UIJoypad::UIJoypad() : UIDragElement<PosJOYPAD>() {
     backgrnd[true] = JoyPad["backgrnd_alternative"];
     backgrnd[false] = JoyPad["backgrnd_classic"];
 
-    buttons[Buttons::DEFAULT] =
+    buttons_[Buttons::DEFAULT] =
         std::make_unique<MapleButton>(JoyPad["BtDefault"]);
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(Basic["BtCancel4"],
                                       Point<int16_t>(124, 303));
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(Basic["BtOK4"], Point<int16_t>(82, 303));
 
     for (auto &text : key_text)
@@ -47,11 +47,11 @@ UIJoypad::UIJoypad() : UIDragElement<PosJOYPAD>() {
                     Color::Name::BLACK,
                     "None");
 
-    dimension = backgrnd[true].get_dimensions();
+    dimension_ = backgrnd[true].get_dimensions();
 }
 
 void UIJoypad::draw(float inter) const {
-    backgrnd[alternative_settings].draw(position);
+    backgrnd[alternative_settings].draw(position_);
 
     int16_t x = 79;
     int16_t y = 24;
@@ -59,13 +59,13 @@ void UIJoypad::draw(float inter) const {
 
     for (size_t i = 0; i < Setting::SETTING_NUM; i++) {
         if (i == 0)
-            key_text[i].draw(position + Point<int16_t>(x, y));
+            key_text[i].draw(position_ + Point<int16_t>(x, y));
         else if (i > 0 && i < 4)
             key_text[i].draw(
-                position + Point<int16_t>(x - 16, y + 44 + y_adj * (i - 1)));
+                position_ + Point<int16_t>(x - 16, y + 44 + y_adj * (i - 1)));
         else
             key_text[i].draw(
-                position + Point<int16_t>(x - 16, y + 123 + y_adj * (i - 4)));
+                position_ + Point<int16_t>(x - 16, y + 123 + y_adj * (i - 4)));
     }
 
     UIElement::draw(inter);

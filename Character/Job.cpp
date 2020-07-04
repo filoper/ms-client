@@ -28,19 +28,19 @@ Job::Job() {
 }
 
 void Job::change_job(uint16_t i) {
-    id = i;
-    name = get_name(id);
+    id_ = i;
+    name_ = get_name(id_);
 
-    if (id == 0)
-        level = Level::BEGINNER;
-    else if (id % 100 == 0)
-        level = Level::FIRST;
-    else if (id % 10 == 0)
-        level = Level::SECOND;
-    else if (id % 10 == 1)
-        level = Level::THIRD;
+    if (id_ == 0)
+        level_ = Level::BEGINNER;
+    else if (id_ % 100 == 0)
+        level_ = Level::FIRST;
+    else if (id_ % 10 == 0)
+        level_ = Level::SECOND;
+    else if (id_ % 10 == 1)
+        level_ = Level::THIRD;
     else
-        level = Level::FOURTH;
+        level_ = Level::FOURTH;
 }
 
 bool Job::is_sub_job(uint16_t subid) const {
@@ -60,17 +60,17 @@ bool Job::can_use(int32_t skill_id) const {
 }
 
 uint16_t Job::get_id() const {
-    return id;
+    return id_;
 }
 
 uint16_t Job::get_subjob(Level lv) const {
-    if (lv <= level) {
+    if (lv <= level_) {
         switch (lv) {
             case Level::BEGINNER: return 0;
-            case Level::FIRST: return (id / 100) * 100;
-            case Level::SECOND: return (id / 10) * 10;
-            case Level::THIRD: return (level == Level::FOURTH) ? id - 1 : id;
-            case Level::FOURTH: return id;
+            case Level::FIRST: return (id_ / 100) * 100;
+            case Level::SECOND: return (id_ / 10) * 10;
+            case Level::THIRD: return (level_ == Level::FOURTH) ? id_ - 1 : id_;
+            case Level::FOURTH: return id_;
         }
     }
 
@@ -78,11 +78,11 @@ uint16_t Job::get_subjob(Level lv) const {
 }
 
 const std::string &Job::get_name() const {
-    return name;
+    return name_;
 }
 
 Job::Level Job::get_level() const {
-    return level;
+    return level_;
 }
 
 std::string Job::get_name(uint16_t jid) const {
@@ -142,7 +142,7 @@ std::string Job::get_name(uint16_t jid) const {
 }
 
 EquipStat::Id Job::get_primary(Weapon::Type weapontype) const {
-    switch (id / 100) {
+    switch (id_ / 100) {
         case 2: return EquipStat::Id::INT;
         case 3: return EquipStat::Id::DEX;
         case 4: return EquipStat::Id::LUK;
@@ -154,7 +154,7 @@ EquipStat::Id Job::get_primary(Weapon::Type weapontype) const {
 }
 
 EquipStat::Id Job::get_secondary(Weapon::Type weapontype) const {
-    switch (id / 100) {
+    switch (id_ / 100) {
         case 2: return EquipStat::Id::LUK;
         case 3: return EquipStat::Id::STR;
         case 4: return EquipStat::Id::DEX;

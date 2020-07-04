@@ -60,9 +60,9 @@ public:
     bool is_pressed() const;
 
 protected:
-    State state;
-    Point<int16_t> position;
-    bool active;
-    bool pressed;
+    State state_;
+    Point<int16_t> position_;
+    bool active_;
+    bool pressed_;
 };
 }  // namespace ms

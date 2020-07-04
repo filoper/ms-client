@@ -41,8 +41,8 @@ public:
           uint8_t slots,
           uint8_t level,
           const EnumMap<EquipStat::Id, uint16_t> &stats,
-          uint8_t itemlevel,
-          int16_t itemexp,
+          uint8_t item_level,
+          int16_t item_exp,
           int32_t vicious);
 
     int32_t get_item_id() const;
@@ -68,17 +68,17 @@ public:
     EquipQuality::Id get_quality() const;
 
 private:
-    EnumMap<EquipStat::Id, uint16_t> stats;
-    int32_t item_id;
-    int64_t expiration;
-    std::string owner;
-    int16_t flags;
-    uint8_t slots;
-    uint8_t level;
-    uint8_t itemlevel;
-    int16_t itemexp;
-    int32_t vicious;
-    Potential potrank;
-    EquipQuality::Id quality;
+    EnumMap<EquipStat::Id, uint16_t> stats_;
+    int32_t item_id_;
+    int64_t expiration_;
+    std::string owner_;
+    int16_t flags_;
+    uint8_t slots_;
+    uint8_t level_;
+    uint8_t item_level_;
+    int16_t item_exp_;
+    int32_t vicious_;
+    Potential potential_rank_;
+    EquipQuality::Id quality_;
 };
 }  // namespace ms

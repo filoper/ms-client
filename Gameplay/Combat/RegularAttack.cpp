@@ -22,7 +22,7 @@ namespace ms {
 void RegularAttack::apply_useeffects(Char &) const {}
 
 void RegularAttack::apply_actions(Char &user, Attack::Type type) const {
-    action.apply(user, type);
+    action_.apply(user, type);
 }
 
 void RegularAttack::apply_stats(const Char &user, Attack &attack) const {
@@ -39,7 +39,7 @@ void RegularAttack::apply_stats(const Char &user, Attack &attack) const {
 void RegularAttack::apply_hiteffects(const AttackUser &, Mob &) const {}
 
 Animation RegularAttack::get_bullet(const Char &user, int32_t bulletid) const {
-    return bullet.get(user, bulletid);
+    return bullet_.get(user, bulletid);
 }
 
 bool RegularAttack::is_attack() const {

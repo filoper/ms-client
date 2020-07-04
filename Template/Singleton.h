@@ -25,14 +25,14 @@ class Singleton {
 public:
     virtual ~Singleton() {}
 
-    static T &get() { return instance; }
+    static T &get() { return instance_; }
 
 private:
     T &operator=(const T &) = delete;
 
-    static T instance;
+    static T instance_;
 };
 
 template<class T>
-T Singleton<T>::instance;
+T Singleton<T>::instance_;
 }  // namespace ms

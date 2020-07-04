@@ -34,14 +34,14 @@
 
 namespace ms {
 
-alure::DeviceManager Music::devMgr;
-alure::Device Music::dev;
-alure::Context Music::ctx;
-alure::Source Music::music_src;
-alure::Buffer Music::music_buff;
-std::unordered_map<std::string, membuf *> Music::audiodb;
-size_t Sound::source_inc;
-alure::Source Sound::sound_srcs[100];
+alure::DeviceManager Music::dev_mngr_;
+alure::Device Music::dev_;
+alure::Context Music::ctx_;
+alure::Source Music::music_src_;
+alure::Buffer Music::music_buff_;
+std::unordered_map<std::string, membuf *> Music::audiodb_;
+size_t Sound::source_inc_;
+alure::Source Sound::sound_srcs_[100];
 
 void Sound::create_alure_source() {
     /* TODO: create interface to batch sounds. If a large amount of sounds are
@@ -50,73 +50,73 @@ void Sound::create_alure_source() {
      * for the next few game ticks. AKA OpenAL will throw an uncatchable error.
      * Below will prevent this error but may not be ideal...
      */
-    // while (source_inc > 200); /* openal limits to 256 concurrent sources */
+    // while (source_inc_ > 200); /* openal limits to 256 concurrent sources */
 
     bool create = true;
 
-    while (sound_srcs[source_inc - 1] != nullptr
-           && !sound_srcs[source_inc - 1].isPlaying()) {
-        sound_srcs[source_inc - 1].destroy();
-        sound_srcs[source_inc - 1] = NULL;
-        source_inc--;
+    while (sound_srcs_[source_inc_ - 1] != nullptr
+           && !sound_srcs_[source_inc_ - 1].isPlaying()) {
+        sound_srcs_[source_inc_ - 1].destroy();
+        sound_srcs_[source_inc_ - 1] = NULL;
+        source_inc_--;
     }
 
-    if (sound_srcs[source_inc]) {
-        if (source_inc > 99) {
+    if (sound_srcs_[source_inc_]) {
+        if (source_inc_ > 99) {
             create = false;
         }
     }
 
     if (create) {
-        sound_src = Music::ctx.createSource();
-        sound_srcs[source_inc] = sound_src;
-        source_inc++;
+        sound_src_ = Music::ctx_.createSource();
+        sound_srcs_[source_inc_] = sound_src_;
+        source_inc_++;
     }
 }
 
 // Sound::~Sound()
 //{
-//    source_inc--;
+//    source_inc_--;
 //}
 
 Sound::Sound(Name name) {
-    id = soundids[name];
+    id_ = soundids_[name];
     create_alure_source();
 }
 
 Sound::Sound(int32_t itemid) {
     auto fitemid = format_id(itemid);
 
-    if (itemids.find(fitemid) != itemids.end()) {
-        id = itemids.at(fitemid);
+    if (itemids_.find(fitemid) != itemids_.end()) {
+        id_ = itemids_.at(fitemid);
     } else {
         auto pid = (10000 * (itemid / 10000));
         auto fpid = format_id(pid);
 
-        if (itemids.find(fpid) != itemids.end())
-            id = itemids.at(fpid);
+        if (itemids_.find(fpid) != itemids_.end())
+            id_ = itemids_.at(fpid);
         else
-            id = itemids.at("02000000");
+            id_ = itemids_.at("02000000");
     }
     create_alure_source();
 }
 
 Sound::Sound(nl::node src) {
-    id = add_sound(src);
+    id_ = add_sound(src);
     create_alure_source();
 }
 
 Sound::Sound() {
-    id = 0;
+    id_ = 0;
     create_alure_source();
 }
 
 void Sound::play() {
-    if (id > 0) {
-        std::string id_s = std::to_string((uint32_t)id);
-        alure::Buffer buff = Music::ctx.getBuffer(id_s);
-        if (sound_src)
-            sound_src.play(buff);
+    if (id_ > 0) {
+        std::string id_s = std::to_string((uint32_t)id_);
+        alure::Buffer buff = Music::ctx_.getBuffer(id_s);
+        if (sound_src_)
+            sound_src_.play(buff);
     }
 }
 
@@ -159,7 +159,7 @@ Error Sound::init() {
 
     uint8_t volume = Setting<SFXVolume>::get().load();
 
-    source_inc = 1;
+    source_inc_ = 1;
     // if (!set_sfxvolume(volume))
     //	return Error::Code::AUDIO;
 
@@ -167,8 +167,8 @@ Error Sound::init() {
 }
 
 void Sound::close() {
-    sound_srcs[source_inc - 1].destroy();
-    sound_srcs[source_inc - 1] = NULL;
+    sound_srcs_[source_inc_ - 1].destroy();
+    sound_srcs_[source_inc_ - 1] = NULL;
     // BASS_Free();
 }
 
@@ -183,29 +183,29 @@ size_t Sound::add_sound(nl::node src) {
     auto data = reinterpret_cast<const char *>(ad.data());
 
     if (data) {
-        size_t id = ad.id();
+        size_t id_ = ad.id();
 
-        std::string id_s = std::to_string((uint32_t)id);
-        Music::audiodb[id_s] = new membuf(data + 82, ad.length() - 82);
+        std::string id_s = std::to_string((uint32_t)id_);
+        Music::audiodb_[id_s] = new membuf(data + 82, ad.length() - 82);
 
-        return id;
+        return id_;
     } else {
         return 0;
     }
 }
 
 void Sound::add_sound(Name name, nl::node src) {
-    size_t id = add_sound(src);
+    size_t id_ = add_sound(src);
 
-    if (id)
-        soundids[name] = id;
+    if (id_)
+        soundids_[name] = id_;
 }
 
 void Sound::add_sound(std::string itemid, nl::node src) {
-    size_t id = add_sound(src);
+    size_t id_ = add_sound(src);
 
-    if (id)
-        itemids[itemid] = id;
+    if (id_)
+        itemids_[itemid] = id_;
 }
 
 std::string Sound::format_id(int32_t itemid) {
@@ -215,68 +215,68 @@ std::string Sound::format_id(int32_t itemid) {
     return strid;
 }
 
-EnumMap<Sound::Name, size_t> Sound::soundids;
-std::unordered_map<std::string, size_t> Sound::itemids;
+EnumMap<Sound::Name, size_t> Sound::soundids_;
+std::unordered_map<std::string, size_t> Sound::itemids_;
 
 Music::Music(std::string p) {
-    path = p;
+    path_ = p;
 }
 
 void Music::play() const {
     static std::string bgmpath = "";
 
-    if (path == bgmpath)
+    if (path_ == bgmpath)
         return;
 
     /* will throw std::out:of:range if not used before. */
     try {
-        audiodb.at(path);
+        audiodb_.at(path_);
     } catch (std::out_of_range e) {
-        nl::audio ad = nl::nx::sound.resolve(path);
+        nl::audio ad = nl::nx::sound.resolve(path_);
         auto data = reinterpret_cast<const char *>(ad.data());
-        audiodb[path] = new membuf(data + 82, ad.length() - 82);
+        audiodb_[path_] = new membuf(data + 82, ad.length() - 82);
     }
 
-    music_buff = Music::ctx.getBuffer(path);
-    music_src.setLooping(true);
-    music_src.play(music_buff);
+    music_buff_ = Music::ctx_.getBuffer(path_);
+    music_src_.setLooping(true);
+    music_src_.play(music_buff_);
 
-    bgmpath = path;
+    bgmpath = path_;
 }
 
 void Music::play_once() const {
     static std::string bgmpath = "";
 
-    if (path == bgmpath)
+    if (path_ == bgmpath)
         return;
 
     /* will throw std::out:of:range if not used before. */
     try {
-        audiodb.at(path);
+        audiodb_.at(path_);
     } catch (std::out_of_range e) {
-        nl::audio ad = nl::nx::sound.resolve(path);
+        nl::audio ad = nl::nx::sound.resolve(path_);
         auto data = reinterpret_cast<const char *>(ad.data());
-        audiodb[path] = new membuf(data + 82, ad.length() - 82);
+        audiodb_[path_] = new membuf(data + 82, ad.length() - 82);
     }
 
-    // alure::Context::MakeCurrent(ctx);
-    music_buff = Music::ctx.getBuffer(path);
-    music_src.setLooping(false);
-    music_src.play(music_buff);
+    // alure::Context::MakeCurrent(ctx_);
+    music_buff_ = Music::ctx_.getBuffer(path_);
+    music_src_.setLooping(false);
+    music_src_.play(music_buff_);
 
-    bgmpath = path;
+    bgmpath = path_;
 }
 
 Error Music::init() {
     uint8_t volume = Setting<BGMVolume>::get().load();
 
-    devMgr = alure::DeviceManager::getInstance();
-    dev = devMgr.openPlayback();
-    ctx = dev.createContext();
-    alure::Context::MakeCurrent(ctx);
-    music_src = ctx.createSource();
+    dev_mngr_ = alure::DeviceManager::getInstance();
+    dev_ = dev_mngr_.openPlayback();
+    ctx_ = dev_.createContext();
+    alure::Context::MakeCurrent(ctx_);
+    music_src_ = ctx_.createSource();
 
-    alure::FileIOFactory::set(alure::MakeUnique<FileFactory>(&audiodb));
+    alure::FileIOFactory::set(alure::MakeUnique<FileFactory>(&audiodb_));
     /*TODO: add checks*/
 
     // if (!set_bgmvolume(volume))
@@ -290,7 +290,7 @@ bool Music::set_bgmvolume(uint8_t vol) {
 }
 
 void Music::update_context() {
-    if (ctx)
-        ctx.update();
+    if (ctx_)
+        ctx_.update();
 }
 }  // namespace ms

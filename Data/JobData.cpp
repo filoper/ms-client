@@ -29,9 +29,9 @@ JobData::JobData(int32_t id) {
     nl::node src = nl::nx::skill[strid + ".img"];
     nl::node strsrc = nl::nx::string["Skill.img"][strid];
 
-    icon = src["info"]["icon"];
+    icon_ = src["info"]["icon"];
 
-    name = std::string(strsrc["bookName"]);
+    name_ = std::string(strsrc["bookName"]);
 
     for (nl::node sub : src["skill"]) {
         int32_t skill_id = string_conversion::or_zero<int32_t>(sub.name());
@@ -39,19 +39,19 @@ JobData::JobData(int32_t id) {
         if (skill_id == 0)
             continue;
 
-        skills.push_back(skill_id);
+        skills_.push_back(skill_id);
     }
 }
 
 const std::vector<std::int32_t> &JobData::get_skills() const {
-    return skills;
+    return skills_;
 }
 
 const std::string &JobData::get_name() const {
-    return name;
+    return name_;
 }
 
 const Texture &JobData::get_icon() const {
-    return icon;
+    return icon_;
 }
 }  // namespace ms

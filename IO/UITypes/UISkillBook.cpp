@@ -120,15 +120,15 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     skillb = main["skillBlank"];
     line = main["line"];
 
-    buttons[Buttons::BT_HYPER] = std::make_unique<MapleButton>(main["BtHyper"]);
-    buttons[Buttons::BT_GUILDSKILL] =
+    buttons_[Buttons::BT_HYPER] = std::make_unique<MapleButton>(main["BtHyper"]);
+    buttons_[Buttons::BT_GUILDSKILL] =
         std::make_unique<MapleButton>(main["BtGuildSkill"]);
-    buttons[Buttons::BT_RIDE] = std::make_unique<MapleButton>(main["BtRide"]);
-    buttons[Buttons::BT_MACRO] = std::make_unique<MapleButton>(main["BtMacro"]);
+    buttons_[Buttons::BT_RIDE] = std::make_unique<MapleButton>(main["BtRide"]);
+    buttons_[Buttons::BT_MACRO] = std::make_unique<MapleButton>(main["BtMacro"]);
 
-    buttons[Buttons::BT_HYPER]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_GUILDSKILL]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_RIDE]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_HYPER]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_GUILDSKILL]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_RIDE]->set_state(Button::State::DISABLED);
 
     nl::node skillPoint = nl::nx::ui["UIWindow4.img"]["Skill"]["skillPoint"];
 
@@ -136,23 +136,23 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     sp_backgrnd2 = skillPoint["backgrnd2"];
     sp_backgrnd3 = skillPoint["backgrnd3"];
 
-    buttons[Buttons::BT_CANCLE] =
+    buttons_[Buttons::BT_CANCLE] =
         std::make_unique<MapleButton>(skillPoint["BtCancle"],
                                       Point<int16_t>(bg_dimensions.x(), 0));
-    buttons[Buttons::BT_OKAY] =
+    buttons_[Buttons::BT_OKAY] =
         std::make_unique<MapleButton>(skillPoint["BtOkay"],
                                       Point<int16_t>(bg_dimensions.x(), 0));
-    buttons[Buttons::BT_SPDOWN] =
+    buttons_[Buttons::BT_SPDOWN] =
         std::make_unique<MapleButton>(skillPoint["BtSpDown"],
                                       Point<int16_t>(bg_dimensions.x(), 0));
-    buttons[Buttons::BT_SPMAX] =
+    buttons_[Buttons::BT_SPMAX] =
         std::make_unique<MapleButton>(skillPoint["BtSpMax"],
                                       Point<int16_t>(bg_dimensions.x(), 0));
-    buttons[Buttons::BT_SPUP] =
+    buttons_[Buttons::BT_SPUP] =
         std::make_unique<MapleButton>(skillPoint["BtSpUp"],
                                       Point<int16_t>(bg_dimensions.x(), 0));
 
-    buttons[Buttons::BT_SPDOWN]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_SPDOWN]->set_state(Button::State::DISABLED);
 
     sp_before = Charset(skillPoint["num"], Charset::Alignment::RIGHT);
     sp_after = Charset(skillPoint["num"], Charset::Alignment::RIGHT);
@@ -163,9 +163,9 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     sp_name =
         Text(Text::Font::A12B, Text::Alignment::CENTER, Color::Name::WHITE);
 
-    sprites.emplace_back(ui_backgrnd, Point<int16_t>(1, 0));
-    sprites.emplace_back(main["backgrnd2"]);
-    sprites.emplace_back(main["backgrnd3"]);
+    sprites_.emplace_back(ui_backgrnd, Point<int16_t>(1, 0));
+    sprites_.emplace_back(main["backgrnd2"]);
+    sprites_.emplace_back(main["backgrnd3"]);
 
     nl::node macro = Skill["macro"];
 
@@ -173,15 +173,15 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     macro_backgrnd2 = macro["backgrnd2"];
     macro_backgrnd3 = macro["backgrnd3"];
 
-    buttons[Buttons::BT_MACRO_OK] =
+    buttons_[Buttons::BT_MACRO_OK] =
         std::make_unique<MapleButton>(macro["BtOK"],
                                       Point<int16_t>(bg_dimensions.x(), 0));
 
-    buttons[Buttons::BT_MACRO_OK]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_MACRO_OK]->set_state(Button::State::DISABLED);
 
     nl::node close = nl::nx::ui["Basic.img"]["BtClose3"];
 
-    buttons[Buttons::BT_CLOSE] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_CLOSE] = std::make_unique<MapleButton>(
         close,
         Point<int16_t>(bg_dimensions.x() - 23, 6));
 
@@ -191,7 +191,7 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
 
     for (uint16_t i = Buttons::BT_TAB0; i <= Buttons::BT_TAB4; ++i) {
         uint16_t tabid = i - Buttons::BT_TAB0;
-        buttons[i] =
+        buttons_[i] =
             std::make_unique<TwoSpriteButton>(disabled[tabid], enabled[tabid]);
     }
 
@@ -206,7 +206,7 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
 
         Point<int16_t> spup_position =
             SKILL_OFFSET + Point<int16_t>(124 + x_adj, 20 + y_adj);
-        buttons[i] =
+        buttons_[i] =
             std::make_unique<MapleButton>(main["BtSpUp"], spup_position);
 
         if (spupid % 2)
@@ -240,21 +240,21 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     set_macro(false);
     set_skillpoint(false);
 
-    dimension = bg_dimensions;
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    dimension_ = bg_dimensions;
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 }
 
 void UISkillBook::draw(float alpha) const {
     UIElement::draw_sprites(alpha);
 
-    bookicon.draw(position + Point<int16_t>(11, 85));
-    booktext.draw(position + Point<int16_t>(173, 59));
-    splabel.draw(position + Point<int16_t>(304, 23));
+    bookicon.draw(position_ + Point<int16_t>(11, 85));
+    booktext.draw(position_ + Point<int16_t>(173, 59));
+    splabel.draw(position_ + Point<int16_t>(304, 23));
 
     Point<int16_t> skill_position_l =
-        position + SKILL_OFFSET + Point<int16_t>(-1, 0);
+        position_ + SKILL_OFFSET + Point<int16_t>(-1, 0);
     Point<int16_t> skill_position_r =
-        position + SKILL_OFFSET + Point<int16_t>(-1 + ROW_WIDTH, 0);
+        position_ + SKILL_OFFSET + Point<int16_t>(-1 + ROW_WIDTH, 0);
 
     for (size_t i = 0; i < ROWS; i++) {
         Point<int16_t> pos = skill_position_l;
@@ -284,11 +284,11 @@ void UISkillBook::draw(float alpha) const {
         }
     }
 
-    slider.draw(position);
+    slider.draw(position_);
 
     if (macro_enabled) {
         Point<int16_t> macro_pos =
-            position + Point<int16_t>(bg_dimensions.x(), 0);
+            position_ + Point<int16_t>(bg_dimensions.x(), 0);
 
         macro_backgrnd.draw(macro_pos + Point<int16_t>(1, 0));
         macro_backgrnd2.draw(macro_pos);
@@ -296,7 +296,7 @@ void UISkillBook::draw(float alpha) const {
     }
 
     if (sp_enabled) {
-        Point<int16_t> sp_pos = position + Point<int16_t>(bg_dimensions.x(), 0);
+        Point<int16_t> sp_pos = position_ + Point<int16_t>(bg_dimensions.x(), 0);
 
         sp_backgrnd.draw(sp_pos);
         sp_backgrnd2.draw(sp_pos);
@@ -344,8 +344,8 @@ Button::State UISkillBook::button_pressed(uint16_t id) {
             sp_used.change_text(std::to_string(used));
             sp_remaining.change_text(std::to_string(cur_sp - used));
 
-            buttons[Buttons::BT_SPUP]->set_state(Button::State::NORMAL);
-            buttons[Buttons::BT_SPMAX]->set_state(Button::State::NORMAL);
+            buttons_[Buttons::BT_SPUP]->set_state(Button::State::NORMAL);
+            buttons_[Buttons::BT_SPMAX]->set_state(Button::State::NORMAL);
 
             if (sp_after - 1 == sp_before)
                 return Button::State::DISABLED;
@@ -363,8 +363,8 @@ Button::State UISkillBook::button_pressed(uint16_t id) {
             sp_used.change_text(std::to_string(used));
             sp_remaining.change_text(std::to_string(cur_sp - used));
 
-            buttons[Buttons::BT_SPUP]->set_state(Button::State::DISABLED);
-            buttons[Buttons::BT_SPDOWN]->set_state(Button::State::NORMAL);
+            buttons_[Buttons::BT_SPUP]->set_state(Button::State::DISABLED);
+            buttons_[Buttons::BT_SPDOWN]->set_state(Button::State::NORMAL);
 
             return Button::State::DISABLED;
         } break;
@@ -378,10 +378,10 @@ Button::State UISkillBook::button_pressed(uint16_t id) {
             sp_used.change_text(std::to_string(used));
             sp_remaining.change_text(std::to_string(cur_sp - used));
 
-            buttons[Buttons::BT_SPDOWN]->set_state(Button::State::NORMAL);
+            buttons_[Buttons::BT_SPDOWN]->set_state(Button::State::NORMAL);
 
             if (sp_after == sp_masterlevel) {
-                buttons[Buttons::BT_SPMAX]->set_state(Button::State::DISABLED);
+                buttons_[Buttons::BT_SPMAX]->set_state(Button::State::DISABLED);
 
                 return Button::State::DISABLED;
             }
@@ -429,7 +429,7 @@ void UISkillBook::toggle_active() {
 }
 
 void UISkillBook::doubleclick(Point<int16_t> cursorpos) {
-    const SkillDisplayMeta *skill = skill_by_position(cursorpos - position);
+    const SkillDisplayMeta *skill = skill_by_position(cursorpos - position_);
 
     if (skill) {
         int32_t skill_id = skill->get_id();
@@ -449,10 +449,10 @@ void UISkillBook::remove_cursor() {
 Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged)
+    if (dragged_)
         return dstate;
 
-    Point<int16_t> cursor_relative = cursorpos - position;
+    Point<int16_t> cursor_relative = cursorpos - position_;
 
     if (slider.isenabled()) {
         if (Cursor::State new_state =
@@ -464,9 +464,9 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     }
 
     Point<int16_t> skill_position_l =
-        position + SKILL_OFFSET + Point<int16_t>(-1, 0);
+        position_ + SKILL_OFFSET + Point<int16_t>(-1, 0);
     Point<int16_t> skill_position_r =
-        position + SKILL_OFFSET + Point<int16_t>(-1 + ROW_WIDTH, 0);
+        position_ + SKILL_OFFSET + Point<int16_t>(-1 + ROW_WIDTH, 0);
 
     if (!grabbing) {
         for (size_t i = 0; i < skills.size(); i++) {
@@ -568,7 +568,7 @@ void UISkillBook::change_job(uint16_t id) {
     Job::Level level = job.get_level();
 
     for (uint16_t i = 0; i <= Job::Level::FOURTH; i++)
-        buttons[Buttons::BT_TAB0 + i]->set_active(i <= level);
+        buttons_[Buttons::BT_TAB0 + i]->set_active(i <= level);
 
     change_tab(level - Job::Level::BEGINNER);
 }
@@ -606,8 +606,8 @@ void UISkillBook::change_sp() {
 }
 
 void UISkillBook::change_tab(uint16_t new_tab) {
-    buttons[Buttons::BT_TAB0 + tab]->set_state(Button::NORMAL);
-    buttons[Buttons::BT_TAB0 + new_tab]->set_state(Button::PRESSED);
+    buttons_[Buttons::BT_TAB0 + tab]->set_state(Button::NORMAL);
+    buttons_[Buttons::BT_TAB0 + new_tab]->set_state(Button::PRESSED);
     tab = new_tab;
 
     skills.clear();
@@ -645,12 +645,12 @@ void UISkillBook::change_offset(uint16_t new_offset) {
     for (int16_t i = 0; i < ROWS; i++) {
         uint16_t index = Buttons::BT_SPUP0 + i;
         uint16_t row = offset + i;
-        buttons[index]->set_active(row < skillcount);
+        buttons_[index]->set_active(row < skillcount);
 
         if (row < skills.size()) {
             int32_t skill_id = skills[row].get_id();
             bool canraise = can_raise(skill_id);
-            buttons[index]->set_state(canraise ? Button::State::NORMAL
+            buttons_[index]->set_state(canraise ? Button::State::NORMAL
                                                : Button::State::DISABLED);
         }
     }
@@ -725,13 +725,13 @@ void UISkillBook::send_spup(uint16_t row) {
     sp_masterlevel = skillData.get_masterlevel();
 
     if (sp_masterlevel == 1) {
-        buttons[Buttons::BT_SPDOWN]->set_state(Button::State::DISABLED);
-        buttons[Buttons::BT_SPMAX]->set_state(Button::State::DISABLED);
-        buttons[Buttons::BT_SPUP]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_SPDOWN]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_SPMAX]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_SPUP]->set_state(Button::State::DISABLED);
     } else {
-        buttons[Buttons::BT_SPDOWN]->set_state(Button::State::DISABLED);
-        buttons[Buttons::BT_SPMAX]->set_state(Button::State::NORMAL);
-        buttons[Buttons::BT_SPUP]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_SPDOWN]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_SPMAX]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_SPUP]->set_state(Button::State::NORMAL);
     }
 
     if (!sp_enabled)
@@ -815,12 +815,12 @@ void UISkillBook::set_macro(bool enabled) {
     macro_enabled = enabled;
 
     if (macro_enabled)
-        dimension = bg_dimensions
+        dimension_ = bg_dimensions
                     + Point<int16_t>(macro_backgrnd.get_dimensions().x(), 0);
     else if (!sp_enabled)
-        dimension = bg_dimensions;
+        dimension_ = bg_dimensions;
 
-    buttons[Buttons::BT_MACRO_OK]->set_active(macro_enabled);
+    buttons_[Buttons::BT_MACRO_OK]->set_active(macro_enabled);
 
     if (macro_enabled && sp_enabled)
         set_skillpoint(false);
@@ -830,16 +830,16 @@ void UISkillBook::set_skillpoint(bool enabled) {
     sp_enabled = enabled;
 
     if (sp_enabled)
-        dimension =
+        dimension_ =
             bg_dimensions + Point<int16_t>(sp_backgrnd.get_dimensions().x(), 0);
     else if (!macro_enabled)
-        dimension = bg_dimensions;
+        dimension_ = bg_dimensions;
 
-    buttons[Buttons::BT_CANCLE]->set_active(sp_enabled);
-    buttons[Buttons::BT_OKAY]->set_active(sp_enabled);
-    buttons[Buttons::BT_SPDOWN]->set_active(sp_enabled);
-    buttons[Buttons::BT_SPMAX]->set_active(sp_enabled);
-    buttons[Buttons::BT_SPUP]->set_active(sp_enabled);
+    buttons_[Buttons::BT_CANCLE]->set_active(sp_enabled);
+    buttons_[Buttons::BT_OKAY]->set_active(sp_enabled);
+    buttons_[Buttons::BT_SPDOWN]->set_active(sp_enabled);
+    buttons_[Buttons::BT_SPMAX]->set_active(sp_enabled);
+    buttons_[Buttons::BT_SPUP]->set_active(sp_enabled);
 
     if (sp_enabled && macro_enabled)
         set_macro(false);

@@ -47,7 +47,7 @@ public:
     void play_hit() override;
 
 private:
-    Sound usesound;
-    Sound hitsound;
+    Sound use_sound_;
+    Sound hit_sound_;
 };
 }  // namespace ms

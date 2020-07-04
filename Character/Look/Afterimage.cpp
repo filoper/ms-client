@@ -40,42 +40,42 @@ Afterimage::Afterimage(int32_t skill_id,
         src = nl::nx::character["Afterimage"][name + ".img"][level / 10]
                                [stance_name];
 
-    range = src;
-    firstframe = 0;
-    displayed = false;
+    range_ = src;
+    first_frame_ = 0;
+    displayed_ = false;
 
     for (nl::node sub : src) {
         uint8_t frame = string_conversion::or_default<uint8_t>(sub.name(), 255);
 
         if (frame < 255) {
-            animation = sub;
-            firstframe = frame;
+            animation_ = sub;
+            first_frame_ = frame;
         }
     }
 }
 
 Afterimage::Afterimage() {
-    firstframe = 0;
-    displayed = true;
+    first_frame_ = 0;
+    displayed_ = true;
 }
 
 void Afterimage::draw(uint8_t stframe,
                       const DrawArgument &args,
                       float alpha) const {
-    if (!displayed && stframe >= firstframe)
-        animation.draw(args, alpha);
+    if (!displayed_ && stframe >= first_frame_)
+        animation_.draw(args, alpha);
 }
 
 void Afterimage::update(uint8_t stframe, uint16_t timestep) {
-    if (!displayed && stframe >= firstframe)
-        displayed = animation.update(timestep);
+    if (!displayed_ && stframe >= first_frame_)
+        displayed_ = animation_.update(timestep);
 }
 
 uint8_t Afterimage::get_first_frame() const {
-    return firstframe;
+    return first_frame_;
 }
 
 Rectangle<int16_t> Afterimage::get_range() const {
-    return range;
+    return range_;
 }
 }  // namespace ms

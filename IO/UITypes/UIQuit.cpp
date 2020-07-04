@@ -37,11 +37,11 @@ UIQuit::UIQuit(const CharStats &st) : screen_adj(212, 114), stats(st) {
     nl::node time = userLog["time"];
     nl::node backgrnd = userLog["backgrnd"];
 
-    sprites.emplace_back(backgrnd, -screen_adj);
+    sprites_.emplace_back(backgrnd, -screen_adj);
 
-    buttons[Buttons::NO] =
+    buttons_[Buttons::NO] =
         std::make_unique<MapleButton>(askReward["btNo"], Point<int16_t>(0, 37));
-    buttons[Buttons::YES] =
+    buttons_[Buttons::YES] =
         std::make_unique<MapleButton>(askReward["btYes"],
                                       Point<int16_t>(0, 37));
 
@@ -117,8 +117,8 @@ UIQuit::UIQuit(const CharStats &st) : screen_adj(212, 114), stats(st) {
     int16_t height = Constants::Constants::get().get_viewheight();
 
     background = ColorBox(width, height, Color::Name::BLACK, 0.5f);
-    position = Point<int16_t>(width / 2, height / 2);
-    dimension = Texture(backgrnd).get_dimensions();
+    position_ = Point<int16_t>(width / 2, height / 2);
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 void UIQuit::draw(float inter) const {
@@ -128,23 +128,23 @@ void UIQuit::draw(float inter) const {
 
     time_minutes.draw(time_minutes_text,
                       time_number_width,
-                      position + time_minutes_pos - screen_adj);
+                      position_ + time_minutes_pos - screen_adj);
     time_hours.draw(time_hours_text,
                     time_number_width,
-                    position + time_hours_pos - screen_adj);
+                    position_ + time_hours_pos - screen_adj);
 
     levelBefore.draw(levelBeforeText,
                      levelNumberWidth,
-                     position + levelBeforePos + level_adj - screen_adj);
+                     position_ + levelBeforePos + level_adj - screen_adj);
     levelAfter.draw(levelAfterText,
                     levelNumberWidth,
-                    position + levelAfterPos + level_adj - screen_adj);
+                    position_ + levelAfterPos + level_adj - screen_adj);
 
     if (cur_level > uplevel)
-        levelupEffect.draw(position - screen_adj, inter);
+        levelupEffect.draw(position_ - screen_adj, inter);
 
-    expBefore.draw(position + expBeforePos - exp_adj - screen_adj);
-    expAfter.draw(position + expAfterPos - exp_adj - screen_adj);
+    expBefore.draw(position_ + expBeforePos - exp_adj - screen_adj);
+    expAfter.draw(position_ + expAfterPos - exp_adj - screen_adj);
 }
 
 void UIQuit::update() {
@@ -154,8 +154,8 @@ void UIQuit::update() {
 }
 
 Cursor::State UIQuit::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    auto lt = position + time_lt - screen_adj;
-    auto rb = position + time_rb - screen_adj;
+    auto lt = position_ + time_lt - screen_adj;
+    auto rb = position_ + time_rb - screen_adj;
 
     auto bounds = Rectangle<int16_t>(lt, rb);
 

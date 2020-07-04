@@ -51,7 +51,7 @@ UIStatusMessenger::UIStatusMessenger() {
 }
 
 void UIStatusMessenger::draw(float inter) const {
-    Point<int16_t> infopos = Point<int16_t>(position.x(), position.y());
+    Point<int16_t> infopos = Point<int16_t>(position_.x(), position_.y());
 
     for (const StatusInfo &info : statusinfos) {
         info.draw(infopos, inter);
@@ -67,7 +67,7 @@ void UIStatusMessenger::update() {
 void UIStatusMessenger::update_screen(int16_t new_width, int16_t new_height) {
     int16_t y_adj = (new_width > 800) ? 37 : 0;
 
-    position = Point<int16_t>(new_width - 6, new_height - 145 + y_adj);
+    position_ = Point<int16_t>(new_width - 6, new_height - 145 + y_adj);
 }
 
 UIElement::Type UIStatusMessenger::get_type() const {

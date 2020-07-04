@@ -29,8 +29,8 @@ UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
     nl::node OptionMenu = nl::nx::ui["StatusBar3.img"]["OptionMenu"];
     nl::node backgrnd = OptionMenu["backgrnd"];
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(OptionMenu["backgrnd2"]);
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(OptionMenu["backgrnd2"]);
 
     nl::node graphic = OptionMenu["graphic"];
 
@@ -40,11 +40,11 @@ UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
     tab_background[Buttons::TAB3] = OptionMenu["invite"]["layer:backgrnd"];
     tab_background[Buttons::TAB4] = OptionMenu["screenshot"]["layer:backgrnd"];
 
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(OptionMenu["button:Cancel"]);
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(OptionMenu["button:OK"]);
-    buttons[Buttons::UIRESET] =
+    buttons_[Buttons::UIRESET] =
         std::make_unique<MapleButton>(OptionMenu["button:UIReset"]);
 
     nl::node tab = OptionMenu["tab"];
@@ -52,7 +52,7 @@ UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
     nl::node tab_enabled = tab["enabled"];
 
     for (size_t i = Buttons::TAB0; i < Buttons::CANCEL; i++)
-        buttons[i] =
+        buttons_[i] =
             std::make_unique<TwoSpriteButton>(tab_disabled[i], tab_enabled[i]);
 
     std::string sButtonUOL =
@@ -95,18 +95,18 @@ UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
         graphic["combo:resolution"]["boxWidth"].get_integer();
     Point<int16_t> lt = Point<int16_t>(graphic["combo:resolution"]["lt"]);
 
-    buttons[Buttons::SELECT_RES] =
+    buttons_[Buttons::SELECT_RES] =
         std::make_unique<MapleComboBox>(type,
                                         resolutions,
                                         default_option,
-                                        position,
+                                        position_,
                                         lt,
                                         combobox_width);
 
     Point<int16_t> bg_dimensions = Texture(backgrnd).get_dimensions();
 
-    dimension = bg_dimensions;
-    dragarea = Point<int16_t>(bg_dimensions.x(), 20);
+    dimension_ = bg_dimensions;
+    drag_area_ = Point<int16_t>(bg_dimensions.x(), 20);
 
     change_tab(Buttons::TAB2);
 }
@@ -114,7 +114,7 @@ UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
 void UIOptionMenu::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
-    tab_background[selected_tab].draw(position);
+    tab_background[selected_tab].draw(position_);
 
     UIElement::draw_buttons(inter);
 }
@@ -133,7 +133,7 @@ Button::State UIOptionMenu::button_pressed(uint16_t buttonid) {
             switch (selected_tab) {
                 case Buttons::TAB0: {
                     uint16_t selected_value =
-                        buttons[Buttons::SELECT_RES]->get_selected();
+                        buttons_[Buttons::SELECT_RES]->get_selected();
 
                     int16_t width = Constants::Constants::get().get_viewwidth();
                     int16_t height =
@@ -183,7 +183,7 @@ Button::State UIOptionMenu::button_pressed(uint16_t buttonid) {
             return Button::State::NORMAL;
         case Buttons::UIRESET: return Button::State::DISABLED;
         case Buttons::SELECT_RES:
-            buttons[Buttons::SELECT_RES]->toggle_pressed();
+            buttons_[Buttons::SELECT_RES]->toggle_pressed();
             return Button::State::NORMAL;
         default: return Button::State::DISABLED;
     }
@@ -193,10 +193,10 @@ Cursor::State UIOptionMenu::send_cursor(bool clicked,
                                         Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged)
+    if (dragged_)
         return dstate;
 
-    auto &button = buttons[Buttons::SELECT_RES];
+    auto &button = buttons_[Buttons::SELECT_RES];
 
     if (button->is_pressed()) {
         if (button->in_combobox(cursorpos)) {
@@ -225,20 +225,20 @@ UIElement::Type UIOptionMenu::get_type() const {
 }
 
 void UIOptionMenu::change_tab(uint16_t tabid) {
-    buttons[selected_tab]->set_state(Button::State::NORMAL);
-    buttons[tabid]->set_state(Button::State::PRESSED);
+    buttons_[selected_tab]->set_state(Button::State::NORMAL);
+    buttons_[tabid]->set_state(Button::State::PRESSED);
 
     selected_tab = tabid;
 
     switch (tabid) {
         case Buttons::TAB0:
-            buttons[Buttons::SELECT_RES]->set_active(true);
+            buttons_[Buttons::SELECT_RES]->set_active(true);
             break;
         case Buttons::TAB1:
         case Buttons::TAB2:
         case Buttons::TAB3:
         case Buttons::TAB4:
-            buttons[Buttons::SELECT_RES]->set_active(false);
+            buttons_[Buttons::SELECT_RES]->set_active(false);
             break;
         default: break;
     }

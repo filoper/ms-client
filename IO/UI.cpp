@@ -35,61 +35,61 @@
 
 namespace ms {
 UI::UI() {
-    state = std::make_unique<UIStateNull>();
-    enabled = true;
+    state_ = std::make_unique<UIStateNull>();
+    enabled_ = true;
 }
 
 void UI::init() {
-    cursor.init();
+    cursor_.init();
     change_state(State::LOGIN);
 }
 
 void UI::draw(float alpha) const {
-    state->draw(alpha, cursor.get_position());
+    state_->draw(alpha, cursor_.get_position());
 
-    scrollingnotice.draw(alpha);
+    scrolling_notice_.draw(alpha);
 
-    cursor.draw(alpha);
+    cursor_.draw(alpha);
 }
 
 void UI::update() {
-    state->update();
+    state_->update();
 
-    scrollingnotice.update();
+    scrolling_notice_.update();
 
-    cursor.update();
+    cursor_.update();
 }
 
 void UI::enable() {
-    enabled = true;
+    enabled_ = true;
 }
 
 void UI::disable() {
-    enabled = false;
+    enabled_ = false;
 }
 
 void UI::change_state(State id) {
     switch (id) {
-        case State::LOGIN: state = std::make_unique<UIStateLogin>(); break;
-        case State::GAME: state = std::make_unique<UIStateGame>(); break;
+        case State::LOGIN: state_ = std::make_unique<UIStateLogin>(); break;
+        case State::GAME: state_ = std::make_unique<UIStateGame>(); break;
         case State::CASHSHOP:
-            state = std::make_unique<UIStateCashShop>();
+            state_ = std::make_unique<UIStateCashShop>();
             break;
     }
 }
 
 void UI::quit() {
-    quitted = true;
+    quitted_ = true;
 }
 
 bool UI::not_quitted() const {
-    return !quitted;
+    return !quitted_;
 }
 
 void UI::send_cursor(Point<int16_t> cursorpos, Cursor::State cursorstate) {
-    Cursor::State nextstate = state->send_cursor(cursorstate, cursorpos);
-    cursor.set_state(nextstate);
-    cursor.set_position(cursorpos);
+    Cursor::State nextstate = state_->send_cursor(cursorstate, cursorpos);
+    cursor_.set_state(nextstate);
+    cursor_.set_position(cursorpos);
 }
 
 void UI::send_focus(int focused) {
@@ -108,88 +108,88 @@ void UI::send_focus(int focused) {
 }
 
 void UI::send_scroll(double yoffset) {
-    state->send_scroll(yoffset);
+    state_->send_scroll(yoffset);
 }
 
 void UI::send_close() {
-    state->send_close();
+    state_->send_close();
 }
 
 void UI::send_cursor(bool pressed) {
     Cursor::State cursorstate =
-        (pressed && enabled) ? Cursor::State::CLICKING : Cursor::State::IDLE;
-    Point<int16_t> cursorpos = cursor.get_position();
+        (pressed && enabled_) ? Cursor::State::CLICKING : Cursor::State::IDLE;
+    Point<int16_t> cursorpos = cursor_.get_position();
     send_cursor(cursorpos, cursorstate);
 
-    if (focusedtextfield && pressed) {
+    if (focused_text_field_ && pressed) {
         Cursor::State tstate =
-            focusedtextfield->send_cursor(cursorpos, pressed);
+            focused_text_field_->send_cursor(cursorpos, pressed);
 
         switch (tstate) {
-            case Cursor::State::IDLE: focusedtextfield = {}; break;
+            case Cursor::State::IDLE: focused_text_field_ = {}; break;
         }
     }
 }
 
 void UI::send_cursor(Point<int16_t> pos) {
-    send_cursor(pos, cursor.get_state());
+    send_cursor(pos, cursor_.get_state());
 }
 
 void UI::rightclick() {
-    Point<int16_t> pos = cursor.get_position();
-    state->rightclick(pos);
+    Point<int16_t> pos = cursor_.get_position();
+    state_->rightclick(pos);
 }
 
 void UI::doubleclick() {
-    Point<int16_t> pos = cursor.get_position();
-    state->doubleclick(pos);
+    Point<int16_t> pos = cursor_.get_position();
+    state_->doubleclick(pos);
 }
 
 void UI::send_key(int32_t keycode, bool pressed) {
-    if ((is_key_down[GLFW_KEY_LEFT_ALT] || is_key_down[GLFW_KEY_RIGHT_ALT])
-        && (is_key_down[GLFW_KEY_ENTER] || is_key_down[GLFW_KEY_KP_ENTER])) {
+    if ((is_key_down_[GLFW_KEY_LEFT_ALT] || is_key_down_[GLFW_KEY_RIGHT_ALT])
+        && (is_key_down_[GLFW_KEY_ENTER] || is_key_down_[GLFW_KEY_KP_ENTER])) {
         Window::get().toggle_fullscreen();
 
-        is_key_down[GLFW_KEY_LEFT_ALT] = false;
-        is_key_down[GLFW_KEY_RIGHT_ALT] = false;
-        is_key_down[GLFW_KEY_ENTER] = false;
-        is_key_down[GLFW_KEY_KP_ENTER] = false;
+        is_key_down_[GLFW_KEY_LEFT_ALT] = false;
+        is_key_down_[GLFW_KEY_RIGHT_ALT] = false;
+        is_key_down_[GLFW_KEY_ENTER] = false;
+        is_key_down_[GLFW_KEY_KP_ENTER] = false;
 
         return;
     }
 
-    if (is_key_down[keyboard.capslockcode()])
-        caps_lock_enabled = !caps_lock_enabled;
+    if (is_key_down_[keyboard_.capslockcode()])
+        caps_lock_enabled_ = !caps_lock_enabled_;
 
-    if (focusedtextfield) {
-        bool ctrl = is_key_down[keyboard.leftctrlcode()]
-                    || is_key_down[keyboard.rightctrlcode()];
+    if (focused_text_field_) {
+        bool ctrl = is_key_down_[keyboard_.leftctrlcode()]
+                    || is_key_down_[keyboard_.rightctrlcode()];
 
         if (ctrl) {
             if (!pressed) {
-                KeyAction::Id action = keyboard.get_ctrl_action(keycode);
+                KeyAction::Id action = keyboard_.get_ctrl_action(keycode);
 
                 switch (action) {
                     case KeyAction::Id::COPY:
                         Window::get().setclipboard(
-                            focusedtextfield->get_text());
+                            focused_text_field_->get_text());
                         break;
                     case KeyAction::Id::PASTE:
-                        focusedtextfield->add_string(
+                        focused_text_field_->add_string(
                             Window::get().getclipboard());
                         break;
                 }
             }
         } else {
-            bool shift = is_key_down[keyboard.leftshiftcode()]
-                         || is_key_down[keyboard.rightshiftcode()]
-                         || caps_lock_enabled;
+            bool shift = is_key_down_[keyboard_.leftshiftcode()]
+                         || is_key_down_[keyboard_.rightshiftcode()]
+                         || caps_lock_enabled_;
             Keyboard::Mapping mapping =
-                keyboard.get_text_mapping(keycode, shift);
-            focusedtextfield->send_key(mapping.type, mapping.action, pressed);
+                keyboard_.get_text_mapping(keycode, shift);
+            focused_text_field_->send_key(mapping.type, mapping.action, pressed);
         }
     } else {
-        Keyboard::Mapping mapping = keyboard.get_mapping(keycode);
+        Keyboard::Mapping mapping = keyboard_.get_mapping(keycode);
 
         bool sent = false;
         std::list<UIElement::Type> types;
@@ -299,7 +299,7 @@ void UI::send_key(int32_t keycode, bool pressed) {
             }
 
             if (types.size() > 0) {
-                auto element = state->get_front(types);
+                auto element = state_->get_front(types);
 
                 if (element && element != nullptr) {
                     element->send_key(mapping.action, pressed, escape);
@@ -316,7 +316,7 @@ void UI::send_key(int32_t keycode, bool pressed) {
                 if (chatbar && chatbar->is_chatopen())
                     chatbar->send_key(mapping.action, pressed, escape);
                 else
-                    state->send_key(mapping.type,
+                    state_->send_key(mapping.type,
                                     mapping.action,
                                     pressed,
                                     escape);
@@ -324,55 +324,55 @@ void UI::send_key(int32_t keycode, bool pressed) {
                 if (chatbar)
                     chatbar->send_key(mapping.action, pressed, escape);
                 else
-                    state->send_key(mapping.type,
+                    state_->send_key(mapping.type,
                                     mapping.action,
                                     pressed,
                                     escape);
             } else {
-                state->send_key(mapping.type, mapping.action, pressed, escape);
+                state_->send_key(mapping.type, mapping.action, pressed, escape);
             }
         }
     }
 
-    is_key_down[keycode] = pressed;
+    is_key_down_[keycode] = pressed;
 }
 
 void UI::set_scrollnotice(const std::string &notice) {
-    scrollingnotice.setnotice(notice);
+    scrolling_notice_.setnotice(notice);
 }
 
 void UI::focus_textfield(Textfield *tofocus) {
-    if (focusedtextfield)
-        focusedtextfield->set_state(Textfield::State::NORMAL);
+    if (focused_text_field_)
+        focused_text_field_->set_state(Textfield::State::NORMAL);
 
-    focusedtextfield = tofocus;
+    focused_text_field_ = tofocus;
 }
 
 void UI::remove_textfield() {
-    if (focusedtextfield)
-        focusedtextfield->set_state(Textfield::State::NORMAL);
+    if (focused_text_field_)
+        focused_text_field_->set_state(Textfield::State::NORMAL);
 
-    focusedtextfield = {};
+    focused_text_field_ = {};
 }
 
 void UI::drag_icon(Icon *icon) {
-    state->drag_icon(icon);
+    state_->drag_icon(icon);
 }
 
 void UI::add_keymapping(uint8_t no, uint8_t type, int32_t action) {
-    keyboard.assign(no, type, action);
+    keyboard_.assign(no, type, action);
 }
 
 void UI::clear_tooltip(Tooltip::Parent parent) {
-    state->clear_tooltip(parent);
+    state_->clear_tooltip(parent);
 }
 
 void UI::show_equip(Tooltip::Parent parent, int16_t slot) {
-    state->show_equip(parent, slot);
+    state_->show_equip(parent, slot);
 }
 
 void UI::show_item(Tooltip::Parent parent, int32_t item_id) {
-    state->show_item(parent, item_id);
+    state_->show_item(parent, item_id);
 }
 
 void UI::show_skill(Tooltip::Parent parent,
@@ -380,11 +380,11 @@ void UI::show_skill(Tooltip::Parent parent,
                     int32_t level,
                     int32_t masterlevel,
                     int64_t expiration) {
-    state->show_skill(parent, skill_id, level, masterlevel, expiration);
+    state_->show_skill(parent, skill_id, level, masterlevel, expiration);
 }
 
 void UI::show_text(Tooltip::Parent parent, std::string text) {
-    state->show_text(parent, text);
+    state_->show_text(parent, text);
 }
 
 void UI::show_map(Tooltip::Parent parent,
@@ -392,16 +392,16 @@ void UI::show_map(Tooltip::Parent parent,
                   std::string description,
                   int32_t mapid,
                   bool bolded) {
-    state->show_map(parent, name, description, mapid, bolded);
+    state_->show_map(parent, name, description, mapid, bolded);
 }
 
 Keyboard &UI::get_keyboard() {
-    return keyboard;
+    return keyboard_;
 }
 
 void UI::remove(UIElement::Type type) {
-    focusedtextfield = {};
+    focused_text_field_ = {};
 
-    state->remove(type);
+    state_->remove(type);
 }
 }  // namespace ms

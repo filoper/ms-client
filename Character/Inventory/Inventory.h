@@ -173,15 +173,15 @@ private:
         bool cash;
     };
 
-    EnumMap<InventoryType::Id, std::map<int16_t, Slot>> inventories;
-    std::unordered_map<int32_t, Item> items;
-    std::unordered_map<int32_t, Equip> equips;
-    std::unordered_map<int32_t, Pet> pets;
-    int32_t running_uid;
+    EnumMap<InventoryType::Id, std::map<int16_t, Slot>> inventories_;
+    std::unordered_map<int32_t, Item> items_;
+    std::unordered_map<int32_t, Equip> equips_;
+    std::unordered_map<int32_t, Pet> pets_;
+    int32_t running_uid_;
 
-    EnumMap<EquipStat::Id, uint16_t> totalstats;
-    EnumMap<InventoryType::Id, uint8_t> slotmaxima;
-    int64_t meso;
-    int16_t bulletslot;
+    EnumMap<EquipStat::Id, uint16_t> total_stats_;
+    EnumMap<InventoryType::Id, uint8_t> slot_maxima_;
+    int64_t meso_;
+    int16_t bullet_slot_;
 };
 }  // namespace ms

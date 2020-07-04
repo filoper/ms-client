@@ -32,8 +32,8 @@ public:
     void set_selected(bool selected);
 
 private:
-    OutlinedText name;
-    BoolPair<std::vector<Texture>> textures;
-    bool selected;
+    OutlinedText name_;
+    BoolPair<std::vector<Texture>> textures_;
+    bool selected_;
 };
 }  // namespace ms

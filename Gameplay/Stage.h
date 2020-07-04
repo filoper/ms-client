@@ -123,29 +123,29 @@ private:
 
     enum State { INACTIVE, TRANSITION, ACTIVE };
 
-    Camera camera;
-    Physics physics;
-    Player player;
+    Camera camera_;
+    Physics physics_;
+    Player player_;
 
-    Optional<Playable> playable;
-    State state;
-    int32_t mapid;
+    Optional<Playable> playable_;
+    State state_;
+    int32_t map_id_;
 
-    MapInfo mapinfo;
-    MapTilesObjs tilesobjs;
-    MapBackgrounds backgrounds;
-    MapPortals portals;
-    MapReactors reactors;
-    MapNpcs npcs;
-    MapChars chars;
-    MapMobs mobs;
-    MapDrops drops;
-    MapEffect effect;
+    MapInfo map_info_;
+    MapTilesObjs tiles_objs_;
+    MapBackgrounds backgrounds_;
+    MapPortals portals_;
+    MapReactors reactors_;
+    MapNpcs npcs_;
+    MapChars chars_;
+    MapMobs mobs_;
+    MapDrops drops_;
+    MapEffect effect_;
 
-    Combat combat;
+    Combat combat_;
 
-    std::chrono::time_point<std::chrono::steady_clock> start;
-    uint16_t levelBefore;
-    int64_t expBefore;
+    std::chrono::time_point<std::chrono::steady_clock> start_;
+    uint16_t level_before_;
+    int64_t exp_before_;
 };
 }  // namespace ms

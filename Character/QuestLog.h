@@ -37,8 +37,8 @@ public:
     int16_t get_last_started();
 
 private:
-    std::map<int16_t, std::string> started;
-    std::map<int16_t, std::pair<int16_t, std::string>> in_progress;
-    std::map<int16_t, int64_t> completed;
+    std::map<int16_t, std::string> started_;
+    std::map<int16_t, std::pair<int16_t, std::string>> in_progress_;
+    std::map<int16_t, int64_t> completed_;
 };
 }  // namespace ms

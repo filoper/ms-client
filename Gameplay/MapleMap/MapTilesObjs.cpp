@@ -25,33 +25,33 @@ TilesObjs::TilesObjs(nl::node src) {
     for (auto tilenode : src["tile"]) {
         Tile tile { tilenode, tileset };
         int8_t z = tile.getz();
-        tiles.emplace(z, std::move(tile));
+        tiles_.emplace(z, std::move(tile));
     }
 
     for (auto objnode : src["obj"]) {
         Obj obj { objnode };
         int8_t z = obj.getz();
-        objs.emplace(z, std::move(obj));
+        objs_.emplace(z, std::move(obj));
     }
 }
 
 TilesObjs::TilesObjs() {}
 
 void TilesObjs::update() {
-    for (auto &iter : objs)
+    for (auto &iter : objs_)
         iter.second.update();
 }
 
 void TilesObjs::draw(Point<int16_t> viewpos, float alpha) const {
-    for (auto &iter : objs)
+    for (auto &iter : objs_)
         iter.second.draw(viewpos, alpha);
 
-    for (auto &iter : tiles)
+    for (auto &iter : tiles_)
         iter.second.draw(viewpos);
 }
 
 MapTilesObjs::MapTilesObjs(nl::node src) {
-    for (auto iter : layers)
+    for (auto iter : layers_)
         iter.second = src[iter.first];
 }
 
@@ -60,11 +60,11 @@ MapTilesObjs::MapTilesObjs() {}
 void MapTilesObjs::draw(Layer::Id layer,
                         Point<int16_t> viewpos,
                         float alpha) const {
-    layers[layer].draw(viewpos, alpha);
+    layers_[layer].draw(viewpos, alpha);
 }
 
 void MapTilesObjs::update() {
-    for (auto iter : layers)
+    for (auto iter : layers_)
         iter.second.update();
 }
 }  // namespace ms

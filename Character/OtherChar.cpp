@@ -29,86 +29,86 @@ OtherChar::OtherChar(int32_t id,
                      int8_t st,
                      Point<int16_t> pos) :
     Char(id, lk, nm) {
-    level = lvl;
-    job = jb;
+    level_ = lvl;
+    job_ = jb;
     set_position(pos);
 
-    lastmove.xpos = pos.x();
-    lastmove.ypos = pos.y();
-    lastmove.newstate = st;
-    timer = 0;
+    last_move_.xpos = pos.x();
+    last_move_.ypos = pos.y();
+    last_move_.newstate = st;
+    timer_ = 0;
 
-    attackspeed = 6;
-    attacking = false;
+    attack_speed_ = 6;
+    attacking_ = false;
 }
 
 int8_t OtherChar::update(const Physics &physics) {
-    if (timer > 1) {
-        timer--;
-    } else if (timer == 1) {
-        if (!movements.empty()) {
-            lastmove = movements.front();
-            movements.pop();
+    if (timer_ > 1) {
+        timer_--;
+    } else if (timer_ == 1) {
+        if (!movements_.empty()) {
+            last_move_ = movements_.front();
+            movements_.pop();
         } else {
-            timer = 0;
+            timer_ = 0;
         }
     }
 
-    if (!attacking) {
-        uint8_t laststate = lastmove.newstate;
+    if (!attacking_) {
+        uint8_t laststate = last_move_.newstate;
         set_state(laststate);
     }
 
-    phobj.hspeed = lastmove.xpos - phobj.crnt_x();
-    phobj.vspeed = lastmove.ypos - phobj.crnt_y();
-    phobj.move();
+    phobj_.hspeed = last_move_.xpos - phobj_.crnt_x();
+    phobj_.vspeed = last_move_.ypos - phobj_.crnt_y();
+    phobj_.move();
 
-    physics.get_fht().update_fh(phobj);
+    physics.get_fht().update_fh(phobj_);
 
     bool aniend = Char::update(physics, get_stancespeed());
 
-    if (aniend && attacking)
-        attacking = false;
+    if (aniend && attacking_)
+        attacking_ = false;
 
     return get_layer();
 }
 
 void OtherChar::send_movement(const std::vector<Movement> &newmoves) {
-    movements.push(newmoves.back());
+    movements_.push(newmoves.back());
 
-    if (timer == 0) {
+    if (timer_ == 0) {
         constexpr uint16_t DELAY = 50;
-        timer = DELAY;
+        timer_ = DELAY;
     }
 }
 
 void OtherChar::update_skill(int32_t skillid, uint8_t skilllevel) {
-    skilllevels[skillid] = skilllevel;
+    skill_levels_[skillid] = skilllevel;
 }
 
 void OtherChar::update_speed(uint8_t as) {
-    attackspeed = as;
+    attack_speed_ = as;
 }
 
 void OtherChar::update_look(const LookEntry &newlook) {
-    look = newlook;
+    look_ = newlook;
 
-    uint8_t laststate = lastmove.newstate;
+    uint8_t laststate = last_move_.newstate;
     set_state(laststate);
 }
 
 int8_t OtherChar::get_integer_attackspeed() const {
-    return attackspeed;
+    return attack_speed_;
 }
 
 uint16_t OtherChar::get_level() const {
-    return level;
+    return level_;
 }
 
 int32_t OtherChar::get_skilllevel(int32_t skillid) const {
-    auto iter = skilllevels.find(skillid);
+    auto iter = skill_levels_.find(skillid);
 
-    if (iter == skilllevels.end())
+    if (iter == skill_levels_.end())
         return 0;
 
     return iter->second;

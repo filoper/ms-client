@@ -70,7 +70,7 @@ private:
     void emplace(Args &&... args);
 
     EnumMap<UIElement::Type, UIElement::UPtr, UIElement::Type::NUM_TYPES>
-        elements;
-    UIElement::Type focused;
+        elements_;
+    UIElement::Type focused_;
 };
 }  // namespace ms

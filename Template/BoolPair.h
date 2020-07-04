@@ -26,25 +26,25 @@ class BoolPair {
 public:
     template<typename... Args>
     BoolPair(Args &&... argsf, Args &&... argss) :
-        first(std::forward<Args>(argsf)...),
-        second(std::forward<Args>(argss)...) {}
-    BoolPair(T f, T s) : first(f), second(s) {}
+        first_(std::forward<Args>(argsf)...),
+        second_(std::forward<Args>(argss)...) {}
+    BoolPair(T f, T s) : first_(f), second_(s) {}
     BoolPair() {}
 
     template<typename... Args>
     void set(bool b, Args &&... args) {
         if (b)
-            first = T(std::forward<Args>(args)...);
+            first_ = T(std::forward<Args>(args)...);
         else
-            second = T(std::forward<Args>(args)...);
+            second_ = T(std::forward<Args>(args)...);
     }
 
-    T &operator[](bool b) { return b ? first : second; }
+    T &operator[](bool b) { return b ? first_ : second_; }
 
-    const T &operator[](bool b) const { return b ? first : second; }
+    const T &operator[](bool b) const { return b ? first_ : second_; }
 
 private:
-    T first;
-    T second;
+    T first_;
+    T second_;
 };
 }  // namespace ms

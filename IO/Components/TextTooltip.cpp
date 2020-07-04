@@ -26,18 +26,17 @@ namespace ms {
 TextTooltip::TextTooltip() {
     nl::node Frame = nl::nx::ui["UIToolTip.img"]["Item"]["Frame2"];
 
-    frame = Frame;
-    cover = Frame["cover"];
-
-    text = "";
+    frame_ = Frame;
+    cover_ = Frame["cover"];
+    text_ = "";
 }
 
 void TextTooltip::draw(Point<int16_t> pos) const {
-    if (text_label.empty())
+    if (text_label_.empty())
         return;
 
-    int16_t fillwidth = text_label.width();
-    int16_t fillheight = text_label.height();
+    int16_t fillwidth = text_label_.width();
+    int16_t fillheight = text_label_.height();
 
     int16_t max_width = Constants::Constants::get().get_viewwidth();
     int16_t max_height = Constants::Constants::get().get_viewheight();
@@ -53,32 +52,32 @@ void TextTooltip::draw(Point<int16_t> pos) const {
     if (adj_y > 0)
         pos.shift_y(adj_y * -1);
 
-    frame.draw(pos + Point<int16_t>(fillwidth / 2 + 2, fillheight - 7),
+    frame_.draw(pos + Point<int16_t>(fillwidth / 2 + 2, fillheight - 7),
                fillwidth - 14,
                fillheight - 18);
 
     if (fillheight > 18) {
-        cover.draw(pos + Point<int16_t>(-5, -2));
-        text_label.draw(pos);
+        cover_.draw(pos + Point<int16_t>(-5, -2));
+        text_label_.draw(pos);
     } else {
-        cover.draw(DrawArgument(pos + Point<int16_t>(-5, -2), 0.5f, 0.5f));
-        text_label.draw(pos + Point<int16_t>(1, -3));
+        cover_.draw(DrawArgument(pos + Point<int16_t>(-5, -2), 0.5f, 0.5f));
+        text_label_.draw(pos + Point<int16_t>(1, -3));
     }
 }
 
 bool TextTooltip::set_text(std::string t) {
-    if (text == t)
+    if (text_ == t)
         return false;
 
-    text = t;
+    text_ = t;
 
-    if (text.empty())
+    if (text_.empty())
         return false;
 
-    text_label = Text(Text::Font::A12M,
+    text_label_ = Text(Text::Font::A12M,
                       Text::Alignment::LEFT,
                       Color::Name::WHITE,
-                      text,
+                      text_,
                       340,
                       true,
                       2);

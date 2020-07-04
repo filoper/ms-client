@@ -28,27 +28,27 @@ namespace ms {
 template<typename T>
 class TimedQueue {
 public:
-    TimedQueue(std::function<void(const T &)> in_action) : action(in_action) {
-        time = 0;
+    TimedQueue(std::function<void(const T &)> in_action) : action_(in_action) {
+        time_ = 0;
     }
 
-    void push(int64_t delay, const T &t) { queue.emplace(time + delay, t); }
+    void push(int64_t delay, const T &t) { queue_.emplace(time_ + delay, t); }
 
     template<typename... Args>
     void emplace(int64_t delay, Args &&... args) {
-        queue.emplace(time + delay, std::move(args)...);
+        queue_.emplace(time_ + delay, std::move(args)...);
     }
 
     void update(int64_t timestep = Constants::TIMESTEP) {
-        time += timestep;
+        time_ += timestep;
 
-        for (; !queue.empty(); queue.pop()) {
-            const Timed &top = queue.top();
+        for (; !queue_.empty(); queue_.pop()) {
+            const Timed &top = queue_.top();
 
-            if (top.when > time)
+            if (top.when > time_)
                 break;
 
-            action(top.value);
+            action_(top.value);
         }
     }
 
@@ -71,8 +71,8 @@ private:
         }
     };
 
-    std::priority_queue<Timed, std::vector<Timed>, TimedComparator> queue;
-    std::function<void(const T &)> action;
-    int64_t time;
+    std::priority_queue<Timed, std::vector<Timed>, TimedComparator> queue_;
+    std::function<void(const T &)> action_;
+    int64_t time_;
 };
 }  // namespace ms

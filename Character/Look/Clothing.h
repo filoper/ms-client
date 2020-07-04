@@ -102,15 +102,15 @@ private:
             EnumMap<Layer,
                     std::unordered_multimap<uint8_t, Texture>,
                     Layer::NUM_LAYERS>>
-        stances;
-    int32_t itemid;
-    EquipSlot::Id eqslot;
-    Stance::Id walk;
-    Stance::Id stand;
-    std::string vslot;
-    bool twohanded;
-    bool transparent;
+        stances_;
+    int32_t item_id_;
+    EquipSlot::Id eq_slot_;
+    Stance::Id walk_;
+    Stance::Id stand_;
+    std::string vslot_;
+    bool two_handed_;
+    bool transparent_;
 
-    static const std::unordered_map<std::string, Layer> sublayernames;
+    static const std::unordered_map<std::string, Layer> sub_layer_names_;
 };
 }  // namespace ms

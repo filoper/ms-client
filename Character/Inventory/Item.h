@@ -25,15 +25,15 @@
 namespace ms {
 class Item {
 public:
-    Item(int32_t itemid,
+    Item(int32_t item_id,
          int64_t expiration,
          const std::string &owner,
          int16_t flags);
 
 private:
-    int32_t item_id;
-    int64_t expiration;
-    std::string owner;
-    int16_t flags;
+    int32_t item_id_;
+    int64_t expiration_;
+    std::string owner_;
+    int16_t flags_;
 };
 }  // namespace ms

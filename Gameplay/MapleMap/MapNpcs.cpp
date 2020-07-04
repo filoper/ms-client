@@ -26,46 +26,46 @@ void MapNpcs::draw(Layer::Id layer,
                    double viewx,
                    double viewy,
                    float alpha) const {
-    npcs.draw(layer, viewx, viewy, alpha);
+    npcs_.draw(layer, viewx, viewy, alpha);
 }
 
 void MapNpcs::update(const Physics &physics) {
-    for (; !spawns.empty(); spawns.pop()) {
-        const NpcSpawn &spawn = spawns.front();
+    for (; !spawns_.empty(); spawns_.pop()) {
+        const NpcSpawn &spawn = spawns_.front();
 
         int32_t oid = spawn.get_oid();
-        Optional<MapObject> npc = npcs.get(oid);
+        Optional<MapObject> npc = npcs_.get(oid);
 
         if (npc)
             npc->makeactive();
         else
-            npcs.add(spawn.instantiate(physics));
+            npcs_.add(spawn.instantiate(physics));
     }
 
-    npcs.update(physics);
+    npcs_.update(physics);
 }
 
 void MapNpcs::spawn(NpcSpawn &&spawn) {
-    spawns.emplace(std::move(spawn));
+    spawns_.emplace(std::move(spawn));
 }
 
 void MapNpcs::remove(int32_t oid) {
-    if (auto npc = npcs.get(oid))
+    if (auto npc = npcs_.get(oid))
         npc->deactivate();
 }
 
 void MapNpcs::clear() {
-    npcs.clear();
+    npcs_.clear();
 }
 
 MapObjects *MapNpcs::get_npcs() {
-    return &npcs;
+    return &npcs_;
 }
 
 Cursor::State MapNpcs::send_cursor(bool pressed,
                                    Point<int16_t> position,
                                    Point<int16_t> viewpos) {
-    for (auto &map_object : npcs) {
+    for (auto &map_object : npcs_) {
         Npc *npc = static_cast<Npc *>(map_object.second.get());
 
         if (npc && npc->is_active() && npc->inrange(position, viewpos)) {

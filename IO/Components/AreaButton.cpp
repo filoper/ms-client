@@ -20,20 +20,20 @@
 
 namespace ms {
 AreaButton::AreaButton(Point<int16_t> pos, Point<int16_t> dim) {
-    position = pos;
-    dimension = dim;
-    state = Button::State::NORMAL;
-    active = true;
+    position_ = pos;
+    dimension_ = dim;
+    state_ = Button::State::NORMAL;
+    active_ = true;
 }
 
 Rectangle<int16_t> AreaButton::bounds(Point<int16_t> parentpos) const {
-    Point<int16_t> absp = position + parentpos;
+    Point<int16_t> absp = position_ + parentpos;
 
-    return Rectangle<int16_t>(absp, absp + dimension);
+    return Rectangle<int16_t>(absp, absp + dimension_);
 }
 
 int16_t AreaButton::width() const {
-    return dimension.x();
+    return dimension_.x();
 }
 
 Point<int16_t> AreaButton::origin() const {

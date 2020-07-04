@@ -142,25 +142,25 @@ constexpr int32_t Specialtable[96] = {
 };
 
 Keyboard::Keyboard() {
-    keymap[GLFW_KEY_LEFT] = Mapping(KeyType::Id::ACTION, KeyAction::Id::LEFT);
-    keymap[GLFW_KEY_RIGHT] = Mapping(KeyType::Id::ACTION, KeyAction::Id::RIGHT);
-    keymap[GLFW_KEY_UP] = Mapping(KeyType::Id::ACTION, KeyAction::Id::UP);
-    keymap[GLFW_KEY_DOWN] = Mapping(KeyType::Id::ACTION, KeyAction::Id::DOWN);
-    keymap[GLFW_KEY_ENTER] =
+    keymap_[GLFW_KEY_LEFT] = Mapping(KeyType::Id::ACTION, KeyAction::Id::LEFT);
+    keymap_[GLFW_KEY_RIGHT] = Mapping(KeyType::Id::ACTION, KeyAction::Id::RIGHT);
+    keymap_[GLFW_KEY_UP] = Mapping(KeyType::Id::ACTION, KeyAction::Id::UP);
+    keymap_[GLFW_KEY_DOWN] = Mapping(KeyType::Id::ACTION, KeyAction::Id::DOWN);
+    keymap_[GLFW_KEY_ENTER] =
         Mapping(KeyType::Id::ACTION, KeyAction::Id::RETURN);
-    keymap[GLFW_KEY_KP_ENTER] =
+    keymap_[GLFW_KEY_KP_ENTER] =
         Mapping(KeyType::Id::ACTION, KeyAction::Id::RETURN);
-    keymap[GLFW_KEY_TAB] = Mapping(KeyType::Id::ACTION, KeyAction::Id::TAB);
+    keymap_[GLFW_KEY_TAB] = Mapping(KeyType::Id::ACTION, KeyAction::Id::TAB);
 
-    textactions[GLFW_KEY_BACKSPACE] = KeyAction::Id::BACK;
-    textactions[GLFW_KEY_ENTER] = KeyAction::Id::RETURN;
-    textactions[GLFW_KEY_KP_ENTER] = KeyAction::Id::RETURN;
-    textactions[GLFW_KEY_SPACE] = KeyAction::Id::SPACE;
-    textactions[GLFW_KEY_TAB] = KeyAction::Id::TAB;
-    textactions[GLFW_KEY_ESCAPE] = KeyAction::Id::ESCAPE;
-    textactions[GLFW_KEY_HOME] = KeyAction::Id::HOME;
-    textactions[GLFW_KEY_END] = KeyAction::Id::END;
-    textactions[GLFW_KEY_DELETE] = KeyAction::Id::DELETE;
+    text_actions_[GLFW_KEY_BACKSPACE] = KeyAction::Id::BACK;
+    text_actions_[GLFW_KEY_ENTER] = KeyAction::Id::RETURN;
+    text_actions_[GLFW_KEY_KP_ENTER] = KeyAction::Id::RETURN;
+    text_actions_[GLFW_KEY_SPACE] = KeyAction::Id::SPACE;
+    text_actions_[GLFW_KEY_TAB] = KeyAction::Id::TAB;
+    text_actions_[GLFW_KEY_ESCAPE] = KeyAction::Id::ESCAPE;
+    text_actions_[GLFW_KEY_HOME] = KeyAction::Id::HOME;
+    text_actions_[GLFW_KEY_END] = KeyAction::Id::END;
+    text_actions_[GLFW_KEY_DELETE] = KeyAction::Id::DELETE;
 }
 
 int32_t Keyboard::leftshiftcode() const {
@@ -184,7 +184,7 @@ int32_t Keyboard::rightctrlcode() const {
 }
 
 std::map<int32_t, Keyboard::Mapping> Keyboard::get_maplekeys() const {
-    return maplekeys;
+    return maple_keys_;
 }
 
 KeyAction::Id Keyboard::get_ctrl_action(int32_t keycode) const {
@@ -202,22 +202,22 @@ void Keyboard::assign(uint8_t key, uint8_t tid, int32_t action) {
     if (KeyType::Id type = KeyType::typebyid(tid)) {
         Mapping mapping = Mapping(type, action);
 
-        keymap[Keytable[key]] = mapping;
-        maplekeys[key] = mapping;
+        keymap_[Keytable[key]] = mapping;
+        maple_keys_[key] = mapping;
     }
 }
 
 void Keyboard::remove(uint8_t key) {
     Mapping mapping = Mapping(KeyType::Id::NONE, 0);
 
-    keymap[Keytable[key]] = mapping;
-    maplekeys[key] = mapping;
+    keymap_[Keytable[key]] = mapping;
+    maple_keys_[key] = mapping;
 }
 
 Keyboard::Mapping Keyboard::get_text_mapping(int32_t keycode,
                                              bool shift) const {
-    if (textactions.count(keycode)) {
-        return Mapping(KeyType::Id::ACTION, textactions.at(keycode));
+    if (text_actions_.count(keycode)) {
+        return Mapping(KeyType::Id::ACTION, text_actions_.at(keycode));
     } else if (keycode == 39 || (keycode >= 44 && keycode <= 57)
                || keycode == 59 || keycode == 61
                || (keycode >= 91 && keycode <= 93) || keycode == 96) {
@@ -235,25 +235,25 @@ Keyboard::Mapping Keyboard::get_text_mapping(int32_t keycode,
             case GLFW_KEY_LEFT:
             case GLFW_KEY_RIGHT:
             case GLFW_KEY_UP:
-            case GLFW_KEY_DOWN: return keymap.at(keycode);
+            case GLFW_KEY_DOWN: return keymap_.at(keycode);
             default: return Mapping(KeyType::Id::NONE, 0);
         }
     }
 }
 
 Keyboard::Mapping Keyboard::get_mapping(int32_t keycode) const {
-    auto iter = keymap.find(keycode);
+    auto iter = keymap_.find(keycode);
 
-    if (iter == keymap.end())
+    if (iter == keymap_.end())
         return Mapping(KeyType::Id::NONE, 0);
 
     return iter->second;
 }
 
 Keyboard::Mapping Keyboard::get_maple_mapping(int32_t keycode) const {
-    auto iter = maplekeys.find(keycode);
+    auto iter = maple_keys_.find(keycode);
 
-    if (iter == maplekeys.end())
+    if (iter == maple_keys_.end())
         return Mapping(KeyType::Id::NONE, 0);
 
     return iter->second;

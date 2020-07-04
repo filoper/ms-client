@@ -58,14 +58,14 @@ private:
     // Load an equip from the game files.
     EquipData(int32_t id);
 
-    const ItemData &itemdata;
+    const ItemData &item_data_;
 
-    EnumMap<MapleStat::Id, int16_t> reqstats;
-    EnumMap<EquipStat::Id, int16_t> defstats;
-    std::string type;
-    EquipSlot::Id eqslot;
-    uint8_t slots;
-    bool cash;
-    bool tradeblock;
+    EnumMap<MapleStat::Id, int16_t> req_stats_;
+    EnumMap<EquipStat::Id, int16_t> def_stats_;
+    std::string type_;
+    EquipSlot::Id eq_slot_;
+    uint8_t slots_;
+    bool cash_;
+    bool trade_block_;
 };
 }  // namespace ms

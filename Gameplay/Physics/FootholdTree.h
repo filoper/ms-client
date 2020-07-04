@@ -57,11 +57,11 @@ private:
 
     const Foothold &get_fh(uint16_t fhid) const;
 
-    std::unordered_map<uint16_t, Foothold> footholds;
-    std::unordered_multimap<int16_t, uint16_t> footholdsbyx;
+    std::unordered_map<uint16_t, Foothold> footholds_;
+    std::unordered_multimap<int16_t, uint16_t> footholds_by_x_;
 
-    Foothold nullfh;
-    Range<int16_t> walls;
-    Range<int16_t> borders;
+    Foothold null_fh_;
+    Range<int16_t> walls_;
+    Range<int16_t> borders_;
 };
 }  // namespace ms

@@ -44,15 +44,15 @@ void UILogo::draw(float inter) const {
 
     if (!user_clicked) {
         if (!nexon_ended) {
-            Nexon.draw(position + Point<int16_t>(440, 360), inter);
+            Nexon.draw(position_ + Point<int16_t>(440, 360), inter);
         } else {
             if (!wizet_ended)
-                Wizet.draw(position + Point<int16_t>(263, 195), inter);
+                Wizet.draw(position_ + Point<int16_t>(263, 195), inter);
             else
-                WizetEnd.draw(position + Point<int16_t>(263, 195));
+                WizetEnd.draw(position_ + Point<int16_t>(263, 195));
         }
     } else {
-        WizetEnd.draw(position + Point<int16_t>(263, 195));
+        WizetEnd.draw(position_ + Point<int16_t>(263, 195));
     }
 }
 

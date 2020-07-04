@@ -35,10 +35,10 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
     nl::node backgrnd = main["backgrnd"];
     Point<int16_t> bg_dimensions = Texture(backgrnd).get_dimensions();
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(main["backgrnd2"], Point<int16_t>(1, 0));
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(main["backgrnd2"], Point<int16_t>(1, 0));
 
-    buttons[Buttons::CLOSE] = std::make_unique<MapleButton>(
+    buttons_[Buttons::CLOSE] = std::make_unique<MapleButton>(
         close,
         Point<int16_t>(bg_dimensions.x() - 19, 6));
 
@@ -83,14 +83,14 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
                             offset += shift;
                     });
 
-    dimension = bg_dimensions;
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    dimension_ = bg_dimensions;
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 }
 
 void UIEvent::draw(float inter) const {
     UIElement::draw(inter);
 
-    slider.draw(position);
+    slider.draw(position_);
 
     for (size_t i = 0; i < 3; i++) {
         int16_t slot = i + offset;
@@ -105,7 +105,7 @@ void UIEvent::draw(float inter) const {
         auto itm_reward = evnt[0];
 
         if (itm_reward) {
-            item_reward.draw(position + event_pos);
+            item_reward.draw(position_ + event_pos);
 
             int16_t x_adj = 0;
 
@@ -120,26 +120,26 @@ void UIEvent::draw(float inter) const {
                 else if (f == 4)
                     x_adj = 9;
 
-                icon.draw(position
+                icon.draw(position_
                           + Point<int16_t>(33 + x_adj + 46 * f, 191 + 125 * i));
             }
         } else {
-            text_reward.draw(position + event_pos);
+            text_reward.draw(position_ + event_pos);
 
             if (!in_progress)
-                next.draw(position + event_pos);
+                next.draw(position_ + event_pos);
         }
 
         if (in_progress)
-            label_on.draw(position + event_pos);
+            label_on.draw(position_ + event_pos);
         else
-            label_next.draw(position + event_pos);
+            label_next.draw(position_ + event_pos);
 
         auto title_pos = Point<int16_t>(28, 95 + 125 * i);
         auto date_pos = Point<int16_t>(28, 123 + 125 * i);
 
-        event_title[i].draw(position + title_pos);
-        event_date[i].draw(position + date_pos);
+        event_title[i].draw(position_ + title_pos);
+        event_date[i].draw(position_ + date_pos);
     }
 }
 
@@ -171,7 +171,7 @@ void UIEvent::remove_cursor() {
 }
 
 Cursor::State UIEvent::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    Point<int16_t> cursoroffset = cursorpos - position;
+    Point<int16_t> cursoroffset = cursorpos - position_;
 
     if (slider.isenabled())
         if (Cursor::State new_state = slider.send_cursor(cursoroffset, clicked))

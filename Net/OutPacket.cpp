@@ -25,28 +25,28 @@
 #include "Session.h"
 
 namespace ms {
-OutPacket::OutPacket(int16_t opc) : opcode(opc) {
-    write_short(opcode);
+OutPacket::OutPacket(int16_t opc) : opcode_(opc) {
+    write_short(opcode_);
 }
 
 void OutPacket::dispatch() {
-    Session::get().write(bytes.data(), bytes.size());
+    Session::get().write(bytes_.data(), bytes_.size());
 
     if (Configuration::get().get_show_packets()) {
-        if (opcode == Opcode::PONG)
+        if (opcode_ == Opcode::PONG)
             std::cout << "Sent Packet: PONG" << std::endl;
         else
-            std::cout << "Sent Packet: " << std::to_string(opcode) << std::endl;
+            std::cout << "Sent Packet: " << std::to_string(opcode_) << std::endl;
     }
 }
 
 void OutPacket::skip(size_t count) {
     for (size_t i = 0; i < count; i++)
-        bytes.push_back(0);
+        bytes_.push_back(0);
 }
 
 void OutPacket::write_byte(int8_t ch) {
-    bytes.push_back(ch);
+    bytes_.push_back(ch);
 }
 
 void OutPacket::write_short(int16_t sh) {

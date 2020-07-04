@@ -21,18 +21,18 @@
 #include "../../Util/Misc.h"
 
 namespace ms {
-SingleUseEffect::SingleUseEffect(nl::node src) : effect(src["effect"]) {}
+SingleUseEffect::SingleUseEffect(nl::node src) : effect_(src["effect"]) {}
 
 void SingleUseEffect::apply(Char &target) const {
-    effect.apply(target);
+    effect_.apply(target);
 }
 
 TwoHandedUseEffect::TwoHandedUseEffect(nl::node src) :
-    effects(src["effect"]["0"], src["effect"]["1"]) {}
+    effects_(src["effect"]["0"], src["effect"]["1"]) {}
 
 void TwoHandedUseEffect::apply(Char &target) const {
     bool twohanded = target.is_twohanded();
-    effects[twohanded].apply(target);
+    effects_[twohanded].apply(target);
 }
 
 MultiUseEffect::MultiUseEffect(nl::node src) {
@@ -40,7 +40,7 @@ MultiUseEffect::MultiUseEffect(nl::node src) {
     nl::node sub = src["effect"];
 
     while (sub) {
-        effects.push_back(sub);
+        effects_.push_back(sub);
 
         no++;
         sub = src["effect" + std::to_string(no)];
@@ -48,27 +48,27 @@ MultiUseEffect::MultiUseEffect(nl::node src) {
 }
 
 void MultiUseEffect::apply(Char &target) const {
-    for (auto &effect : effects)
+    for (auto &effect : effects_)
         effect.apply(target);
 }
 
 ByLevelUseEffect::ByLevelUseEffect(nl::node src) {
     for (auto sub : src["CharLevel"]) {
         auto level = string_conversion::or_zero<uint16_t>(sub.name());
-        effects.emplace(level, sub["effect"]);
+        effects_.emplace(level, sub["effect"]);
     }
 }
 
 void ByLevelUseEffect::apply(Char &target) const {
-    if (effects.empty())
+    if (effects_.empty())
         return;
 
     uint16_t level = target.get_level();
-    auto iter = effects.begin();
-    for (; iter != effects.end() && level > iter->first; ++iter) {
+    auto iter = effects_.begin();
+    for (; iter != effects_.end() && level > iter->first; ++iter) {
     }
 
-    if (iter != effects.begin())
+    if (iter != effects_.begin())
         iter--;
 
     iter->second.apply(target);

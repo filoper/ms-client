@@ -27,18 +27,18 @@ StatefulIcon::StatefulIcon(std::unique_ptr<Type> type,
     ntx.shift({ 0, 32 });
     dtx.shift({ 0, 32 });
     motx.shift({ 0, 32 });
-    textures[State::NORMAL] = ntx;
-    textures[State::DISABLED] = dtx;
-    textures[State::MOUSEOVER] = motx;
+    textures_[State::NORMAL] = ntx;
+    textures_[State::DISABLED] = dtx;
+    textures_[State::MOUSEOVER] = motx;
 
-    state = State::NORMAL;
+    state_ = State::NORMAL;
 }
 
 Texture StatefulIcon::get_texture() const {
-    return textures[state];
+    return textures_[state_];
 }
 
 void StatefulIcon::set_state(State s) {
-    state = s;
+    state_ = s;
 }
 }  // namespace ms

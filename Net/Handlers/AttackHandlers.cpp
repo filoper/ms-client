@@ -26,7 +26,7 @@
 
 namespace ms {
 AttackHandler::AttackHandler(Attack::Type t) {
-    type = t;
+    type_ = t;
 }
 
 void AttackHandler::handle(InPacket &recv) const {
@@ -36,7 +36,7 @@ void AttackHandler::handle(InPacket &recv) const {
     recv.skip(1);
 
     AttackResult attack;
-    attack.type = type;
+    attack.type = type_;
     attack.attacker = cid;
 
     attack.level = recv.read_byte();

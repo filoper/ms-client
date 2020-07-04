@@ -51,18 +51,18 @@ private:
     int16_t WOFFSET;
     int16_t HOFFSET;
 
-    Animation animation;
-    bool animated;
-    int16_t cx;
-    int16_t cy;
-    double rx;
-    double ry;
-    int16_t htile;
-    int16_t vtile;
-    float opacity;
-    bool flipped;
+    Animation animation_;
+    bool animated_;
+    int16_t cx_;
+    int16_t cy_;
+    double rx_;
+    double ry_;
+    int16_t htile_;
+    int16_t vtile_;
+    float opacity_;
+    bool flipped_;
 
-    MovingObject moveobj;
+    MovingObject move_obj_;
 };
 
 class MapBackgrounds {
@@ -78,8 +78,8 @@ public:
     void update();
 
 private:
-    std::vector<Background> backgrounds;
-    std::vector<Background> foregrounds;
-    bool black;
+    std::vector<Background> backgrounds_;
+    std::vector<Background> foregrounds_;
+    bool black_;
 };
 }  // namespace ms

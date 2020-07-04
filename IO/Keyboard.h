@@ -72,9 +72,9 @@ public:
     Mapping get_text_mapping(int32_t keycode, bool shift) const;
 
 private:
-    std::map<int32_t, Mapping> keymap;
-    std::map<int32_t, Mapping> maplekeys;
-    std::map<int32_t, KeyAction::Id> textactions;
-    std::map<int32_t, bool> keystate;
+    std::map<int32_t, Mapping> keymap_;
+    std::map<int32_t, Mapping> maple_keys_;
+    std::map<int32_t, KeyAction::Id> text_actions_;
+    std::map<int32_t, bool> key_state_;
 };
 }  // namespace ms

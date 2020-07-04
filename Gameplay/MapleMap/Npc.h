@@ -59,22 +59,22 @@ public:
     std::string get_func();
 
 private:
-    std::map<std::string, Animation> animations;
-    std::map<std::string, std::vector<std::string>> lines;
-    std::vector<std::string> states;
-    std::string name;
-    std::string func;
-    bool hidename;
-    bool scripted;
-    bool mouseonly;
+    std::map<std::string, Animation> animations_;
+    std::map<std::string, std::vector<std::string>> lines_;
+    std::vector<std::string> states_;
+    std::string name_;
+    std::string func_;
+    bool hide_name_;
+    bool scripted_;
+    bool mouse_only_;
 
-    int32_t npcid;
-    bool flip;
-    std::string stance;
-    bool control;
+    int32_t npc_id_;
+    bool flip_;
+    std::string stance_;
+    bool control_;
 
-    Randomizer random;
-    Text namelabel;
-    Text funclabel;
+    Randomizer random_;
+    Text name_label_;
+    Text func_label_;
 };
 }  // namespace ms

@@ -180,27 +180,27 @@ public:
     MonsterBook &get_monsterbook();
 
 private:
-    CharStats stats;
-    Inventory inventory;
-    SkillBook skillbook;
-    QuestLog questlog;
-    TeleportRock teleportrock;
-    MonsterBook monsterbook;
+    CharStats stats_;
+    Inventory inventory_;
+    SkillBook skill_book_;
+    QuestLog quest_log_;
+    TeleportRock teleport_rock_;
+    MonsterBook monster_book_;
 
-    EnumMap<Buffstat::Id, Buff> buffs;
-    ActiveBuffs active_buffs;
-    PassiveBuffs passive_buffs;
+    EnumMap<Buffstat::Id, Buff> buffs_;
+    ActiveBuffs active_buffs_;
+    PassiveBuffs passive_buffs_;
 
-    std::unordered_map<int32_t, int32_t> cooldowns;
+    std::unordered_map<int32_t, int32_t> cooldowns_;
 
-    std::map<KeyAction::Id, bool> keysdown;
+    std::map<KeyAction::Id, bool> keys_down_;
 
-    Movement lastmove;
+    Movement last_move_;
 
-    Randomizer randomizer;
+    Randomizer randomizer_;
 
-    Optional<const Ladder> ladder;
+    Optional<const Ladder> ladder_;
 
-    bool underwater;
+    bool underwater_;
 };
 }  // namespace ms

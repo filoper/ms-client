@@ -40,11 +40,11 @@ UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
     bottombox = src["s_box"];
 
     if (type == NoticeType::YESNO) {
-        position.shift_y(-8);
+        position_.shift_y(-8);
         question =
             Text(Text::Font::A11M, alignment, Color::Name::WHITE, message, 200);
     } else if (type == NoticeType::ENTERNUMBER) {
-        position.shift_y(-16);
+        position_.shift_y(-16);
         question = Text(Text::Font::A12M,
                         Text::Alignment::LEFT,
                         Color::Name::WHITE,
@@ -53,7 +53,7 @@ UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
     } else if (type == NoticeType::OK) {
         uint16_t maxwidth = top.width() - 6;
 
-        position.shift_y(-8);
+        position_.shift_y(-8);
         question = Text(Text::Font::A11M,
                         Text::Alignment::CENTER,
                         Color::Name::WHITE,
@@ -62,11 +62,11 @@ UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
     }
 
     height = question.height();
-    dimension =
+    dimension_ =
         Point<int16_t>(top.width(), top.height() + height + bottom.height());
-    position = Point<int16_t>(position.x() - dimension.x() / 2,
-                              position.y() - dimension.y() / 2);
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    position_ = Point<int16_t>(position_.x() - dimension_.x() / 2,
+                              position_.y() - dimension_.y() / 2);
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
     if (type != NoticeType::ENTERNUMBER)
         Sound(Sound::Name::DLGNOTICE).play();
@@ -76,7 +76,7 @@ UINotice::UINotice(std::string message, NoticeType t) :
     UINotice(message, t, Text::Alignment::CENTER) {}
 
 void UINotice::draw(bool textfield) const {
-    Point<int16_t> start = position;
+    Point<int16_t> start = position_;
 
     top.draw(start);
     start.shift_y(top.height());
@@ -91,7 +91,7 @@ void UINotice::draw(bool textfield) const {
         box.draw(DrawArgument(start, Point<int16_t>(0, 29)));
         start.shift_y(29);
 
-        question.draw(position + Point<int16_t>(13, 13));
+        question.draw(position_ + Point<int16_t>(13, 13));
     } else {
         int16_t pos_y = height >= 32 ? height : 32;
 
@@ -103,9 +103,9 @@ void UINotice::draw(bool textfield) const {
         start.shift_y(box.height());
 
         if (type == NoticeType::YESNO && alignment == Text::Alignment::LEFT)
-            question.draw(position + Point<int16_t>(31, 14));
+            question.draw(position_ + Point<int16_t>(31, 14));
         else
-            question.draw(position + Point<int16_t>(131, 14));
+            question.draw(position_ + Point<int16_t>(131, 14));
     }
 
     bottombox.draw(start);
@@ -132,10 +132,10 @@ UIYesNo::UIYesNo(std::string message,
 
     nl::node src = nl::nx::ui["Basic.img"];
 
-    buttons[Buttons::YES] =
+    buttons_[Buttons::YES] =
         std::make_unique<MapleButton>(src["BtOK4"],
                                       Point<int16_t>(156, belowtext));
-    buttons[Buttons::NO] =
+    buttons_[Buttons::NO] =
         std::make_unique<MapleButton>(src["BtCancel4"],
                                       Point<int16_t>(198, belowtext));
 }
@@ -187,9 +187,9 @@ UIEnterNumber::UIEnterNumber(std::string message,
 
     nl::node src = nl::nx::ui["Basic.img"];
 
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(src["BtOK4"], 156, pos_y);
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(src["BtCancel4"], 198, pos_y);
 
     numfield = Textfield(Text::Font::A11M,
@@ -211,13 +211,13 @@ void UIEnterNumber::draw(float alpha) const {
     UINotice::draw(true);
     UIElement::draw(alpha);
 
-    numfield.draw(position);
+    numfield.draw(position_);
 }
 
 void UIEnterNumber::update() {
     UIElement::update();
 
-    numfield.update(position);
+    numfield.update(position_);
 }
 
 Cursor::State UIEnterNumber::send_cursor(bool clicked,
@@ -261,7 +261,7 @@ void UIEnterNumber::handlestring(std::string numstr) {
 
     auto okhandler = [&](bool) {
         numfield.set_state(Textfield::State::FOCUSED);
-        buttons[Buttons::OK]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
     };
 
     if (!has_only_digits) {
@@ -290,7 +290,7 @@ void UIEnterNumber::handlestring(std::string numstr) {
         deactivate();
     }
 
-    buttons[Buttons::OK]->set_state(Button::State::NORMAL);
+    buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
 }
 
 UIOk::UIOk(std::string message, std::function<void(bool ok)> oh) :
@@ -299,7 +299,7 @@ UIOk::UIOk(std::string message, std::function<void(bool ok)> oh) :
 
     nl::node src = nl::nx::ui["Basic.img"];
 
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(src["BtOK4"], 197, box2offset(false));
 }
 

@@ -50,8 +50,8 @@ public:
     }
 
 private:
-    BoolPair<Texture> textures;
-    Point<int16_t> npos;
-    Point<int16_t> spos;
+    BoolPair<Texture> textures_;
+    Point<int16_t> npos_;
+    Point<int16_t> spos_;
 };
 }  // namespace ms

@@ -98,19 +98,19 @@ private:
 
     const SpecialMove &get_move(int32_t move_id);
 
-    Player &player;
-    MapChars &chars;
-    MapMobs &mobs;
-    MapReactors &reactors;
+    Player &player_;
+    MapChars &chars_;
+    MapMobs &mobs_;
+    MapReactors &reactors_;
 
-    std::unordered_map<int32_t, Skill> skills;
-    RegularAttack regularattack;
+    std::unordered_map<int32_t, Skill> skills_;
+    RegularAttack regular_attack_;
 
-    TimedQueue<AttackResult> attackresults;
-    TimedQueue<BulletEffect> bulleteffects;
-    TimedQueue<DamageEffect> damageeffects;
+    TimedQueue<AttackResult> attack_results_;
+    TimedQueue<BulletEffect> bullet_effects_;
+    TimedQueue<DamageEffect> damage_effects_;
 
-    std::list<BulletEffect> bullets;
-    std::list<DamageNumber> damagenumbers;
+    std::list<BulletEffect> bullets_;
+    std::list<DamageNumber> damage_numbers_;
 };
 }  // namespace ms

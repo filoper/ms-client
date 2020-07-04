@@ -34,18 +34,18 @@ public:
     // Return a ref to the game object with the specified id.
     // If the object is not in cache, it is created.
     static const T &get(std::int32_t id) {
-        auto iter = cache.find(id);
+        auto iter = cache_.find(id);
 
-        if (iter == cache.end())
-            iter = cache.emplace(id, T { id }).first;
+        if (iter == cache_.end())
+            iter = cache_.emplace(id, T { id }).first;
 
         return iter->second;
     }
 
 private:
-    static std::map<std::int32_t, T> cache;
+    static std::map<std::int32_t, T> cache_;
 };
 
 template<typename T>
-std::map<std::int32_t, T> Cache<T>::cache;
+std::map<std::int32_t, T> Cache<T>::cache_;
 }  // namespace ms

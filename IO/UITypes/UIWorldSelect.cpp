@@ -71,7 +71,7 @@ UIWorldSelect::UIWorldSelect() :
 
     set_region(regionid);
 
-    sprites.emplace_back(obj["WorldSelect"]["default"][0], background_pos);
+    sprites_.emplace_back(obj["WorldSelect"]["default"][0], background_pos);
 
     std::vector<std::string> backgrounds = { "cernium" };
     auto backgrounds_size = backgrounds.size();
@@ -81,70 +81,70 @@ UIWorldSelect::UIWorldSelect() :
             auto randomizer = Randomizer();
             int32_t index = randomizer.next_int(backgrounds_size);
 
-            sprites.emplace_back(obj["WorldSelect"][backgrounds[index]][0],
+            sprites_.emplace_back(obj["WorldSelect"][backgrounds[index]][0],
                                  background_pos);
         } else {
-            sprites.emplace_back(obj["WorldSelect"][backgrounds[0]][0],
+            sprites_.emplace_back(obj["WorldSelect"][backgrounds[0]][0],
                                  background_pos);
         }
     }
 
-    sprites.emplace_back(common["frame"], Point<int16_t>(400, 300));
-    sprites.emplace_back(common["step"]["1"], Point<int16_t>(40, 0));
+    sprites_.emplace_back(common["frame"], Point<int16_t>(400, 300));
+    sprites_.emplace_back(common["step"]["1"], Point<int16_t>(40, 0));
 
-    buttons[Buttons::BT_VIEWALL] =
+    buttons_[Buttons::BT_VIEWALL] =
         std::make_unique<MapleButton>(worldselect["BtViewAll"],
                                       Point<int16_t>(0, 53));
-    buttons[Buttons::BT_VIEWRECOMMENDED] =
+    buttons_[Buttons::BT_VIEWRECOMMENDED] =
         std::make_unique<MapleButton>(worldselect["BtViewChoice"],
                                       Point<int16_t>(0, 53));
-    buttons[Buttons::BT_VIEWRECOMMENDED_SELECT] =
+    buttons_[Buttons::BT_VIEWRECOMMENDED_SELECT] =
         std::make_unique<MapleButton>(worldselect["alert"]["BtChoice"],
                                       Point<int16_t>(349, 327));
-    buttons[Buttons::BT_VIEWRECOMMENDED_CANCEL] =
+    buttons_[Buttons::BT_VIEWRECOMMENDED_CANCEL] =
         std::make_unique<MapleButton>(worldselect["alert"]["BtClose"],
                                       Point<int16_t>(407, 327));
-    buttons[Buttons::BT_VIEWRECOMMENDED_PREV] =
+    buttons_[Buttons::BT_VIEWRECOMMENDED_PREV] =
         std::make_unique<MapleButton>(worldselect["alert"]["BtArrowL"],
                                       Point<int16_t>(338, 244));
-    buttons[Buttons::BT_VIEWRECOMMENDED_NEXT] =
+    buttons_[Buttons::BT_VIEWRECOMMENDED_NEXT] =
         std::make_unique<MapleButton>(worldselect["alert"]["BtArrowR"],
                                       Point<int16_t>(439, 244));
 
-    buttons[Buttons::BT_VIEWALL]->set_active(false);
-    buttons[Buttons::BT_VIEWRECOMMENDED]->set_active(use_recommended ? true
+    buttons_[Buttons::BT_VIEWALL]->set_active(false);
+    buttons_[Buttons::BT_VIEWRECOMMENDED]->set_active(use_recommended ? true
                                                                      : false);
-    buttons[Buttons::BT_VIEWRECOMMENDED_SELECT]->set_active(false);
-    buttons[Buttons::BT_VIEWRECOMMENDED_CANCEL]->set_active(false);
-    buttons[Buttons::BT_VIEWRECOMMENDED_PREV]->set_active(false);
-    buttons[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_active(false);
+    buttons_[Buttons::BT_VIEWRECOMMENDED_SELECT]->set_active(false);
+    buttons_[Buttons::BT_VIEWRECOMMENDED_CANCEL]->set_active(false);
+    buttons_[Buttons::BT_VIEWRECOMMENDED_PREV]->set_active(false);
+    buttons_[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_active(false);
 
-    buttons[Buttons::BT_VIEWRECOMMENDED]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_VIEWRECOMMENDED]->set_state(Button::State::DISABLED);
 
     recommended_textures.emplace_back(worldselect["alert"]["backgrd"]);
 
-    buttons[Buttons::BT_CHANGEREGION] =
+    buttons_[Buttons::BT_CHANGEREGION] =
         std::make_unique<MapleButton>(worldselect["BtRegion"],
                                       Point<int16_t>(3, 127));
-    buttons[Buttons::BT_QUITGAME] =
+    buttons_[Buttons::BT_QUITGAME] =
         std::make_unique<MapleButton>(common["BtExit"], Point<int16_t>(0, 515));
 
     for (size_t i = 0; i < Buttons::BT_ENTERWORLD - Buttons::BT_CHANNEL0; i++) {
         std::string ch = std::to_string(i);
 
-        buttons[Buttons::BT_CHANNEL0 + i] = std::make_unique<TwoSpriteButton>(
+        buttons_[Buttons::BT_CHANNEL0 + i] = std::make_unique<TwoSpriteButton>(
             channelsrc["button:" + ch]["normal"]["0"],
             channelsrc["button:" + ch]["keyFocused"]["0"],
             channelsrc_pos);
-        buttons[Buttons::BT_CHANNEL0 + i]->set_active(false);
+        buttons_[Buttons::BT_CHANNEL0 + i]->set_active(false);
     }
 
     channels_background = channelsrc["layer:bg"];
 
-    buttons[Buttons::BT_ENTERWORLD] =
+    buttons_[Buttons::BT_ENTERWORLD] =
         std::make_unique<MapleButton>(channelsrc["button:GoWorld"],
                                       channelsrc_pos);
-    buttons[Buttons::BT_ENTERWORLD]->set_active(false);
+    buttons_[Buttons::BT_ENTERWORLD]->set_active(false);
 
     chatballoon.change_text(
         "Please select the World you would like to play in.");
@@ -167,37 +167,37 @@ UIWorldSelect::UIWorldSelect() :
 void UIWorldSelect::draw(float alpha) const {
     UIElement::draw_sprites(alpha);
 
-    worlds_background.draw(position + worldsrc_pos);
+    worlds_background.draw(position_ + worldsrc_pos);
 
     if (show_recommended) {
-        recommended_textures[0].draw(position + Point<int16_t>(302, 152));
+        recommended_textures[0].draw(position_ + Point<int16_t>(302, 152));
         recommended_world_textures[recommended_worldid].draw(
-            position + Point<int16_t>(336, 187));
-        recommended_message.draw(position + Point<int16_t>(401, 259));
+            position_ + Point<int16_t>(336, 187));
+        recommended_message.draw(position_ + Point<int16_t>(401, 259));
     }
 
     if (world_selected) {
-        channels_background.draw(position + channelsrc_pos);
-        world_textures[worldid].draw(position + channelsrc_pos);
+        channels_background.draw(position_ + channelsrc_pos);
+        world_textures[worldid].draw(position_ + channelsrc_pos);
     }
 
     UIElement::draw_buttons(alpha);
 
-    version.draw(position + Point<int16_t>(707, 1));
+    version.draw(position_ + Point<int16_t>(707, 1));
 
     if (draw_chatballoon)
-        chatballoon.draw(position + Point<int16_t>(503, 255));
+        chatballoon.draw(position_ + Point<int16_t>(503, 255));
 }
 
 Cursor::State UIWorldSelect::send_cursor(bool clicked,
                                          Point<int16_t> cursorpos) {
     Rectangle<int16_t> channels_bounds = Rectangle<int16_t>(
-        position + channelsrc_pos,
-        position + channelsrc_pos + channels_background.get_dimensions());
+        position_ + channelsrc_pos,
+        position_ + channelsrc_pos + channels_background.get_dimensions());
 
     Rectangle<int16_t> worlds_bounds = Rectangle<int16_t>(
-        position + worldsrc_pos,
-        position + worldsrc_pos + worlds_background.get_dimensions());
+        position_ + worldsrc_pos,
+        position_ + worldsrc_pos + worlds_background.get_dimensions());
 
     if (world_selected && !channels_bounds.contains(cursorpos)
         && !worlds_bounds.contains(cursorpos)) {
@@ -209,9 +209,9 @@ Cursor::State UIWorldSelect::send_cursor(bool clicked,
 
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
-    for (auto &btit : buttons) {
+    for (auto &btit : buttons_) {
         if (btit.second->is_active()
-            && btit.second->bounds(position).contains(cursorpos)) {
+            && btit.second->bounds(position_).contains(cursorpos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTONOVER).play();
 
@@ -339,12 +339,12 @@ void UIWorldSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                     }
                 }
 
-                buttons[Buttons::BT_WORLD0 + worldid]->set_state(
+                buttons_[Buttons::BT_WORLD0 + worldid]->set_state(
                     Button::State::NORMAL);
 
                 worldid = static_cast<uint8_t>(selected_world);
 
-                buttons[Buttons::BT_WORLD0 + worldid]->set_state(
+                buttons_[Buttons::BT_WORLD0 + worldid]->set_state(
                     Button::State::PRESSED);
             } else if (escape) {
                 auto quitconfirm = UI::get().get_element<UIQuitConfirm>();
@@ -365,7 +365,7 @@ void UIWorldSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                          i < Buttons::BT_CHANNEL0;
                          i++) {
                         auto state =
-                            buttons[Buttons::BT_WORLD0 + i]->get_state();
+                            buttons_[Buttons::BT_WORLD0 + i]->get_state();
 
                         if (state == Button::State::PRESSED) {
                             found = true;
@@ -376,7 +376,7 @@ void UIWorldSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                     if (found)
                         button_pressed(selected_world + Buttons::BT_WORLD0);
                     else
-                        buttons[Buttons::BT_WORLD0 + selected_world]->set_state(
+                        buttons_[Buttons::BT_WORLD0 + selected_world]->set_state(
                             Button::State::PRESSED);
                 }
             }
@@ -400,7 +400,7 @@ void UIWorldSelect::draw_world() {
                      // the graphic for the channel selection is defaulted to at
                      // least 2
 
-        buttons[Buttons::BT_WORLD0 + world.wid]->set_active(true);
+        buttons_[Buttons::BT_WORLD0 + world.wid]->set_active(true);
 
         if (channelid >= world.channelcount)
             channelid = 0;
@@ -417,23 +417,23 @@ void UIWorldSelect::add_recommended_world(RecommendedWorld world) {
         recommended_worlds.emplace_back(std::move(world));
         recommended_worldcount++;
 
-        buttons[Buttons::BT_VIEWRECOMMENDED]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_VIEWRECOMMENDED]->set_state(Button::State::NORMAL);
     }
 }
 
 void UIWorldSelect::change_world(World selectedWorld) {
-    buttons[Buttons::BT_WORLD0 + selectedWorld.wid]->set_state(
+    buttons_[Buttons::BT_WORLD0 + selectedWorld.wid]->set_state(
         Button::State::PRESSED);
 
     for (size_t i = 0; i < selectedWorld.channelcount; ++i) {
-        buttons[Buttons::BT_CHANNEL0 + i]->set_active(true);
+        buttons_[Buttons::BT_CHANNEL0 + i]->set_active(true);
 
         if (i == channelid)
-            buttons[Buttons::BT_CHANNEL0 + i]->set_state(
+            buttons_[Buttons::BT_CHANNEL0 + i]->set_state(
                 Button::State::PRESSED);
     }
 
-    buttons[Buttons::BT_ENTERWORLD]->set_active(true);
+    buttons_[Buttons::BT_ENTERWORLD]->set_active(true);
 }
 
 void UIWorldSelect::remove_selected() {
@@ -469,11 +469,11 @@ void UIWorldSelect::set_region(uint8_t regionid) {
 
         nl::node worldbtn = worldsrc["button:" + world];
 
-        buttons[Buttons::BT_WORLD0 + i] = std::make_unique<TwoSpriteButton>(
+        buttons_[Buttons::BT_WORLD0 + i] = std::make_unique<TwoSpriteButton>(
             worldbtn["normal"]["0"],
             worldbtn["keyFocused"]["0"],
             worldsrc_pos + Point<int16_t>(region["origin"][i + 1]));
-        buttons[Buttons::BT_WORLD0 + i]->set_active(false);
+        buttons_[Buttons::BT_WORLD0 + i]->set_active(false);
     }
 }
 
@@ -501,11 +501,11 @@ Button::State UIWorldSelect::button_pressed(uint16_t id) {
 
         return Button::State::NORMAL;
     } else if (id == Buttons::BT_VIEWRECOMMENDED_SELECT) {
-        buttons[Buttons::BT_WORLD0 + worldid]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_WORLD0 + worldid]->set_state(Button::State::NORMAL);
 
         worldid = recommended_worldid;
 
-        buttons[Buttons::BT_WORLD0 + worldid]->set_state(
+        buttons_[Buttons::BT_WORLD0 + worldid]->set_state(
             Button::State::PRESSED);
 
         toggle_recommended(false);
@@ -544,7 +544,7 @@ Button::State UIWorldSelect::button_pressed(uint16_t id) {
     } else if (id >= Buttons::BT_WORLD0 && id < Buttons::BT_CHANNEL0) {
         toggle_recommended(false);
 
-        buttons[Buttons::BT_WORLD0 + worldid]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_WORLD0 + worldid]->set_state(Button::State::NORMAL);
 
         worldid = id - Buttons::BT_WORLD0;
 
@@ -559,10 +559,10 @@ Button::State UIWorldSelect::button_pressed(uint16_t id) {
         uint8_t selectedch = static_cast<uint8_t>(id - Buttons::BT_CHANNEL0);
 
         if (selectedch != channelid) {
-            buttons[Buttons::BT_CHANNEL0 + channelid]->set_state(
+            buttons_[Buttons::BT_CHANNEL0 + channelid]->set_state(
                 Button::State::NORMAL);
             channelid = static_cast<uint8_t>(id - Buttons::BT_CHANNEL0);
-            buttons[Buttons::BT_CHANNEL0 + channelid]->set_state(
+            buttons_[Buttons::BT_CHANNEL0 + channelid]->set_state(
                 Button::State::PRESSED);
             Sound(Sound::Name::WORLDSELECT).play();
         } else {
@@ -591,22 +591,22 @@ void UIWorldSelect::toggle_recommended(bool active) {
         recommended_worldid = 0;
         show_recommended = active;
 
-        buttons[Buttons::BT_VIEWALL]->set_active(active);
-        buttons[Buttons::BT_VIEWRECOMMENDED]->set_active(!active);
-        buttons[Buttons::BT_VIEWRECOMMENDED_SELECT]->set_active(active);
-        buttons[Buttons::BT_VIEWRECOMMENDED_CANCEL]->set_active(active);
-        buttons[Buttons::BT_VIEWRECOMMENDED_PREV]->set_active(active);
-        buttons[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_active(active);
+        buttons_[Buttons::BT_VIEWALL]->set_active(active);
+        buttons_[Buttons::BT_VIEWRECOMMENDED]->set_active(!active);
+        buttons_[Buttons::BT_VIEWRECOMMENDED_SELECT]->set_active(active);
+        buttons_[Buttons::BT_VIEWRECOMMENDED_CANCEL]->set_active(active);
+        buttons_[Buttons::BT_VIEWRECOMMENDED_PREV]->set_active(active);
+        buttons_[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_active(active);
 
         if (recommended_worldcount <= 1) {
-            buttons[Buttons::BT_VIEWRECOMMENDED_PREV]->set_state(
+            buttons_[Buttons::BT_VIEWRECOMMENDED_PREV]->set_state(
                 Button::State::DISABLED);
-            buttons[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_state(
+            buttons_[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_state(
                 Button::State::DISABLED);
         } else {
-            buttons[Buttons::BT_VIEWRECOMMENDED_PREV]->set_state(
+            buttons_[Buttons::BT_VIEWRECOMMENDED_PREV]->set_state(
                 Button::State::NORMAL);
-            buttons[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_state(
+            buttons_[Buttons::BT_VIEWRECOMMENDED_NEXT]->set_state(
                 Button::State::NORMAL);
         }
 
@@ -622,14 +622,14 @@ void UIWorldSelect::clear_selected_world() {
     channelid = 0;
 
     for (size_t i = Buttons::BT_CHANNEL0; i < Buttons::BT_ENTERWORLD; i++)
-        buttons[i]->set_state(Button::State::NORMAL);
+        buttons_[i]->set_state(Button::State::NORMAL);
 
-    buttons[Buttons::BT_CHANNEL0]->set_state(Button::State::PRESSED);
+    buttons_[Buttons::BT_CHANNEL0]->set_state(Button::State::PRESSED);
 
     for (size_t i = 0; i < Buttons::BT_ENTERWORLD - Buttons::BT_CHANNEL0; i++)
-        buttons[Buttons::BT_CHANNEL0 + i]->set_active(false);
+        buttons_[Buttons::BT_CHANNEL0 + i]->set_active(false);
 
-    buttons[Buttons::BT_ENTERWORLD]->set_active(false);
+    buttons_[Buttons::BT_ENTERWORLD]->set_active(false);
 }
 
 uint16_t UIWorldSelect::get_next_world(uint16_t id, bool upward) {

@@ -43,26 +43,26 @@ UILoginNotice::UILoginNotice(uint16_t message,
         default: backgrnd = Notice["backgrnd"]["0"]; break;
     }
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(Notice["text"][message], Point<int16_t>(17, 13));
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(Notice["text"][message], Point<int16_t>(17, 13));
 
     if (message == Message::DELETE_CONFIRMATION) {
         multiple = true;
 
-        buttons[Buttons::YES] =
+        buttons_[Buttons::YES] =
             std::make_unique<MapleButton>(Notice["BtYes"],
                                           Point<int16_t>(70, 106));
-        buttons[Buttons::NO] =
+        buttons_[Buttons::NO] =
             std::make_unique<MapleButton>(Notice["BtNo"],
                                           Point<int16_t>(130, 106));
     } else {
-        buttons[Buttons::YES] =
+        buttons_[Buttons::YES] =
             std::make_unique<MapleButton>(Notice["BtYes"],
                                           Point<int16_t>(100, 106));
     }
 
-    position = Point<int16_t>(275, 209);
-    dimension = Texture(backgrnd).get_dimensions();
+    position_ = Point<int16_t>(275, 209);
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 UILoginNotice::UILoginNotice(uint16_t message,
@@ -107,17 +107,17 @@ UIQuitConfirm::UIQuitConfirm() {
     nl::node notice = nl::nx::ui["Login.img"]["Notice"];
     nl::node backgrnd = notice["backgrnd"]["0"];
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(notice["text"][UILoginNotice::Message::CONFIRM_EXIT],
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(notice["text"][UILoginNotice::Message::CONFIRM_EXIT],
                          Point<int16_t>(17, 13));
 
-    buttons[Buttons::BT_OK] =
+    buttons_[Buttons::BT_OK] =
         std::make_unique<MapleButton>(notice["BtYes"], Point<int16_t>(70, 106));
-    buttons[Buttons::BT_CANCEL] =
+    buttons_[Buttons::BT_CANCEL] =
         std::make_unique<MapleButton>(notice["BtNo"], Point<int16_t>(130, 106));
 
-    position = Point<int16_t>(275, 209);
-    dimension = Texture(backgrnd).get_dimensions();
+    position_ = Point<int16_t>(275, 209);
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 void UIQuitConfirm::send_key(int32_t keycode, bool pressed, bool escape) {
@@ -186,29 +186,29 @@ UIClassConfirm::UIClassConfirm(uint8_t selected_class,
         default: break;
     }
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(race, race_pos + (Point<int16_t>)race["origin"]);
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(race, race_pos + (Point<int16_t>)race["origin"]);
 
     if (unavailable) {
-        buttons[Buttons::OK] = std::make_unique<MapleButton>(type["BtOK"]);
+        buttons_[Buttons::OK] = std::make_unique<MapleButton>(type["BtOK"]);
     } else {
-        buttons[Buttons::OK] =
+        buttons_[Buttons::OK] =
             std::make_unique<MapleButton>(type["BtOK"],
                                           Point<int16_t>(62, 107));
-        buttons[Buttons::CANCEL] =
+        buttons_[Buttons::CANCEL] =
             std::make_unique<MapleButton>(type["BtCancel"],
                                           Point<int16_t>(137, 107));
     }
 
-    position = Point<int16_t>(286, 189);
-    dimension = Texture(backgrnd).get_dimensions();
+    position_ = Point<int16_t>(286, 189);
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 Cursor::State UIClassConfirm::send_cursor(bool clicked,
                                           Point<int16_t> cursorpos) {
-    for (auto &btit : buttons) {
+    for (auto &btit : buttons_) {
         if (btit.second->is_active()
-            && btit.second->bounds(position).contains(cursorpos)) {
+            && btit.second->bounds(position_).contains(cursorpos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTONOVER).play();
 
@@ -256,18 +256,18 @@ UIKeySelect::UIKeySelect(std::function<void(bool)> oh, bool l) :
     nl::node KeyType = nl::nx::ui["UIWindow2.img"]["KeyConfig"]["KeyType"];
     nl::node backgrnd = KeyType["backgrnd"];
 
-    sprites.emplace_back(backgrnd);
+    sprites_.emplace_back(backgrnd);
 
-    buttons[Buttons::CLOSE] = std::make_unique<MapleButton>(KeyType["btClose"]);
-    buttons[Buttons::TYPEA] = std::make_unique<MapleButton>(KeyType["btTypeA"]);
-    buttons[Buttons::TYPEB] =
+    buttons_[Buttons::CLOSE] = std::make_unique<MapleButton>(KeyType["btClose"]);
+    buttons_[Buttons::TYPEA] = std::make_unique<MapleButton>(KeyType["btTypeA"]);
+    buttons_[Buttons::TYPEB] =
         std::make_unique<MapleButton>(KeyType["btTypeB"], Point<int16_t>(1, 1));
 
     if (login)
-        buttons[Buttons::CLOSE]->set_active(false);
+        buttons_[Buttons::CLOSE]->set_active(false);
 
-    position = Point<int16_t>(181, 145);
-    dimension = Texture(backgrnd).get_dimensions();
+    position_ = Point<int16_t>(181, 145);
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 void UIKeySelect::send_key(int32_t keycode, bool pressed, bool escape) {
@@ -289,9 +289,9 @@ Button::State UIKeySelect::button_pressed(uint16_t buttonid) {
             bool alternate = (buttonid == Buttons::TYPEA) ? false : true;
 
             if (alternate)
-                buttons[Buttons::TYPEA]->set_state(Button::State::DISABLED);
+                buttons_[Buttons::TYPEA]->set_state(Button::State::DISABLED);
             else
-                buttons[Buttons::TYPEB]->set_state(Button::State::DISABLED);
+                buttons_[Buttons::TYPEB]->set_state(Button::State::DISABLED);
 
             auto onok = [&, alternate]() {
                 okhandler(alternate);
@@ -313,12 +313,12 @@ UIKeyConfirm::UIKeyConfirm(bool alternate, std::function<void()> oh, bool l) :
         nl::nx::ui["UIWindow2.img"]["KeyConfig"]["KeyType"]["alert"];
     nl::node background = alternate ? alert["alternate"] : alert["default"];
 
-    sprites.emplace_back(background);
+    sprites_.emplace_back(background);
 
-    buttons[Buttons::OK] = std::make_unique<MapleButton>(alert["btOk"]);
+    buttons_[Buttons::OK] = std::make_unique<MapleButton>(alert["btOk"]);
 
-    position = Point<int16_t>(276, 229);
-    dimension = Texture(background).get_dimensions();
+    position_ = Point<int16_t>(276, 229);
+    dimension_ = Texture(background).get_dimensions();
 }
 
 void UIKeyConfirm::send_key(int32_t keycode, bool pressed, bool escape) {

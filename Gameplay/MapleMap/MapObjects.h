@@ -73,7 +73,7 @@ public:
     underlying_t::size_type size() const;
 
 private:
-    std::unordered_map<int32_t, std::unique_ptr<MapObject>> objects;
-    std::array<std::unordered_set<int32_t>, Layer::Id::LENGTH> layers;
+    std::unordered_map<int32_t, std::unique_ptr<MapObject>> objects_;
+    std::array<std::unordered_set<int32_t>, Layer::Id::LENGTH> layers_;
 };
 }  // namespace ms

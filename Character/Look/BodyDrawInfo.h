@@ -31,9 +31,9 @@ namespace ms {
 class BodyAction {
 public:
     BodyAction(nl::node src) {
-        stance = Stance::by_string(src["action"]);
-        frame = src["frame"];
-        move = src["move"];
+        stance_ = Stance::by_string(src["action"]);
+        frame_ = src["frame"];
+        move_ = src["move"];
 
         int16_t sgndelay = src["delay"];
 
@@ -41,32 +41,32 @@ public:
             sgndelay = 100;
 
         if (sgndelay > 0) {
-            delay = sgndelay;
-            attackframe = true;
+            delay_ = sgndelay;
+            attack_frame_ = true;
         } else if (sgndelay < 0) {
-            delay = -sgndelay;
-            attackframe = false;
+            delay_ = -sgndelay;
+            attack_frame_ = false;
         }
     }
 
     BodyAction() {}
 
-    bool isattackframe() const { return attackframe; }
+    bool isattackframe() const { return attack_frame_; }
 
-    uint8_t get_frame() const { return frame; }
+    uint8_t get_frame() const { return frame_; }
 
-    uint16_t get_delay() const { return delay; }
+    uint16_t get_delay() const { return delay_; }
 
-    Point<int16_t> get_move() const { return move; }
+    Point<int16_t> get_move() const { return move_; }
 
-    Stance::Id get_stance() const { return stance; }
+    Stance::Id get_stance() const { return stance_; }
 
 private:
-    Stance::Id stance;
-    uint8_t frame;
-    uint16_t delay;
-    Point<int16_t> move;
-    bool attackframe;
+    Stance::Id stance_;
+    uint8_t frame_;
+    uint16_t delay_;
+    Point<int16_t> move_;
+    bool attack_frame_;
 };
 
 class BodyDrawInfo {

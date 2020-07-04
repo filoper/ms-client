@@ -73,7 +73,7 @@ UIBuffList::UIBuffList() {
 }
 
 void UIBuffList::draw(float alpha) const {
-    Point<int16_t> icpos = position;
+    Point<int16_t> icpos = position_;
 
     for (auto &icon : icons) {
         icon.second.draw(icpos, alpha);
@@ -93,8 +93,8 @@ void UIBuffList::update() {
 }
 
 void UIBuffList::update_screen(int16_t new_width, int16_t) {
-    position = Point<int16_t>(new_width - 35, 55);
-    dimension = Point<int16_t>(position.x(), 32);
+    position_ = Point<int16_t>(new_width - 35, 55);
+    dimension_ = Point<int16_t>(position_.x(), 32);
 }
 
 Cursor::State UIBuffList::send_cursor(bool pressed,

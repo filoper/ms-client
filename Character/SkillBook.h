@@ -53,6 +53,6 @@ private:
         int64_t expiration;
     };
 
-    std::unordered_map<int32_t, SkillEntry> skillentries;
+    std::unordered_map<int32_t, SkillEntry> skill_entries_;
 };
 }  // namespace ms

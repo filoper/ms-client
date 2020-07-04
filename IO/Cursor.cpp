@@ -24,56 +24,56 @@
 
 namespace ms {
 Cursor::Cursor() {
-    state = Cursor::State::IDLE;
-    hide_counter = 0;
+    state_ = Cursor::State::IDLE;
+    hide_counter_ = 0;
 }
 
 void Cursor::init() {
     nl::node src = nl::nx::ui["Basic.img"]["Cursor"];
 
-    for (auto iter : animations)
+    for (auto iter : animations_)
         iter.second = src[iter.first];
 }
 
 void Cursor::draw(float alpha) const {
     constexpr int64_t HIDE_AFTER = HIDE_TIME / Constants::TIMESTEP;
 
-    if (hide_counter < HIDE_AFTER)
-        animations[state].draw(position, alpha);
+    if (hide_counter_ < HIDE_AFTER)
+        animations_[state_].draw(position_, alpha);
 }
 
 void Cursor::update() {
-    animations[state].update();
+    animations_[state_].update();
 
-    switch (state) {
+    switch (state_) {
         case Cursor::State::CANCLICK:
         case Cursor::State::CANCLICK2:
         case Cursor::State::CANGRAB:
         case Cursor::State::CLICKING:
-        case Cursor::State::GRABBING: hide_counter = 0; break;
-        default: hide_counter++; break;
+        case Cursor::State::GRABBING: hide_counter_ = 0; break;
+        default: hide_counter_++; break;
     }
 }
 
 void Cursor::set_state(State s) {
-    if (state != s) {
-        state = s;
+    if (state_ != s) {
+        state_ = s;
 
-        animations[state].reset();
-        hide_counter = 0;
+        animations_[state_].reset();
+        hide_counter_ = 0;
     }
 }
 
 void Cursor::set_position(Point<int16_t> pos) {
-    position = pos;
-    hide_counter = 0;
+    position_ = pos;
+    hide_counter_ = 0;
 }
 
 Cursor::State Cursor::get_state() const {
-    return state;
+    return state_;
 }
 
 Point<int16_t> Cursor::get_position() const {
-    return position;
+    return position_;
 }
 }  // namespace ms

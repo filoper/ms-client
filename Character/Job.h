@@ -62,8 +62,8 @@ public:
 private:
     std::string get_name(uint16_t id) const;
 
-    std::string name;
-    uint16_t id;
-    Level level;
+    std::string name_;
+    uint16_t id_;
+    Level level_;
 };
 }  // namespace ms

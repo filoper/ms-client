@@ -45,12 +45,12 @@ public:
     Point<int16_t> get_portal_by_name(const std::string &name) const;
 
 private:
-    static std::unordered_map<Portal::Type, Animation> animations;
+    static std::unordered_map<Portal::Type, Animation> animations_;
 
-    std::unordered_map<uint8_t, Portal> portals_by_id;
-    std::unordered_map<std::string, uint8_t> portal_ids_by_name;
+    std::unordered_map<uint8_t, Portal> portals_by_id_;
+    std::unordered_map<std::string, uint8_t> portal_ids_by_name_;
 
     static const int16_t WARPCD = 48;
-    int16_t cooldown;
+    int16_t cooldown_;
 };
 }  // namespace ms

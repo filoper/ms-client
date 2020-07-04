@@ -23,9 +23,9 @@
 
 namespace ms {
 UIElement::UIElement(Point<int16_t> p, Point<int16_t> d, bool a) :
-    position(p),
-    dimension(d),
-    active(a) {}
+    position_(p),
+    dimension_(d),
+    active_(a) {}
 
 UIElement::UIElement(Point<int16_t> p, Point<int16_t> d) :
     UIElement(p, d, true) {}
@@ -38,52 +38,52 @@ void UIElement::draw(float alpha) const {
 }
 
 void UIElement::draw_sprites(float alpha) const {
-    for (const Sprite &sprite : sprites)
-        sprite.draw(position, alpha);
+    for (const Sprite &sprite : sprites_)
+        sprite.draw(position_, alpha);
 }
 
 void UIElement::draw_buttons(float) const {
-    for (auto &iter : buttons)
+    for (auto &iter : buttons_)
         if (const Button *button = iter.second.get())
-            button->draw(position);
+            button->draw(position_);
 }
 
 void UIElement::update() {
-    for (auto &sprite : sprites)
+    for (auto &sprite : sprites_)
         sprite.update();
 
-    for (auto &iter : buttons)
+    for (auto &iter : buttons_)
         if (Button *button = iter.second.get())
             button->update();
 }
 
 void UIElement::makeactive() {
-    active = true;
+    active_ = true;
 }
 
 void UIElement::deactivate() {
-    active = false;
+    active_ = false;
 }
 
 bool UIElement::is_active() const {
-    return active;
+    return active_;
 }
 
 void UIElement::toggle_active() {
-    if (active)
+    if (active_)
         deactivate();
     else
         makeactive();
 }
 
 bool UIElement::is_in_range(Point<int16_t> cursorpos) const {
-    auto bounds = Rectangle<int16_t>(position, position + dimension);
+    auto bounds = Rectangle<int16_t>(position_, position_ + dimension_);
 
     return bounds.contains(cursorpos);
 }
 
 void UIElement::remove_cursor() {
-    for (auto &btit : buttons) {
+    for (auto &btit : buttons_) {
         auto button = btit.second.get();
 
         if (button->get_state() == Button::State::MOUSEOVER)
@@ -94,9 +94,9 @@ void UIElement::remove_cursor() {
 Cursor::State UIElement::send_cursor(bool down, Point<int16_t> pos) {
     Cursor::State ret = down ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
-    for (auto &btit : buttons) {
+    for (auto &btit : buttons_) {
         if (btit.second->is_active()
-            && btit.second->bounds(position).contains(pos)) {
+            && btit.second->bounds(position_).contains(pos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTONOVER).play();
 

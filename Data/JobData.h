@@ -41,8 +41,8 @@ private:
 
     JobData(int32_t id);
 
-    Texture icon;
-    std::vector<std::int32_t> skills;
-    std::string name;
+    Texture icon_;
+    std::vector<std::int32_t> skills_;
+    std::string name_;
 };
 }  // namespace ms

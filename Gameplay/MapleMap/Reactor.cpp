@@ -25,75 +25,75 @@
 namespace ms {
 Reactor::Reactor(int32_t o, int32_t r, int8_t s, Point<int16_t> p) :
     MapObject(o, p),
-    rid(r),
-    state(s) {
-    std::string strid = string_format::extend_id(rid, 7);
-    src = nl::nx::reactor[strid + ".img"];
+    rid_(r),
+    state_(s) {
+    std::string strid = string_format::extend_id(rid_, 7);
+    src_ = nl::nx::reactor[strid + ".img"];
 
-    normal = src[0];
-    animation_ended = true;
-    dead = false;
-    hittable = false;
+    normal_ = src_[0];
+    animation_ended_ = true;
+    dead_ = false;
+    hit_table_ = false;
 
-    for (auto sub : src[0])
+    for (auto sub : src_[0])
         if (sub.name() == "event")
             if (sub["0"]["type"].get_integer() == 0)
-                hittable = true;
+                hit_table_ = true;
 }
 
 void Reactor::draw(double viewx, double viewy, float alpha) const {
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
-    Point<int16_t> shift = Point<int16_t>(0, normal.get_origin().y());
+    Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
+    Point<int16_t> shift = Point<int16_t>(0, normal_.get_origin().y());
 
-    if (animation_ended) {
+    if (animation_ended_) {
         // TODO: Handle 'default' animations (horntail reactor floating)
-        normal.draw(absp - shift, alpha);
+        normal_.draw(absp - shift, alpha);
     } else {
-        animations.at(state - 1).draw(DrawArgument(absp - shift), 1.0);
+        animations_.at(state_ - 1).draw(DrawArgument(absp - shift), 1.0);
     }
 }
 
 int8_t Reactor::update(const Physics &physics) {
-    physics.move_object(phobj);
+    physics.move_object(phobj_);
 
-    if (!animation_ended)
-        animation_ended = animations.at(state - 1).update();
+    if (!animation_ended_)
+        animation_ended_ = animations_.at(state_ - 1).update();
 
-    if (animation_ended && dead)
+    if (animation_ended_ && dead_)
         deactivate();
 
-    return phobj.fhlayer;
+    return phobj_.fhlayer;
 }
 
 void Reactor::set_state(int8_t state) {
     // TODO: hit/break sounds
-    if (hittable) {
-        animations[this->state] = src[this->state]["hit"];
-        animation_ended = false;
+    if (hit_table_) {
+        animations_[state_] = src_[state_]["hit"];
+        animation_ended_ = false;
     }
 
-    this->state = state;
+    state_ = state;
 }
 
 void Reactor::destroy(int8_t, Point<int16_t>) {
-    animations[this->state] = src[this->state]["hit"];
-    state++;
-    dead = true;
-    animation_ended = false;
+    animations_[state_] = src_[state_]["hit"];
+    state_++;
+    dead_ = true;
+    animation_ended_ = false;
 }
 
 bool Reactor::is_hittable() const {
-    return hittable;
+    return hit_table_;
 }
 
 bool Reactor::is_in_range(const Rectangle<int16_t> &range) const {
-    if (!active)
+    if (!active_)
         return false;
 
     Rectangle<int16_t> bounds(
-        Point<int16_t>(-30, -normal.get_dimensions().y()),
+        Point<int16_t>(-30, -normal_.get_dimensions().y()),
         Point<int16_t>(
-            normal.get_dimensions().x() - 10,
+            normal_.get_dimensions().x() - 10,
             0));  // normal.get_bounds(); //animations.at(stance).get_bounds();
     bounds.shift(get_position());
 

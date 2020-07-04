@@ -39,15 +39,15 @@ public:
     void update(float target);
 
 private:
-    Texture barfront;
-    Texture barmid;
-    Texture barend;
-    int16_t maximum;
+    Texture bar_front_;
+    Texture bar_mid_;
+    Texture bar_end_;
+    int16_t maximum_;
 
-    float percentage;
-    float target;
-    float step;
+    float percentage_;
+    float target_;
+    float step_;
 
-    Type type;
+    Type type_;
 };
 }  // namespace ms

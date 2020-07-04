@@ -52,10 +52,10 @@ public:
     static Layer layer_by_name(const std::string &name);
 
 private:
-    std::unordered_map<uint8_t, Texture> stances[Stance::Id::LENGTH]
+    std::unordered_map<uint8_t, Texture> stances_[Stance::Id::LENGTH]
                                                 [Layer::NUM_LAYERS];
-    std::string name;
+    std::string name_;
 
-    static const std::unordered_map<std::string, Layer> layers_by_name;
+    static const std::unordered_map<std::string, Layer> layers_by_name_;
 };
 }  // namespace ms

@@ -108,44 +108,44 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
     totem_dimensions = Texture(totem_backgrnd).get_dimensions();
     totem_adj = Point<int16_t>(-totem_dimensions.x() + 4, 0);
 
-    sprites.emplace_back(totem_backgrnd, totem_adj);
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(Equip["backgrnd2"]);
+    sprites_.emplace_back(totem_backgrnd, totem_adj);
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(Equip["backgrnd2"]);
 
     tabbar = Equip["tabbar"];
     disabled = Equip[tab_source[Buttons::BT_TAB0]]["disabled"];
     disabled2 = Equip[tab_source[Buttons::BT_TAB0]]["disabled2"];
 
-    buttons[Buttons::BT_CLOSE] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_CLOSE] = std::make_unique<MapleButton>(
         close,
         Point<int16_t>(bg_dimensions.x() - 19, 5));
-    buttons[Buttons::BT_SLOT] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_SLOT] = std::make_unique<MapleButton>(
         Equip[tab_source[Buttons::BT_TAB0]]["BtSlot"]);
-    buttons[Buttons::BT_EFFECT] =
+    buttons_[Buttons::BT_EFFECT] =
         std::make_unique<MapleButton>(EquipGL["Equip"]["btEffect"]);
-    buttons[Buttons::BT_SALON] =
+    buttons_[Buttons::BT_SALON] =
         std::make_unique<MapleButton>(EquipGL["Equip"]["btSalon"]);
-    buttons[Buttons::BT_CONSUMESETTING] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_CONSUMESETTING] = std::make_unique<MapleButton>(
         Equip[tab_source[Buttons::BT_TAB2]]["BtConsumeSetting"]);
-    buttons[Buttons::BT_EXCEPTION] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_EXCEPTION] = std::make_unique<MapleButton>(
         Equip[tab_source[Buttons::BT_TAB2]]["BtException"]);
-    buttons[Buttons::BT_SHOP] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_SHOP] = std::make_unique<MapleButton>(
         Equip[tab_source[Buttons::BT_TAB3]]["BtShop"]);
 
-    buttons[Buttons::BT_CONSUMESETTING]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_EXCEPTION]->set_state(Button::State::DISABLED);
-    buttons[Buttons::BT_SHOP]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_CONSUMESETTING]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_EXCEPTION]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_SHOP]->set_state(Button::State::DISABLED);
 
     nl::node Tab = Equip["Tab"];
 
     for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++)
-        buttons[Buttons::BT_TAB0 + i] =
+        buttons_[Buttons::BT_TAB0 + i] =
             std::make_unique<TwoSpriteButton>(Tab["disabled"][i],
                                               Tab["enabled"][i],
                                               Point<int16_t>(0, 3));
 
-    dimension = bg_dimensions;
-    dragarea = Point<int16_t>(bg_dimensions.x(), 20);
+    dimension_ = bg_dimensions;
+    drag_area_ = Point<int16_t>(bg_dimensions.x(), 20);
 
     load_icons();
     change_tab(Buttons::BT_TAB0);
@@ -154,27 +154,27 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
 void UIEquipInventory::draw(float alpha) const {
     UIElement::draw(alpha);
 
-    background[tab].draw(position);
-    tabbar.draw(position);
+    background[tab].draw(position_);
+    tabbar.draw(position_);
 
     for (auto slot : Slots[tab])
-        slot.draw(position);
+        slot.draw(position_);
 
     if (tab == Buttons::BT_TAB0) {
         if (!hasPendantSlot)
-            disabled.draw(position + iconpositions[EquipSlot::Id::PENDANT2]);
+            disabled.draw(position_ + iconpositions[EquipSlot::Id::PENDANT2]);
 
         if (!hasPocketSlot)
-            disabled.draw(position + iconpositions[EquipSlot::Id::POCKET]);
+            disabled.draw(position_ + iconpositions[EquipSlot::Id::POCKET]);
 
         for (auto iter : icons)
             if (iter.second)
-                iter.second->draw(position + iconpositions[iter.first]
+                iter.second->draw(position_ + iconpositions[iter.first]
                                   + Point<int16_t>(4, 4));
     } else if (tab == Buttons::BT_TAB2) {
-        disabled2.draw(position + Point<int16_t>(113, 57));
-        disabled2.draw(position + Point<int16_t>(113, 106));
-        disabled2.draw(position + Point<int16_t>(113, 155));
+        disabled2.draw(position_ + Point<int16_t>(113, 57));
+        disabled2.draw(position_ + Point<int16_t>(113, 106));
+        disabled2.draw(position_ + Point<int16_t>(113, 155));
     }
 }
 
@@ -217,7 +217,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
                                             Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(pressed, cursorpos);
 
-    if (dragged) {
+    if (dragged_) {
         clear_tooltip();
 
         return dstate;
@@ -227,7 +227,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
 
     if (auto icon = icons[slot].get()) {
         if (pressed) {
-            icon->start_drag(cursorpos - position - iconpositions[slot]);
+            icon->start_drag(cursorpos - position_ - iconpositions[slot]);
 
             UI::get().drag_icon(icon);
 
@@ -276,10 +276,10 @@ void UIEquipInventory::doubleclick(Point<int16_t> cursorpos) {
 
 bool UIEquipInventory::is_in_range(Point<int16_t> cursorpos) const {
     Rectangle<int16_t> bounds =
-        Rectangle<int16_t>(position, position + dimension);
+        Rectangle<int16_t>(position_, position_ + dimension_);
 
     Rectangle<int16_t> totem_bounds =
-        Rectangle<int16_t>(position, position + totem_dimensions);
+        Rectangle<int16_t>(position_, position_ + totem_dimensions);
     totem_bounds.shift(totem_adj);
 
     return bounds.contains(cursorpos) || totem_bounds.contains(cursorpos);
@@ -327,8 +327,8 @@ EquipSlot::Id UIEquipInventory::slot_by_position(
 
     for (auto iter : iconpositions) {
         Rectangle<int16_t> iconrect =
-            Rectangle<int16_t>(position + iter.second,
-                               position + iter.second + Point<int16_t>(32, 32));
+            Rectangle<int16_t>(position_ + iter.second,
+                               position_ + iter.second + Point<int16_t>(32, 32));
 
         if (iconrect.contains(cursorpos))
             return iter.first;
@@ -344,26 +344,26 @@ void UIEquipInventory::change_tab(uint16_t tabid) {
     if (oldtab != tab) {
         clear_tooltip();
 
-        buttons[oldtab]->set_state(Button::State::NORMAL);
-        buttons[tab]->set_state(Button::State::PRESSED);
+        buttons_[oldtab]->set_state(Button::State::NORMAL);
+        buttons_[tab]->set_state(Button::State::PRESSED);
 
         if (tab == Buttons::BT_TAB0)
-            buttons[Buttons::BT_SLOT]->set_active(true);
+            buttons_[Buttons::BT_SLOT]->set_active(true);
         else
-            buttons[Buttons::BT_SLOT]->set_active(false);
+            buttons_[Buttons::BT_SLOT]->set_active(false);
 
         if (tab == Buttons::BT_TAB2) {
-            buttons[Buttons::BT_CONSUMESETTING]->set_active(true);
-            buttons[Buttons::BT_EXCEPTION]->set_active(true);
+            buttons_[Buttons::BT_CONSUMESETTING]->set_active(true);
+            buttons_[Buttons::BT_EXCEPTION]->set_active(true);
         } else {
-            buttons[Buttons::BT_CONSUMESETTING]->set_active(false);
-            buttons[Buttons::BT_EXCEPTION]->set_active(false);
+            buttons_[Buttons::BT_CONSUMESETTING]->set_active(false);
+            buttons_[Buttons::BT_EXCEPTION]->set_active(false);
         }
 
         if (tab == Buttons::BT_TAB3)
-            buttons[Buttons::BT_SHOP]->set_active(true);
+            buttons_[Buttons::BT_SHOP]->set_active(true);
         else
-            buttons[Buttons::BT_SHOP]->set_active(false);
+            buttons_[Buttons::BT_SHOP]->set_active(false);
     }
 }
 

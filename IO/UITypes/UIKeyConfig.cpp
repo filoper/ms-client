@@ -48,27 +48,27 @@ UIKeyConfig::UIKeyConfig(const Inventory &in_inventory,
     Texture bg = backgrnd;
     Point<int16_t> bg_dimensions = bg.get_dimensions();
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(KeyConfig["backgrnd2"]);
-    sprites.emplace_back(KeyConfig["backgrnd3"]);
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(KeyConfig["backgrnd2"]);
+    sprites_.emplace_back(KeyConfig["backgrnd3"]);
 
     nl::node BtClose3 = nl::nx::ui["Basic.img"]["BtClose3"];
-    buttons[Buttons::CLOSE] = std::make_unique<MapleButton>(
+    buttons_[Buttons::CLOSE] = std::make_unique<MapleButton>(
         BtClose3,
         Point<int16_t>(bg_dimensions.x() - 18, 3));
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(KeyConfig["button:Cancel"]);
-    buttons[Buttons::DEFAULT] =
+    buttons_[Buttons::DEFAULT] =
         std::make_unique<MapleButton>(KeyConfig["button:Default"]);
-    buttons[Buttons::DELETE] =
+    buttons_[Buttons::DELETE] =
         std::make_unique<MapleButton>(KeyConfig["button:Delete"]);
-    buttons[Buttons::KEYSETTING] =
+    buttons_[Buttons::KEYSETTING] =
         std::make_unique<MapleButton>(KeyConfig["button:keySetting"]);
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(KeyConfig["button:OK"]);
 
-    dimension = bg_dimensions;
-    dragarea = Point<int16_t>(bg_dimensions.x(), 20);
+    dimension_ = bg_dimensions;
+    drag_area_ = Point<int16_t>(bg_dimensions.x(), 20);
 
     load_keys_pos();
     load_unbound_actions_pos();
@@ -965,35 +965,35 @@ void UIKeyConfig::draw(float inter) const {
                 KeyConfig::Key fkey = KeyConfig::actionbyid(maplekey);
 
                 if (maplekey == KeyConfig::Key::SPACE) {
-                    ficon->draw(position + keys_pos[fkey]
+                    ficon->draw(position_ + keys_pos[fkey]
                                 - Point<int16_t>(0, 3));
                 } else {
                     if (fkey == KeyConfig::Key::LEFT_CONTROL
                         || fkey == KeyConfig::Key::RIGHT_CONTROL) {
-                        ficon->draw(position
+                        ficon->draw(position_
                                     + keys_pos[KeyConfig::Key::LEFT_CONTROL]
                                     - Point<int16_t>(2, 3));
-                        ficon->draw(position
+                        ficon->draw(position_
                                     + keys_pos[KeyConfig::Key::RIGHT_CONTROL]
                                     - Point<int16_t>(2, 3));
                     } else if (fkey == KeyConfig::Key::LEFT_ALT
                                || fkey == KeyConfig::Key::RIGHT_ALT) {
-                        ficon->draw(position
+                        ficon->draw(position_
                                     + keys_pos[KeyConfig::Key::LEFT_ALT]
                                     - Point<int16_t>(2, 3));
-                        ficon->draw(position
+                        ficon->draw(position_
                                     + keys_pos[KeyConfig::Key::RIGHT_ALT]
                                     - Point<int16_t>(2, 3));
                     } else if (fkey == KeyConfig::Key::LEFT_SHIFT
                                || fkey == KeyConfig::Key::RIGHT_SHIFT) {
-                        ficon->draw(position
+                        ficon->draw(position_
                                     + keys_pos[KeyConfig::Key::LEFT_SHIFT]
                                     - Point<int16_t>(2, 3));
-                        ficon->draw(position
+                        ficon->draw(position_
                                     + keys_pos[KeyConfig::Key::RIGHT_SHIFT]
                                     - Point<int16_t>(2, 3));
                     } else {
-                        ficon->draw(position + keys_pos[fkey]
+                        ficon->draw(position_ + keys_pos[fkey]
                                     - Point<int16_t>(2, 3));
                     }
                 }
@@ -1007,14 +1007,14 @@ void UIKeyConfig::draw(float inter) const {
                           bound_actions.end(),
                           ubicon.first)
                 == bound_actions.end())
-                ubicon.second->draw(position
+                ubicon.second->draw(position_
                                     + unbound_actions_pos[ubicon.first]);
 
     for (auto fkey : key_textures) {
         KeyConfig::Key key = fkey.first;
         Texture tx = fkey.second;
 
-        tx.draw(position + keys_pos[key]);
+        tx.draw(position_ + keys_pos[key]);
     }
 }
 
@@ -1079,7 +1079,7 @@ Button::State UIKeyConfig::button_pressed(uint16_t buttonid) {
 Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged)
+    if (dragged_)
         return dstate;
 
     KeyAction::Id icon_slot = unbound_action_by_position(cursorpos);
@@ -1087,7 +1087,7 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     if (icon_slot != KeyAction::Id::LENGTH) {
         if (auto icon = action_icons[icon_slot].get()) {
             if (clicked) {
-                icon->start_drag(cursorpos - position
+                icon->start_drag(cursorpos - position_
                                  - unbound_actions_pos[icon_slot]);
                 UI::get().drag_icon(icon);
 
@@ -1131,7 +1131,7 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                 if (clicked) {
                     clear_tooltip();
 
-                    ficon->start_drag(cursorpos - position
+                    ficon->start_drag(cursorpos - position_
                                       - keys_pos[key_slot]);
                     UI::get().drag_icon(ficon);
 
@@ -1149,8 +1149,8 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
 bool UIKeyConfig::send_icon(const Icon &icon, Point<int16_t> cursorpos) {
     for (auto iter : unbound_actions_pos) {
         Rectangle<int16_t> icon_rect =
-            Rectangle<int16_t>(position + iter.second,
-                               position + iter.second + Point<int16_t>(32, 32));
+            Rectangle<int16_t>(position_ + iter.second,
+                               position_ + iter.second + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos))
             icon.drop_on_bindings(cursorpos, true);
@@ -1442,8 +1442,8 @@ Texture UIKeyConfig::get_skill_texture(int32_t skill_id) const {
 KeyConfig::Key UIKeyConfig::key_by_position(Point<int16_t> cursorpos) const {
     for (auto iter : keys_pos) {
         Rectangle<int16_t> icon_rect =
-            Rectangle<int16_t>(position + iter.second,
-                               position + iter.second + Point<int16_t>(32, 32));
+            Rectangle<int16_t>(position_ + iter.second,
+                               position_ + iter.second + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos))
             return iter.first;
@@ -1460,8 +1460,8 @@ KeyAction::Id UIKeyConfig::unbound_action_by_position(
             continue;
 
         Rectangle<int16_t> icon_rect =
-            Rectangle<int16_t>(position + iter.second,
-                               position + iter.second + Point<int16_t>(32, 32));
+            Rectangle<int16_t>(position_ + iter.second,
+                               position_ + iter.second + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos))
             return iter.first;

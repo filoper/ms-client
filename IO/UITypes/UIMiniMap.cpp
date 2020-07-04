@@ -44,22 +44,22 @@ UIMiniMap::UIMiniMap(const CharStats &stats) :
     MiniMap = nl::nx::ui["UIWindow2.img"][node];
     listNpc = nl::nx::ui["UIWindow2.img"]["MiniMap"]["ListNpc"];
 
-    buttons[Buttons::BT_MIN] =
+    buttons_[Buttons::BT_MIN] =
         std::make_unique<MapleButton>(MiniMap["BtMin"],
                                       Point<int16_t>(195, -6));
-    buttons[Buttons::BT_MAX] =
+    buttons_[Buttons::BT_MAX] =
         std::make_unique<MapleButton>(MiniMap["BtMax"],
                                       Point<int16_t>(209, -6));
-    buttons[Buttons::BT_SMALL] =
+    buttons_[Buttons::BT_SMALL] =
         std::make_unique<MapleButton>(MiniMap["BtSmall"],
                                       Point<int16_t>(223, -6));
-    buttons[Buttons::BT_BIG] =
+    buttons_[Buttons::BT_BIG] =
         std::make_unique<MapleButton>(MiniMap["BtBig"],
                                       Point<int16_t>(223, -6));
-    buttons[Buttons::BT_MAP] =
+    buttons_[Buttons::BT_MAP] =
         std::make_unique<MapleButton>(MiniMap["BtMap"],
                                       Point<int16_t>(237, -6));
-    buttons[Buttons::BT_NPC] =
+    buttons_[Buttons::BT_NPC] =
         std::make_unique<MapleButton>(MiniMap["BtNpc"],
                                       Point<int16_t>(276, -6));
 
@@ -82,40 +82,40 @@ UIMiniMap::UIMiniMap(const CharStats &stats) :
 void UIMiniMap::draw(float alpha) const {
     if (type == Type::MIN) {
         for (auto sprite : min_sprites)
-            sprite.draw(position, alpha);
+            sprite.draw(position_, alpha);
 
-        combined_text.draw(position + Point<int16_t>(7, -3));
+        combined_text.draw(position_ + Point<int16_t>(7, -3));
     } else if (type == Type::NORMAL) {
         for (auto sprite : normal_sprites)
-            sprite.draw(position, alpha);
+            sprite.draw(position_, alpha);
 
         if (has_map) {
             Animation portal_marker = Animation(marker["portal"]);
 
             for (auto sprite : static_marker_info)
-                portal_marker.draw(position + sprite.second, alpha);
+                portal_marker.draw(position_ + sprite.second, alpha);
 
-            draw_movable_markers(position, alpha);
+            draw_movable_markers(position_, alpha);
 
             if (listNpc_enabled)
                 draw_npclist(normal_dimensions, alpha);
         }
     } else {
         for (auto sprite : max_sprites)
-            sprite.draw(position, alpha);
+            sprite.draw(position_, alpha);
 
-        region_text.draw(position + Point<int16_t>(48, 14));
-        town_text.draw(position + Point<int16_t>(48, 28));
+        region_text.draw(position_ + Point<int16_t>(48, 14));
+        town_text.draw(position_ + Point<int16_t>(48, 28));
 
         if (has_map) {
             Animation portal_marker(marker["portal"]);
 
             for (auto sprite : static_marker_info)
                 portal_marker.draw(
-                    position + sprite.second + Point<int16_t>(0, MAX_ADJ),
+                    position_ + sprite.second + Point<int16_t>(0, MAX_ADJ),
                     alpha);
 
-            draw_movable_markers(position + Point<int16_t>(0, MAX_ADJ), alpha);
+            draw_movable_markers(position_ + Point<int16_t>(0, MAX_ADJ), alpha);
 
             if (listNpc_enabled)
                 draw_npclist(max_dimensions, alpha);
@@ -190,10 +190,10 @@ void UIMiniMap::remove_cursor() {
 Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged)
+    if (dragged_)
         return dstate;
 
-    Point<int16_t> cursor_relative = cursorpos - position;
+    Point<int16_t> cursor_relative = cursorpos - position_;
 
     if (listNpc_slider.isenabled())
         if (Cursor::State new_state =
@@ -335,9 +335,9 @@ UIElement::Type UIMiniMap::get_type() const {
 
 void UIMiniMap::update_buttons() {
     // Add one pixel for a space to the right of each button
-    bt_min_width = buttons[Buttons::BT_MIN]->width() + 1;
-    bt_max_width = buttons[Buttons::BT_MAX]->width() + 1;
-    bt_map_width = buttons[Buttons::BT_MAP]->width() + 1;
+    bt_min_width = buttons_[Buttons::BT_MIN]->width() + 1;
+    bt_max_width = buttons_[Buttons::BT_MAX]->width() + 1;
+    bt_map_width = buttons_[Buttons::BT_MAP]->width() + 1;
 
     combined_text_width = combined_text.width();
 }
@@ -346,98 +346,98 @@ void UIMiniMap::toggle_buttons() {
     int16_t bt_min_x;
 
     if (type == Type::MIN) {
-        buttons[Buttons::BT_MAP]->set_active(true);
-        buttons[Buttons::BT_MAX]->set_active(true);
-        buttons[Buttons::BT_MIN]->set_active(true);
-        buttons[Buttons::BT_NPC]->set_active(false);
-        buttons[Buttons::BT_SMALL]->set_active(false);
-        buttons[Buttons::BT_BIG]->set_active(false);
+        buttons_[Buttons::BT_MAP]->set_active(true);
+        buttons_[Buttons::BT_MAX]->set_active(true);
+        buttons_[Buttons::BT_MIN]->set_active(true);
+        buttons_[Buttons::BT_NPC]->set_active(false);
+        buttons_[Buttons::BT_SMALL]->set_active(false);
+        buttons_[Buttons::BT_BIG]->set_active(false);
 
-        buttons[Buttons::BT_MIN]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_MIN]->set_state(Button::State::DISABLED);
 
         if (has_map)
-            buttons[Buttons::BT_MAX]->set_state(Button::State::NORMAL);
+            buttons_[Buttons::BT_MAX]->set_state(Button::State::NORMAL);
         else
-            buttons[Buttons::BT_MAX]->set_state(Button::State::DISABLED);
+            buttons_[Buttons::BT_MAX]->set_state(Button::State::DISABLED);
 
         bt_min_x = combined_text_width + 11;
 
-        buttons[Buttons::BT_MIN]->set_position(
+        buttons_[Buttons::BT_MIN]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         bt_min_x += bt_min_width;
 
-        buttons[Buttons::BT_MAX]->set_position(
+        buttons_[Buttons::BT_MAX]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         bt_min_x += bt_max_width;
 
-        buttons[Buttons::BT_MAP]->set_position(
+        buttons_[Buttons::BT_MAP]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         min_dimensions = Point<int16_t>(bt_min_x + bt_map_width + 7, 20);
 
         update_dimensions();
 
-        dragarea = dimension;
+        drag_area_ = dimension_;
 
         set_npclist_active(false);
     } else {
         bool has_npcs = Stage::get().get_npcs().get_npcs()->size() > 0;
 
-        buttons[Buttons::BT_MAP]->set_active(true);
-        buttons[Buttons::BT_MAX]->set_active(true);
-        buttons[Buttons::BT_MIN]->set_active(true);
-        buttons[Buttons::BT_NPC]->set_active(has_npcs);
+        buttons_[Buttons::BT_MAP]->set_active(true);
+        buttons_[Buttons::BT_MAX]->set_active(true);
+        buttons_[Buttons::BT_MIN]->set_active(true);
+        buttons_[Buttons::BT_NPC]->set_active(has_npcs);
 
         if (big_map) {
-            buttons[Buttons::BT_BIG]->set_active(false);
-            buttons[Buttons::BT_SMALL]->set_active(true);
+            buttons_[Buttons::BT_BIG]->set_active(false);
+            buttons_[Buttons::BT_SMALL]->set_active(true);
         } else {
-            buttons[Buttons::BT_BIG]->set_active(true);
-            buttons[Buttons::BT_SMALL]->set_active(false);
+            buttons_[Buttons::BT_BIG]->set_active(true);
+            buttons_[Buttons::BT_SMALL]->set_active(false);
         }
 
-        buttons[Buttons::BT_MIN]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_MIN]->set_state(Button::State::NORMAL);
 
         bt_min_x = middle_right_x
-                   - (bt_min_width + buttons[Buttons::BT_SMALL]->width() + 1
+                   - (bt_min_width + buttons_[Buttons::BT_SMALL]->width() + 1
                       + bt_max_width + bt_map_width
-                      + (has_npcs ? buttons[Buttons::BT_NPC]->width() : 0));
+                      + (has_npcs ? buttons_[Buttons::BT_NPC]->width() : 0));
 
-        buttons[Buttons::BT_MIN]->set_position(
+        buttons_[Buttons::BT_MIN]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         bt_min_x += bt_max_width;
 
-        buttons[Buttons::BT_MAX]->set_position(
+        buttons_[Buttons::BT_MAX]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         bt_min_x += bt_max_width;
 
-        buttons[Buttons::BT_SMALL]->set_position(
+        buttons_[Buttons::BT_SMALL]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
-        buttons[Buttons::BT_BIG]->set_position(
+        buttons_[Buttons::BT_BIG]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         bt_min_x += bt_max_width;
 
-        buttons[Buttons::BT_MAP]->set_position(
+        buttons_[Buttons::BT_MAP]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         bt_min_x += bt_map_width;
 
-        buttons[Buttons::BT_NPC]->set_position(
+        buttons_[Buttons::BT_NPC]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y));
 
         if (type == Type::MAX)
-            buttons[Buttons::BT_MAX]->set_state(Button::State::DISABLED);
+            buttons_[Buttons::BT_MAX]->set_state(Button::State::DISABLED);
         else
-            buttons[Buttons::BT_MAX]->set_state(Button::State::NORMAL);
+            buttons_[Buttons::BT_MAX]->set_state(Button::State::NORMAL);
 
         set_npclist_active(listNpc_enabled && has_npcs);
 
-        dragarea = Point<int16_t>(dimension.x(), 20);
+        drag_area_ = Point<int16_t>(dimension_.x(), 20);
     }
 }
 
@@ -699,15 +699,15 @@ void UIMiniMap::set_npclist_active(bool active) {
 
 void UIMiniMap::update_dimensions() {
     if (type == Type::MIN) {
-        dimension = min_dimensions;
+        dimension_ = min_dimensions;
     } else {
         Point<int16_t> base_dims =
             type == Type::MAX ? max_dimensions : normal_dimensions;
-        dimension = base_dims;
+        dimension_ = base_dims;
 
         if (listNpc_enabled) {
-            dimension += listNpc_dimensions;
-            dimension.set_y(std::max(base_dims.y(), listNpc_dimensions.y()));
+            dimension_ += listNpc_dimensions;
+            dimension_.set_y(std::max(base_dims.y(), listNpc_dimensions.y()));
         }
     }
 }
@@ -826,10 +826,10 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
     Animation npc_marker = Animation(marker["npc"]);
 
     for (Sprite sprite : listNpc_sprites)
-        sprite.draw(position, alpha);
+        sprite.draw(position_, alpha);
 
     Point<int16_t> listNpc_pos =
-        position + Point<int16_t>(minimap_dims.x() + 10, 23);
+        position_ + Point<int16_t>(minimap_dims.x() + 10, 23);
 
     for (int8_t i = 0; i + listNpc_offset < listNpc_list.size() && i < 8; i++) {
         if (selected - listNpc_offset == i) {
@@ -852,7 +852,7 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
     }
 
     if (listNpc_slider.isenabled())
-        listNpc_slider.draw(position);
+        listNpc_slider.draw(position_);
 
     if (selected >= 0) {
         Point<int16_t> npc_pos =
@@ -861,7 +861,7 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
                              map_draw_origin_y - npc_marker.get_dimensions().y()
                                  + (type == Type::MAX ? MAX_ADJ : 0));
 
-        selected_marker.draw(position + npc_pos, 0.5f);
+        selected_marker.draw(position_ + npc_pos, 0.5f);
     }
 }
 

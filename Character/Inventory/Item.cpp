@@ -23,8 +23,8 @@ Item::Item(int32_t item_id,
            int64_t expiration,
            const std::string &owner,
            int16_t flags) :
-    item_id(item_id),
-    expiration(expiration),
-    owner(owner),
-    flags(flags) {}
+    item_id_(item_id),
+    expiration_(expiration),
+    owner_(owner),
+    flags_(flags) {}
 }  // namespace ms

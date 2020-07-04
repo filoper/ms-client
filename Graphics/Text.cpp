@@ -29,13 +29,13 @@ Text::Text(Font f,
            uint16_t mw,
            bool fm,
            int16_t la) :
-    font(f),
-    alignment(a),
-    color(c),
-    background(b),
-    maxwidth(mw),
-    formatted(fm),
-    line_adj(la) {
+    font_(f),
+    alignment_(a),
+    color_(c),
+    background_(b),
+    max_width_(mw),
+    formatted_(fm),
+    line_adj_(la) {
     change_text(t);
 }
 
@@ -51,37 +51,37 @@ Text::Text(Font f,
 Text::Text() : Text(Font::A11M, Alignment::LEFT, Color::BLACK) {}
 
 void Text::reset_layout() {
-    if (text.empty())
+    if (text_.empty())
         return;
 
-    layout = GraphicsGL::get().createlayout(text,
-                                            font,
-                                            alignment,
-                                            maxwidth,
-                                            formatted,
-                                            line_adj);
+    layout_ = GraphicsGL::get().createlayout(text_,
+                                            font_,
+                                            alignment_,
+                                            max_width_,
+                                            formatted_,
+                                            line_adj_);
 }
 
 void Text::change_text(const std::string &t) {
-    if (text == t)
+    if (text_ == t)
         return;
 
-    text = t;
+    text_ = t;
 
     reset_layout();
 }
 
 void Text::change_color(Color::Name c) {
-    if (color == c)
+    if (color_ == c)
         return;
 
-    color = c;
+    color_ = c;
 
     reset_layout();
 }
 
 void Text::set_background(Background b) {
-    background = b;
+    background_ = b;
 }
 
 void Text::draw(const DrawArgument &args) const {
@@ -91,39 +91,39 @@ void Text::draw(const DrawArgument &args) const {
 void Text::draw(const DrawArgument &args,
                 const Range<int16_t> &vertical) const {
     GraphicsGL::get()
-        .drawtext(args, vertical, text, layout, font, color, background);
+        .drawtext(args, vertical, text_, layout_, font_, color_, background_);
 }
 
 uint16_t Text::advance(size_t pos) const {
-    return layout.advance(pos);
+    return layout_.advance(pos);
 }
 
 bool Text::empty() const {
-    return text.empty();
+    return text_.empty();
 }
 
 size_t Text::length() const {
-    return text.size();
+    return text_.size();
 }
 
 int16_t Text::width() const {
-    return layout.width();
+    return layout_.width();
 }
 
 int16_t Text::height() const {
-    return layout.height();
+    return layout_.height();
 }
 
 Point<int16_t> Text::dimensions() const {
-    return layout.get_dimensions();
+    return layout_.get_dimensions();
 }
 
 Point<int16_t> Text::endoffset() const {
-    return layout.get_endoffset();
+    return layout_.get_endoffset();
 }
 
 const std::string &Text::get_text() const {
-    return text;
+    return text_;
 }
 
 Text::Layout::Layout(const std::vector<Layout::Line> &l,
@@ -132,39 +132,39 @@ Text::Layout::Layout(const std::vector<Layout::Line> &l,
                      int16_t h,
                      int16_t ex,
                      int16_t ey) :
-    lines(l),
-    advances(a),
-    dimensions(w, h),
-    endoffset(ex, ey) {}
+    lines_(l),
+    advances_(a),
+    dimensions_(w, h),
+    end_offset_(ex, ey) {}
 
 Text::Layout::Layout() :
     Layout(std::vector<Layout::Line>(), std::vector<int16_t>(), 0, 0, 0, 0) {}
 
 int16_t Text::Layout::width() const {
-    return dimensions.x();
+    return dimensions_.x();
 }
 
 int16_t Text::Layout::height() const {
-    return dimensions.y();
+    return dimensions_.y();
 }
 
 int16_t Text::Layout::advance(size_t index) const {
-    return index < advances.size() ? advances[index] : 0;
+    return index < advances_.size() ? advances_[index] : 0;
 }
 
 Point<int16_t> Text::Layout::get_dimensions() const {
-    return dimensions;
+    return dimensions_;
 }
 
 Point<int16_t> Text::Layout::get_endoffset() const {
-    return endoffset;
+    return end_offset_;
 }
 
 Text::Layout::iterator Text::Layout::begin() const {
-    return lines.begin();
+    return lines_.begin();
 }
 
 Text::Layout::iterator Text::Layout::end() const {
-    return lines.end();
+    return lines_.end();
 }
 }  // namespace ms

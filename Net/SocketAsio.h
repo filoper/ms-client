@@ -51,10 +51,10 @@ public:
     bool dispatch(const int8_t *bytes, size_t length);
 
 private:
-    io_service ioservice;
-    tcp::resolver resolver;
-    tcp::socket socket;
-    int8_t buffer[MAX_PACKET_LENGTH];
+    io_service ioservice_;
+    tcp::resolver resolver_;
+    tcp::socket socket_;
+    int8_t buffer_[MAX_PACKET_LENGTH];
 };
 }  // namespace ms
 #endif

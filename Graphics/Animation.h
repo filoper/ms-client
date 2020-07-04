@@ -91,16 +91,16 @@ public:
 private:
     const Frame &get_frame() const;
 
-    std::vector<Frame> frames;
-    bool animated;
-    bool zigzag;
+    std::vector<Frame> frames_;
+    bool animated_;
+    bool zigzag_;
 
-    Nominal<int16_t> frame;
-    Linear<float> opacity;
-    Linear<float> xyscale;
+    Nominal<int16_t> frame_;
+    Linear<float> opacity_;
+    Linear<float> xyscale_;
 
-    uint16_t delay;
-    int16_t framestep;
-    float opcstep;
+    uint16_t delay_;
+    int16_t frame_step_;
+    float opc_step_;
 };
 }  // namespace ms

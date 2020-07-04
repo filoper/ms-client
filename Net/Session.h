@@ -55,18 +55,18 @@ private:
     bool init(const char *host, const char *port);
     void process(const int8_t *bytes, size_t available);
 
-    Cryptography cryptography;
-    PacketSwitch packetswitch;
+    Cryptography cryptography_;
+    PacketSwitch packet_switch_;
 
-    int8_t buffer[MAX_PACKET_LENGTH];
-    size_t length;
-    size_t pos;
-    bool connected;
+    int8_t buffer_[MAX_PACKET_LENGTH];
+    size_t length_;
+    size_t pos_;
+    bool connected_;
 
 #ifdef USE_ASIO
-    SocketAsio socket;
+    SocketAsio socket_;
 #else
-    SocketWinsock socket;
+    SocketWinsock socket_;
 #endif
 };
 }  // namespace ms

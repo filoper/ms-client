@@ -81,6 +81,6 @@ public:
                     int32_t skill_level) const;
 
 private:
-    std::unordered_map<int32_t, std::unique_ptr<PassiveBuff>> buffs;
+    std::unordered_map<int32_t, std::unique_ptr<PassiveBuff>> buffs_;
 };
 }  // namespace ms

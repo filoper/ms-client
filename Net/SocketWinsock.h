@@ -40,8 +40,8 @@ public:
     const int8_t *get_buffer() const;
 
 private:
-    uint64_t sock;
-    int8_t buffer[MAX_PACKET_LENGTH];
+    uint64_t sock_;
+    int8_t buffer_[MAX_PACKET_LENGTH];
 };
 }  // namespace ms
 #endif

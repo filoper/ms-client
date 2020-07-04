@@ -20,28 +20,28 @@
 
 namespace ms {
 Sprite::Sprite(const Animation &a, const DrawArgument &args) :
-    animation(a),
-    stateargs(args) {}
+    animation_(a),
+    state_args_(args) {}
 
 Sprite::Sprite(nl::node src, const DrawArgument &args) :
-    animation(src),
-    stateargs(args) {}
+    animation_(src),
+    state_args_(args) {}
 
 Sprite::Sprite(nl::node src) : Sprite(src, {}) {}
 
 Sprite::Sprite() {}
 
 void Sprite::draw(Point<int16_t> parentpos, float alpha) const {
-    auto absargs = stateargs + parentpos;
-    animation.draw(absargs, alpha);
+    auto absargs = state_args_ + parentpos;
+    animation_.draw(absargs, alpha);
 }
 
 bool Sprite::update(uint16_t timestep) {
-    return animation.update(timestep);
+    return animation_.update(timestep);
 }
 
 bool Sprite::update() {
-    return animation.update();
+    return animation_.update();
 }
 
 int16_t Sprite::width() const {
@@ -53,10 +53,10 @@ int16_t Sprite::height() const {
 }
 
 Point<int16_t> Sprite::get_origin() const {
-    return animation.get_origin();
+    return animation_.get_origin();
 }
 
 Point<int16_t> Sprite::get_dimensions() const {
-    return animation.get_dimensions();
+    return animation_.get_dimensions();
 }
 }  // namespace ms

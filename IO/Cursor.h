@@ -67,11 +67,11 @@ public:
     Point<int16_t> get_position() const;
 
 private:
-    EnumMap<State, Animation> animations;
+    EnumMap<State, Animation> animations_;
 
-    State state;
-    Point<int16_t> position;
-    int32_t hide_counter;
+    State state_;
+    Point<int16_t> position_;
+    int32_t hide_counter_;
 
     static constexpr int64_t HIDE_TIME = 15'000;
 };

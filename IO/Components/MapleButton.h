@@ -46,7 +46,7 @@ public:
     }
 
 private:
-    Texture textures[Button::State::NUM_STATES];
-    Animation animations[Button::State::NUM_STATES];
+    Texture textures_[Button::State::NUM_STATES];
+    Animation animations_[Button::State::NUM_STATES];
 };
 }  // namespace ms

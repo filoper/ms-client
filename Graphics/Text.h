@@ -72,10 +72,10 @@ public:
         iterator end() const;
 
     private:
-        std::vector<Line> lines;
-        std::vector<int16_t> advances;
-        Point<int16_t> dimensions;
-        Point<int16_t> endoffset;
+        std::vector<Line> lines_;
+        std::vector<int16_t> advances_;
+        Point<int16_t> dimensions_;
+        Point<int16_t> end_offset_;
     };
 
     Text(Font font,
@@ -126,14 +126,14 @@ public:
 private:
     void reset_layout();
 
-    Font font;
-    Alignment alignment;
-    Color::Name color;
-    Background background;
-    Layout layout;
-    uint16_t maxwidth;
-    bool formatted;
-    std::string text;
-    int16_t line_adj;
+    Font font_;
+    Alignment alignment_;
+    Color::Name color_;
+    Background background_;
+    Layout layout_;
+    uint16_t max_width_;
+    bool formatted_;
+    std::string text_;
+    int16_t line_adj_;
 };
 }  // namespace ms

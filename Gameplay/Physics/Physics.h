@@ -45,6 +45,6 @@ private:
 
     void move_swimming(PhysicsObject &) const;
 
-    FootholdTree fht;
+    FootholdTree fh_tree_;
 };
 }  // namespace ms

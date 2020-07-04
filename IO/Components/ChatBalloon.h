@@ -40,10 +40,10 @@ private:
     // How long a line stays on screen
     static constexpr int16_t DURATION = 4000;  // 4 seconds
 
-    MapleFrame frame;
-    Text textlabel;
-    Texture arrow;
-    int16_t duration;
+    MapleFrame frame_;
+    Text text_label_;
+    Texture arrow_;
+    int16_t duration_;
 };
 
 class ChatBalloonHorizontal {
@@ -55,18 +55,18 @@ public:
     void change_text(const std::string &text);
 
 private:
-    Text textlabel;
-    Texture arrow;
-    Texture center;
-    Texture east;
-    Texture northeast;
-    Texture north;
-    Texture northwest;
-    Texture west;
-    Texture southwest;
-    Texture south;
-    Texture southeast;
-    int16_t xtile;
-    int16_t ytile;
+    Text text_label_;
+    Texture arrow_;
+    Texture center_;
+    Texture east_;
+    Texture north_east_;
+    Texture north_;
+    Texture north_west_;
+    Texture west_;
+    Texture south_west_;
+    Texture south_;
+    Texture south_east_;
+    int16_t xtile_;
+    int16_t ytile_;
 };
 }  // namespace ms

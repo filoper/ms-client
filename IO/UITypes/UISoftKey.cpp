@@ -41,32 +41,32 @@ UISoftKey::UISoftKey(OkCallback ok,
     nl::node TabNormal = Tab["normal"];
     nl::node TabSelected = Tab["selected"];
 
-    sprites.emplace_back(backgrnd, screen_adj);
-    sprites.emplace_back(SoftKey["backgrnd2"]);
-    sprites.emplace_back(SoftKey["backgrnd3"]);
+    sprites_.emplace_back(backgrnd, screen_adj);
+    sprites_.emplace_back(SoftKey["backgrnd2"]);
+    sprites_.emplace_back(SoftKey["backgrnd3"]);
 
-    buttons[Buttons::NEXT] = std::make_unique<MapleButton>(SoftKey["BtNext"]);
-    buttons[Buttons::DEL] = std::make_unique<MapleButton>(SoftKey["BtDel"]);
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::NEXT] = std::make_unique<MapleButton>(SoftKey["BtNext"]);
+    buttons_[Buttons::DEL] = std::make_unique<MapleButton>(SoftKey["BtDel"]);
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(SoftKey["BtCancel"],
                                       Point<int16_t>(72, 235));
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(SoftKey["BtOK"], Point<int16_t>(14, 235));
 
     for (size_t i = 0; i < 3; i++) {
-        buttons[Buttons::TAB0 + i] =
+        buttons_[Buttons::TAB0 + i] =
             std::make_unique<TwoSpriteButton>(TabNormal[i],
                                               TabSelected[i],
                                               screen_adj);
 
         if (i == 0)
-            buttons[Buttons::TAB0 + i]->set_state(Button::State::PRESSED);
+            buttons_[Buttons::TAB0 + i]->set_state(Button::State::PRESSED);
         else
-            buttons[Buttons::TAB0 + i]->set_state(Button::State::DISABLED);
+            buttons_[Buttons::TAB0 + i]->set_state(Button::State::DISABLED);
     }
 
     for (size_t i = 0; i < NUM_KEYS; i++)
-        buttons[Buttons::NUM0 + i] =
+        buttons_[Buttons::NUM0 + i] =
             std::make_unique<MapleButton>(SoftKey["BtNum"][i]);
 
     entry = Textfield(
@@ -80,8 +80,8 @@ UISoftKey::UISoftKey(OkCallback ok,
     shufflekeys();
     show_text(tooltip_text);
 
-    position = Point<int16_t>(330, 160);
-    dimension = Texture(backgrnd).get_dimensions();
+    position_ = Point<int16_t>(330, 160);
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 UISoftKey::UISoftKey(OkCallback ok_callback,
@@ -99,10 +99,10 @@ UISoftKey::UISoftKey(OkCallback ok_callback) :
 void UISoftKey::draw(float inter) const {
     UIElement::draw(inter);
 
-    entry.draw(position + Point<int16_t>(15, 43));
+    entry.draw(position_ + Point<int16_t>(15, 43));
 
     if (tooltip)
-        tooltip->draw(position + Point<int16_t>(71, 46) + tooltipposition);
+        tooltip->draw(position_ + Point<int16_t>(71, 46) + tooltipposition);
 }
 
 void UISoftKey::update() {
@@ -173,7 +173,7 @@ void UISoftKey::shufflekeys() {
         size_t rand = random.next_int(reserve.size());
         Point<int16_t> pos = keypos(reserve[rand]);
 
-        buttons[Buttons::NUM0 + i]->set_position(pos);
+        buttons_[Buttons::NUM0 + i]->set_position(pos);
 
         reserve.erase(reserve.begin() + rand);
     }

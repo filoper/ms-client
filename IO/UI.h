@@ -111,32 +111,32 @@ public:
     void remove(UIElement::Type type);
 
 private:
-    std::unique_ptr<UIState> state;
-    Keyboard keyboard;
-    Cursor cursor;
-    ScrollingNotice scrollingnotice;
+    std::unique_ptr<UIState> state_;
+    Keyboard keyboard_;
+    Cursor cursor_;
+    ScrollingNotice scrolling_notice_;
 
-    Optional<Textfield> focusedtextfield;
-    std::unordered_map<int32_t, bool> is_key_down;
+    Optional<Textfield> focused_text_field_;
+    std::unordered_map<int32_t, bool> is_key_down_;
 
-    bool enabled;
-    bool quitted;
-    bool caps_lock_enabled = false;
+    bool enabled_;
+    bool quitted_;
+    bool caps_lock_enabled_ = false;
 };
 
 template<class T, typename... Args>
 Optional<T> UI::emplace(Args &&... args) {
-    if (auto iter = state->pre_add(T::TYPE, T::TOGGLED, T::FOCUSED)) {
+    if (auto iter = state_->pre_add(T::TYPE, T::TOGGLED, T::FOCUSED)) {
         (*iter).second = std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-    return state->get(T::TYPE);
+    return state_->get(T::TYPE);
 }
 
 template<class T>
 Optional<T> UI::get_element() {
     UIElement::Type type = T::TYPE;
-    UIElement *element = state->get(type);
+    UIElement *element = state_->get(type);
 
     return static_cast<T *>(element);
 }

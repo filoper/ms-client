@@ -35,8 +35,8 @@ public:
     bool update(Point<int16_t> target);
 
 private:
-    Animation animation;
-    MovingObject moveobj;
-    bool flip;
+    Animation animation_;
+    MovingObject move_obj_;
+    bool flip_;
 };
 }  // namespace ms

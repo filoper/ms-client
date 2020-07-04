@@ -52,7 +52,7 @@ public:
     Animation get(const Char &user, int32_t bulletid) const override;
 
 private:
-    Ball ball;
+    Ball ball_;
 };
 
 class BySkillLevelBullet : public SkillBullet {
@@ -62,7 +62,7 @@ public:
     Animation get(const Char &user, int32_t bulletid) const override;
 
 private:
-    std::unordered_map<int32_t, Ball> bullets;
-    int32_t skillid;
+    std::unordered_map<int32_t, Ball> bullets_;
+    int32_t skill_id_;
 };
 }  // namespace ms

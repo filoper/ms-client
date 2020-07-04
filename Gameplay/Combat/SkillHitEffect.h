@@ -33,19 +33,19 @@ protected:
     class Effect {
     public:
         Effect(nl::node src) {
-            animation = src;
-            pos = src["pos"];
-            z = src["z"];
+            animation_ = src;
+            pos_ = src["pos"];
+            z_ = src["z"];
         }
 
         void apply(Mob &target, bool flip) const {
-            target.show_effect(animation, pos, z, flip);
+            target.show_effect(animation_, pos_, z_, flip);
         }
 
     private:
-        Animation animation;
-        int8_t pos;
-        int8_t z;
+        Animation animation_;
+        int8_t pos_;
+        int8_t z_;
     };
 };
 
@@ -63,7 +63,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    Effect effect;
+    Effect effect_;
 };
 
 // The animation changes depending on the weapon used
@@ -74,7 +74,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    BoolPair<Effect> effects;
+    BoolPair<Effect> effects_;
 };
 
 // The animation changes with the character level
@@ -85,7 +85,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    std::map<uint16_t, Effect> effects;
+    std::map<uint16_t, Effect> effects_;
 };
 
 // The animation changes with the character level and weapon used
@@ -96,7 +96,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    std::map<uint16_t, BoolPair<Effect>> effects;
+    std::map<uint16_t, BoolPair<Effect>> effects_;
 };
 
 // The animation changes with the skill level
@@ -107,6 +107,6 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    std::map<int32_t, Effect> effects;
+    std::map<int32_t, Effect> effects_;
 };
 }  // namespace ms

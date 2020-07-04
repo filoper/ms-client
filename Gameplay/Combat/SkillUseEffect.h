@@ -32,17 +32,17 @@ protected:
     class Effect {
     public:
         Effect(nl::node src) {
-            animation = src;
-            z = src["z"];
+            animation_ = src;
+            z_ = src["z"];
         }
 
         void apply(Char &target) const {
-            target.show_attack_effect(animation, z);
+            target.show_attack_effect(animation_, z_);
         }
 
     private:
-        Animation animation;
-        int8_t z;
+        Animation animation_;
+        int8_t z_;
     };
 };
 
@@ -60,7 +60,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    Effect effect;
+    Effect effect_;
 };
 
 // An effect which displays an animation over the character's position
@@ -72,7 +72,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    BoolPair<Effect> effects;
+    BoolPair<Effect> effects_;
 };
 
 // An effect which displays multiple animations over the character's position
@@ -83,7 +83,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    std::vector<Effect> effects;
+    std::vector<Effect> effects_;
 };
 
 // The animation changes with the character level
@@ -94,7 +94,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    std::map<uint16_t, Effect> effects;
+    std::map<uint16_t, Effect> effects_;
 };
 
 // Use effect for Iron Body

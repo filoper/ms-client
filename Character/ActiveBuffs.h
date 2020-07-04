@@ -68,6 +68,6 @@ public:
     void apply_buff(CharStats &stats, Buffstat::Id stat, int16_t value) const;
 
 private:
-    EnumMap<Buffstat::Id, std::unique_ptr<ActiveBuff>> buffs;
+    EnumMap<Buffstat::Id, std::unique_ptr<ActiveBuff>> buffs_;
 };
 }  // namespace ms

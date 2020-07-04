@@ -32,15 +32,15 @@ SkillData::SkillData(int32_t id) {
     nl::node strsrc = nl::nx::string["Skill.img"][strid];
 
     // Load icons
-    icons = { src["icon"], src["iconDisabled"], src["iconMouseOver"] };
+    icons_ = { src["icon"], src["iconDisabled"], src["iconMouseOver"] };
 
     // Load strings
-    name = std::string(strsrc["name"]);
-    desc = std::string(strsrc["desc"]);
+    name_ = std::string(strsrc["name"]);
+    desc_ = std::string(strsrc["desc"]);
 
     for (int32_t level = 1; nl::node sub = strsrc["h" + std::to_string(level)];
          level++)
-        levels.emplace(level, sub);
+        levels_.emplace(level, sub);
 
     /// Load stats
     nl::node levelsrc = src["level"];
@@ -64,7 +64,7 @@ SkillData::SkillData(int32_t id) {
         Rectangle<int16_t> range = sub;
         int32_t level = string_conversion::or_default<int32_t>(sub.name(), -1);
 
-        stats.emplace(std::piecewise_construct,
+        stats_.emplace(std::piecewise_construct,
                       std::forward_as_tuple(level),
                       std::forward_as_tuple(damage,
                                             matk,
@@ -83,17 +83,17 @@ SkillData::SkillData(int32_t id) {
                                             range));
     }
 
-    element = std::string(src["elemAttr"]);
+    element_ = std::string(src["elemAttr"]);
 
     if (jobid == "900" || jobid == "910")
-        reqweapon = Weapon::Type::NONE;
+        req_weapon_ = Weapon::Type::NONE;
     else
-        reqweapon = Weapon::by_value(100 + (int32_t)src["weapon"]);
+        req_weapon_ = Weapon::by_value(100 + (int32_t)src["weapon"]);
 
-    masterlevel = static_cast<int32_t>(stats.size());
-    passive = (id % 10000) / 1000 == 0;
-    flags = flags_of(id);
-    invisible = src["invisible"].get_bool();
+    master_level_ = static_cast<int32_t>(stats_.size());
+    passive_ = (id % 10000) / 1000 == 0;
+    flags_ = flags_of(id);
+    invisible_ = src["invisible"].get_bool();
 
     /// Load required skills
     nl::node reqsrc = src["req"];
@@ -103,7 +103,7 @@ SkillData::SkillData(int32_t id) {
             string_conversion::or_default<int32_t>(sub.name(), -1);
         int32_t reqlv = sub.get_integer();
 
-        reqskills.emplace(skillid, reqlv);
+        req_skills_.emplace(skillid, reqlv);
     }
 }
 
@@ -168,29 +168,29 @@ int32_t SkillData::flags_of(int32_t id) const {
 }
 
 bool SkillData::is_passive() const {
-    return passive;
+    return passive_;
 }
 
 bool SkillData::is_attack() const {
-    return !passive && (flags & ATTACK);
+    return !passive_ && (flags_ & ATTACK);
 }
 
 bool SkillData::is_invisible() const {
-    return invisible;
+    return invisible_;
 }
 
 int32_t SkillData::get_masterlevel() const {
-    return masterlevel;
+    return master_level_;
 }
 
 Weapon::Type SkillData::get_required_weapon() const {
-    return reqweapon;
+    return req_weapon_;
 }
 
 const SkillData::Stats &SkillData::get_stats(int32_t level) const {
-    auto iter = stats.find(level);
+    auto iter = stats_.find(level);
 
-    if (iter == stats.end()) {
+    if (iter == stats_.end()) {
         static constexpr Stats null_stats = Stats(0.0f,
                                                   0,
                                                   0,
@@ -214,17 +214,17 @@ const SkillData::Stats &SkillData::get_stats(int32_t level) const {
 }
 
 const std::string &SkillData::get_name() const {
-    return name;
+    return name_;
 }
 
 const std::string &SkillData::get_desc() const {
-    return desc;
+    return desc_;
 }
 
 const std::string &SkillData::get_level_desc(int32_t level) const {
-    auto iter = levels.find(level);
+    auto iter = levels_.find(level);
 
-    if (iter == levels.end()) {
+    if (iter == levels_.end()) {
         static const std::string null_level = "Missing level description.";
 
         return null_level;
@@ -234,10 +234,10 @@ const std::string &SkillData::get_level_desc(int32_t level) const {
 }
 
 const Texture &SkillData::get_icon(Icon icon) const {
-    return icons[icon];
+    return icons_[icon];
 }
 
 const std::unordered_map<int32_t, int32_t> &SkillData::get_reqskills() const {
-    return reqskills;
+    return req_skills_;
 }
 }  // namespace ms

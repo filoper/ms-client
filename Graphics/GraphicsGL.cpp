@@ -22,7 +22,7 @@
 
 namespace ms {
 GraphicsGL::GraphicsGL() {
-    locked = false;
+    locked_ = false;
 
     VWIDTH = Constants::Constants::get().get_viewwidth();
     VHEIGHT = Constants::Constants::get().get_viewheight();
@@ -95,14 +95,14 @@ Error GraphicsGL::init() {
     std::cout << "Using OpenGL " << glGetString(GL_VERSION) << std::endl;
     // std::cout << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
 
-    if (FT_Init_FreeType(&ftlibrary))
+    if (FT_Init_FreeType(&ft_library_))
         return Error::Code::FREETYPE;
 
     FT_Int ftmajor;
     FT_Int ftminor;
     FT_Int ftpatch;
 
-    FT_Library_Version(ftlibrary, &ftmajor, &ftminor, &ftpatch);
+    FT_Library_Version(ft_library_, &ftmajor, &ftminor, &ftpatch);
 
     std::cout << "Using FreeType " << ftmajor << "." << ftminor << "."
               << ftpatch << std::endl;
@@ -139,28 +139,28 @@ Error GraphicsGL::init() {
     }
 
     // Link Shaders
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
+    shader_program_ = glCreateProgram();
+    glAttachShader(shader_program_, vertexShader);
+    glAttachShader(shader_program_, fragmentShader);
+    glLinkProgram(shader_program_);
 
     // Check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    glGetProgramiv(shader_program_, GL_LINK_STATUS, &success);
 
     if (success != GL_TRUE) {
-        glGetProgramInfoLog(shaderProgram, bufSize, NULL, infoLog);
+        glGetProgramInfoLog(shader_program_, bufSize, NULL, infoLog);
 
         return Error(Error::Code::SHADER_PROGRAM_LINK, infoLog);
     }
 
     // Validate Program
-    glValidateProgram(shaderProgram);
+    glValidateProgram(shader_program_);
 
     // Check for validation errors
-    glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &success);
+    glGetProgramiv(shader_program_, GL_VALIDATE_STATUS, &success);
 
     if (success != GL_TRUE) {
-        glGetProgramInfoLog(shaderProgram, bufSize, NULL, infoLog);
+        glGetProgramInfoLog(shader_program_, bufSize, NULL, infoLog);
 
         return Error(Error::Code::SHADER_PROGRAM_VALID, infoLog);
     }
@@ -168,24 +168,24 @@ Error GraphicsGL::init() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    attribute_coord = glGetAttribLocation(shaderProgram, "coord");
-    attribute_color = glGetAttribLocation(shaderProgram, "color");
-    uniform_texture = glGetUniformLocation(shaderProgram, "texture");
-    uniform_atlassize = glGetUniformLocation(shaderProgram, "atlassize");
-    uniform_screensize = glGetUniformLocation(shaderProgram, "screensize");
-    uniform_yoffset = glGetUniformLocation(shaderProgram, "yoffset");
-    uniform_fontregion = glGetUniformLocation(shaderProgram, "fontregion");
+    attribute_coord_ = glGetAttribLocation(shader_program_, "coord");
+    attribute_color_ = glGetAttribLocation(shader_program_, "color");
+    uniform_texture_ = glGetUniformLocation(shader_program_, "texture");
+    uniform_atlas_size_ = glGetUniformLocation(shader_program_, "atlassize");
+    uniform_screen_size_ = glGetUniformLocation(shader_program_, "screensize");
+    uniform_yoffset = glGetUniformLocation(shader_program_, "yoffset");
+    uniform_font_region_ = glGetUniformLocation(shader_program_, "fontregion");
 
-    if (attribute_coord == -1 || attribute_color == -1 || uniform_texture == -1
-        || uniform_atlassize == -1 || uniform_screensize == -1
+    if (attribute_coord_ == -1 || attribute_color_ == -1 || uniform_texture_ == -1
+        || uniform_atlas_size_ == -1 || uniform_screen_size_ == -1
         || uniform_yoffset == -1)
         return Error::Code::SHADER_VARS;
 
     // Vertex Buffer Object
-    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &VBO_);
 
-    glGenTextures(1, &atlas);
-    glBindTexture(GL_TEXTURE_2D, atlas);
+    glGenTextures(1, &atlas_);
+    glBindTexture(GL_TEXTURE_2D, atlas_);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -199,7 +199,7 @@ Error GraphicsGL::init() {
                  GL_UNSIGNED_BYTE,
                  nullptr);
 
-    fontborder.set_y(1);
+    font_border.set_y(1);
 
     const std::string FONT_NORMAL = Setting<FontPathNormal>().get().load();
     const std::string FONT_BOLD = Setting<FontPathBold>().get().load();
@@ -219,9 +219,9 @@ Error GraphicsGL::init() {
     addfont(FONT_BOLD_STR, Text::Font::A15B, 0, 15);
     addfont(FONT_NORMAL_STR, Text::Font::A18M, 0, 18);
 
-    fontymax += fontborder.y();
+    font_ymax += font_border.y();
 
-    leftovers = QuadTree<size_t, Leftover>(
+    leftovers_ = QuadTree<size_t, Leftover>(
         [](const Leftover &first, const Leftover &second) {
             bool width_comparison = first.width() >= second.width();
             bool height_comparison = first.height() >= second.height();
@@ -245,7 +245,7 @@ bool GraphicsGL::addfont(const char *name,
                          FT_UInt pixelh) {
     FT_Face face;
 
-    if (FT_New_Face(ftlibrary, name, 0, &face))
+    if (FT_New_Face(ft_library_, name, 0, &face))
         return false;
 
     if (FT_Set_Pixel_Sizes(face, pixelw, pixelh))
@@ -269,21 +269,21 @@ bool GraphicsGL::addfont(const char *name,
             height = h;
     }
 
-    if (fontborder.x() + width > ATLASW) {
-        fontborder.set_x(0);
-        fontborder.set_y(fontymax);
-        fontymax = 0;
+    if (font_border.x() + width > ATLASW) {
+        font_border.set_x(0);
+        font_border.set_y(font_ymax);
+        font_ymax = 0;
     }
 
-    GLshort x = fontborder.x();
-    GLshort y = fontborder.y();
+    GLshort x = font_border.x();
+    GLshort y = font_border.y();
 
-    fontborder.shift_x(width);
+    font_border.shift_x(width);
 
-    if (height > fontymax)
-        fontymax = height;
+    if (height > font_ymax)
+        font_ymax = height;
 
-    fonts[id] = Font(width, height);
+    fonts_[id] = Font(width, height);
 
     GLshort ox = x;
     GLshort oy = y;
@@ -310,7 +310,7 @@ bool GraphicsGL::addfont(const char *name,
                         g->bitmap.buffer);
 
         Offset offset = Offset(ox, oy, w, h);
-        fonts[id].chars[c] = { ax, ay, w, h, l, t, offset };
+        fonts_[id].chars[c] = { ax, ay, w, h, l, t, offset };
 
         ox += w;
     }
@@ -328,20 +328,20 @@ void GraphicsGL::reinit() {
         SCREEN = Rectangle<int16_t>(0, VWIDTH, 0, VHEIGHT);
     }
 
-    glUseProgram(shaderProgram);
+    glUseProgram(shader_program_);
 
-    glUniform1i(uniform_fontregion, fontymax);
-    glUniform2f(uniform_atlassize, ATLASW, ATLASH);
-    glUniform2f(uniform_screensize, VWIDTH, VHEIGHT);
+    glUniform1i(uniform_font_region_, font_ymax);
+    glUniform2f(uniform_atlas_size_, ATLASW, ATLASH);
+    glUniform2f(uniform_screen_size_, VWIDTH, VHEIGHT);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(attribute_coord,
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_);
+    glVertexAttribPointer(attribute_coord_,
                           4,
                           GL_SHORT,
                           GL_FALSE,
                           sizeof(Quad::Vertex),
                           0);
-    glVertexAttribPointer(attribute_color,
+    glVertexAttribPointer(attribute_color_,
                           4,
                           GL_FLOAT,
                           GL_FALSE,
@@ -351,7 +351,7 @@ void GraphicsGL::reinit() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glBindTexture(GL_TEXTURE_2D, atlas);
+    glBindTexture(GL_TEXTURE_2D, atlas_);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -360,17 +360,17 @@ void GraphicsGL::reinit() {
 }
 
 void GraphicsGL::clearinternal() {
-    border = Point<GLshort>(0, fontymax);
-    yrange = Range<GLshort>();
+    border_ = Point<GLshort>(0, font_ymax);
+    y_range_ = Range<GLshort>();
 
-    offsets.clear();
-    leftovers.clear();
-    rlid = 1;
-    wasted = 0;
+    offsets_.clear();
+    leftovers_.clear();
+    rlid_ = 1;
+    wasted_ = 0;
 }
 
 void GraphicsGL::clear() {
-    size_t used = ATLASW * border.y() + border.x() * yrange.second();
+    size_t used = ATLASW * border_.y() + border_.x() * y_range_.second();
     double usedpercent = static_cast<double>(used) / (ATLASW * ATLASH);
 
     if (usedpercent > 80.0)
@@ -383,9 +383,9 @@ void GraphicsGL::addbitmap(const nl::bitmap &bmp) {
 
 const GraphicsGL::Offset &GraphicsGL::getoffset(const nl::bitmap &bmp) {
     size_t id = bmp.id();
-    auto offiter = offsets.find(id);
+    auto offiter = offsets_.find(id);
 
-    if (offiter != offsets.end())
+    if (offiter != offsets_.end())
         return offiter->second;
 
     GLshort x = 0;
@@ -394,18 +394,18 @@ const GraphicsGL::Offset &GraphicsGL::getoffset(const nl::bitmap &bmp) {
     GLshort height = bmp.height();
 
     if (width <= 0 || height <= 0)
-        return nulloffset;
+        return null_offset_;
 
     Leftover value = Leftover(x, y, width, height);
 
-    size_t lid = leftovers.findnode(
+    size_t lid = leftovers_.findnode(
         value,
         [](const Leftover &val, const Leftover &leaf) {
             return val.width() <= leaf.width() && val.height() <= leaf.height();
         });
 
     if (lid > 0) {
-        const Leftover &leftover = leftovers[lid];
+        const Leftover &leftover = leftovers_[lid];
 
         x = leftover.left;
         y = leftover.top;
@@ -413,77 +413,77 @@ const GraphicsGL::Offset &GraphicsGL::getoffset(const nl::bitmap &bmp) {
         GLshort width_delta = leftover.width() - width;
         GLshort height_delta = leftover.height() - height;
 
-        leftovers.erase(lid);
+        leftovers_.erase(lid);
 
-        wasted -= width * height;
+        wasted_ -= width * height;
 
         if (width_delta >= MINLOSIZE && height_delta >= MINLOSIZE) {
-            leftovers.add(
-                rlid,
+            leftovers_.add(
+                rlid_,
                 Leftover(x + width, y + height, width_delta, height_delta));
-            rlid++;
+            rlid_++;
 
             if (width >= MINLOSIZE) {
-                leftovers.add(rlid,
+                leftovers_.add(rlid_,
                               Leftover(x, y + height, width, height_delta));
-                rlid++;
+                rlid_++;
             }
 
             if (height >= MINLOSIZE) {
-                leftovers.add(rlid,
+                leftovers_.add(rlid_,
                               Leftover(x + width, y, width_delta, height));
-                rlid++;
+                rlid_++;
             }
         } else if (width_delta >= MINLOSIZE) {
-            leftovers.add(
-                rlid,
+            leftovers_.add(
+                rlid_,
                 Leftover(x + width, y, width_delta, height + height_delta));
-            rlid++;
+            rlid_++;
         } else if (height_delta >= MINLOSIZE) {
-            leftovers.add(
-                rlid,
+            leftovers_.add(
+                rlid_,
                 Leftover(x, y + height, width + width_delta, height_delta));
-            rlid++;
+            rlid_++;
         }
     } else {
-        if (border.x() + width > ATLASW) {
-            border.set_x(0);
-            border.shift_y(yrange.second());
+        if (border_.x() + width > ATLASW) {
+            border_.set_x(0);
+            border_.shift_y(y_range_.second());
 
-            if (border.y() + height > ATLASH)
+            if (border_.y() + height > ATLASH)
                 clearinternal();
             else
-                yrange = Range<GLshort>();
+                y_range_ = Range<GLshort>();
         }
 
-        x = border.x();
-        y = border.y();
+        x = border_.x();
+        y = border_.y();
 
-        border.shift_x(width);
+        border_.shift_x(width);
 
-        if (height > yrange.second()) {
-            if (x >= MINLOSIZE && height - yrange.second() >= MINLOSIZE) {
-                leftovers.add(
-                    rlid,
-                    Leftover(0, yrange.first(), x, height - yrange.second()));
-                rlid++;
+        if (height > y_range_.second()) {
+            if (x >= MINLOSIZE && height - y_range_.second() >= MINLOSIZE) {
+                leftovers_.add(
+                    rlid_,
+                    Leftover(0, y_range_.first(), x, height - y_range_.second()));
+                rlid_++;
             }
 
-            wasted += x * (height - yrange.second());
+            wasted_ += x * (height - y_range_.second());
 
-            yrange = Range<int16_t>(y + height, height);
-        } else if (height < yrange.first() - y) {
+            y_range_ = Range<int16_t>(y + height, height);
+        } else if (height < y_range_.first() - y) {
             if (width >= MINLOSIZE
-                && yrange.first() - y - height >= MINLOSIZE) {
-                leftovers.add(rlid,
+                && y_range_.first() - y - height >= MINLOSIZE) {
+                leftovers_.add(rlid_,
                               Leftover(x,
                                        y + height,
                                        width,
-                                       yrange.first() - y - height));
-                rlid++;
+                                       y_range_.first() - y - height));
+                rlid_++;
             }
 
-            wasted += width * (yrange.first() - y - height);
+            wasted_ += width * (y_range_.first() - y - height);
         }
     }
 
@@ -505,7 +505,7 @@ const GraphicsGL::Offset &GraphicsGL::getoffset(const nl::bitmap &bmp) {
                     GL_UNSIGNED_BYTE,
                     bmp.data());
 
-    return offsets
+    return offsets_
         .emplace(std::piecewise_construct,
                  std::forward_as_tuple(id),
                  std::forward_as_tuple(x, y, width, height))
@@ -516,7 +516,7 @@ void GraphicsGL::draw(const nl::bitmap &bmp,
                       const Rectangle<int16_t> &rect,
                       const Color &color,
                       float angle) {
-    if (locked)
+    if (locked_)
         return;
 
     if (color.invisible())
@@ -525,7 +525,7 @@ void GraphicsGL::draw(const nl::bitmap &bmp,
     if (!rect.overlaps(SCREEN))
         return;
 
-    quads.emplace_back(rect.left(),
+    quads_.emplace_back(rect.left(),
                        rect.right(),
                        rect.top(),
                        rect.bottom(),
@@ -545,7 +545,7 @@ Text::Layout GraphicsGL::createlayout(const std::string &text,
     if (length == 0)
         return Text::Layout();
 
-    LayoutBuilder builder(fonts[id], alignment, maxwidth, formatted, line_adj);
+    LayoutBuilder builder(fonts_[id], alignment, maxwidth, formatted, line_adj);
 
     const char *p_text = text.c_str();
 
@@ -570,20 +570,20 @@ GraphicsGL::LayoutBuilder::LayoutBuilder(const Font &f,
                                          int16_t mw,
                                          bool fm,
                                          int16_t la) :
-    font(f),
-    alignment(a),
-    maxwidth(mw),
-    formatted(fm),
-    line_adj(la) {
-    fontid = Text::Font::NUM_FONTS;
-    color = Color::Name::NUM_COLORS;
-    ax = 0;
-    ay = font.linespace();
-    width = 0;
-    endy = 0;
+    font_(f),
+    alignment_(a),
+    max_width_(mw),
+    formatted_(fm),
+    line_adj_(la) {
+    font_id_ = Text::Font::NUM_FONTS;
+    color_ = Color::Name::NUM_COLORS;
+    ax_ = 0;
+    ay_ = font_.linespace();
+    width_ = 0;
+    endy_ = 0;
 
-    if (maxwidth == 0)
-        maxwidth = 800;
+    if (max_width_ == 0)
+        max_width_ = 800;
 }
 
 size_t GraphicsGL::LayoutBuilder::add(const char *text,
@@ -593,18 +593,18 @@ size_t GraphicsGL::LayoutBuilder::add(const char *text,
     if (first == last)
         return prev;
 
-    Text::Font last_font = fontid;
-    Color::Name last_color = color;
+    Text::Font last_font = font_id_;
+    Color::Name last_color = color_;
     size_t skip = 0;
     bool linebreak = false;
 
-    if (formatted) {
+    if (formatted_) {
         switch (text[first]) {
             case '\\':
                 if (first + 1 < last) {
                     switch (text[first + 1]) {
                         case 'n': linebreak = true; break;
-                        case 'r': linebreak = ax > 0; break;
+                        case 'r': linebreak = ax_ > 0; break;
                     }
 
                     skip++;
@@ -615,10 +615,10 @@ size_t GraphicsGL::LayoutBuilder::add(const char *text,
             case '#':
                 if (first + 1 < last) {
                     switch (text[first + 1]) {
-                        case 'k': color = Color::Name::DARKGREY; break;
-                        case 'b': color = Color::Name::BLUE; break;
-                        case 'r': color = Color::Name::RED; break;
-                        case 'c': color = Color::Name::ORANGE; break;
+                        case 'k': color_ = Color::Name::DARKGREY; break;
+                        case 'b': color_ = Color::Name::BLUE; break;
+                        case 'r': color_ = Color::Name::RED; break;
+                        case 'c': color_ = Color::Name::ORANGE; break;
                     }
 
                     skip++;
@@ -634,9 +634,9 @@ size_t GraphicsGL::LayoutBuilder::add(const char *text,
     if (!linebreak) {
         for (size_t i = first; i < last; i++) {
             char c = text[i];
-            wordwidth += font.chars[c].ax;
+            wordwidth += font_.chars[c].ax;
 
-            if (wordwidth > maxwidth) {
+            if (wordwidth > max_width_) {
                 if (last - first == 1) {
                     return last;
                 } else {
@@ -648,7 +648,7 @@ size_t GraphicsGL::LayoutBuilder::add(const char *text,
     }
 
     bool newword = skip > 0;
-    bool newline = linebreak || ax + wordwidth > maxwidth;
+    bool newline = linebreak || ax_ + wordwidth > max_width_;
 
     if (newword || newline)
         add_word(prev, first, last_font, last_color);
@@ -656,27 +656,27 @@ size_t GraphicsGL::LayoutBuilder::add(const char *text,
     if (newline) {
         add_line();
 
-        endy = ay;
-        ax = 0;
-        ay += font.linespace();
+        endy_ = ay_;
+        ax_ = 0;
+        ay_ += font_.linespace();
 
-        if (lines.size() > 0)
-            ay -= line_adj;
+        if (lines_.size() > 0)
+            ay_ -= line_adj_;
     }
 
     for (size_t pos = first; pos < last; pos++) {
         char c = text[pos];
-        const Font::Char &ch = font.chars[c];
+        const Font::Char &ch = font_.chars[c];
 
-        advances.push_back(ax);
+        advances_.push_back(ax_);
 
         if (pos < first + skip || newline && c == ' ')
             continue;
 
-        ax += ch.ax;
+        ax_ += ch.ax;
 
-        if (width < ax)
-            width = ax;
+        if (width_ < ax_)
+            width_ = ax_;
     }
 
     if (newword || newline)
@@ -686,32 +686,32 @@ size_t GraphicsGL::LayoutBuilder::add(const char *text,
 }
 
 Text::Layout GraphicsGL::LayoutBuilder::finish(size_t first, size_t last) {
-    add_word(first, last, fontid, color);
+    add_word(first, last, font_id_, color_);
     add_line();
 
-    advances.push_back(ax);
+    advances_.push_back(ax_);
 
-    return Text::Layout(lines, advances, width, ay, ax, endy);
+    return Text::Layout(lines_, advances_, width_, ay_, ax_, endy_);
 }
 
 void GraphicsGL::LayoutBuilder::add_word(size_t word_first,
                                          size_t word_last,
                                          Text::Font word_font,
                                          Color::Name word_color) {
-    words.push_back({ word_first, word_last, word_font, word_color });
+    words_.push_back({ word_first, word_last, word_font, word_color });
 }
 
 void GraphicsGL::LayoutBuilder::add_line() {
     int16_t line_x = 0;
-    int16_t line_y = ay;
+    int16_t line_y = ay_;
 
-    switch (alignment) {
-        case Text::Alignment::CENTER: line_x -= ax / 2; break;
-        case Text::Alignment::RIGHT: line_x -= ax; break;
+    switch (alignment_) {
+        case Text::Alignment::CENTER: line_x -= ax_ / 2; break;
+        case Text::Alignment::RIGHT: line_x -= ax_; break;
     }
 
-    lines.push_back({ words, { line_x, line_y } });
-    words.clear();
+    lines_.push_back({ words_, { line_x, line_y } });
+    words_.clear();
 }
 
 void GraphicsGL::drawtext(const DrawArgument &args,
@@ -721,7 +721,7 @@ void GraphicsGL::drawtext(const DrawArgument &args,
                           Text::Font id,
                           Color::Name colorid,
                           Text::Background background) {
-    if (locked)
+    if (locked_)
         return;
 
     const Color &color = args.get_color();
@@ -729,7 +729,7 @@ void GraphicsGL::drawtext(const DrawArgument &args,
     if (text.empty() || color.invisible())
         return;
 
-    const Font &font = fonts[id];
+    const Font &font = fonts_[id];
 
     GLshort x = args.getpos().x();
     GLshort y = args.getpos().y();
@@ -749,25 +749,25 @@ void GraphicsGL::drawtext(const DrawArgument &args,
                 GLshort bottom = top + h - 2;
                 Color ntcolor = Color(0.0f, 0.0f, 0.0f, 0.6f);
 
-                quads.emplace_back(left,
+                quads_.emplace_back(left,
                                    right,
                                    top,
                                    bottom,
-                                   nulloffset,
+                                   null_offset_,
                                    ntcolor,
                                    0.0f);
-                quads.emplace_back(left - 1,
+                quads_.emplace_back(left - 1,
                                    left,
                                    top + 1,
                                    bottom - 1,
-                                   nulloffset,
+                                   null_offset_,
                                    ntcolor,
                                    0.0f);
-                quads.emplace_back(right,
+                quads_.emplace_back(right,
                                    right + 1,
                                    top + 1,
                                    bottom - 1,
-                                   nulloffset,
+                                   null_offset_,
                                    ntcolor,
                                    0.0f);
             }
@@ -826,7 +826,7 @@ void GraphicsGL::drawtext(const DrawArgument &args,
                 if (char_width <= 0 || char_height <= 0)
                     continue;
 
-                quads.emplace_back(char_x,
+                quads_.emplace_back(char_x,
                                    char_x + char_width,
                                    char_y,
                                    char_bottom,
@@ -846,14 +846,14 @@ void GraphicsGL::drawrectangle(int16_t x,
                                float green,
                                float blue,
                                float alpha) {
-    if (locked)
+    if (locked_)
         return;
 
-    quads.emplace_back(x,
+    quads_.emplace_back(x,
                        x + width,
                        y,
                        y + height,
-                       nulloffset,
+                       null_offset_,
                        Color(red, green, blue, alpha),
                        0.0f);
 }
@@ -866,11 +866,11 @@ void GraphicsGL::drawscreenfill(float red,
 }
 
 void GraphicsGL::lock() {
-    locked = true;
+    locked_ = true;
 }
 
 void GraphicsGL::unlock() {
-    locked = false;
+    locked_ = false;
 }
 
 void GraphicsGL::flush(float opacity) {
@@ -880,11 +880,11 @@ void GraphicsGL::flush(float opacity) {
         float complement = 1.0f - opacity;
         Color color = Color(0.0f, 0.0f, 0.0f, complement);
 
-        quads.emplace_back(SCREEN.left(),
+        quads_.emplace_back(SCREEN.left(),
                            SCREEN.right(),
                            SCREEN.top(),
                            SCREEN.bottom(),
-                           nulloffset,
+                           null_offset_,
                            color,
                            0.0f);
     }
@@ -892,26 +892,26 @@ void GraphicsGL::flush(float opacity) {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    GLsizeiptr csize = quads.size() * sizeof(Quad);
-    GLsizeiptr fsize = quads.size() * Quad::LENGTH;
+    GLsizeiptr csize = quads_.size() * sizeof(Quad);
+    GLsizeiptr fsize = quads_.size() * Quad::LENGTH;
 
-    glEnableVertexAttribArray(attribute_coord);
-    glEnableVertexAttribArray(attribute_color);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, csize, quads.data(), GL_STREAM_DRAW);
+    glEnableVertexAttribArray(attribute_coord_);
+    glEnableVertexAttribArray(attribute_color_);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_);
+    glBufferData(GL_ARRAY_BUFFER, csize, quads_.data(), GL_STREAM_DRAW);
 
     glDrawArrays(GL_QUADS, 0, fsize);
 
-    glDisableVertexAttribArray(attribute_coord);
-    glDisableVertexAttribArray(attribute_color);
+    glDisableVertexAttribArray(attribute_coord_);
+    glDisableVertexAttribArray(attribute_color_);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     if (coverscene)
-        quads.pop_back();
+        quads_.pop_back();
 }
 
 void GraphicsGL::clearscene() {
-    if (!locked)
-        quads.clear();
+    if (!locked_)
+        quads_.clear();
 }
 }  // namespace ms

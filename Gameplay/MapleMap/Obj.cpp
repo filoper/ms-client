@@ -22,22 +22,22 @@
 
 namespace ms {
 Obj::Obj(nl::node src) {
-    animation = Animation(nl::nx::map["Obj"][src["oS"] + ".img"][src["l0"]]
+    animation_ = Animation(nl::nx::map["Obj"][src["oS"] + ".img"][src["l0"]]
                                      [src["l1"]][src["l2"]]);
-    pos = Point<int16_t>(src["x"], src["y"]);
-    flip = src["f"].get_bool();
-    z = src["z"];
+    pos_ = Point<int16_t>(src["x"], src["y"]);
+    flip_ = src["f"].get_bool();
+    z_ = src["z"];
 }
 
 void Obj::update() {
-    animation.update();
+    animation_.update();
 }
 
 void Obj::draw(Point<int16_t> viewpos, float inter) const {
-    animation.draw(DrawArgument(pos + viewpos, flip), inter);
+    animation_.draw(DrawArgument(pos_ + viewpos, flip_), inter);
 }
 
 uint8_t Obj::getz() const {
-    return z;
+    return z_;
 }
 }  // namespace ms

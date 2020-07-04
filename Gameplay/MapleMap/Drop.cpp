@@ -27,90 +27,90 @@ Drop::Drop(int32_t id,
            int8_t mode,
            bool pldrp) :
     MapObject(id) {
-    owner = own;
+    owner_ = own;
     set_position(start.x(), start.y() - 4);
-    dest = dst;
-    pickuptype = type;
-    playerdrop = pldrp;
+    dest_ = dst;
+    pickup_type_ = type;
+    player_drop_ = pldrp;
 
-    angle.set(0.0f);
-    opacity.set(1.0f);
-    moved = 0.0f;
-    looter = nullptr;
+    angle_.set(0.0f);
+    opacity_.set(1.0f);
+    moved_ = 0.0f;
+    looter_ = nullptr;
 
     switch (mode) {
         case 0:
         case 1:
-            state = Drop::State::DROPPED;
-            basey = static_cast<double>(dest.y() - 4);
-            phobj.vspeed = -5.0f;
-            phobj.hspeed = static_cast<double>(dest.x() - start.x()) / 48;
+            state_ = Drop::State::DROPPED;
+            base_y_ = static_cast<double>(dest_.y() - 4);
+            phobj_.vspeed = -5.0f;
+            phobj_.hspeed = static_cast<double>(dest_.x() - start.x()) / 48;
             break;
         case 2:
-            state = Drop::State::FLOATING;
-            basey = phobj.crnt_y();
-            phobj.type = PhysicsObject::Type::FIXATED;
+            state_ = Drop::State::FLOATING;
+            base_y_ = phobj_.crnt_y();
+            phobj_.type = PhysicsObject::Type::FIXATED;
             break;
         case 3:
-            state = Drop::State::PICKEDUP;
-            phobj.vspeed = -5.0f;
+            state_ = Drop::State::PICKEDUP;
+            phobj_.vspeed = -5.0f;
             break;
     }
 }
 
 int8_t Drop::update(const Physics &physics) {
-    physics.move_object(phobj);
+    physics.move_object(phobj_);
 
-    if (state == Drop::State::DROPPED) {
-        if (phobj.onground) {
-            phobj.hspeed = 0.0;
-            phobj.type = PhysicsObject::Type::FIXATED;
-            state = Drop::State::FLOATING;
-            angle.set(0.0f);
-            set_position(dest.x(), dest.y() - 4);
+    if (state_ == Drop::State::DROPPED) {
+        if (phobj_.onground) {
+            phobj_.hspeed = 0.0;
+            phobj_.type = PhysicsObject::Type::FIXATED;
+            state_ = Drop::State::FLOATING;
+            angle_.set(0.0f);
+            set_position(dest_.x(), dest_.y() - 4);
         } else {
             static const float SPINSTEP = 0.2f;
-            angle += SPINSTEP;
+            angle_ += SPINSTEP;
         }
     }
 
-    if (state == Drop::State::FLOATING) {
-        phobj.y = basey + 5.0f + (cos(moved) - 1.0f) * 2.5f;
-        moved = (moved < 360.0f) ? moved + 0.025f : 0.0f;
+    if (state_ == Drop::State::FLOATING) {
+        phobj_.y = base_y_ + 5.0f + (cos(moved_) - 1.0f) * 2.5f;
+        moved_ = (moved_ < 360.0f) ? moved_ + 0.025f : 0.0f;
     }
 
-    if (state == Drop::State::PICKEDUP) {
+    if (state_ == Drop::State::PICKEDUP) {
         static const uint16_t PICKUPTIME = 48;
         static const float OPCSTEP = 1.0f / PICKUPTIME;
 
-        if (looter) {
-            double hdelta = looter->x - phobj.x;
-            phobj.hspeed = looter->hspeed / 2.0 + (hdelta - 16.0) / PICKUPTIME;
+        if (looter_) {
+            double hdelta = looter_->x - phobj_.x;
+            phobj_.hspeed = looter_->hspeed / 2.0 + (hdelta - 16.0) / PICKUPTIME;
         }
 
-        opacity -= OPCSTEP;
+        opacity_ -= OPCSTEP;
 
-        if (opacity.last() <= OPCSTEP) {
-            opacity.set(1.0f);
+        if (opacity_.last() <= OPCSTEP) {
+            opacity_.set(1.0f);
 
             MapObject::deactivate();
             return -1;
         }
     }
 
-    return phobj.fhlayer;
+    return phobj_.fhlayer;
 }
 
 void Drop::expire(int8_t type, const PhysicsObject *lt) {
     switch (type) {
-        case 0: state = Drop::State::PICKEDUP; break;
+        case 0: state_ = Drop::State::PICKEDUP; break;
         case 1: deactivate(); break;
         case 2:
-            angle.set(0.0f);
-            state = Drop::State::PICKEDUP;
-            looter = lt;
-            phobj.vspeed = -4.5f;
-            phobj.type = PhysicsObject::Type::NORMAL;
+            angle_.set(0.0f);
+            state_ = Drop::State::PICKEDUP;
+            looter_ = lt;
+            phobj_.vspeed = -4.5f;
+            phobj_.type = PhysicsObject::Type::NORMAL;
             break;
     }
 }

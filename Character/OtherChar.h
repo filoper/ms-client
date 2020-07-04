@@ -62,13 +62,13 @@ public:
     int32_t get_skilllevel(int32_t skillid) const override;
 
 private:
-    uint16_t level;
-    int16_t job;
-    std::queue<Movement> movements;
-    Movement lastmove;
-    uint16_t timer;
+    uint16_t level_;
+    int16_t job_;
+    std::queue<Movement> movements_;
+    Movement last_move_;
+    uint16_t timer_;
 
-    std::unordered_map<int32_t, uint8_t> skilllevels;
-    uint8_t attackspeed;
+    std::unordered_map<int32_t, uint8_t> skill_levels_;
+    uint8_t attack_speed_;
 };
 }  // namespace ms

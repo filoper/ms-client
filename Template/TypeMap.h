@@ -34,41 +34,41 @@ public:
 
     template<typename D, typename... Args>
     D *emplace(Args &&... args) {
-        auto *ptr = container.emplace(typeid(D), std::make_unique<D>(args...))
+        auto *ptr = container_.emplace(typeid(D), std::make_unique<D>(args...))
                         .first->second.get();
         return static_cast<D *>(ptr);
     }
 
     template<typename D>
     void erase() {
-        container.erase(typeid(D));
+        container_.erase(typeid(D));
     }
 
-    void clear() { container.clear(); }
+    void clear() { container_.clear(); }
 
     template<typename D>
     D *get() {
-        return static_cast<D *>(container[typeid(D)].get());
+        return static_cast<D *>(container_[typeid(D)].get());
     }
 
     template<typename D>
     const D *get() const {
-        return static_cast<D *>(container[typeid(D)].get());
+        return static_cast<D *>(container_[typeid(D)].get());
     }
 
-    typename underlying_map::iterator begin() { return container.begin(); }
+    typename underlying_map::iterator begin() { return container_.begin(); }
 
-    typename underlying_map::iterator end() { return container.end(); }
+    typename underlying_map::iterator end() { return container_.end(); }
 
     typename underlying_map::const_iterator begin() const {
-        return container.begin();
+        return container_.begin();
     }
 
     typename underlying_map::const_iterator end() const {
-        return container.end();
+        return container_.end();
     }
 
 private:
-    underlying_map container;
+    underlying_map container_;
 };
 }  // namespace ms

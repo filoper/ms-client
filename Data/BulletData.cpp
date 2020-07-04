@@ -21,17 +21,17 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-BulletData::BulletData(int32_t itemid) : itemdata(ItemData::get(itemid)) {
+BulletData::BulletData(int32_t itemid) : item_data_(ItemData::get(itemid)) {
     std::string prefix = "0" + std::to_string(itemid / 10000);
     std::string strid = "0" + std::to_string(itemid);
     nl::node src = src = nl::nx::item["Consume"][prefix + ".img"][strid];
 
-    bullet = src["bullet"];
-    watk = src["info"]["incPAD"];
+    bullet_ = src["bullet"];
+    watk_ = src["info"]["incPAD"];
 }
 
 bool BulletData::is_valid() const {
-    return itemdata.is_valid();
+    return item_data_.is_valid();
 }
 
 BulletData::operator bool() const {
@@ -39,14 +39,14 @@ BulletData::operator bool() const {
 }
 
 int16_t BulletData::get_watk() const {
-    return watk;
+    return watk_;
 }
 
 const Animation &BulletData::get_animation() const {
-    return bullet;
+    return bullet_;
 }
 
 const ItemData &BulletData::get_itemdata() const {
-    return itemdata;
+    return item_data_;
 }
 }  // namespace ms

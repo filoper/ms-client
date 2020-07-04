@@ -35,7 +35,7 @@ Expression::Id Expression::byaction(size_t action) {
     return Expression::Id::DEFAULT;
 }
 
-const EnumMap<Expression::Id, std::string> Expression::names
+const EnumMap<Expression::Id, std::string> Expression::names_
     = { "default", "blink",      "hit",     "smile",   "troubled", "cry",
         "angry",   "bewildered", "stunned", "blaze",   "bowing",   "cheers",
         "chu",     "dam",        "despair", "glitter", "hot",      "hum",
@@ -45,11 +45,11 @@ Face::Face(int32_t faceid) {
     std::string strid = "000" + std::to_string(faceid);
     nl::node facenode = nl::nx::character["Face"][strid + ".img"];
 
-    for (auto iter : Expression::names) {
+    for (auto iter : Expression::names_) {
         Expression::Id exp = iter.first;
 
         if (exp == Expression::Id::DEFAULT) {
-            expressions[Expression::Id::DEFAULT].emplace(0,
+            expressions_[Expression::Id::DEFAULT].emplace(0,
                                                          facenode["default"]);
         } else {
             const std::string &expname = iter.second;
@@ -57,34 +57,34 @@ Face::Face(int32_t faceid) {
 
             for (uint8_t frame = 0; nl::node framenode = expnode[frame];
                  ++frame)
-                expressions[exp].emplace(frame, framenode);
+                expressions_[exp].emplace(frame, framenode);
         }
     }
 
     // TODO: (rich) fix
-    name = std::string(nl::nx::string["Eqp.img"]["Eqp"]["Face"]
+    name_ = std::string(nl::nx::string["Eqp.img"]["Eqp"]["Face"]
                                      [std::to_string(faceid)]["name"]);
 }
 
 void Face::draw(Expression::Id expression,
                 uint8_t frame,
                 const DrawArgument &args) const {
-    auto frameit = expressions[expression].find(frame);
+    auto frameit = expressions_[expression].find(frame);
 
-    if (frameit != expressions[expression].end())
+    if (frameit != expressions_[expression].end())
         frameit->second.texture.draw(args);
 }
 
 uint8_t Face::nextframe(Expression::Id exp, uint8_t frame) const {
-    return expressions[exp].count(frame + 1) ? frame + 1 : 0;
+    return expressions_[exp].count(frame + 1) ? frame + 1 : 0;
 }
 
 int16_t Face::get_delay(Expression::Id exp, uint8_t frame) const {
-    auto delayit = expressions[exp].find(frame);
-    return delayit != expressions[exp].end() ? delayit->second.delay : 100;
+    auto delayit = expressions_[exp].find(frame);
+    return delayit != expressions_[exp].end() ? delayit->second.delay : 100;
 }
 
 const std::string &Face::get_name() const {
-    return name;
+    return name_;
 }
 }  // namespace ms

@@ -50,15 +50,15 @@ private:
 
     static constexpr uint16_t FADE_TIME = 500;
 
-    Type type;
-    bool miss;
-    bool multiple;
-    int8_t firstnum;
-    std::string restnum;
-    int16_t shift;
-    MovingObject moveobj;
-    Linear<float> opacity;
+    Type type_;
+    bool miss_;
+    bool multiple_;
+    int8_t first_num_;
+    std::string rest_num_;
+    int16_t shift_;
+    MovingObject move_obj_;
+    Linear<float> opacity_;
 
-    static BoolPair<Charset> charsets[NUM_TYPES];
+    static BoolPair<Charset> charsets_[NUM_TYPES];
 };
 }  // namespace ms

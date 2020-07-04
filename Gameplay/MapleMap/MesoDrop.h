@@ -36,6 +36,6 @@ public:
     void draw(double viewx, double viewy, float alpha) const override;
 
 private:
-    const Animation &icon;
+    const Animation &icon_;
 };
 }  // namespace ms

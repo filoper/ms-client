@@ -49,8 +49,8 @@ public:
     MapObjects *get_reactors();
 
 private:
-    MapObjects reactors;
+    MapObjects reactors_;
 
-    std::queue<ReactorSpawn> spawns;
+    std::queue<ReactorSpawn> spawns_;
 };
 }  // namespace ms

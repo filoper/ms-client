@@ -48,28 +48,28 @@ private:
     static constexpr Point<int16_t> LIFE_LABEL_ADJ = Point<int16_t>(20, 3);
     static constexpr Point<int16_t> LIFE_ICON_ADJ = Point<int16_t>(5, 9);
 
-    MapleFrame frame;
+    MapleFrame frame_;
 
-    Texture cover;
-    Texture Mob;
-    Texture Npc;
-    Texture Party;
+    Texture cover_;
+    Texture mob_;
+    Texture npc_;
+    Texture party_;
 
-    Tooltip::Parent parent;
+    Tooltip::Parent parent_;
 
-    std::string name;
-    std::string description;
+    std::string name_;
+    std::string description_;
 
-    Text name_label;
-    Text name_simple;
-    Text desc_label;
-    Text desc_simple;
-    Text mob_labels[MAX_LIFE];
-    Text npc_labels[MAX_LIFE];
+    Text name_label_;
+    Text name_simple_;
+    Text desc_label_;
+    Text desc_simple_;
+    Text mob_labels_[MAX_LIFE];
+    Text npc_labels_[MAX_LIFE];
 
-    int16_t fillwidth;
-    int16_t fillheight;
+    int16_t fill_width_;
+    int16_t fill_height_;
 
-    ColorLine separator;
+    ColorLine separator_;
 };
 }  // namespace ms

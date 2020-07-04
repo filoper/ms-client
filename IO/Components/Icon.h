@@ -95,12 +95,12 @@ public:
     bool get_drag();
 
 private:
-    std::unique_ptr<Type> type;
-    bool showcount;
-    int16_t count;
+    std::unique_ptr<Type> type_;
+    bool show_count_;
+    int16_t count_;
 
-    Texture texture;
-    bool dragged;
-    Point<int16_t> cursoroffset;
+    Texture texture_;
+    bool dragged_;
+    Point<int16_t> cursor_offset_;
 };
 }  // namespace ms

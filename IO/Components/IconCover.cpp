@@ -20,49 +20,49 @@
 
 namespace ms {
 IconCover::IconCover(Type t, int32_t duration) {
-    cover = ColorBox(30, 30, Color::Name::BLACK, 0.6f);
+    cover_ = ColorBox(30, 30, Color::Name::BLACK, 0.6f);
 
     if (duration <= Constants::TIMESTEP)
-        scalestep = 1.0f;
+        scale_step_ = 1.0f;
     else
-        scalestep = Constants::TIMESTEP * 1.0f / duration;
+        scale_step_ = Constants::TIMESTEP * 1.0f / duration;
 
-    type = t;
+    type_ = t;
 
-    switch (type) {
-        case Type::BUFF: yscale.set(0.0f); break;
-        case Type::COOLDOWN: yscale.set(1.0f); break;
+    switch (type_) {
+        case Type::BUFF: yscale_.set(0.0f); break;
+        case Type::COOLDOWN: yscale_.set(1.0f); break;
     }
 }
 
 void IconCover::draw(Point<int16_t> position, float alpha) const {
-    float interyscale = yscale.get(alpha);
+    float interyscale = yscale_.get(alpha);
     auto interheight = static_cast<int16_t>(30 * interyscale);
 
     if (interheight == 0)
         return;
 
-    cover.draw(DrawArgument(position + Point<int16_t>(0, 30 - interheight),
+    cover_.draw(DrawArgument(position + Point<int16_t>(0, 30 - interheight),
                             Point<int16_t>(30, interheight)));
 }
 
 void IconCover::update() {
-    switch (type) {
+    switch (type_) {
         case Type::BUFF:
-            yscale += scalestep;
+            yscale_ += scale_step_;
 
-            if (yscale.last() >= 1.0f) {
-                yscale.set(1.0f);
-                scalestep = 0.0f;
+            if (yscale_.last() >= 1.0f) {
+                yscale_.set(1.0f);
+                scale_step_ = 0.0f;
             }
 
             break;
         case Type::COOLDOWN:
-            yscale -= scalestep;
+            yscale_ -= scale_step_;
 
-            if (yscale.last() <= 0.0f) {
-                yscale.set(0.0f);
-                scalestep = 0.0f;
+            if (yscale_.last() <= 0.0f) {
+                yscale_.set(0.0f);
+                scale_step_ = 0.0f;
             }
 
             break;

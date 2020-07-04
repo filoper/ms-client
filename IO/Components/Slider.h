@@ -88,26 +88,26 @@ public:
 private:
     Point<int16_t> getthumbpos() const;
 
-    std::function<void(bool upwards)> onmoved;
+    std::function<void(bool upwards)> onmoved_;
 
-    Range<int16_t> vertical;
-    Point<int16_t> start;
-    Point<int16_t> end;
-    int16_t type;
-    int16_t buttonheight;
-    int16_t rowheight;
-    int16_t x;
-    int16_t row;
-    int16_t rowmax;
-    bool scrolling;
-    bool enabled;
+    Range<int16_t> vertical_;
+    Point<int16_t> start_;
+    Point<int16_t> end_;
+    int16_t type_;
+    int16_t button_height_;
+    int16_t row_height_;
+    int16_t x_;
+    int16_t row_;
+    int16_t row_max_;
+    bool scrolling_;
+    bool enabled_;
 
-    Texture dbase;
-    Texture dnext;
-    Texture dprev;
-    Texture base;
-    TwoSpriteButton next;
-    TwoSpriteButton prev;
-    TwoSpriteButton thumb;
+    Texture dbase_;
+    Texture dnext_;
+    Texture dprev_;
+    Texture base_;
+    TwoSpriteButton next_;
+    TwoSpriteButton prev_;
+    TwoSpriteButton thumb_;
 };
 }  // namespace ms

@@ -23,18 +23,18 @@
 
 namespace ms {
 MapleFrame::MapleFrame(nl::node src) {
-    center = src["c"];
-    east = src["e"];
-    northeast = src["ne"];
-    north = src["n"];
-    northwest = src["nw"];
-    west = src["w"];
-    southwest = src["sw"];
-    south = src["s"];
-    southeast = src["se"];
+    center_ = src["c"];
+    east_ = src["e"];
+    north_east_ = src["ne"];
+    north_ = src["n"];
+    north_west_ = src["nw"];
+    west_ = src["w"];
+    south_west_ = src["sw"];
+    south_ = src["s"];
+    south_east_ = src["se"];
 
-    xtile = std::max<int16_t>(north.width(), 1);
-    ytile = std::max<int16_t>(west.height(), 1);
+    xtile_ = std::max<int16_t>(north_.width(), 1);
+    ytile_ = std::max<int16_t>(west_.height(), 1);
 }
 
 MapleFrame::MapleFrame() {}
@@ -42,32 +42,32 @@ MapleFrame::MapleFrame() {}
 void MapleFrame::draw(Point<int16_t> position,
                       int16_t rwidth,
                       int16_t rheight) const {
-    int16_t numhor = rwidth / xtile + 2;
-    int16_t numver = rheight / ytile;
-    int16_t width = numhor * xtile;
-    int16_t height = numver * ytile;
+    int16_t numhor = rwidth / xtile_ + 2;
+    int16_t numver = rheight / ytile_;
+    int16_t width = numhor * xtile_;
+    int16_t height = numver * ytile_;
     int16_t left = position.x() - width / 2;
     int16_t top = position.y() - height;
     int16_t right = left + width;
     int16_t bottom = top + height;
 
-    northwest.draw(DrawArgument(left, top));
-    southwest.draw(DrawArgument(left, bottom));
+    north_west_.draw(DrawArgument(left, top));
+    south_west_.draw(DrawArgument(left, bottom));
 
-    for (int16_t y = top; y < bottom; y += ytile) {
-        west.draw(DrawArgument(left, y));
-        east.draw(DrawArgument(right, y));
+    for (int16_t y = top; y < bottom; y += ytile_) {
+        west_.draw(DrawArgument(left, y));
+        east_.draw(DrawArgument(right, y));
     }
 
-    center.draw(
+    center_.draw(
         DrawArgument(Point<int16_t>(left, top), Point<int16_t>(width, height)));
 
-    for (int16_t x = left; x < right; x += xtile) {
-        north.draw(DrawArgument(x, top));
-        south.draw(DrawArgument(x, bottom));
+    for (int16_t x = left; x < right; x += xtile_) {
+        north_.draw(DrawArgument(x, top));
+        south_.draw(DrawArgument(x, bottom));
     }
 
-    northeast.draw(DrawArgument(right, top));
-    southeast.draw(DrawArgument(right, bottom));
+    north_east_.draw(DrawArgument(right, top));
+    south_east_.draw(DrawArgument(right, bottom));
 }
 }  // namespace ms

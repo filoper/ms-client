@@ -76,14 +76,14 @@ public:
 private:
     void updateopc();
 
-    GLFWwindow *glwnd;
-    GLFWwindow *context;
-    bool fullscreen;
-    float opacity;
-    float opcstep;
-    std::function<void()> fadeprocedure;
-    int16_t width;
-    int16_t height;
+    GLFWwindow *glwnd_;
+    GLFWwindow *context_;
+    bool fullscreen_;
+    float opacity_;
+    float opc_step_;
+    std::function<void()> fade_procedure_;
+    int16_t width_;
+    int16_t height_;
 
     std::string GetCurrentWorkingDir(void);
 };

@@ -33,11 +33,11 @@ UITermsOfService::UITermsOfService(std::function<void()> oh) :
     nl::node Login = nl::nx::ui["Login.img"];
     nl::node TOS = Login["TOS"];
 
-    sprites.emplace_back(TOS, Point<int16_t>(399, 250));
+    sprites_.emplace_back(TOS, Point<int16_t>(399, 250));
 
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(Login["BtOk"], Point<int16_t>(483, 425));
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(Login["BtCancel"],
                                       Point<int16_t>(557, 425));
 
@@ -1570,22 +1570,22 @@ UITermsOfService::UITermsOfService(std::function<void()> oh) :
 
     update_accept(offset);
 
-    position = Point<int16_t>(0, 10);
-    dimension = Texture(TOS).get_dimensions();
+    position_ = Point<int16_t>(0, 10);
+    dimension_ = Texture(TOS).get_dimensions();
 }
 
 void UITermsOfService::draw(float inter) const {
     UIElement::draw(inter);
 
     int16_t range_min = 80;
-    text.draw(position + Point<int16_t>(226, 84 - offset * 300),
+    text.draw(position_ + Point<int16_t>(226, 84 - offset * 300),
               Range<int16_t>(range_min, range_min + 316));
-    slider.draw(position);
+    slider.draw(position_);
 }
 
 Cursor::State UITermsOfService::send_cursor(bool clicked,
                                             Point<int16_t> cursorpos) {
-    Point<int16_t> cursoroffset = cursorpos - position;
+    Point<int16_t> cursoroffset = cursorpos - position_;
 
     if (slider.isenabled()) {
         Cursor::State state = slider.send_cursor(cursoroffset, clicked);
@@ -1620,8 +1620,8 @@ Button::State UITermsOfService::button_pressed(uint16_t buttonid) {
 
 void UITermsOfService::update_accept(uint16_t offset) {
     if (offset == max_rows - unit_rows)
-        buttons[Buttons::OK]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
     else
-        buttons[Buttons::OK]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::OK]->set_state(Button::State::DISABLED);
 }
 }  // namespace ms

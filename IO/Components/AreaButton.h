@@ -41,6 +41,6 @@ public:
     }
 
 private:
-    Point<int16_t> dimension;
+    Point<int16_t> dimension_;
 };
 }  // namespace ms

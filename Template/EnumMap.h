@@ -33,39 +33,39 @@ class EnumMap {
 public:
     template<typename... Args>
     // Initialize with an initializer list.
-    EnumMap(Args &&... args) : m_values { { std::forward<Args>(args)... } } {
+    EnumMap(Args &&... args) : m_values_ { { std::forward<Args>(args)... } } {
         static_assert(std::is_enum<K>::value,
                       "Template parameter 'K' for EnumMap must be an enum.");
 
         for (size_t i = 0; i < LENGTH; i++)
-            m_keys[i] = static_cast<K>(i);
+            m_keys_[i] = static_cast<K>(i);
     }
 
     void clear() {
         for (size_t i = 0; i < LENGTH; i++)
-            m_values[i] = V();
+            m_values_[i] = V();
     }
 
     void erase(K key) {
         if (key >= 0 && key < LENGTH)
-            m_values[key] = V();
+            m_values_[key] = V();
     }
 
     template<typename... Args>
     void emplace(K key, Args &&... args) {
-        m_values[key] = { std::forward<Args>(args)... };
+        m_values_[key] = { std::forward<Args>(args)... };
     }
 
-    V &operator[](K key) { return m_values[key]; }
+    V &operator[](K key) { return m_values_[key]; }
 
-    const V &operator[](K key) const { return m_values[key]; }
+    const V &operator[](K key) const { return m_values_[key]; }
 
     template<typename T>
     class base_iterator : public std::iterator<std::forward_iterator_tag, V> {
     public:
         using index_type = typename std::underlying_type<K>::type;
 
-        base_iterator(T *p, index_type i) : value(p), index(i) {}
+        base_iterator(T *p, index_type i) : value_(p), index_(i) {}
 
         struct node {
             K first;
@@ -80,33 +80,33 @@ public:
 
         node operator*() { return node { first(), second() }; }
 
-        explicit operator bool() const { return index >= 0 && index < LENGTH; }
+        explicit operator bool() const { return index_ >= 0 && index_ < LENGTH; }
 
-        K first() const { return static_cast<K>(index); }
+        K first() const { return static_cast<K>(index_); }
 
         T &second() {
             if (!this)
                 throw std::out_of_range("iterator out of range");
             else
-                return *(value + index);
+                return *(value_ + index_);
         }
 
         base_iterator &operator++() {
-            index++;
+            index_++;
             return *this;
         }
 
         bool operator!=(const base_iterator &other) const {
-            return index != other.index;
+            return index_ != other.index_;
         }
 
         bool operator==(const base_iterator &other) const {
-            return index == other.index;
+            return index_ == other.index_;
         }
 
     private:
-        T *value;
-        index_type index;
+        T *value_;
+        index_type index_;
     };
 
     using iterator = base_iterator<V>;
@@ -114,26 +114,26 @@ public:
     using node = typename iterator::node;
     using cnode = typename const_iterator::node;
 
-    iterator find(K key) { return { m_values.data(), key }; }
+    iterator find(K key) { return { m_values_.data(), key }; }
 
-    const_iterator find(K key) const { return { m_values.data(), key }; }
+    const_iterator find(K key) const { return { m_values_.data(), key }; }
 
-    iterator begin() { return { m_values.data(), 0 }; }
+    iterator begin() { return { m_values_.data(), 0 }; }
 
-    iterator end() { return { m_values.data(), LENGTH }; }
+    iterator end() { return { m_values_.data(), LENGTH }; }
 
-    const_iterator begin() const { return { m_values.data(), 0 }; }
+    const_iterator begin() const { return { m_values_.data(), 0 }; }
 
-    const_iterator end() const { return { m_values.data(), LENGTH }; }
+    const_iterator end() const { return { m_values_.data(), LENGTH }; }
 
-    const std::array<K, LENGTH> &keys() const { return m_keys; }
+    const std::array<K, LENGTH> &keys() const { return m_keys_; }
 
-    std::array<V, LENGTH> &values() { return m_values; }
+    std::array<V, LENGTH> &values() { return m_values_; }
 
-    const std::array<V, LENGTH> &values() const { return m_values; }
+    const std::array<V, LENGTH> &values() const { return m_values_; }
 
 private:
-    std::array<K, LENGTH> m_keys;
-    std::array<V, LENGTH> m_values;
+    std::array<K, LENGTH> m_keys_;
+    std::array<V, LENGTH> m_values_;
 };
 }  // namespace ms

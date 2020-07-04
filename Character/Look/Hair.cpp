@@ -40,9 +40,9 @@ Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
              ++frame) {
             for (nl::node layernode : framenode) {
                 std::string layername = layernode.name();
-                auto layer_iter = layers_by_name.find(layername);
+                auto layer_iter = layers_by_name_.find(layername);
 
-                if (layer_iter == layers_by_name.end()) {
+                if (layer_iter == layers_by_name_.end()) {
                     std::cout << "Unknown Hair::Layer name: [" << layername
                               << "]" << std::endl;
                     continue;
@@ -54,14 +54,14 @@ Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
                 Point<int16_t> shift
                     = drawinfo.gethairpos(stance, frame) - brow;
 
-                stances[stance][layer]
+                stances_[stance][layer]
                     .emplace(frame, layernode)
                     .first->second.shift(shift);
             }
         }
     }
 
-    name = std::string(nl::nx::string["Eqp.img"]["Eqp"]["Hair"]
+    name_ = std::string(nl::nx::string["Eqp.img"]["Eqp"]["Hair"]
                                      [std::to_string(hairid)]["name"]);
 
     constexpr size_t NUM_COLORS = 8;
@@ -71,30 +71,30 @@ Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
             "Green", "Blue", "Violet", "Brown" };
 
     size_t index = hairid % 10;
-    color = (index < NUM_COLORS) ? haircolors[index] : "";
+    color_ = (index < NUM_COLORS) ? haircolors[index] : "";
 }
 
 void Hair::draw(Stance::Id stance,
                 Layer layer,
                 uint8_t frame,
                 const DrawArgument &args) const {
-    auto frameit = stances[stance][layer].find(frame);
+    auto frameit = stances_[stance][layer].find(frame);
 
-    if (frameit == stances[stance][layer].end())
+    if (frameit == stances_[stance][layer].end())
         return;
 
     frameit->second.draw(args);
 }
 
 const std::string &Hair::get_name() const {
-    return name;
+    return name_;
 }
 
 const std::string &Hair::getcolor() const {
-    return color;
+    return color_;
 }
 
-const std::unordered_map<std::string, Hair::Layer> Hair::layers_by_name
+const std::unordered_map<std::string, Hair::Layer> Hair::layers_by_name_
     = { { "hair", Hair::Layer::DEFAULT },
         { "hairBelowBody", Hair::Layer::BELOWBODY },
         { "hairOverHead", Hair::Layer::OVERHEAD },

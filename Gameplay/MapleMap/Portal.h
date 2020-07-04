@@ -90,11 +90,11 @@ public:
     WarpInfo getwarpinfo() const;
 
 private:
-    const Animation *animation;
-    Type type;
-    std::string name;
-    Point<int16_t> position;
-    WarpInfo warpinfo;
-    bool touched;
+    const Animation *animation_;
+    Type type_;
+    std::string name_;
+    Point<int16_t> position_;
+    WarpInfo warp_info_;
+    bool touched_;
 };
 }  // namespace ms

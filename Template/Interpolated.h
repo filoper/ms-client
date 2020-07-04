@@ -24,110 +24,110 @@ namespace ms {
 template<typename T>
 class Nominal {
 public:
-    constexpr Nominal() : now(T()), before(T()), threshold(0.0f) {}
+    constexpr Nominal() : now_(T()), before_(T()), threshold_(0.0f) {}
 
-    T get() const { return now; }
+    T get() const { return now_; }
 
-    T get(float alpha) const { return alpha >= threshold ? now : before; }
+    T get(float alpha) const { return alpha >= threshold_ ? now_ : before_; }
 
-    T last() const { return before; }
+    T last() const { return before_; }
 
     void set(T value) {
-        now = value;
-        before = value;
+        now_ = value;
+        before_ = value;
     }
 
-    void normalize() { before = now; }
+    void normalize() { before_ = now_; }
 
-    bool normalized() const { return before == now; }
+    bool normalized() const { return before_ == now_; }
 
     void next(T value, float thrs) {
-        before = now;
-        now = value;
-        threshold = thrs;
+        before_ = now_;
+        now_ = value;
+        threshold_ = thrs;
     }
 
-    bool operator==(T value) const { return now == value; }
+    bool operator==(T value) const { return now_ == value; }
 
-    bool operator!=(T value) const { return now != value; }
+    bool operator!=(T value) const { return now_ != value; }
 
-    T operator+(T value) const { return now + value; }
+    T operator+(T value) const { return now_ + value; }
 
-    T operator-(T value) const { return now - value; }
+    T operator-(T value) const { return now_ - value; }
 
-    T operator*(T value) const { return now * value; }
+    T operator*(T value) const { return now_ * value; }
 
-    T operator/(T value) const { return now / value; }
+    T operator/(T value) const { return now_ / value; }
 
 private:
-    T now;
-    T before;
-    float threshold;
+    T now_;
+    T before_;
+    float threshold_;
 };
 
 template<typename T>
 class Linear {
 public:
-    T get() const { return now; }
+    T get() const { return now_; }
 
-    T get(float alpha) const { return lerp<T>(before, now, alpha); }
+    T get(float alpha) const { return lerp<T>(before_, now_, alpha); }
 
-    T last() const { return before; }
+    T last() const { return before_; }
 
     void set(T value) {
-        now = value;
-        before = value;
+        now_ = value;
+        before_ = value;
     }
 
-    void normalize() { before = now; }
+    void normalize() { before_ = now_; }
 
-    bool normalized() const { return before == now; }
+    bool normalized() const { return before_ == now_; }
 
     void operator=(T value) {
-        before = now;
-        now = value;
+        before_ = now_;
+        now_ = value;
     }
 
     void operator+=(T value) {
-        before = now;
-        now += value;
+        before_ = now_;
+        now_ += value;
     }
 
     void operator-=(T value) {
-        before = now;
-        now -= value;
+        before_ = now_;
+        now_ -= value;
     }
 
-    bool operator==(T value) const { return now == value; }
+    bool operator==(T value) const { return now_ == value; }
 
-    bool operator!=(T value) const { return now != value; }
+    bool operator!=(T value) const { return now_ != value; }
 
-    bool operator<(T value) const { return now < value; }
+    bool operator<(T value) const { return now_ < value; }
 
-    bool operator<=(T value) const { return now <= value; }
+    bool operator<=(T value) const { return now_ <= value; }
 
-    bool operator>(T value) const { return now > value; }
+    bool operator>(T value) const { return now_ > value; }
 
-    bool operator>=(T value) const { return now >= value; }
+    bool operator>=(T value) const { return now_ >= value; }
 
-    T operator+(T value) const { return now + value; }
+    T operator+(T value) const { return now_ + value; }
 
-    T operator-(T value) const { return now - value; }
+    T operator-(T value) const { return now_ - value; }
 
-    T operator*(T value) const { return now * value; }
+    T operator*(T value) const { return now_ * value; }
 
-    T operator/(T value) const { return now / value; }
+    T operator/(T value) const { return now_ / value; }
 
-    T operator+(Linear<T> value) const { return now + value.get(); }
+    T operator+(Linear<T> value) const { return now_ + value.get(); }
 
-    T operator-(Linear<T> value) const { return now - value.get(); }
+    T operator-(Linear<T> value) const { return now_ - value.get(); }
 
-    T operator*(Linear<T> value) const { return now * value.get(); }
+    T operator*(Linear<T> value) const { return now_ * value.get(); }
 
-    T operator/(Linear<T> value) const { return now / value.get(); }
+    T operator/(Linear<T> value) const { return now_ / value.get(); }
 
 private:
-    T now;
-    T before;
+    T now_;
+    T before_;
 };
 }  // namespace ms

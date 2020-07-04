@@ -39,8 +39,8 @@ public:
     void update();
 
 private:
-    std::multimap<uint8_t, Tile> tiles;
-    std::multimap<uint8_t, Obj> objs;
+    std::multimap<uint8_t, Tile> tiles_;
+    std::multimap<uint8_t, Obj> objs_;
 };
 
 // The collection of tile and obj layers on a map.
@@ -55,6 +55,6 @@ public:
     void update();
 
 private:
-    EnumMap<Layer::Id, TilesObjs> layers;
+    EnumMap<Layer::Id, TilesObjs> layers_;
 };
 }  // namespace ms

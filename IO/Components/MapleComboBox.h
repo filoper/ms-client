@@ -81,21 +81,21 @@ private:
         OPTION10
     };
 
-    Texture textures[Button::State::NUM_STATES][3];
-    std::vector<std::string> options;
-    std::vector<Text> option_text;
-    Text selected;
-    ColorBox background;
-    ColorBox rect;
-    ColorBox current_rect;
-    uint16_t rwidth;
+    Texture textures_[Button::State::NUM_STATES][3];
+    std::vector<std::string> options_;
+    std::vector<Text> option_text_;
+    Text selected_;
+    ColorBox background_;
+    ColorBox rect_;
+    ColorBox current_rect_;
+    uint16_t rwidth_;
     static constexpr uint16_t HEIGHT = 16;
-    std::map<uint16_t, std::unique_ptr<Button>> buttons;
-    uint16_t current_pos;
-    bool current_shown;
-    uint16_t last_shown;
-    uint16_t selected_index;
-    Point<int16_t> selected_adj;
-    Point<int16_t> parentpos;
+    std::map<uint16_t, std::unique_ptr<Button>> buttons_;
+    uint16_t current_pos_;
+    bool current_shown_;
+    uint16_t last_shown_;
+    uint16_t selected_index_;
+    Point<int16_t> selected_adj_;
+    Point<int16_t> parent_pos_;
 };
 }  // namespace ms

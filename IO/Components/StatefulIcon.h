@@ -62,7 +62,7 @@ public:
     void set_state(State state);
 
 private:
-    State state;
-    EnumMap<State, Texture> textures;
+    State state_;
+    EnumMap<State, Texture> textures_;
 };
 }  // namespace ms

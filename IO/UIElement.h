@@ -122,10 +122,10 @@ protected:
 
     void draw_buttons(float alpha) const;
 
-    std::map<uint16_t, std::unique_ptr<Button>> buttons;
-    std::vector<Sprite> sprites;
-    Point<int16_t> position;
-    Point<int16_t> dimension;
-    bool active;
+    std::map<uint16_t, std::unique_ptr<Button>> buttons_;
+    std::vector<Sprite> sprites_;
+    Point<int16_t> position_;
+    Point<int16_t> dimension_;
+    bool active_;
 };
 }  // namespace ms

@@ -20,14 +20,14 @@
 
 namespace ms {
 MonsterBook::MonsterBook() {
-    cover = 0;
+    cover_ = 0;
 }
 
 void MonsterBook::set_cover(int32_t cov) {
-    cover = cov;
+    cover_ = cov;
 }
 
 void MonsterBook::add_card(int16_t card, int8_t level) {
-    cards[card] = level;
+    cards_[card] = level;
 }
 }  // namespace ms

@@ -130,7 +130,7 @@ public:
     };
 
     // Create a color by an array of real numbers [0.0f, 1.0f]
-    constexpr Color(underlying_t comps) : rgba(comps) {}
+    constexpr Color(underlying_t comps) : rgba_(comps) {}
 
     // Create a color by real numbers [0.0f, 1.0f]
     constexpr Color(float red, float green, float blue, float alpha) :
@@ -160,19 +160,19 @@ public:
     constexpr Color() : Color(Code::CNONE) {}
 
     // Check whether the color is completely invisible
-    constexpr bool invisible() const { return rgba[3] <= 0.0f; }
+    constexpr bool invisible() const { return rgba_[3] <= 0.0f; }
 
     // Return the red component
-    constexpr float r() const { return rgba[0]; }
+    constexpr float r() const { return rgba_[0]; }
 
     // Return the green component
-    constexpr float g() const { return rgba[1]; }
+    constexpr float g() const { return rgba_[1]; }
 
     // Return the blue component
-    constexpr float b() const { return rgba[2]; }
+    constexpr float b() const { return rgba_[2]; }
 
     // Return the alpha (opacity) component
-    constexpr float a() const { return rgba[3]; }
+    constexpr float a() const { return rgba_[3]; }
 
     // Return all components.
     const float *data() const;
@@ -197,6 +197,6 @@ public:
     }
 
 private:
-    underlying_t rgba;
+    underlying_t rgba_;
 };
 }  // namespace ms

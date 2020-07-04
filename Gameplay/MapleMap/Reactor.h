@@ -44,22 +44,22 @@ public:
     bool is_in_range(const Rectangle<int16_t> &range) const;
 
 private:
-    int32_t oid;
-    int32_t rid;
-    int8_t state;
+    int32_t oid_;
+    int32_t rid_;
+    int8_t state_;
     // int8_t stance; // TODO: ??
     // TODO: These are in the GMS client
     // bool movable; // TODO: Snowball?
     // int32_t questid;
     // bool activates_by_touch;
 
-    nl::node src;
-    std::map<int8_t, Animation> animations;
-    bool animation_ended;
+    nl::node src_;
+    std::map<int8_t, Animation> animations_;
+    bool animation_ended_;
 
-    bool hittable;
-    bool dead;
+    bool hit_table_;
+    bool dead_;
 
-    Animation normal;
+    Animation normal_;
 };
 }  // namespace ms

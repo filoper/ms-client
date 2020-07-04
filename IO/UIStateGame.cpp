@@ -42,18 +42,18 @@
 
 namespace ms {
 UIStateGame::UIStateGame() :
-    stats(Stage::get().get_player().get_stats()),
-    dragged(nullptr) {
-    focused = UIElement::Type::NONE;
-    tooltipparent = Tooltip::Parent::NONE;
+    stats_(Stage::get().get_player().get_stats()),
+    dragged_(nullptr) {
+    focused_ = UIElement::Type::NONE;
+    tooltip_parent_ = Tooltip::Parent::NONE;
 
     const CharLook &look = Stage::get().get_player().get_look();
     const Inventory &inventory = Stage::get().get_player().get_inventory();
 
     emplace<UIStatusMessenger>();
-    emplace<UIStatusBar>(stats);
+    emplace<UIStatusBar>(stats_);
     emplace<UIChatBar>();
-    emplace<UIMiniMap>(stats);
+    emplace<UIMiniMap>(stats_);
     emplace<UIBuffList>();
     emplace<UIShop>(look, inventory);
 
@@ -62,18 +62,18 @@ UIStateGame::UIStateGame() :
 }
 
 void UIStateGame::draw(float inter, Point<int16_t> cursor) const {
-    for (auto &type : elementorder) {
-        auto &element = elements[type];
+    for (auto &type : element_order_) {
+        auto &element = elements_[type];
 
         if (element && element->is_active())
             element->draw(inter);
     }
 
-    if (tooltip)
-        tooltip->draw(cursor + Point<int16_t>(0, 22));
+    if (tooltip_)
+        tooltip_->draw(cursor + Point<int16_t>(0, 22));
 
-    if (draggedicon)
-        draggedicon->dragdraw(cursor);
+    if (dragged_icon_)
+        dragged_icon_->dragdraw(cursor);
 }
 
 void UIStateGame::update() {
@@ -92,8 +92,8 @@ void UIStateGame::update() {
         emplace<UIStatusBar>(stats);
     }
 
-    for (auto &type : elementorder) {
-        auto &element = elements[type];
+    for (auto &type : element_order_) {
+        auto &element = elements_[type];
 
         if (element && element->is_active()) {
             element->update();
@@ -114,13 +114,13 @@ bool UIStateGame::drop_icon(const Icon &icon, Point<int16_t> pos) {
 }
 
 void UIStateGame::remove_icon() {
-    draggedicon->reset();
-    draggedicon = {};
+    dragged_icon_->reset();
+    dragged_icon_ = {};
 }
 
 void UIStateGame::remove_cursors() {
-    for (auto type : elementorder) {
-        auto element = elements[type].get();
+    for (auto type : element_order_) {
+        auto element = elements_[type].get();
 
         if (element && element->is_active())
             element->remove_cursor();
@@ -128,8 +128,8 @@ void UIStateGame::remove_cursors() {
 }
 
 void UIStateGame::remove_cursor(UIElement::Type t) {
-    for (auto type : elementorder) {
-        auto element = elements[type].get();
+    for (auto type : element_order_) {
+        auto element = elements_[type].get();
 
         if (element && element->is_active() && element->get_type() != t)
             element->remove_cursor();
@@ -150,11 +150,11 @@ void UIStateGame::send_key(KeyType::Id type,
                            int32_t action,
                            bool pressed,
                            bool escape) {
-    if (UIElement *focusedelement = get(focused)) {
+    if (UIElement *focusedelement = get(focused_)) {
         if (focusedelement->is_active()) {
             return focusedelement->send_key(action, pressed, escape);
         } else {
-            focused = UIElement::NONE;
+            focused_ = UIElement::NONE;
 
             return;
         }
@@ -293,9 +293,9 @@ void UIStateGame::send_key(KeyType::Id type,
 
 Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
                                        Point<int16_t> cursorpos) {
-    if (draggedicon) {
+    if (dragged_icon_) {
         if (cursorstate == Cursor::State::CLICKING) {
-            if (drop_icon(*draggedicon, cursorpos))
+            if (drop_icon(*dragged_icon_, cursorpos))
                 remove_icon();
 
             return cursorstate;
@@ -306,26 +306,26 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
         bool clicked = cursorstate == Cursor::State::CLICKING
                        || cursorstate == Cursor::State::VSCROLLIDLE;
 
-        if (auto focusedelement = get(focused)) {
+        if (auto focusedelement = get(focused_)) {
             if (focusedelement->is_active()) {
                 remove_cursor(focusedelement->get_type());
 
                 return focusedelement->send_cursor(clicked, cursorpos);
             } else {
-                focused = UIElement::Type::NONE;
+                focused_ = UIElement::Type::NONE;
 
                 return cursorstate;
             }
         } else {
             if (!clicked) {
-                dragged = nullptr;
+                dragged_ = nullptr;
 
                 if (auto front = get_front(cursorpos)) {
                     UIElement::Type front_type = front->get_type();
 
-                    if (tooltipparent != UIElement::Type::NONE)
-                        if (front_type != tooltipparent)
-                            clear_tooltip(tooltipparent);
+                    if (tooltip_parent_ != UIElement::Type::NONE)
+                        if (front_type != tooltip_parent_)
+                            clear_tooltip(tooltip_parent_);
 
                     remove_cursor(front_type);
 
@@ -336,30 +336,30 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
                     return Stage::get().send_cursor(clicked, cursorpos);
                 }
             } else {
-                if (!dragged) {
+                if (!dragged_) {
                     UIElement::Type drag_element_type = UIElement::Type::NONE;
 
-                    for (auto iter = elementorder.rbegin();
-                         iter != elementorder.rend();
+                    for (auto iter = element_order_.rbegin();
+                         iter != element_order_.rend();
                          ++iter) {
-                        auto &element = elements[*iter];
+                        auto &element = elements_[*iter];
 
                         if (element && element->is_active()
                             && element->is_in_range(cursorpos)) {
-                            dragged = element.get();
+                            dragged_ = element.get();
                             drag_element_type = *iter;
                             break;
                         }
                     }
 
                     if (drag_element_type != UIElement::Type::NONE) {
-                        elementorder.remove(drag_element_type);
-                        elementorder.push_back(drag_element_type);
+                        element_order_.remove(drag_element_type);
+                        element_order_.push_back(drag_element_type);
                     }
                 }
 
-                if (dragged)
-                    return dragged->send_cursor(clicked, cursorpos);
+                if (dragged_)
+                    return dragged_->send_cursor(clicked, cursorpos);
                 else
                     return Stage::get().send_cursor(clicked, cursorpos);
             }
@@ -368,8 +368,8 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
 }
 
 void UIStateGame::send_scroll(double yoffset) {
-    for (auto &type : elementorder) {
-        auto &element = elements[type];
+    for (auto &type : element_order_) {
+        auto &element = elements_[type];
 
         if (element && element->is_active())
             element->send_scroll(yoffset);
@@ -377,39 +377,39 @@ void UIStateGame::send_scroll(double yoffset) {
 }
 
 void UIStateGame::send_close() {
-    UI::get().emplace<UIQuit>(stats);
+    UI::get().emplace<UIQuit>(stats_);
 }
 
 void UIStateGame::drag_icon(Icon *drgic) {
-    draggedicon = drgic;
+    dragged_icon_ = drgic;
 }
 
 void UIStateGame::clear_tooltip(Tooltip::Parent parent) {
-    if (parent == tooltipparent) {
-        eqtooltip.set_equip(Tooltip::Parent::NONE, 0);
-        ittooltip.set_item(0);
-        tetooltip.set_text("");
-        matooltip.reset();
-        tooltip = {};
-        tooltipparent = Tooltip::Parent::NONE;
+    if (parent == tooltip_parent_) {
+        eq_tooltip_.set_equip(Tooltip::Parent::NONE, 0);
+        it_tooltip_.set_item(0);
+        te_tooltip_.set_text("");
+        ma_tooltip_.reset();
+        tooltip_ = {};
+        tooltip_parent_ = Tooltip::Parent::NONE;
     }
 }
 
 void UIStateGame::show_equip(Tooltip::Parent parent, int16_t slot) {
-    eqtooltip.set_equip(parent, slot);
+    eq_tooltip_.set_equip(parent, slot);
 
     if (slot) {
-        tooltip = eqtooltip;
-        tooltipparent = parent;
+        tooltip_ = eq_tooltip_;
+        tooltip_parent_ = parent;
     }
 }
 
 void UIStateGame::show_item(Tooltip::Parent parent, int32_t itemid) {
-    ittooltip.set_item(itemid);
+    it_tooltip_.set_item(itemid);
 
     if (itemid) {
-        tooltip = ittooltip;
-        tooltipparent = parent;
+        tooltip_ = it_tooltip_;
+        tooltip_parent_ = parent;
     }
 }
 
@@ -418,20 +418,20 @@ void UIStateGame::show_skill(Tooltip::Parent parent,
                              int32_t level,
                              int32_t masterlevel,
                              int64_t expiration) {
-    sktooltip.set_skill(skill_id, level, masterlevel, expiration);
+    sk_tooltip_.set_skill(skill_id, level, masterlevel, expiration);
 
     if (skill_id) {
-        tooltip = sktooltip;
-        tooltipparent = parent;
+        tooltip_ = sk_tooltip_;
+        tooltip_parent_ = parent;
     }
 }
 
 void UIStateGame::show_text(Tooltip::Parent parent, std::string text) {
-    tetooltip.set_text(text);
+    te_tooltip_.set_text(text);
 
     if (!text.empty()) {
-        tooltip = tetooltip;
-        tooltipparent = parent;
+        tooltip_ = te_tooltip_;
+        tooltip_parent_ = parent;
     }
 }
 
@@ -440,13 +440,13 @@ void UIStateGame::show_map(Tooltip::Parent parent,
                            std::string description,
                            int32_t mapid,
                            bool bolded) {
-    matooltip.set_name(parent, name, bolded);
-    matooltip.set_desc(description);
-    matooltip.set_mapid(mapid);
+    ma_tooltip_.set_name(parent, name, bolded);
+    ma_tooltip_.set_desc(description);
+    ma_tooltip_.set_mapid(mapid);
 
     if (!name.empty()) {
-        tooltip = matooltip;
-        tooltipparent = parent;
+        tooltip_ = ma_tooltip_;
+        tooltip_parent_ = parent;
     }
 }
 
@@ -478,11 +478,11 @@ void UIStateGame::emplace(Args &&... args) {
 UIState::Iterator UIStateGame::pre_add(UIElement::Type type,
                                        bool is_toggled,
                                        bool is_focused) {
-    auto &element = elements[type];
+    auto &element = elements_[type];
 
     if (element && is_toggled) {
-        elementorder.remove(type);
-        elementorder.push_back(type);
+        element_order_.remove(type);
+        element_order_.push_back(type);
 
         bool active = element->is_active();
 
@@ -504,53 +504,53 @@ UIState::Iterator UIStateGame::pre_add(UIElement::Type type,
 
                 element->remove_cursor();
 
-                if (draggedicon)
+                if (dragged_icon_)
                     if (element->get_type()
-                        == icon_map[draggedicon.get()->get_type()])
+                        == icon_map_[dragged_icon_.get()->get_type()])
                         remove_icon();
 
                 UI::get().send_cursor(false);
             }
         }
 
-        return elements.end();
+        return elements_.end();
     } else {
         remove(type);
-        elementorder.push_back(type);
+        element_order_.push_back(type);
 
         if (is_focused)
-            focused = type;
+            focused_ = type;
 
-        return elements.find(type);
+        return elements_.find(type);
     }
 }
 
 void UIStateGame::remove(UIElement::Type type) {
-    if (type == focused)
-        focused = UIElement::Type::NONE;
+    if (type == focused_)
+        focused_ = UIElement::Type::NONE;
 
-    if (type == tooltipparent)
-        clear_tooltip(tooltipparent);
+    if (type == tooltip_parent_)
+        clear_tooltip(tooltip_parent_);
 
-    elementorder.remove(type);
+    element_order_.remove(type);
 
-    if (auto &element = elements[type]) {
+    if (auto &element = elements_[type]) {
         element->deactivate();
         element.release();
     }
 }
 
 UIElement *UIStateGame::get(UIElement::Type type) {
-    return elements[type].get();
+    return elements_[type].get();
 }
 
 UIElement *UIStateGame::get_front(std::list<UIElement::Type> types) {
-    auto begin = elementorder.rbegin();
-    auto end = elementorder.rend();
+    auto begin = element_order_.rbegin();
+    auto end = element_order_.rend();
 
     for (auto iter = begin; iter != end; ++iter) {
         if (std::find(types.begin(), types.end(), *iter) != types.end()) {
-            auto &element = elements[*iter];
+            auto &element = elements_[*iter];
 
             if (element && element->is_active())
                 return element.get();
@@ -562,11 +562,11 @@ UIElement *UIStateGame::get_front(std::list<UIElement::Type> types) {
 // TODO: (rich) fix
 
 UIElement *UIStateGame::get_front(Point<int16_t> pos) {
-    auto begin = elementorder.rbegin();
-    auto end = elementorder.rend();
+    auto begin = element_order_.rbegin();
+    auto end = element_order_.rend();
 
     for (auto iter = begin; iter != end; ++iter) {
-        auto &element = elements[*iter];
+        auto &element = elements_[*iter];
 
         if (element && element->is_active() && element->is_in_range(pos))
             return element.get();

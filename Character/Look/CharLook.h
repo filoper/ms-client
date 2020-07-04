@@ -105,31 +105,31 @@ private:
 
     Stance::Id getattackstance(uint8_t attack, bool degenerate) const;
 
-    Nominal<Stance::Id> stance;
-    Nominal<uint8_t> stframe;
-    uint16_t stelapsed;
+    Nominal<Stance::Id> stance_;
+    Nominal<uint8_t> st_frame_;
+    uint16_t st_elapsed_;
 
-    Nominal<Expression::Id> expression;
-    Nominal<uint8_t> expframe;
-    uint16_t expelapsed;
+    Nominal<Expression::Id> expression_;
+    Nominal<uint8_t> exp_frame_;
+    uint16_t exp_elapsed_;
 
-    bool flip;
+    bool flip_;
 
-    const BodyAction *action;
-    std::string actionstr;
-    uint8_t actframe;
+    const BodyAction *action_;
+    std::string actionstr_;
+    uint8_t actframe_;
 
-    const Body *body;
-    const Hair *hair;
-    const Face *face;
-    CharEquips equips;
+    const Body *body_;
+    const Hair *hair_;
+    const Face *face_;
+    CharEquips equips_;
 
-    Randomizer randomizer;
-    TimedBool alerted;
+    Randomizer randomizer_;
+    TimedBool alerted_;
 
-    static BodyDrawInfo drawinfo;
-    static std::unordered_map<int32_t, Hair> hairstyles;
-    static std::unordered_map<int32_t, Face> facetypes;
-    static std::unordered_map<int32_t, Body> bodytypes;
+    static BodyDrawInfo draw_info_;
+    static std::unordered_map<int32_t, Hair> hair_styles_;
+    static std::unordered_map<int32_t, Face> face_types_;
+    static std::unordered_map<int32_t, Body> body_types_;
 };
 }  // namespace ms

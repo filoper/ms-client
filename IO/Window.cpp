@@ -34,12 +34,12 @@
 
 namespace ms {
 Window::Window() {
-    context = nullptr;
-    glwnd = nullptr;
-    opacity = 1.0f;
-    opcstep = 0.0f;
-    width = Constants::Constants::get().get_viewwidth();
-    height = Constants::Constants::get().get_viewheight();
+    context_ = nullptr;
+    glwnd_ = nullptr;
+    opacity_ = 1.0f;
+    opc_step_ = 0.0f;
+    width_ = Constants::Constants::get().get_viewwidth();
+    height_ = Constants::Constants::get().get_viewheight();
 }
 
 Window::~Window() {
@@ -105,14 +105,14 @@ void close_callback(GLFWwindow *window) {
 }
 
 Error Window::init() {
-    fullscreen = Setting<Fullscreen>::get().load();
+    fullscreen_ = Setting<Fullscreen>::get().load();
 
     if (!glfwInit())
         return Error::Code::GLFW;
 
     glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-    context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
-    glfwMakeContextCurrent(context);
+    context_ = glfwCreateWindow(1, 1, "", nullptr, nullptr);
+    glfwMakeContextCurrent(context_);
     glfwSetErrorCallback(error_callback);
     glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -124,41 +124,41 @@ Error Window::init() {
 }
 
 Error Window::initwindow() {
-    if (glwnd)
-        glfwDestroyWindow(glwnd);
+    if (glwnd_)
+        glfwDestroyWindow(glwnd_);
 
-    glwnd = glfwCreateWindow(width,
-                             height,
+    glwnd_ = glfwCreateWindow(width_,
+                             height_,
                              Configuration::get().get_title().c_str(),
-                             fullscreen ? glfwGetPrimaryMonitor() : nullptr,
-                             context);
+                             fullscreen_ ? glfwGetPrimaryMonitor() : nullptr,
+                             context_);
 
-    if (!glwnd)
+    if (!glwnd_)
         return Error::Code::WINDOW;
 
-    glfwMakeContextCurrent(glwnd);
+    glfwMakeContextCurrent(glwnd_);
 
     bool vsync = Setting<VSync>::get().load();
     glfwSwapInterval(vsync ? 1 : 0);
 
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, width_, height_);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    glfwSetInputMode(glwnd, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(glwnd_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     double xpos, ypos;
 
-    glfwGetCursorPos(glwnd, &xpos, &ypos);
-    cursor_callback(glwnd, xpos, ypos);
+    glfwGetCursorPos(glwnd_, &xpos, &ypos);
+    cursor_callback(glwnd_, xpos, ypos);
 
-    glfwSetInputMode(glwnd, GLFW_STICKY_KEYS, GL_TRUE);
-    glfwSetKeyCallback(glwnd, key_callback);
-    glfwSetMouseButtonCallback(glwnd, mousekey_callback);
-    glfwSetCursorPosCallback(glwnd, cursor_callback);
-    glfwSetWindowFocusCallback(glwnd, focus_callback);
-    glfwSetScrollCallback(glwnd, scroll_callback);
-    glfwSetWindowCloseCallback(glwnd, close_callback);
+    glfwSetInputMode(glwnd_, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetKeyCallback(glwnd_, key_callback);
+    glfwSetMouseButtonCallback(glwnd_, mousekey_callback);
+    glfwSetCursorPosCallback(glwnd_, cursor_callback);
+    glfwSetWindowFocusCallback(glwnd_, focus_callback);
+    glfwSetScrollCallback(glwnd_, scroll_callback);
+    glfwSetWindowCloseCallback(glwnd_, close_callback);
 
     /*char buf[256];
     GetCurrentWorkingDir()
@@ -176,7 +176,7 @@ Error Window::initwindow() {
 
     images[0].pixels = stbi;
 
-    glfwSetWindowIcon(glwnd, 1, images);
+    glfwSetWindowIcon(glwnd_, 1, images);
     stbi_image_free(images[0].pixels);
 
     GraphicsGL::get().reinit();
@@ -185,7 +185,7 @@ Error Window::initwindow() {
 }
 
 bool Window::not_closed() const {
-    return glfwWindowShouldClose(glwnd) == 0;
+    return glfwWindowShouldClose(glwnd_) == 0;
 }
 
 void Window::update() {
@@ -193,17 +193,17 @@ void Window::update() {
 }
 
 void Window::updateopc() {
-    if (opcstep != 0.0f) {
-        opacity += opcstep;
+    if (opc_step_ != 0.0f) {
+        opacity_ += opc_step_;
 
-        if (opacity >= 1.0f) {
-            opacity = 1.0f;
-            opcstep = 0.0f;
-        } else if (opacity <= 0.0f) {
-            opacity = 0.0f;
-            opcstep = -opcstep;
+        if (opacity_ >= 1.0f) {
+            opacity_ = 1.0f;
+            opc_step_ = 0.0f;
+        } else if (opacity_ <= 0.0f) {
+            opacity_ = 0.0f;
+            opc_step_ = -opc_step_;
 
-            fadeprocedure();
+            fade_procedure_();
         }
     }
 }
@@ -214,12 +214,12 @@ void Window::check_events() {
     int16_t new_width = Constants::Constants::get().get_viewwidth();
     int16_t new_height = Constants::Constants::get().get_viewheight();
 
-    if (width != new_width || height != new_height) {
-        width = new_width;
-        height = new_height;
+    if (width_ != new_width || height_ != new_height) {
+        width_ = new_width;
+        height_ = new_height;
 
         if (new_width >= max_width || new_height >= max_height)
-            fullscreen = true;
+            fullscreen_ = true;
 
         initwindow();
     }
@@ -232,21 +232,21 @@ void Window::begin() const {
 }
 
 void Window::end() const {
-    GraphicsGL::get().flush(opacity);
-    glfwSwapBuffers(glwnd);
+    GraphicsGL::get().flush(opacity_);
+    glfwSwapBuffers(glwnd_);
 }
 
 void Window::fadeout(float step, std::function<void()> fadeproc) {
-    opcstep = -step;
-    fadeprocedure = fadeproc;
+    opc_step_ = -step;
+    fade_procedure_ = fadeproc;
 }
 
 void Window::setclipboard(const std::string &text) const {
-    glfwSetClipboardString(glwnd, text.c_str());
+    glfwSetClipboardString(glwnd_, text.c_str());
 }
 
 std::string Window::getclipboard() const {
-    const char *text = glfwGetClipboardString(glwnd);
+    const char *text = glfwGetClipboardString(glwnd_);
 
     return text ? text : "";
 }
@@ -255,9 +255,9 @@ void Window::toggle_fullscreen() {
     int16_t max_width = Configuration::get().get_max_width();
     int16_t max_height = Configuration::get().get_max_height();
 
-    if (width < max_width && height < max_height) {
-        fullscreen = !fullscreen;
-        Setting<Fullscreen>::get().save(fullscreen);
+    if (width_ < max_width && height_ < max_height) {
+        fullscreen_ = !fullscreen_;
+        Setting<Fullscreen>::get().save(fullscreen_);
 
         initwindow();
         glfwPollEvents();

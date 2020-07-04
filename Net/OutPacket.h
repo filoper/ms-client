@@ -126,7 +126,7 @@ protected:
     int32_t hex_to_dec(std::string hexVal);
 
 private:
-    std::vector<int8_t> bytes;
-    int16_t opcode;
+    std::vector<int8_t> bytes_;
+    int16_t opcode_;
 };
 }  // namespace ms

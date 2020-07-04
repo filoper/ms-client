@@ -32,8 +32,8 @@ public:
     void update();
 
 private:
-    bool active;
-    Animation effect;
-    Point<int16_t> position;
+    bool active_;
+    Animation effect_;
+    Point<int16_t> position_;
 };
 }  // namespace ms

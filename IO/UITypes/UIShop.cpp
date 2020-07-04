@@ -41,14 +41,14 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
 
     auto bg_dimensions = bg.get_dimensions();
 
-    sprites.emplace_back(background);
-    sprites.emplace_back(src["backgrnd2"]);
-    sprites.emplace_back(src["backgrnd3"]);
-    sprites.emplace_back(src["backgrnd4"]);
+    sprites_.emplace_back(background);
+    sprites_.emplace_back(src["backgrnd2"]);
+    sprites_.emplace_back(src["backgrnd3"]);
+    sprites_.emplace_back(src["backgrnd4"]);
 
-    buttons[Buttons::BUY_ITEM] = std::make_unique<MapleButton>(src["BtBuy"]);
-    buttons[Buttons::SELL_ITEM] = std::make_unique<MapleButton>(src["BtSell"]);
-    buttons[Buttons::EXIT] = std::make_unique<MapleButton>(src["BtExit"]);
+    buttons_[Buttons::BUY_ITEM] = std::make_unique<MapleButton>(src["BtBuy"]);
+    buttons_[Buttons::SELL_ITEM] = std::make_unique<MapleButton>(src["BtSell"]);
+    buttons_[Buttons::EXIT] = std::make_unique<MapleButton>(src["BtExit"]);
 
     Texture cben = src["checkBox"][0];
     Texture cbdis = src["checkBox"][1];
@@ -60,14 +60,14 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     checkBox[0] = cbdis;
     checkBox[1] = cben;
 
-    buttons[Buttons::CHECKBOX] = std::make_unique<AreaButton>(
+    buttons_[Buttons::CHECKBOX] = std::make_unique<AreaButton>(
         Point<int16_t>(std::abs(cb_x), std::abs(cb_y)),
         cben.get_dimensions());
 
     nl::node buyen = src["TabBuy"]["enabled"];
     nl::node buydis = src["TabBuy"]["disabled"];
 
-    buttons[Buttons::OVERALL] =
+    buttons_[Buttons::OVERALL] =
         std::make_unique<TwoSpriteButton>(buydis[0], buyen[0]);
 
     nl::node sellen = src["TabSell"]["enabled"];
@@ -75,7 +75,7 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
 
     for (uint16_t i = Buttons::EQUIP; i <= Buttons::CASH; i++) {
         std::string tabnum = std::to_string(i - Buttons::EQUIP);
-        buttons[i] =
+        buttons_[i] =
             std::make_unique<TwoSpriteButton>(selldis[tabnum], sellen[tabnum]);
     }
 
@@ -88,7 +88,7 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     for (uint16_t i = Buttons::BUY0; i <= Buttons::BUY8; i++) {
         Point<int16_t> pos(buy_x, item_y + 42 * (i - Buttons::BUY0));
         Point<int16_t> dim(buy_width, item_height);
-        buttons[i] = std::make_unique<AreaButton>(pos, dim);
+        buttons_[i] = std::make_unique<AreaButton>(pos, dim);
     }
 
     sell_x = 284;
@@ -97,7 +97,7 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     for (uint16_t i = Buttons::SELL0; i <= Buttons::SELL8; i++) {
         Point<int16_t> pos(sell_x, item_y + 42 * (i - Buttons::SELL0));
         Point<int16_t> dim(sell_width, item_height);
-        buttons[i] = std::make_unique<AreaButton>(pos, dim);
+        buttons_[i] = std::make_unique<AreaButton>(pos, dim);
     }
 
     buy_selection = src["select"];
@@ -137,29 +137,29 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
                                 sellstate.offset += shift;
                         });
 
-    active = false;
-    dimension = bg_dimensions;
-    dragarea = Point<int16_t>(bg_dimensions.x(), 10);
+    active_ = false;
+    dimension_ = bg_dimensions;
+    drag_area_ = Point<int16_t>(bg_dimensions.x(), 10);
 }
 
 void UIShop::draw(float alpha) const {
     UIElement::draw(alpha);
 
-    npc.draw(DrawArgument(position + Point<int16_t>(58, 85), true));
-    charlook.draw(position + Point<int16_t>(338, 85),
+    npc.draw(DrawArgument(position_ + Point<int16_t>(58, 85), true));
+    charlook.draw(position_ + Point<int16_t>(338, 85),
                   false,
                   Stance::Id::STAND1,
                   Expression::Id::DEFAULT);
 
-    mesolabel.draw(position + Point<int16_t>(493, 51));
+    mesolabel.draw(position_ + Point<int16_t>(493, 51));
 
-    buystate.draw(position, buy_selection);
-    sellstate.draw(position, sell_selection);
+    buystate.draw(position_, buy_selection);
+    sellstate.draw(position_, sell_selection);
 
-    buyslider.draw(position);
-    sellslider.draw(position);
+    buyslider.draw(position_);
+    sellslider.draw(position_);
 
-    checkBox[rightclicksell].draw(position);
+    checkBox[rightclicksell].draw(position_);
 }
 
 void UIShop::update() {
@@ -237,7 +237,7 @@ void UIShop::remove_cursor() {
 }
 
 Cursor::State UIShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    Point<int16_t> cursoroffset = cursorpos - position;
+    Point<int16_t> cursoroffset = cursorpos - position_;
     lastcursorpos = cursoroffset;
 
     if (buyslider.isenabled()) {
@@ -278,19 +278,19 @@ Cursor::State UIShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
     for (size_t i = 0; i < Buttons::NUM_BUTTONS; i++) {
-        if (buttons[i]->is_active()
-            && buttons[i]->bounds(position).contains(cursorpos)) {
-            if (buttons[i]->get_state() == Button::State::NORMAL) {
+        if (buttons_[i]->is_active()
+            && buttons_[i]->bounds(position_).contains(cursorpos)) {
+            if (buttons_[i]->get_state() == Button::State::NORMAL) {
                 if (i >= Buttons::BUY_ITEM && i <= Buttons::EXIT) {
                     Sound(Sound::Name::BUTTONOVER).play();
 
-                    buttons[i]->set_state(Button::State::MOUSEOVER);
+                    buttons_[i]->set_state(Button::State::MOUSEOVER);
                     ret = Cursor::State::CANCLICK;
                 } else {
-                    buttons[i]->set_state(Button::State::MOUSEOVER);
+                    buttons_[i]->set_state(Button::State::MOUSEOVER);
                     ret = Cursor::State::IDLE;
                 }
-            } else if (buttons[i]->get_state() == Button::State::MOUSEOVER) {
+            } else if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
                     if (i >= Buttons::BUY_ITEM && i <= Buttons::CASH) {
                         if (i >= Buttons::OVERALL && i <= Buttons::CASH) {
@@ -300,11 +300,11 @@ Cursor::State UIShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                                 Sound(Sound::Name::BUTTONCLICK).play();
                         }
 
-                        buttons[i]->set_state(button_pressed(i));
+                        buttons_[i]->set_state(button_pressed(i));
 
                         ret = Cursor::State::IDLE;
                     } else {
-                        buttons[i]->set_state(button_pressed(i));
+                        buttons_[i]->set_state(button_pressed(i));
 
                         ret = Cursor::State::IDLE;
                     }
@@ -314,7 +314,7 @@ Cursor::State UIShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                     else
                         ret = Cursor::State::IDLE;
                 }
-            } else if (buttons[i]->get_state() == Button::State::PRESSED) {
+            } else if (buttons_[i]->get_state() == Button::State::PRESSED) {
                 if (clicked) {
                     if (i >= Buttons::OVERALL && i <= Buttons::CASH) {
                         Sound(Sound::Name::TAB).play();
@@ -323,8 +323,8 @@ Cursor::State UIShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                     }
                 }
             }
-        } else if (buttons[i]->get_state() == Button::State::MOUSEOVER) {
-            buttons[i]->set_state(Button::State::NORMAL);
+        } else if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
+            buttons_[i]->set_state(Button::State::NORMAL);
         }
     }
 
@@ -346,7 +346,7 @@ void UIShop::send_scroll(double yoffset) {
 
 void UIShop::rightclick(Point<int16_t> cursorpos) {
     if (rightclicksell) {
-        Point<int16_t> cursoroffset = cursorpos - position;
+        Point<int16_t> cursoroffset = cursorpos - position_;
 
         int16_t xoff = cursoroffset.x();
         int16_t yoff = cursoroffset.y();
@@ -388,12 +388,12 @@ void UIShop::changeselltab(InventoryType::Id type) {
     uint16_t oldtab = tabbyinventory(sellstate.tab);
 
     if (oldtab > 0)
-        buttons[oldtab]->set_state(Button::State::NORMAL);
+        buttons_[oldtab]->set_state(Button::State::NORMAL);
 
     uint16_t newtab = tabbyinventory(type);
 
     if (newtab > 0)
-        buttons[newtab]->set_state(Button::State::PRESSED);
+        buttons_[newtab]->set_state(Button::State::PRESSED);
 
     sellstate.change_tab(inventory, type, meso);
 
@@ -401,9 +401,9 @@ void UIShop::changeselltab(InventoryType::Id type) {
 
     for (size_t i = Buttons::SELL0; i < Buttons::SELL8; i++) {
         if (i - Buttons::SELL0 < sellstate.lastslot)
-            buttons[i]->set_state(Button::State::NORMAL);
+            buttons_[i]->set_state(Button::State::NORMAL);
         else
-            buttons[i]->set_state(Button::State::DISABLED);
+            buttons_[i]->set_state(Button::State::DISABLED);
     }
 }
 
@@ -411,11 +411,11 @@ void UIShop::reset(int32_t npcid) {
     std::string strid = string_format::extend_id(npcid, 7);
     npc = nl::nx::npc[strid + ".img"]["stand"]["0"];
 
-    for (auto &button : buttons)
+    for (auto &button : buttons_)
         button.second->set_state(Button::State::NORMAL);
 
-    buttons[Buttons::OVERALL]->set_state(Button::State::PRESSED);
-    buttons[Buttons::EQUIP]->set_state(Button::State::PRESSED);
+    buttons_[Buttons::OVERALL]->set_state(Button::State::PRESSED);
+    buttons_[Buttons::EQUIP]->set_state(Button::State::PRESSED);
 
     buystate.reset();
     sellstate.reset();

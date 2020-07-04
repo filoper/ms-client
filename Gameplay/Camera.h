@@ -52,12 +52,12 @@ public:
 
 private:
     // Movement variables.
-    Linear<double> x;
-    Linear<double> y;
+    Linear<double> x_;
+    Linear<double> y_;
 
     // View limits.
-    Range<int16_t> hbounds;
-    Range<int16_t> vbounds;
+    Range<int16_t> hbounds_;
+    Range<int16_t> vbounds_;
 
     int16_t VWIDTH;
     int16_t VHEIGHT;

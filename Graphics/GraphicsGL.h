@@ -252,23 +252,23 @@ private:
 
         void add_line();
 
-        const Font &font;
+        const Font &font_;
 
-        Text::Alignment alignment;
-        Text::Font fontid;
-        Color::Name color;
-        int16_t maxwidth;
-        bool formatted;
+        Text::Alignment alignment_;
+        Text::Font font_id_;
+        Color::Name color_;
+        int16_t max_width_;
+        bool formatted_;
 
-        int16_t ax;
-        int16_t ay;
+        int16_t ax_;
+        int16_t ay_;
 
-        std::vector<Text::Layout::Line> lines;
-        std::vector<Text::Layout::Word> words;
-        std::vector<int16_t> advances;
-        int16_t width;
-        int16_t endy;
-        int16_t line_adj;
+        std::vector<Text::Layout::Line> lines_;
+        std::vector<Text::Layout::Word> words_;
+        std::vector<int16_t> advances_;
+        int16_t width_;
+        int16_t endy_;
+        int16_t line_adj_;
     };
 
     int16_t VWIDTH;
@@ -279,33 +279,33 @@ private:
     static const GLshort ATLASH = 8192;
     static const GLshort MINLOSIZE = 32;
 
-    bool locked;
+    bool locked_;
 
-    std::vector<Quad> quads;
-    GLuint VBO;
-    GLuint atlas;
+    std::vector<Quad> quads_;
+    GLuint VBO_;
+    GLuint atlas_;
 
-    GLint shaderProgram;
-    GLint attribute_coord;
-    GLint attribute_color;
-    GLint uniform_texture;
-    GLint uniform_atlassize;
-    GLint uniform_screensize;
+    GLint shader_program_;
+    GLint attribute_coord_;
+    GLint attribute_color_;
+    GLint uniform_texture_;
+    GLint uniform_atlas_size_;
+    GLint uniform_screen_size_;
     GLint uniform_yoffset;
-    GLint uniform_fontregion;
+    GLint uniform_font_region_;
 
-    std::unordered_map<size_t, Offset> offsets;
-    Offset nulloffset;
+    std::unordered_map<size_t, Offset> offsets_;
+    Offset null_offset_;
 
-    QuadTree<size_t, Leftover> leftovers;
-    size_t rlid;
-    size_t wasted;
-    Point<GLshort> border;
-    Range<GLshort> yrange;
+    QuadTree<size_t, Leftover> leftovers_;
+    size_t rlid_;
+    size_t wasted_;
+    Point<GLshort> border_;
+    Range<GLshort> y_range_;
 
-    FT_Library ftlibrary;
-    Font fonts[Text::Font::NUM_FONTS];
-    Point<GLshort> fontborder;
-    GLshort fontymax;
+    FT_Library ft_library_;
+    Font fonts_[Text::Font::NUM_FONTS];
+    Point<GLshort> font_border;
+    GLshort font_ymax;
 };
 }  // namespace ms

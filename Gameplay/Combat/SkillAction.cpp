@@ -37,21 +37,21 @@ void RegularAction::apply(Char &target, Attack::Type atype) const {
 }
 
 SingleAction::SingleAction(nl::node src) {
-    action = std::string(src["action"]["0"]);
+    action_ = std::string(src["action"]["0"]);
 }
 
 void SingleAction::apply(Char &target, Attack::Type) const {
-    target.attack(action);
+    target.attack(action_);
 }
 
 TwoHandedAction::TwoHandedAction(nl::node src) {
-    actions[false] = std::string(src["action"]["0"]);
-    actions[true] = std::string(src["action"]["1"]);
+    actions_[false] = std::string(src["action"]["0"]);
+    actions_[true] = std::string(src["action"]["1"]);
 }
 
 void TwoHandedAction::apply(Char &target, Attack::Type) const {
     bool twohanded = target.is_twohanded();
-    std::string action = actions[twohanded];
+    std::string action = actions_[twohanded];
 
     target.attack(action);
 }
@@ -59,17 +59,17 @@ void TwoHandedAction::apply(Char &target, Attack::Type) const {
 ByLevelAction::ByLevelAction(nl::node src, int32_t id) {
     for (auto sub : src["level"]) {
         int32_t level = string_conversion::or_zero<int32_t>(sub.name());
-        actions[level] = std::string(sub["action"]);
+        actions_[level] = std::string(sub["action"]);
     }
 
-    skillid = id;
+    skill_id_ = id;
 }
 
 void ByLevelAction::apply(Char &target, Attack::Type) const {
-    int32_t level = target.get_skilllevel(skillid);
-    auto iter = actions.find(level);
+    int32_t level = target.get_skilllevel(skill_id_);
+    auto iter = actions_.find(level);
 
-    if (iter != actions.end())
+    if (iter != actions_.end())
         target.attack(iter->second);
 }
 }  // namespace ms

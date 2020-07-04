@@ -39,7 +39,7 @@ UIGender::UIGender(std::function<void()> oh) :
     for (size_t i = 0; i < 3; i++)
         gender_sprites[i] = scroll[i];
 
-    sprites.emplace_back(Gender["text"][0], Point<int16_t>(601, 326));
+    sprites_.emplace_back(Gender["text"][0], Point<int16_t>(601, 326));
 
     std::vector<std::string> options;
     options.push_back("Male");
@@ -47,33 +47,33 @@ UIGender::UIGender(std::function<void()> oh) :
 
     uint16_t default_option = 0;
 
-    buttons[Buttons::NO] = std::make_unique<MapleButton>(
+    buttons_[Buttons::NO] = std::make_unique<MapleButton>(
         Login["BtCancel"],
         Point<int16_t>(650,
                        349));  // TODO: _inlink issue: Original: Gender["BtNo"]
-    buttons[Buttons::YES] =
+    buttons_[Buttons::YES] =
         std::make_unique<MapleButton>(Gender["BtYes"],
                                       Point<int16_t>(578, 349));
-    buttons[Buttons::SELECT] =
+    buttons_[Buttons::SELECT] =
         std::make_unique<MapleComboBox>(MapleComboBox::Type::DEFAULT,
                                         options,
                                         default_option,
-                                        position,
+                                        position_,
                                         Point<int16_t>(510, 283),
                                         65);
 
-    dimension = Texture(gender_sprites[2]).get_dimensions();
+    dimension_ = Texture(gender_sprites[2]).get_dimensions();
 }
 
 void UIGender::draw(float inter) const {
     Point<int16_t> gender_pos = Point<int16_t>(355, 185);
 
     if (CUR_TIMESTEP == 0) {
-        gender_sprites[0].draw(position + gender_pos);
+        gender_sprites[0].draw(position_ + gender_pos);
     } else if (CUR_TIMESTEP == Constants::TIMESTEP * 3) {
-        gender_sprites[1].draw(position + gender_pos);
+        gender_sprites[1].draw(position_ + gender_pos);
     } else if (CUR_TIMESTEP >= Constants::TIMESTEP * 6) {
-        gender_sprites[2].draw(position + gender_pos);
+        gender_sprites[2].draw(position_ + gender_pos);
 
         UIElement::draw(inter);
     }
@@ -87,7 +87,7 @@ void UIGender::update() {
 }
 
 Cursor::State UIGender::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    auto &combobox = buttons[Buttons::SELECT];
+    auto &combobox = buttons_[Buttons::SELECT];
 
     if (combobox->is_pressed() && combobox->in_combobox(cursorpos))
         if (Cursor::State new_state = combobox->send_cursor(clicked, cursorpos))
@@ -109,10 +109,10 @@ Button::State UIGender::button_pressed(uint16_t buttonid) {
         case Buttons::YES: {
             UI::get().emplace<UILoginWait>();
 
-            uint16_t selected_value = buttons[Buttons::SELECT]->get_selected();
+            uint16_t selected_value = buttons_[Buttons::SELECT]->get_selected();
             GenderPacket(selected_value).dispatch();
         } break;
-        case Buttons::SELECT: buttons[Buttons::SELECT]->toggle_pressed(); break;
+        case Buttons::SELECT: buttons_[Buttons::SELECT]->toggle_pressed(); break;
         default: break;
     }
 

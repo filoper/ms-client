@@ -49,7 +49,7 @@ public:
                          uint16_t bullets) const override;
 
 private:
-    RegularAction action;
-    RegularBullet bullet;
+    RegularAction action_;
+    RegularBullet bullet_;
 };
 }  // namespace ms

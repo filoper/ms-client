@@ -25,35 +25,35 @@ void SkillBook::set_skill(int32_t id,
                           int32_t level,
                           int32_t mlevel,
                           int64_t expire) {
-    skillentries[id] = { level, mlevel, expire };
+    skill_entries_[id] = { level, mlevel, expire };
 }
 
 bool SkillBook::has_skill(int32_t id) const {
-    return skillentries.count(id) > 0;
+    return skill_entries_.count(id) > 0;
 }
 
 int32_t SkillBook::get_level(int32_t id) const {
-    auto iter = skillentries.find(id);
+    auto iter = skill_entries_.find(id);
 
-    if (iter == skillentries.end())
+    if (iter == skill_entries_.end())
         return 0;
 
     return iter->second.level;
 }
 
 int32_t SkillBook::get_masterlevel(int32_t id) const {
-    auto iter = skillentries.find(id);
+    auto iter = skill_entries_.find(id);
 
-    if (iter == skillentries.end())
+    if (iter == skill_entries_.end())
         return 0;
 
     return iter->second.masterlevel;
 }
 
 int64_t SkillBook::get_expiration(int32_t id) const {
-    auto iter = skillentries.find(id);
+    auto iter = skill_entries_.find(id);
 
-    if (iter == skillentries.end())
+    if (iter == skill_entries_.end())
         return 0;
 
     return iter->second.expiration;
@@ -62,7 +62,7 @@ int64_t SkillBook::get_expiration(int32_t id) const {
 std::map<int32_t, int32_t> SkillBook::collect_passives() const {
     std::map<int32_t, int32_t> passives;
 
-    for (auto &iter : skillentries)
+    for (auto &iter : skill_entries_)
         if (SkillData::get(iter.first).is_passive())
             passives.emplace(iter.first, iter.second.level);
 
@@ -71,9 +71,9 @@ std::map<int32_t, int32_t> SkillBook::collect_passives() const {
 
 std::unordered_map<int32_t, int32_t> SkillBook::collect_required(
     int32_t id) const {
-    auto iter = skillentries.find(id);
+    auto iter = skill_entries_.find(id);
 
-    if (iter == skillentries.end())
+    if (iter == skill_entries_.end())
         return {};
 
     return SkillData::get(iter->first).get_reqskills();

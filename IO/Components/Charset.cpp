@@ -19,7 +19,7 @@
 #include "Charset.h"
 
 namespace ms {
-Charset::Charset(nl::node src, Alignment alignment) : alignment(alignment) {
+Charset::Charset(nl::node src, Alignment alignment) : alignment_(alignment) {
     for (auto sub : src) {
         std::string name = sub.name();
 
@@ -31,30 +31,30 @@ Charset::Charset(nl::node src, Alignment alignment) : alignment(alignment) {
         if (c == '\\')
             c = '/';
 
-        chars.emplace(c, sub);
+        chars_.emplace(c, sub);
     }
 }
 
-Charset::Charset() : alignment(Charset::Alignment::LEFT) {}
+Charset::Charset() : alignment_(Charset::Alignment::LEFT) {}
 
 void Charset::draw(int8_t c, const DrawArgument &args) const {
-    auto iter = chars.find(c);
+    auto iter = chars_.find(c);
 
-    if (iter != chars.end())
+    if (iter != chars_.end())
         iter->second.draw(args);
 }
 
 int16_t Charset::getw(int8_t c) const {
-    auto iter = chars.find(c);
+    auto iter = chars_.find(c);
 
-    return iter != chars.end() ? iter->second.width() : 0;
+    return iter != chars_.end() ? iter->second.width() : 0;
 }
 
 int16_t Charset::draw(const std::string &text, const DrawArgument &args) const {
     int16_t shift = 0;
     int16_t total = 0;
 
-    switch (alignment) {
+    switch (alignment_) {
         case Charset::Alignment::CENTER:
             for (char c : text) {
                 int16_t width = getw(c);
@@ -92,7 +92,7 @@ int16_t Charset::draw(const std::string &text,
     size_t length = text.size();
     int16_t shift = 0;
 
-    switch (alignment) {
+    switch (alignment_) {
         case Charset::Alignment::CENTER:
             shift -= hspace * static_cast<int16_t>(length) / 2;
             break;

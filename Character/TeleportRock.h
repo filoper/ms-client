@@ -30,7 +30,7 @@ public:
     void addviplocation(int32_t);
 
 private:
-    std::vector<int32_t> locations;
-    std::vector<int32_t> viplocations;
+    std::vector<int32_t> locations_;
+    std::vector<int32_t> vip_locations_;
 };
 }  // namespace ms

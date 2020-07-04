@@ -55,8 +55,8 @@ UICashShop::UICashShop() :
     nl::node CSList = CashShop["CSList"];
     nl::node CSEffect = CashShop["CSEffect"];
 
-    sprites.emplace_back(backgrnd);
-    sprites.emplace_back(BestNew, Point<int16_t>(139, 346));
+    sprites_.emplace_back(backgrnd);
+    sprites_.emplace_back(BestNew, Point<int16_t>(139, 346));
 
     BestNew_dim = Texture(BestNew).get_dimensions();
 
@@ -64,38 +64,38 @@ UICashShop::UICashShop() :
         preview_sprites[i] = Preview[i];
 
     for (size_t i = 0; i < 3; i++)
-        buttons[Buttons::BtPreview1 + i] = std::make_unique<TwoSpriteButton>(
+        buttons_[Buttons::BtPreview1 + i] = std::make_unique<TwoSpriteButton>(
             Base["Tab"]["Disable"][i],
             Base["Tab"]["Enable"][i],
             Point<int16_t>(957 + (i * 17), 46));
 
-    buttons[Buttons::BtPreview1]->set_state(Button::State::PRESSED);
+    buttons_[Buttons::BtPreview1]->set_state(Button::State::PRESSED);
 
-    buttons[Buttons::BtExit] =
+    buttons_[Buttons::BtExit] =
         std::make_unique<MapleButton>(CSTab["BtExit"], Point<int16_t>(5, 728));
-    buttons[Buttons::BtChargeNX] =
+    buttons_[Buttons::BtChargeNX] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeNX"],
                                       Point<int16_t>(5, 554));
-    buttons[Buttons::BtChargeRefresh] =
+    buttons_[Buttons::BtChargeRefresh] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
                                       Point<int16_t>(92, 554));
 
     for (size_t i = 0; i < 9; i++)
         menu_tabs[i] = CSTab["Tab"][i];
 
-    buttons[Buttons::BtChargeRefresh] =
+    buttons_[Buttons::BtChargeRefresh] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
                                       Point<int16_t>(92, 554));
-    buttons[Buttons::BtWish] =
+    buttons_[Buttons::BtWish] =
         std::make_unique<MapleButton>(CSStatus["BtWish"],
                                       Point<int16_t>(226, 6));
-    buttons[Buttons::BtMileage] =
+    buttons_[Buttons::BtMileage] =
         std::make_unique<MapleButton>(CSStatus["BtMileage"],
                                       Point<int16_t>(869, 4));
-    buttons[Buttons::BtHelp] =
+    buttons_[Buttons::BtHelp] =
         std::make_unique<MapleButton>(CSStatus["BtHelp"],
                                       Point<int16_t>(997, 4));
-    buttons[Buttons::BtCoupon] =
+    buttons_[Buttons::BtCoupon] =
         std::make_unique<MapleButton>(CSStatus["BtCoupon"],
                                       Point<int16_t>(950, 4));
 
@@ -111,14 +111,14 @@ UICashShop::UICashShop() :
                       "ShomeiZekkou");
 
     promotion_pos = Point<int16_t>(138, 40);
-    sprites.emplace_back(CSPromotionBanner["shadow"], promotion_pos);
+    sprites_.emplace_back(CSPromotionBanner["shadow"], promotion_pos);
 
     promotion_sprites.emplace_back(CSPromotionBanner["basic"]);
 
-    buttons[Buttons::BtNext] =
+    buttons_[Buttons::BtNext] =
         std::make_unique<MapleButton>(CSPromotionBanner["BtNext"],
                                       promotion_pos);
-    buttons[Buttons::BtPrev] =
+    buttons_[Buttons::BtPrev] =
         std::make_unique<MapleButton>(CSPromotionBanner["BtPrev"],
                                       promotion_pos);
 
@@ -126,13 +126,13 @@ UICashShop::UICashShop() :
         mvp_sprites[i] = CSMVPBanner["grade"][i];
 
     mvp_pos = Point<int16_t>(63, 681);
-    buttons[Buttons::BtDetailPackage] =
+    buttons_[Buttons::BtDetailPackage] =
         std::make_unique<MapleButton>(CSMVPBanner["BtDetailPackage"], mvp_pos);
-    buttons[Buttons::BtNonGrade] =
+    buttons_[Buttons::BtNonGrade] =
         std::make_unique<MapleButton>(CSMVPBanner["BtNonGrade"], mvp_pos);
 
-    buttons[Buttons::BtDetailPackage]->set_active(mvp_grade);
-    buttons[Buttons::BtNonGrade]->set_active(!mvp_grade);
+    buttons_[Buttons::BtDetailPackage]->set_active(mvp_grade);
+    buttons_[Buttons::BtNonGrade]->set_active(!mvp_grade);
 
     mvp_gauge = Gauge(Gauge::Type::CASHSHOP,
                       CSMVPBanner["gage"][0],
@@ -142,23 +142,23 @@ UICashShop::UICashShop() :
                       0.0f);
 
     Point<int16_t> search_pos = Point<int16_t>(0, 36);
-    sprites.emplace_back(CSItemSearch["backgrnd"], search_pos);
-    sprites.emplace_back(CSItemSearch["search"],
+    sprites_.emplace_back(CSItemSearch["backgrnd"], search_pos);
+    sprites_.emplace_back(CSItemSearch["search"],
                          search_pos + Point<int16_t>(35, 8));
 
-    buttons[Buttons::BtBuyAvatar] =
+    buttons_[Buttons::BtBuyAvatar] =
         std::make_unique<MapleButton>(CSChar["BtBuyAvatar"],
                                       Point<int16_t>(642, 305));
-    buttons[Buttons::BtDefaultAvatar] =
+    buttons_[Buttons::BtDefaultAvatar] =
         std::make_unique<MapleButton>(CSChar["BtDefaultAvatar"],
                                       Point<int16_t>(716, 305));
-    buttons[Buttons::BtInventory] =
+    buttons_[Buttons::BtInventory] =
         std::make_unique<MapleButton>(CSChar["BtInventory"],
                                       Point<int16_t>(938, 305));
-    buttons[Buttons::BtSaveAvatar] =
+    buttons_[Buttons::BtSaveAvatar] =
         std::make_unique<MapleButton>(CSChar["BtSaveAvatar"],
                                       Point<int16_t>(864, 305));
-    buttons[Buttons::BtTakeoffAvatar] =
+    buttons_[Buttons::BtTakeoffAvatar] =
         std::make_unique<MapleButton>(CSChar["BtTakeoffAvatar"],
                                       Point<int16_t>(790, 305));
 
@@ -191,7 +191,7 @@ UICashShop::UICashShop() :
     for (size_t i = 0; i < MAX_ITEMS; i++) {
         div_t div = std::div(i, 7);
 
-        buttons[Buttons::BtBuy + i] = std::make_unique<MapleButton>(
+        buttons_[Buttons::BtBuy + i] = std::make_unique<MapleButton>(
             CSList["BtBuy"],
             Point<int16_t>(146, 523)
                 + Point<int16_t>(124 * div.rem, 205 * div.quot));
@@ -230,29 +230,29 @@ UICashShop::UICashShop() :
 
     update_items();
 
-    dimension = Texture(backgrnd).get_dimensions();
+    dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 void UICashShop::draw(float inter) const {
-    preview_sprites[preview_index].draw(position + Point<int16_t>(644, 65),
+    preview_sprites[preview_index].draw(position_ + Point<int16_t>(644, 65),
                                         inter);
 
     UIElement::draw_sprites(inter);
 
-    menu_tabs[menu_index].draw(position + Point<int16_t>(0, 63), inter);
+    menu_tabs[menu_index].draw(position_ + Point<int16_t>(0, 63), inter);
 
-    Point<int16_t> label_pos = position + Point<int16_t>(4, 3);
+    Point<int16_t> label_pos = position_ + Point<int16_t>(4, 3);
     job_label.draw(label_pos);
 
     size_t length = job_label.width();
     name_label.draw(label_pos + Point<int16_t>(length + 10, 0));
 
-    promotion_sprites[promotion_index].draw(position + promotion_pos, inter);
+    promotion_sprites[promotion_index].draw(position_ + promotion_pos, inter);
 
-    mvp_sprites[mvp_grade].draw(position + mvp_pos, inter);
-    mvp_gauge.draw(position + mvp_pos);
+    mvp_sprites[mvp_grade].draw(position_ + mvp_pos, inter);
+    mvp_gauge.draw(position_ + mvp_pos);
 
-    Point<int16_t> charge_pos = position + Point<int16_t>(107, 388);
+    Point<int16_t> charge_pos = position_ + Point<int16_t>(107, 388);
 
     charge_charset.draw("0", charge_pos + Point<int16_t>(0, 30 * 1));
     charge_charset.draw("3,300", charge_pos + Point<int16_t>(0, 30 * 2));
@@ -261,10 +261,10 @@ void UICashShop::draw(float inter) const {
     charge_charset.draw("0", charge_pos + Point<int16_t>(0, 30 * 5));
 
     if (items.size() > 0)
-        item_line.draw(position + Point<int16_t>(139, 566), inter);
+        item_line.draw(position_ + Point<int16_t>(139, 566), inter);
     else
         item_none.draw(
-            position + Point<int16_t>(137, 372)
+            position_ + Point<int16_t>(137, 372)
                 + Point<int16_t>(BestNew_dim.x() / 2,
                                  list_slider.getvertical().length() / 2)
                 - item_none.get_dimensions() / 2,
@@ -277,45 +277,45 @@ void UICashShop::draw(float inter) const {
             div_t div = std::div(i, 7);
             Item item = items[index];
 
-            item_base.draw(position + Point<int16_t>(137, 372)
+            item_base.draw(position_ + Point<int16_t>(137, 372)
                                + Point<int16_t>(124 * div.rem, 205 * div.quot),
                            inter);
             item.draw(DrawArgument(
-                position + Point<int16_t>(164, 473)
+                position_ + Point<int16_t>(164, 473)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot),
                 2.0f,
                 2.0f));
 
             if (item.label != Item::Label::NONE)
                 item_labels[item.label + 1].draw(
-                    position + Point<int16_t>(152, 372)
+                    position_ + Point<int16_t>(152, 372)
                         + Point<int16_t>(124 * div.rem, 205 * div.quot),
                     inter);
 
-            item_name[i].draw(position + Point<int16_t>(192, 480)
+            item_name[i].draw(position_ + Point<int16_t>(192, 480)
                               + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
             if (item_discount[i].get_text() == "") {
                 item_price[i].draw(
-                    position + Point<int16_t>(195, 499)
+                    position_ + Point<int16_t>(195, 499)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
             } else {
                 item_price[i].draw(
-                    position + Point<int16_t>(196, 506)
+                    position_ + Point<int16_t>(196, 506)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
                 item_discount[i].draw(
-                    position + Point<int16_t>(185, 495)
+                    position_ + Point<int16_t>(185, 495)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
                 item_percent[i].draw(
-                    position
+                    position_
                     + Point<int16_t>(198 + (item_discount[i].width() / 2), 495)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
             }
         }
     }
 
-    list_slider.draw(position);
+    list_slider.draw(position_);
 
     UIElement::draw_buttons(inter);
 }
@@ -331,7 +331,7 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
         case Buttons::BtPreview1:
         case Buttons::BtPreview2:
         case Buttons::BtPreview3:
-            buttons[preview_index]->set_state(Button::State::NORMAL);
+            buttons_[preview_index]->set_state(Button::State::NORMAL);
 
             preview_index = buttonid;
             return Button::State::PRESSED;
@@ -402,7 +402,7 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 }
 
 Cursor::State UICashShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    Point<int16_t> cursor_relative = cursorpos - position;
+    Point<int16_t> cursor_relative = cursorpos - position_;
 
     if (list_slider.isenabled()) {
         Cursor::State state = list_slider.send_cursor(cursor_relative, clicked);
@@ -443,7 +443,7 @@ void UICashShop::update_items() {
         int16_t index = i + list_offset;
         bool found_item = index < items.size();
 
-        buttons[Buttons::BtBuy + i]->set_active(found_item);
+        buttons_[Buttons::BtBuy + i]->set_active(found_item);
 
         std::string name = "";
         std::string price_text = "";

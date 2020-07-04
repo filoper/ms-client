@@ -98,8 +98,8 @@ public:
 
     inline void print() {
         std::cout << "Recv: ";
-        for (int i=0; i < top; i++) {
-            std::cout << (unsigned short)bytes[i] << " ";
+        for (int i=0; i < top_; i++) {
+            std::cout << (unsigned short)bytes_[i] << " ";
         }
         std::cout << std::endl;
     }
@@ -112,7 +112,7 @@ private:
         T all = 0;
 
         for (size_t i = 0; i < count; i++) {
-            T val = static_cast<uint8_t>(bytes[pos]);
+            T val = static_cast<uint8_t>(bytes_[pos_]);
             all += val << (8 * i);
 
             skip(1);
@@ -138,16 +138,16 @@ private:
     template<typename T>
     // Read without advancing the buffer position
     T inspect() {
-        size_t before = pos;
+        size_t before = pos_;
         T value = read<T>();
-        pos = before;
+        pos_ = before;
 
         return value;
     }
 
-    const int8_t *bytes;
-    size_t top;
-    size_t pos;
+    const int8_t *bytes_;
+    size_t top_;
+    size_t pos_;
 };
 
 // template<>

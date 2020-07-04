@@ -55,8 +55,8 @@ UICygnusCreation::UICygnusCreation() :
     sky = back["2"];
     cloud = back["27"];
 
-    sprites.emplace_back(back["46"], Point<int16_t>(400, 300));
-    sprites.emplace_back(signboard["2"],
+    sprites_.emplace_back(back["46"], Point<int16_t>(400, 300));
+    sprites_.emplace_back(signboard["2"],
                          DrawArgument(Point<int16_t>(212, 217), 2.0f));
     sprites_gender_select.emplace_back(board["genderTop"],
                                        Point<int16_t>(423, 104));
@@ -79,41 +79,41 @@ UICygnusCreation::UICygnusCreation() :
                                        Point<int16_t>(416, 98 + y));
     }
 
-    buttons[Buttons::BT_CHARC_GENDER_M] =
+    buttons_[Buttons::BT_CHARC_GENDER_M] =
         std::make_unique<MapleButton>(genderSelect["male"],
                                       Point<int16_t>(425, 107));
-    buttons[Buttons::BT_CHARC_GEMDER_F] =
+    buttons_[Buttons::BT_CHARC_GEMDER_F] =
         std::make_unique<MapleButton>(genderSelect["female"],
                                       Point<int16_t>(423, 107));
-    buttons[Buttons::BT_CHARC_SKINL] =
+    buttons_[Buttons::BT_CHARC_SKINL] =
         std::make_unique<MapleButton>(CustomizeChar["BtLeft"],
                                       Point<int16_t>(418, 81 + (4 * 18)));
-    buttons[Buttons::BT_CHARC_SKINR] =
+    buttons_[Buttons::BT_CHARC_SKINR] =
         std::make_unique<MapleButton>(CustomizeChar["BtRight"],
                                       Point<int16_t>(415, 81 + (4 * 18)));
-    buttons[Buttons::BT_CHARC_WEPL] =
+    buttons_[Buttons::BT_CHARC_WEPL] =
         std::make_unique<MapleButton>(CustomizeChar["BtLeft"],
                                       Point<int16_t>(418, 81 + (8 * 18)));
-    buttons[Buttons::BT_CHARC_WEPR] =
+    buttons_[Buttons::BT_CHARC_WEPR] =
         std::make_unique<MapleButton>(CustomizeChar["BtRight"],
                                       Point<int16_t>(415, 81 + (8 * 18)));
 
     for (size_t i = 0; i <= 7; i++) {
-        buttons[Buttons::BT_CHARC_HAIRC0 + i] =
+        buttons_[Buttons::BT_CHARC_HAIRC0 + i] =
             std::make_unique<MapleButton>(CustomizeChar["hairSelect"][i],
                                           Point<int16_t>(553 + (i * 15), 238));
-        buttons[Buttons::BT_CHARC_HAIRC0 + i]->set_active(false);
+        buttons_[Buttons::BT_CHARC_HAIRC0 + i]->set_active(false);
     }
 
-    buttons[Buttons::BT_CHARC_SKINL]->set_active(false);
-    buttons[Buttons::BT_CHARC_SKINR]->set_active(false);
-    buttons[Buttons::BT_CHARC_WEPL]->set_active(false);
-    buttons[Buttons::BT_CHARC_WEPR]->set_active(false);
+    buttons_[Buttons::BT_CHARC_SKINL]->set_active(false);
+    buttons_[Buttons::BT_CHARC_SKINR]->set_active(false);
+    buttons_[Buttons::BT_CHARC_WEPL]->set_active(false);
+    buttons_[Buttons::BT_CHARC_WEPR]->set_active(false);
 
-    buttons[Buttons::BT_CHARC_OK] =
+    buttons_[Buttons::BT_CHARC_OK] =
         std::make_unique<MapleButton>(CustomizeChar["BtYes"],
                                       Point<int16_t>(510, 396));
-    buttons[Buttons::BT_CHARC_CANCEL] =
+    buttons_[Buttons::BT_CHARC_CANCEL] =
         std::make_unique<MapleButton>(CustomizeChar["BtNo"],
                                       Point<int16_t>(615, 396));
 
@@ -125,10 +125,10 @@ UICygnusCreation::UICygnusCreation() :
         Rectangle<int16_t>(Point<int16_t>(539, 209), Point<int16_t>(631, 252)),
         12);
 
-    sprites.emplace_back(Common["frame"], Point<int16_t>(400, 300));
-    sprites.emplace_back(Common["step"]["3"], Point<int16_t>(40, 0));
+    sprites_.emplace_back(Common["frame"], Point<int16_t>(400, 300));
+    sprites_.emplace_back(Common["step"]["3"], Point<int16_t>(40, 0));
 
-    buttons[Buttons::BT_BACK] =
+    buttons_[Buttons::BT_BACK] =
         std::make_unique<MapleButton>(Login["Common"]["BtStart"],
                                       Point<int16_t>(0, 515));
 
@@ -219,10 +219,10 @@ void UICygnusCreation::draw(float inter) const {
             if (i == 1) {
                 for (size_t f = 0; f <= 6; f++)
                     sprites_gender_select[i].draw(
-                        position + Point<int16_t>(0, 18 * f),
+                        position_ + Point<int16_t>(0, 18 * f),
                         inter);
             } else {
-                sprites_gender_select[i].draw(position, inter);
+                sprites_gender_select[i].draw(position_, inter);
             }
         }
 
@@ -237,10 +237,10 @@ void UICygnusCreation::draw(float inter) const {
                 if (i == 1) {
                     for (size_t f = 0; f <= 7; f++)
                         sprites_lookboard[i].draw(
-                            position + Point<int16_t>(0, 18 * f),
+                            position_ + Point<int16_t>(0, 18 * f),
                             inter);
                 } else {
-                    sprites_lookboard[i].draw(position, inter);
+                    sprites_lookboard[i].draw(position_, inter);
                 }
             }
 
@@ -261,7 +261,7 @@ void UICygnusCreation::draw(float inter) const {
 
                 nameboard.draw(Point<int16_t>(423, 104));
 
-                namechar.draw(position);
+                namechar.draw(position_);
                 newchar.draw(Point<int16_t>(394, 339), inter);
 
                 UIElement::draw_buttons(inter);
@@ -273,12 +273,12 @@ void UICygnusCreation::draw(float inter) const {
                 UIElement::draw_buttons(inter);
 
                 for (auto &sprite : sprites_keytype)
-                    sprite.draw(position, inter);
+                    sprite.draw(position_, inter);
             }
         }
     }
 
-    version.draw(position + Point<int16_t>(707, 1));
+    version.draw(position_ + Point<int16_t>(707, 1));
 }
 
 void UICygnusCreation::update() {
@@ -295,7 +295,7 @@ void UICygnusCreation::update() {
             newchar.update(Constants::TIMESTEP);
         } else {
             if (!named) {
-                namechar.update(position);
+                namechar.update(position_);
                 newchar.update(Constants::TIMESTEP);
             } else {
                 for (auto &sprite : sprites_keytype)
@@ -386,8 +386,8 @@ void UICygnusCreation::send_naming_result(bool nameused) {
             auto onok = [&]() {
                 namechar.set_state(Textfield::State::FOCUSED);
 
-                buttons[Buttons::BT_CHARC_OK]->set_state(Button::State::NORMAL);
-                buttons[Buttons::BT_CHARC_CANCEL]->set_state(
+                buttons_[Buttons::BT_CHARC_OK]->set_state(Button::State::NORMAL);
+                buttons_[Buttons::BT_CHARC_CANCEL]->set_state(
                     Button::State::NORMAL);
             };
 
@@ -404,21 +404,21 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
             if (!gender) {
                 gender = true;
 
-                buttons[Buttons::BT_CHARC_GENDER_M]->set_active(false);
-                buttons[Buttons::BT_CHARC_GEMDER_F]->set_active(false);
+                buttons_[Buttons::BT_CHARC_GENDER_M]->set_active(false);
+                buttons_[Buttons::BT_CHARC_GEMDER_F]->set_active(false);
 
-                buttons[Buttons::BT_CHARC_SKINL]->set_active(true);
-                buttons[Buttons::BT_CHARC_SKINR]->set_active(true);
+                buttons_[Buttons::BT_CHARC_SKINL]->set_active(true);
+                buttons_[Buttons::BT_CHARC_SKINR]->set_active(true);
 
-                buttons[Buttons::BT_CHARC_WEPL]->set_active(true);
-                buttons[Buttons::BT_CHARC_WEPR]->set_active(true);
+                buttons_[Buttons::BT_CHARC_WEPL]->set_active(true);
+                buttons_[Buttons::BT_CHARC_WEPR]->set_active(true);
 
                 for (size_t i = 0; i <= 7; i++)
-                    buttons[Buttons::BT_CHARC_HAIRC0 + i]->set_active(true);
+                    buttons_[Buttons::BT_CHARC_HAIRC0 + i]->set_active(true);
 
-                buttons[Buttons::BT_CHARC_OK]->set_position(
+                buttons_[Buttons::BT_CHARC_OK]->set_position(
                     Point<int16_t>(502, 381));
-                buttons[Buttons::BT_CHARC_CANCEL]->set_position(
+                buttons_[Buttons::BT_CHARC_CANCEL]->set_position(
                     Point<int16_t>(607, 381));
 
                 return Button::State::NORMAL;
@@ -426,19 +426,19 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
                 if (!charSet) {
                     charSet = true;
 
-                    buttons[Buttons::BT_CHARC_SKINL]->set_active(false);
-                    buttons[Buttons::BT_CHARC_SKINR]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_SKINL]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_SKINR]->set_active(false);
 
-                    buttons[Buttons::BT_CHARC_WEPL]->set_active(false);
-                    buttons[Buttons::BT_CHARC_WEPR]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_WEPL]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_WEPR]->set_active(false);
 
                     for (size_t i = 0; i <= 7; i++)
-                        buttons[Buttons::BT_CHARC_HAIRC0 + i]->set_active(
+                        buttons_[Buttons::BT_CHARC_HAIRC0 + i]->set_active(
                             false);
 
-                    buttons[Buttons::BT_CHARC_OK]->set_position(
+                    buttons_[Buttons::BT_CHARC_OK]->set_position(
                         Point<int16_t>(510, 289));
-                    buttons[Buttons::BT_CHARC_CANCEL]->set_position(
+                    buttons_[Buttons::BT_CHARC_CANCEL]->set_position(
                         Point<int16_t>(615, 289));
 
                     namechar.set_state(Textfield::State::FOCUSED);
@@ -453,9 +453,9 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
                         } else if (name.size() >= 4) {
                             namechar.set_state(Textfield::State::DISABLED);
 
-                            buttons[Buttons::BT_CHARC_OK]->set_state(
+                            buttons_[Buttons::BT_CHARC_OK]->set_state(
                                 Button::State::DISABLED);
-                            buttons[Buttons::BT_CHARC_CANCEL]->set_state(
+                            buttons_[Buttons::BT_CHARC_CANCEL]->set_state(
                                 Button::State::DISABLED);
 
                             if (auto raceselect =
@@ -470,9 +470,9 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
                             std::function<void()> okhandler = [&]() {
                                 namechar.set_state(Textfield::State::FOCUSED);
 
-                                buttons[Buttons::BT_CHARC_OK]->set_state(
+                                buttons_[Buttons::BT_CHARC_OK]->set_state(
                                     Button::State::NORMAL);
-                                buttons[Buttons::BT_CHARC_CANCEL]->set_state(
+                                buttons_[Buttons::BT_CHARC_CANCEL]->set_state(
                                     Button::State::NORMAL);
                             };
 
@@ -484,17 +484,17 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
                         } else {
                             namechar.set_state(Textfield::State::DISABLED);
 
-                            buttons[Buttons::BT_CHARC_OK]->set_state(
+                            buttons_[Buttons::BT_CHARC_OK]->set_state(
                                 Button::State::DISABLED);
-                            buttons[Buttons::BT_CHARC_CANCEL]->set_state(
+                            buttons_[Buttons::BT_CHARC_CANCEL]->set_state(
                                 Button::State::DISABLED);
 
                             std::function<void()> okhandler = [&]() {
                                 namechar.set_state(Textfield::State::FOCUSED);
 
-                                buttons[Buttons::BT_CHARC_OK]->set_state(
+                                buttons_[Buttons::BT_CHARC_OK]->set_state(
                                     Button::State::NORMAL);
-                                buttons[Buttons::BT_CHARC_CANCEL]->set_state(
+                                buttons_[Buttons::BT_CHARC_CANCEL]->set_state(
                                     Button::State::NORMAL);
                             };
 
@@ -520,18 +520,18 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
             if (charSet) {
                 charSet = false;
 
-                buttons[Buttons::BT_CHARC_SKINL]->set_active(true);
-                buttons[Buttons::BT_CHARC_SKINR]->set_active(true);
+                buttons_[Buttons::BT_CHARC_SKINL]->set_active(true);
+                buttons_[Buttons::BT_CHARC_SKINR]->set_active(true);
 
-                buttons[Buttons::BT_CHARC_WEPL]->set_active(true);
-                buttons[Buttons::BT_CHARC_WEPR]->set_active(true);
+                buttons_[Buttons::BT_CHARC_WEPL]->set_active(true);
+                buttons_[Buttons::BT_CHARC_WEPR]->set_active(true);
 
                 for (size_t i = 0; i <= 7; i++)
-                    buttons[Buttons::BT_CHARC_HAIRC0 + i]->set_active(true);
+                    buttons_[Buttons::BT_CHARC_HAIRC0 + i]->set_active(true);
 
-                buttons[Buttons::BT_CHARC_OK]->set_position(
+                buttons_[Buttons::BT_CHARC_OK]->set_position(
                     Point<int16_t>(502, 381));
-                buttons[Buttons::BT_CHARC_CANCEL]->set_position(
+                buttons_[Buttons::BT_CHARC_CANCEL]->set_position(
                     Point<int16_t>(607, 381));
 
                 namechar.set_state(Textfield::State::DISABLED);
@@ -541,22 +541,22 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
                 if (gender) {
                     gender = false;
 
-                    buttons[Buttons::BT_CHARC_GENDER_M]->set_active(true);
-                    buttons[Buttons::BT_CHARC_GEMDER_F]->set_active(true);
+                    buttons_[Buttons::BT_CHARC_GENDER_M]->set_active(true);
+                    buttons_[Buttons::BT_CHARC_GEMDER_F]->set_active(true);
 
-                    buttons[Buttons::BT_CHARC_SKINL]->set_active(false);
-                    buttons[Buttons::BT_CHARC_SKINR]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_SKINL]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_SKINR]->set_active(false);
 
-                    buttons[Buttons::BT_CHARC_WEPL]->set_active(false);
-                    buttons[Buttons::BT_CHARC_WEPR]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_WEPL]->set_active(false);
+                    buttons_[Buttons::BT_CHARC_WEPR]->set_active(false);
 
                     for (size_t i = 0; i <= 7; i++)
-                        buttons[Buttons::BT_CHARC_HAIRC0 + i]->set_active(
+                        buttons_[Buttons::BT_CHARC_HAIRC0 + i]->set_active(
                             false);
 
-                    buttons[Buttons::BT_CHARC_OK]->set_position(
+                    buttons_[Buttons::BT_CHARC_OK]->set_position(
                         Point<int16_t>(510, 396));
-                    buttons[Buttons::BT_CHARC_CANCEL]->set_position(
+                    buttons_[Buttons::BT_CHARC_CANCEL]->set_position(
                         Point<int16_t>(615, 396));
 
                     return Button::State::NORMAL;

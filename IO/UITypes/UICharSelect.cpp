@@ -604,6 +604,17 @@ const CharEntry &UICharSelect::get_character(int32_t id) {
     return null_character;
 }
 
+bool UICharSelect::update_character(int32_t id, StatsEntry stats) {
+    for (auto &character : characters) {
+        if (character.id == id) {
+            character.stats = stats;
+            return true;
+        }
+    }
+            
+    return false;
+}
+
 Button::State UICharSelect::button_pressed(uint16_t buttonid) {
     switch (buttonid) {
         case Buttons::CHARACTER_SELECT: {

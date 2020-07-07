@@ -59,6 +59,8 @@ public:
 
     const CharEntry &get_character(int32_t id);
 
+    bool update_character(int32_t id, StatsEntry stats);
+
 protected:
     Button::State button_pressed(uint16_t buttonid) override;
 

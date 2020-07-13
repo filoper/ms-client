@@ -1,16 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
+//	This file is part of the continued Journey MMORPG client // 	Copyright
+//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
 //																				//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
+//// 	it under the terms of the GNU Affero General Public License as published
+/// by / 	the Free Software Foundation, either version 3 of the License, or //
+///(at
+// your option) any later version.											//
 //																				//
 //	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
+// WITHOUT ANY WARRANTY; without even the implied warranty of				//
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
+// Affero General Public License for more details.							//
 //																				//
 //	You should have received a copy of the GNU Affero General Public License
 //// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
@@ -295,12 +296,12 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
                                        Point<int16_t> cursorpos) {
     if (dragged_icon_) {
         if (cursorstate == Cursor::State::CLICKING) {
-            if (drop_icon(*dragged_icon_, cursorpos))
+            if (drop_icon(*dragged_icon_, cursorpos)) {
                 remove_icon();
-
+                time_rel_grabbed = std::chrono::steady_clock::now();
+            }
             return cursorstate;
         }
-
         return Cursor::State::GRABBING;
     } else {
         bool clicked = cursorstate == Cursor::State::CLICKING
@@ -309,11 +310,9 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
         if (auto focusedelement = get(focused_)) {
             if (focusedelement->is_active()) {
                 remove_cursor(focusedelement->get_type());
-
                 return focusedelement->send_cursor(clicked, cursorpos);
             } else {
                 focused_ = UIElement::Type::NONE;
-
                 return cursorstate;
             }
         } else {
@@ -328,11 +327,9 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
                             clear_tooltip(tooltip_parent_);
 
                     remove_cursor(front_type);
-
                     return front->send_cursor(clicked, cursorpos);
                 } else {
                     remove_cursors();
-
                     return Stage::get().send_cursor(clicked, cursorpos);
                 }
             } else {
@@ -358,10 +355,19 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
                     }
                 }
 
-                if (dragged_)
+                // fixes bug with icon in keyconfig being re-grabbed after
+                // assign
+                if (auto duration = duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - time_rel_grabbed);
+                    duration < MIN_DELAY_NEXT_GRAB_) {
+                    return Cursor::State::IDLE;
+                }
+
+                if (dragged_) {
                     return dragged_->send_cursor(clicked, cursorpos);
-                else
-                    return Stage::get().send_cursor(clicked, cursorpos);
+                }
+                
+                return Stage::get().send_cursor(clicked, cursorpos);
             }
         }
     }

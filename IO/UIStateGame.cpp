@@ -19,6 +19,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 #include "UIStateGame.h"
 
+#ifdef _WIN32
+#include <Windows.h>
+#include <time.h>
+#endif
+
 #include "../Net/Packets/GameplayPackets.h"
 #include "UI.h"
 #include "UITypes/UIBuffList.h"
@@ -357,9 +362,9 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
 
                 // fixes bug with icon in keyconfig being re-grabbed after
                 // assign
-                if (duration_cast<std::chrono::milliseconds>(
-                        std::chrono::steady_clock::now() - time_rel_grabbed)
-                    < MIN_DELAY_NEXT_GRAB_) {
+                if (auto duration = duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - time_rel_grabbed);
+                    duration < MIN_DELAY_NEXT_GRAB_) {
                     return Cursor::State::IDLE;
                 }
 

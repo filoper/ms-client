@@ -19,8 +19,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include <chrono>
-
 #include "../Character/CharStats.h"
 #include "../Template/EnumMap.h"
 #include "../Template/Optional.h"
@@ -119,8 +117,10 @@ private:
 
     Optional<Icon> dragged_icon_;
     std::chrono::time_point<std::chrono::steady_clock> time_rel_grabbed =
-        std::chrono::steady_clock::now();
-    static constexpr std::chrono::microseconds MIN_DELAY_NEXT_GRAB_ { 10 };
+        ContinuousTimer::get().start();
+    //std::chrono::time_point<std::chrono::steady_clock> time_rel_grabbed =
+    //    std::chrono::steady_clock::now();
+    //static constexpr std::chrono::microseconds MIN_DELAY_NEXT_GRAB_ { 10 };
 
     std::map<Icon::IconType, UIElement::Type> icon_map_ = {
         { Icon::IconType::NONE, UIElement::Type::NONE },

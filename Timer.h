@@ -72,14 +72,6 @@ public:
         return duration.count();
     }
 
-    bool is_less_than_since(point last, int ms) {
-        auto now = clock::now();
-        std::chrono::microseconds msec { ms };
-
-        auto duration = duration_cast<std::chrono::milliseconds>(now - last);
-        return duration < msec;
-    }
-
 private:
     using clock = std::chrono::steady_clock;
 };

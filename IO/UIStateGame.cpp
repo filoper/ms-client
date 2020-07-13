@@ -357,16 +357,16 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
 
                 // fixes bug with icon in keyconfig being re-grabbed after
                 // assign
-                if (auto duration = duration_cast<std::chrono::milliseconds>(
-                        std::chrono::steady_clock::now() - time_rel_grabbed);
-                    duration < MIN_DELAY_NEXT_GRAB_) {
+                if (duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - time_rel_grabbed)
+                    < MIN_DELAY_NEXT_GRAB_) {
                     return Cursor::State::IDLE;
                 }
 
                 if (dragged_) {
                     return dragged_->send_cursor(clicked, cursorpos);
                 }
-                
+
                 return Stage::get().send_cursor(clicked, cursorpos);
             }
         }

@@ -1,16 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
+//	This file is part of the continued Journey MMORPG client // 	Copyright
+//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
 //																				//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
+//// 	it under the terms of the GNU Affero General Public License as published
+/// by / 	the Free Software Foundation, either version 3 of the License, or //
+///(at
+// your option) any later version.											//
 //																				//
 //	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
+// WITHOUT ANY WARRANTY; without even the implied warranty of				//
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
+// Affero General Public License for more details.							//
 //																				//
 //	You should have received a copy of the GNU Affero General Public License
 //// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
@@ -19,11 +20,10 @@
 #include "InPacket.h"
 
 namespace ms {
-InPacket::InPacket(const int8_t *recv, size_t length) {
-    bytes_ = recv;
-    top_ = length;
-    pos_ = 0;
-}
+InPacket::InPacket(const int8_t *recv, size_t length) :
+    bytes_(recv),
+    top_(length),
+    pos_(0) {}
 
 bool InPacket::available() const {
     return length() > 0;
@@ -42,7 +42,7 @@ void InPacket::skip(size_t count) {
 
 bool InPacket::read_bool() {
     return read_byte() == 1;
-    //return read<bool>();
+    // return read<bool>();
 }
 
 int8_t InPacket::read_byte() {
@@ -84,7 +84,7 @@ std::string InPacket::read_string() {
     uint16_t length = read<uint16_t>();
 
     return read_padded_string(length);
-    //return read<std::string>();
+    // return read<std::string>();
 }
 
 std::string InPacket::read_padded_string(uint16_t count) {

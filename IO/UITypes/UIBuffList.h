@@ -35,14 +35,14 @@ public:
     bool update();
 
 private:
-    static const uint16_t FLASH_TIME = 3'000;
+    static const uint16_t FLASH_TIME_ = 3'000;
 
-    Texture icon;
-    IconCover cover;
-    int32_t buffid;
-    int32_t duration;
-    Linear<float> opacity;
-    float opcstep;
+    Texture icon_;
+    IconCover cover_;
+    int32_t buffid_;
+    int32_t duration_;
+    Linear<float> opacity_;
+    float opcstep_;
 };
 
 class UIBuffList : public UIElement {
@@ -66,6 +66,6 @@ public:
     void add_buff(int32_t buffid, int32_t duration);
 
 private:
-    std::unordered_map<int32_t, BuffIcon> icons;
+    std::unordered_map<int32_t, BuffIcon> icons_;
 };
 }  // namespace ms

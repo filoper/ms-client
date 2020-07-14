@@ -38,12 +38,12 @@ public:
     UIElement::Type get_type() const override;
 
 private:
-    Animation Nexon;
-    Animation Wizet;
-    Texture WizetEnd;
+    Animation nexon_;
+    Animation wizet_;
+    Texture wizet_end_;
 
-    bool nexon_ended;
-    bool wizet_ended;
-    bool user_clicked;
+    bool nexon_ended_;
+    bool wizet_ended_;
+    bool user_clicked_;
 };
 }  // namespace ms

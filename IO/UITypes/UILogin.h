@@ -58,13 +58,13 @@ private:
         NUM_BUTTONS
     };
 
-    Text version;
-    Textfield account;
-    Textfield password;
-    Texture accountbg;
-    Texture passwordbg;
-    BoolPair<Texture> checkbox;
+    Text version_;
+    Textfield account_;
+    Textfield password_;
+    Texture accountbg_;
+    Texture passwordbg_;
+    BoolPair<Texture> checkbox_;
 
-    bool saveid;
+    bool saveid_;
 };
 }  // namespace ms

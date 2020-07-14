@@ -26,8 +26,8 @@
 
 namespace ms {
 UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
-    offset = 0;
-    event_count = 16;
+    offset_ = 0;
+    event_count_ = 16;
 
     nl::node main = nl::nx::ui["UIWindow2.img"]["EventList"]["main"];
     nl::node close = nl::nx::ui["Basic.img"]["BtClose3"];
@@ -46,41 +46,41 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
     bool item_rewards = false;
 
     for (size_t i = 0; i < 5; i++)
-        events.emplace_back(BoolPair<bool>(true, true));
+        events_.emplace_back(BoolPair<bool>(true, true));
 
     for (size_t i = 0; i < 10; i++)
-        events.emplace_back(BoolPair<bool>(false, true));
+        events_.emplace_back(BoolPair<bool>(false, true));
 
-    events.emplace_back(BoolPair<bool>(false, false));
+    events_.emplace_back(BoolPair<bool>(false, false));
 
     for (size_t i = 0; i < 3; i++)
-        event_title[i] = ShadowText(Text::Font::A18M,
+        event_title_[i] = ShadowText(Text::Font::A18M,
                                     Text::Alignment::LEFT,
                                     Color::Name::HALFANDHALF,
                                     Color::Name::ENDEAVOUR);
 
     for (size_t i = 0; i < 3; i++)
-        event_date[i] =
+        event_date_[i] =
             Text(Text::Font::A12B, Text::Alignment::LEFT, Color::Name::WHITE);
 
-    item_reward = main["event"]["normal"];
-    text_reward = main["liveEvent"]["normal"];
-    next = main["liveEvent"]["next"];
-    label_on = main["label_on"]["0"];
-    label_next = main["label_next"]["0"];
+    item_reward_ = main["event"]["normal"];
+    text_reward_ = main["liveEvent"]["normal"];
+    next_ = main["liveEvent"]["next"];
+    label_on_ = main["label_on"]["0"];
+    label_next_ = main["label_next"]["0"];
 
-    slider = Slider(Slider::Type::DEFAULT_SILVER,
+    slider_ = Slider(Slider::Type::DEFAULT_SILVER,
                     Range<int16_t>(86, 449),
                     396,
                     3,
-                    event_count,
+                    event_count_,
                     [&](bool upwards) {
                         int16_t shift = upwards ? -1 : 1;
-                        bool above = offset + shift >= 0;
-                        bool below = offset + shift <= event_count - 3;
+                        bool above = offset_ + shift >= 0;
+                        bool below = offset_ + shift <= event_count_ - 3;
 
                         if (above && below)
-                            offset += shift;
+                            offset_ += shift;
                     });
 
     dimension_ = bg_dimensions;
@@ -90,22 +90,22 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
 void UIEvent::draw(float inter) const {
     UIElement::draw(inter);
 
-    slider.draw(position_);
+    slider_.draw(position_);
 
     for (size_t i = 0; i < 3; i++) {
-        int16_t slot = i + offset;
+        int16_t slot = i + offset_;
 
-        if (slot >= event_count)
+        if (slot >= event_count_)
             break;
 
         auto event_pos = Point<int16_t>(12, 87 + 125 * i);
 
-        auto evnt = events[slot];
+        auto evnt = events_[slot];
         auto in_progress = evnt[1];
         auto itm_reward = evnt[0];
 
         if (itm_reward) {
-            item_reward.draw(position_ + event_pos);
+            item_reward_.draw(position_ + event_pos);
 
             int16_t x_adj = 0;
 
@@ -124,22 +124,22 @@ void UIEvent::draw(float inter) const {
                           + Point<int16_t>(33 + x_adj + 46 * f, 191 + 125 * i));
             }
         } else {
-            text_reward.draw(position_ + event_pos);
+            text_reward_.draw(position_ + event_pos);
 
             if (!in_progress)
-                next.draw(position_ + event_pos);
+                next_.draw(position_ + event_pos);
         }
 
         if (in_progress)
-            label_on.draw(position_ + event_pos);
+            label_on_.draw(position_ + event_pos);
         else
-            label_next.draw(position_ + event_pos);
+            label_next_.draw(position_ + event_pos);
 
         auto title_pos = Point<int16_t>(28, 95 + 125 * i);
         auto date_pos = Point<int16_t>(28, 123 + 125 * i);
 
-        event_title[i].draw(position_ + title_pos);
-        event_date[i].draw(position_ + date_pos);
+        event_title_[i].draw(position_ + title_pos);
+        event_date_[i].draw(position_ + date_pos);
     }
 }
 
@@ -147,9 +147,9 @@ void UIEvent::update() {
     UIElement::update();
 
     for (size_t i = 0; i < 3; i++) {
-        int16_t slot = i + offset;
+        int16_t slot = i + offset_;
 
-        if (slot >= event_count)
+        if (slot >= event_count_)
             break;
 
         std::string title = get_event_title(slot);
@@ -157,8 +157,8 @@ void UIEvent::update() {
         if (title.length() > 35)
             title = title.substr(0, 35) + "..";
 
-        event_title[i].change_text(title);
-        event_date[i].change_text(get_event_date(slot));
+        event_title_[i].change_text(title);
+        event_date_[i].change_text(get_event_date(slot));
     }
 }
 
@@ -167,14 +167,14 @@ void UIEvent::remove_cursor() {
 
     UI::get().clear_tooltip(Tooltip::Parent::EVENT);
 
-    slider.remove_cursor();
+    slider_.remove_cursor();
 }
 
 Cursor::State UIEvent::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Point<int16_t> cursoroffset = cursorpos - position_;
 
-    if (slider.isenabled())
-        if (Cursor::State new_state = slider.send_cursor(cursoroffset, clicked))
+    if (slider_.isenabled())
+        if (Cursor::State new_state = slider_.send_cursor(cursoroffset, clicked))
             return new_state;
 
     int16_t yoff = cursoroffset.y();

@@ -70,12 +70,12 @@ private:
 
     std::string format_text(const std::string &tx, const int32_t &npcid);
 
-    static constexpr int16_t MAX_HEIGHT = 248;
+    static constexpr int16_t MAX_HEIGHT_ = 248;
 
     enum Buttons {
-        ALLLEVEL,
+        ALL_LEVEL,
         CLOSE,
-        MYLEVEL,
+        MY_LEVEL,
         NEXT,
         NO,
         OK,
@@ -90,29 +90,29 @@ private:
         YES
     };
 
-    Texture top;
-    Texture fill;
-    Texture bottom;
-    Texture nametag;
-    Texture speaker;
+    Texture top_;
+    Texture fill_;
+    Texture bottom_;
+    Texture nametag_;
+    Texture speaker_;
 
-    Text text;
-    Text name;
+    Text text_;
+    Text name_;
 
-    int16_t height;
-    int16_t offset;
-    int16_t unitrows;
-    int16_t rowmax;
-    int16_t min_height;
+    int16_t height_;
+    int16_t offset_;
+    int16_t unit_rows_;
+    int16_t row_max_;
+    int16_t min_height_;
 
-    bool show_slider;
-    bool draw_text;
-    Slider slider;
-    TalkType type;
-    std::string formatted_text;
-    size_t formatted_text_pos;
-    uint16_t timestep;
+    bool show_slider_;
+    bool draw_text_;
+    Slider slider_;
+    TalkType type_;
+    std::string formatted_text_;
+    size_t formatted_text_pos_;
+    uint16_t timestep_;
 
-    std::function<void(bool)> onmoved;
+    std::function<void(bool)> onmoved_;
 };
 }  // namespace ms

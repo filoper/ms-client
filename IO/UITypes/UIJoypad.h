@@ -47,8 +47,8 @@ private:
 
     enum Buttons : uint16_t { DEFAULT, CANCEL, OK };
 
-    bool alternative_settings;
-    BoolPair<Texture> backgrnd;
+    bool alternative_settings_;
+    BoolPair<Texture> backgrnd_;
 
     enum Setting : uint8_t {
         // Joypad name
@@ -71,6 +71,6 @@ private:
         SETTING_NUM
     };
 
-    Text key_text[UIJoypad::Setting::SETTING_NUM];
+    Text key_text_[UIJoypad::Setting::SETTING_NUM];
 };
 }  // namespace ms

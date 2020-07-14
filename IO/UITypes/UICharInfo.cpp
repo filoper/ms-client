@@ -27,12 +27,12 @@
 namespace ms {
 UICharInfo::UICharInfo(int32_t cid) :
     UIDragElement<PosCHARINFO>(),
-    is_loading(true),
-    timestep(Constants::TIMESTEP),
-    personality_enabled(false),
-    collect_enabled(false),
-    damage_enabled(false),
-    item_enabled(false) {
+    is_loading_(true),
+    timestep_(Constants::TIMESTEP),
+    personality_enabled_(false),
+    collect_enabled_(false),
+    damage_enabled_(false),
+    item_enabled_(false) {
     nl::node close = nl::nx::ui["Basic.img"]["BtClose3"];
     nl::node UserInfo = nl::nx::ui["UIWindow2.img"]["UserInfo"];
     nl::node character = UserInfo["character"];
@@ -70,12 +70,12 @@ UICharInfo::UICharInfo(int32_t cid) :
     buttons_[Buttons::BtTrad] =
         std::make_unique<MapleButton>(character["BtTrad"]);
 
-    name = Text(Text::Font::A12M, Text::Alignment::CENTER, Color::Name::WHITE);
-    job = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
-    level = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
-    fame = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
-    guild = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
-    alliance =
+    name_ = Text(Text::Font::A12M, Text::Alignment::CENTER, Color::Name::WHITE);
+    job_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
+    level_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
+    fame_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
+    guild_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
+    alliance_ =
         Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
 
     // TODO: Check if player has a mount or pet, disable if they don't
@@ -86,107 +86,107 @@ UICharInfo::UICharInfo(int32_t cid) :
     nl::node farm = UserInfo["farm"];
     nl::node farm_backgrnd = farm["backgrnd"];
 
-    loading = farm["loading"];
+    loading_ = farm["loading"];
 
-    farm_dim = Texture(farm_backgrnd).get_dimensions();
-    farm_adj = Point<int16_t>(-farm_dim.x(), 0);
+    farm_dim_ = Texture(farm_backgrnd).get_dimensions();
+    farm_adj_ = Point<int16_t>(-farm_dim_.x(), 0);
 
-    sprites_.emplace_back(farm_backgrnd, farm_adj);
-    sprites_.emplace_back(farm["backgrnd2"], farm_adj);
-    sprites_.emplace_back(farm["default"], farm_adj);
-    sprites_.emplace_back(farm["cover"], farm_adj);
+    sprites_.emplace_back(farm_backgrnd, farm_adj_);
+    sprites_.emplace_back(farm["backgrnd2"], farm_adj_);
+    sprites_.emplace_back(farm["default"], farm_adj_);
+    sprites_.emplace_back(farm["cover"], farm_adj_);
 
     buttons_[Buttons::BtFriend] =
-        std::make_unique<MapleButton>(farm["btFriend"], farm_adj);
+        std::make_unique<MapleButton>(farm["btFriend"], farm_adj_);
     buttons_[Buttons::BtVisit] =
-        std::make_unique<MapleButton>(farm["btVisit"], farm_adj);
+        std::make_unique<MapleButton>(farm["btVisit"], farm_adj_);
 
-    farm_name =
+    farm_name_ =
         Text(Text::Font::A11M, Text::Alignment::CENTER, Color::Name::SUPERNOVA);
-    farm_level = Charset(farm["number"], Charset::Alignment::LEFT);
+    farm_level_ = Charset(farm["number"], Charset::Alignment::LEFT);
 
 #pragma region BottomWindow
-    bottom_window_adj = Point<int16_t>(0, backgrnd_dim.y() + 1);
+    bottom_window_adj_ = Point<int16_t>(0, backgrnd_dim.y() + 1);
 
     /// Personality
     nl::node personality = UserInfo["personality"];
     nl::node personality_backgrnd = personality["backgrnd"];
 
-    personality_sprites.emplace_back(personality_backgrnd, bottom_window_adj);
-    personality_sprites.emplace_back(personality["backgrnd2"],
-                                     bottom_window_adj);
+    personality_sprites_.emplace_back(personality_backgrnd, bottom_window_adj_);
+    personality_sprites_.emplace_back(personality["backgrnd2"],
+                                     bottom_window_adj_);
 
-    personality_sprites_enabled[true].emplace_back(personality["backgrnd3"],
-                                                   bottom_window_adj);
-    personality_sprites_enabled[true].emplace_back(personality["backgrnd4"],
-                                                   bottom_window_adj);
-    personality_sprites_enabled[true].emplace_back(personality["center"],
-                                                   bottom_window_adj);
-    personality_sprites_enabled[false].emplace_back(
+    personality_sprites_enabled_[true].emplace_back(personality["backgrnd3"],
+                                                   bottom_window_adj_);
+    personality_sprites_enabled_[true].emplace_back(personality["backgrnd4"],
+                                                   bottom_window_adj_);
+    personality_sprites_enabled_[true].emplace_back(personality["center"],
+                                                   bottom_window_adj_);
+    personality_sprites_enabled_[false].emplace_back(
         personality["before30level"],
-        bottom_window_adj);
+        bottom_window_adj_);
 
-    personality_dimensions = Texture(personality_backgrnd).get_dimensions();
+    personality_dimensions_ = Texture(personality_backgrnd).get_dimensions();
 
     /// Collect
     nl::node collect = UserInfo["collect"];
     nl::node collect_backgrnd = collect["backgrnd"];
 
-    collect_sprites.emplace_back(collect_backgrnd, bottom_window_adj);
-    collect_sprites.emplace_back(collect["backgrnd2"], bottom_window_adj);
+    collect_sprites_.emplace_back(collect_backgrnd, bottom_window_adj_);
+    collect_sprites_.emplace_back(collect["backgrnd2"], bottom_window_adj_);
 
-    default_medal = collect["icon1"];
+    default_medal_ = collect["icon1"];
 
     buttons_[Buttons::BtArrayGet] =
-        std::make_unique<MapleButton>(collect["BtArrayGet"], bottom_window_adj);
+        std::make_unique<MapleButton>(collect["BtArrayGet"], bottom_window_adj_);
     buttons_[Buttons::BtArrayName] =
         std::make_unique<MapleButton>(collect["BtArrayName"],
-                                      bottom_window_adj);
+                                      bottom_window_adj_);
 
-    medal_text = Text(Text::Font::A11M,
+    medal_text_ = Text(Text::Font::A11M,
                       Text::Alignment::LEFT,
                       Color::Name::EMPEROR,
                       "Junior Adventurer");
-    medal_total = Text(Text::Font::A11M,
+    medal_total_ = Text(Text::Font::A11M,
                        Text::Alignment::LEFT,
                        Color::Name::EMPEROR,
                        "2");
 
-    collect_dimensions = Texture(collect_backgrnd).get_dimensions();
+    collect_dimensions_ = Texture(collect_backgrnd).get_dimensions();
 
     /// Damage
     nl::node damage = UserInfo["damage"];
     nl::node damage_backgrnd = damage["backgrnd"];
 
-    damage_sprites.emplace_back(damage_backgrnd, bottom_window_adj);
-    damage_sprites.emplace_back(damage["backgrnd2"], bottom_window_adj);
-    damage_sprites.emplace_back(damage["backgrnd3"], bottom_window_adj);
+    damage_sprites_.emplace_back(damage_backgrnd, bottom_window_adj_);
+    damage_sprites_.emplace_back(damage["backgrnd2"], bottom_window_adj_);
+    damage_sprites_.emplace_back(damage["backgrnd3"], bottom_window_adj_);
 
     buttons_[Buttons::BtFAQ] =
-        std::make_unique<MapleButton>(damage["BtFAQ"], bottom_window_adj);
+        std::make_unique<MapleButton>(damage["BtFAQ"], bottom_window_adj_);
     buttons_[Buttons::BtRegist] =
-        std::make_unique<MapleButton>(damage["BtRegist"], bottom_window_adj);
+        std::make_unique<MapleButton>(damage["BtRegist"], bottom_window_adj_);
 
-    damage_dimensions = Texture(damage_backgrnd).get_dimensions();
+    damage_dimensions_ = Texture(damage_backgrnd).get_dimensions();
 #pragma endregion
 
 #pragma region RightWindow
-    right_window_adj = Point<int16_t>(backgrnd_dim.x(), 0);
+    right_window_adj_ = Point<int16_t>(backgrnd_dim.x(), 0);
 
     /// Item
     nl::node item = UserInfo["item"];
     nl::node item_backgrnd = item["backgrnd"];
 
-    item_sprites.emplace_back(item_backgrnd, right_window_adj);
-    item_sprites.emplace_back(item["backgrnd2"], right_window_adj);
+    item_sprites_.emplace_back(item_backgrnd, right_window_adj_);
+    item_sprites_.emplace_back(item["backgrnd2"], right_window_adj_);
 
-    item_dimensions = Texture(item_backgrnd).get_dimensions();
+    item_dimensions_ = Texture(item_backgrnd).get_dimensions();
 #pragma endregion
 
     dimension_ = backgrnd_dim;
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
-    target_character = Stage::get().get_character(cid).get();
+    target_character_ = Stage::get().get_character(cid).get();
 
     CharInfoRequestPacket(cid).dispatch();
 }
@@ -202,45 +202,45 @@ void UICharInfo::draw(float inter) const {
     int16_t row_height = 18;
     Point<int16_t> text_pos = position_ + Point<int16_t>(153, 65);
 
-    target_character->draw_preview(position_ + Point<int16_t>(63, 129), inter);
+    target_character_->draw_preview(position_ + Point<int16_t>(63, 129), inter);
 
-    name.draw(position_ + Point<int16_t>(59, 131));
-    level.draw(text_pos + Point<int16_t>(0, row_height * 0));
-    job.draw(text_pos + Point<int16_t>(0, row_height * 1));
-    fame.draw(text_pos + Point<int16_t>(0, row_height * 2));
-    guild.draw(text_pos + Point<int16_t>(0, row_height * 3)
+    name_.draw(position_ + Point<int16_t>(59, 131));
+    level_.draw(text_pos + Point<int16_t>(0, row_height * 0));
+    job_.draw(text_pos + Point<int16_t>(0, row_height * 1));
+    fame_.draw(text_pos + Point<int16_t>(0, row_height * 2));
+    guild_.draw(text_pos + Point<int16_t>(0, row_height * 3)
                + Point<int16_t>(0, 1));
-    alliance.draw(text_pos + Point<int16_t>(0, row_height * 4));
+    alliance_.draw(text_pos + Point<int16_t>(0, row_height * 4));
 
     /// Farm
-    Point<int16_t> farm_pos = position_ + farm_adj;
+    Point<int16_t> farm_pos = position_ + farm_adj_;
 
-    if (is_loading)
-        loading.draw(farm_pos, inter);
+    if (is_loading_)
+        loading_.draw(farm_pos, inter);
 
-    farm_name.draw(farm_pos + Point<int16_t>(136, 51));
-    farm_level.draw(farm_level_text, farm_pos + Point<int16_t>(126, 34));
+    farm_name_.draw(farm_pos + Point<int16_t>(136, 51));
+    farm_level_.draw(farm_level_text_, farm_pos + Point<int16_t>(126, 34));
 
     /// Personality
-    if (personality_enabled) {
-        for (Sprite sprite : personality_sprites)
+    if (personality_enabled_) {
+        for (Sprite sprite : personality_sprites_)
             sprite.draw(position_, inter);
 
-        bool show_personality = (target_character->get_level() >= 30);
+        bool show_personality = (target_character_->get_level() >= 30);
 
-        for (Sprite sprite : personality_sprites_enabled[show_personality])
+        for (Sprite sprite : personality_sprites_enabled_[show_personality])
             sprite.draw(position_, inter);
     }
 
     /// Collect
-    if (collect_enabled) {
-        for (Sprite sprite : collect_sprites)
+    if (collect_enabled_) {
+        for (Sprite sprite : collect_sprites_)
             sprite.draw(position_, inter);
 
         for (size_t i = 0; i < 15; i++) {
             div_t div = std::div(i, 5);
-            default_medal.draw(
-                position_ + bottom_window_adj + Point<int16_t>(61, 66)
+            default_medal_.draw(
+                position_ + bottom_window_adj_ + Point<int16_t>(61, 66)
                     + Point<int16_t>(38 * div.rem, 38 * div.quot),
                 inter);
         }
@@ -251,14 +251,14 @@ void UICharInfo::draw(float inter) const {
 
         Point<int16_t> text_pos = Point<int16_t>(121, 8);
 
-        medal_text.draw(position_ + bottom_window_adj + text_pos);
-        medal_total.draw(position_ + bottom_window_adj + text_pos
+        medal_text_.draw(position_ + bottom_window_adj_ + text_pos);
+        medal_total_.draw(position_ + bottom_window_adj_ + text_pos
                          + Point<int16_t>(0, 19));
     }
 
     /// Damage
-    if (damage_enabled) {
-        for (Sprite sprite : damage_sprites)
+    if (damage_enabled_) {
+        for (Sprite sprite : damage_sprites_)
             sprite.draw(position_, inter);
 
         for (size_t i = Buttons::BtFAQ; i < buttons_.size(); i++)
@@ -267,17 +267,17 @@ void UICharInfo::draw(float inter) const {
     }
 
     /// Item
-    if (item_enabled)
-        for (Sprite sprite : item_sprites)
+    if (item_enabled_)
+        for (Sprite sprite : item_sprites_)
             sprite.draw(position_, inter);
 }
 
 void UICharInfo::update() {
-    if (timestep >= Constants::TIMESTEP * UCHAR_MAX) {
-        is_loading = false;
+    if (timestep_ >= Constants::TIMESTEP * UCHAR_MAX) {
+        is_loading_ = false;
     } else {
-        loading.update();
-        timestep += Constants::TIMESTEP;
+        loading_.update();
+        timestep_ += Constants::TIMESTEP;
     }
 }
 
@@ -312,8 +312,8 @@ bool UICharInfo::is_in_range(Point<int16_t> cursorpos) const {
         Rectangle<int16_t>(position_, position_ + dimension_);
 
     Rectangle<int16_t> farm_bounds =
-        Rectangle<int16_t>(position_, position_ + farm_dim);
-    farm_bounds.shift(farm_adj);
+        Rectangle<int16_t>(position_, position_ + farm_dim_);
+    farm_bounds.shift(farm_adj_);
 
     Rectangle<int16_t> bottom_bounds =
         Rectangle<int16_t>(Point<int16_t>(0, 0), Point<int16_t>(0, 0));
@@ -323,27 +323,27 @@ bool UICharInfo::is_in_range(Point<int16_t> cursorpos) const {
     int16_t cur_x = cursorpos.x();
     int16_t cur_y = cursorpos.y();
 
-    if (personality_enabled) {
+    if (personality_enabled_) {
         bottom_bounds =
-            Rectangle<int16_t>(position_, position_ + personality_dimensions);
-        bottom_bounds.shift(bottom_window_adj);
+            Rectangle<int16_t>(position_, position_ + personality_dimensions_);
+        bottom_bounds.shift(bottom_window_adj_);
     }
 
-    if (collect_enabled) {
+    if (collect_enabled_) {
         bottom_bounds =
-            Rectangle<int16_t>(position_, position_ + collect_dimensions);
-        bottom_bounds.shift(bottom_window_adj);
+            Rectangle<int16_t>(position_, position_ + collect_dimensions_);
+        bottom_bounds.shift(bottom_window_adj_);
     }
 
-    if (damage_enabled) {
+    if (damage_enabled_) {
         bottom_bounds =
-            Rectangle<int16_t>(position_, position_ + damage_dimensions);
-        bottom_bounds.shift(bottom_window_adj);
+            Rectangle<int16_t>(position_, position_ + damage_dimensions_);
+        bottom_bounds.shift(bottom_window_adj_);
     }
 
-    if (item_enabled) {
-        right_bounds = Rectangle<int16_t>(position_, position_ + item_dimensions);
-        right_bounds.shift(right_window_adj);
+    if (item_enabled_) {
+        right_bounds = Rectangle<int16_t>(position_, position_ + item_dimensions_);
+        right_bounds.shift(right_window_adj_);
     }
 
     return bounds.contains(cursorpos) || farm_bounds.contains(cursorpos)
@@ -377,34 +377,34 @@ void UICharInfo::update_stats(int32_t character_id,
 
     Job character_job = Job(job_id);
 
-    name.change_text(target_character->get_name());
-    job.change_text(character_job.get_name());
-    level.change_text(std::to_string(lv));
-    fame.change_text(std::to_string(f));
-    guild.change_text((g == "" ? "-" : g));
-    alliance.change_text(a);
+    name_.change_text(target_character_->get_name());
+    job_.change_text(character_job.get_name());
+    level_.change_text(std::to_string(lv));
+    fame_.change_text(std::to_string(f));
+    guild_.change_text((g == "" ? "-" : g));
+    alliance_.change_text(a);
 
-    farm_name.change_text("");
-    farm_level_text = "1";
+    farm_name_.change_text("");
+    farm_level_text_ = "1";
 }
 
 void UICharInfo::show_bottom_window(uint16_t buttonid) {
-    personality_enabled = false;
-    collect_enabled = false;
-    damage_enabled = false;
+    personality_enabled_ = false;
+    collect_enabled_ = false;
+    damage_enabled_ = false;
 
     switch (buttonid) {
-        case Buttons::BtPersonality: personality_enabled = true; break;
-        case Buttons::BtCollect: collect_enabled = true; break;
-        case Buttons::BtDamage: damage_enabled = true; break;
+        case Buttons::BtPersonality: personality_enabled_ = true; break;
+        case Buttons::BtCollect: collect_enabled_ = true; break;
+        case Buttons::BtDamage: damage_enabled_ = true; break;
     }
 }
 
 void UICharInfo::show_right_window(uint16_t buttonid) {
-    item_enabled = false;
+    item_enabled_ = false;
 
     switch (buttonid) {
-        case Buttons::BtItem: item_enabled = true; break;
+        case Buttons::BtItem: item_enabled_ = true; break;
     }
 }
 }  // namespace ms

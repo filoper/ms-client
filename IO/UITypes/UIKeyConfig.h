@@ -104,7 +104,7 @@ private:
         Icon::IconType get_type() override;
 
     private:
-        Keyboard::Mapping mapping;
+        Keyboard::Mapping mapping_;
     };
 
     // Used for displaying item counts
@@ -115,36 +115,36 @@ private:
         void set_count(int16_t count) override;
 
     private:
-        int16_t count;
+        int16_t count_;
     };
 
-    const Inventory &inventory;
-    const SkillBook &skillbook;
+    const Inventory &inventory_;
+    const SkillBook &skillbook_;
 
-    bool dirty;
+    bool dirty_;
 
-    Keyboard *keyboard = nullptr;
+    Keyboard *keyboard_ = nullptr;
 
-    nl::node key;
-    nl::node icon;
+    nl::node key_;
+    nl::node icon_;
 
-    EnumMap<KeyConfig::Key, Texture> key_textures;
-    EnumMap<KeyConfig::Key, Point<int16_t>> keys_pos;
+    EnumMap<KeyConfig::Key, Texture> key_textures_;
+    EnumMap<KeyConfig::Key, Point<int16_t>> keys_pos_;
 
-    EnumMap<KeyAction::Id, std::unique_ptr<Icon>> action_icons;
-    EnumMap<KeyAction::Id, Point<int16_t>> unbound_actions_pos;
+    EnumMap<KeyAction::Id, std::unique_ptr<Icon>> action_icons_;
+    EnumMap<KeyAction::Id, Point<int16_t>> unbound_actions_pos_;
 
-    std::map<int32_t, std::unique_ptr<Icon>> item_icons;
-    std::map<int32_t, std::unique_ptr<Icon>> skill_icons;
+    std::map<int32_t, std::unique_ptr<Icon>> item_icons_;
+    std::map<int32_t, std::unique_ptr<Icon>> skill_icons_;
 
     // Used to determine if mapping belongs to predefined action, e.g. attack,
     // pick up, faces, etc.
-    std::vector<Keyboard::Mapping> action_mappings;
+    std::vector<Keyboard::Mapping> action_mappings_;
 
-    std::vector<KeyAction::Id> bound_actions;
-    std::map<int32_t, Keyboard::Mapping> staged_mappings;
+    std::vector<KeyAction::Id> bound_actions_;
+    std::map<int32_t, Keyboard::Mapping> staged_mappings_;
 
-    std::map<int32_t, Keyboard::Mapping> alternate_keys = {
+    std::map<int32_t, Keyboard::Mapping> alternate_keys_ = {
         { KeyConfig::Key::ESCAPE,
           Keyboard::Mapping(KeyType::Id::MENU, KeyAction::Id::MAINMENU) },
         { KeyConfig::Key::F1,
@@ -234,7 +234,7 @@ private:
           Keyboard::Mapping(KeyType::Id::ACTION, KeyAction::Id::ATTACK) }
     };
 
-    std::map<int32_t, Keyboard::Mapping> basic_keys = {
+    std::map<int32_t, Keyboard::Mapping> basic_keys_ = {
         { KeyConfig::Key::ESCAPE,
           Keyboard::Mapping(KeyType::Id::MENU, KeyAction::Id::MAINMENU) },
         { KeyConfig::Key::F1,

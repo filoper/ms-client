@@ -87,17 +87,17 @@ private:
         NUM9
     };
 
-    static constexpr size_t MIN_SIZE = 6;
-    static constexpr size_t MAX_SIZE = 16;
-    static constexpr uint8_t NUM_KEYS = 10;
+    static constexpr size_t MIN_SIZE_ = 6;
+    static constexpr size_t MAX_SIZE_ = 16;
+    static constexpr uint8_t NUM_KEYS_ = 10;
 
-    OkCallback ok_callback;
-    CancelCallback cancel_callback;
-    Textfield entry;
-    Randomizer random;
-    TextTooltip tetooltip;
-    Optional<Tooltip> tooltip;
-    Point<int16_t> tooltipposition;
-    int16_t timestamp;
+    OkCallback ok_callback_;
+    CancelCallback cancel_callback_;
+    Textfield entry_;
+    Randomizer random_;
+    TextTooltip tetooltip_;
+    Optional<Tooltip> tooltip_;
+    Point<int16_t> tooltip_position_;
+    int16_t timestamp_;
 };
 }  // namespace ms

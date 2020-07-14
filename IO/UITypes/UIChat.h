@@ -45,14 +45,14 @@ private:
 
     enum Buttons : uint16_t { CLOSE, CHAT_DUO, CHAT_FRIEND, CHAT_RANDOM };
 
-    bool show_weekly;
-    Point<int16_t> rank_shift;
-    Point<int16_t> name_shift;
-    Point<int16_t> origin_left;
-    Point<int16_t> origin_right;
-    Charset charset;
-    Text name_left;
-    Text name_right;
+    bool show_weekly_;
+    Point<int16_t> rank_shift_;
+    Point<int16_t> name_shift_;
+    Point<int16_t> origin_left_;
+    Point<int16_t> origin_right_;
+    Charset charset_;
+    Text name_left_;
+    Text name_right_;
 };
 
 class UIRank : public UIDragElement<PosMAPLECHAT> {
@@ -77,12 +77,12 @@ private:
 
     enum Buttons : uint16_t { CLOSE };
 
-    Point<int16_t> rank_shift;
-    Point<int16_t> name_shift;
-    Point<int16_t> origin_left;
-    Point<int16_t> origin_right;
-    Charset charset;
-    Text name_left;
-    Text name_right;
+    Point<int16_t> rank_shift_;
+    Point<int16_t> name_shift_;
+    Point<int16_t> origin_left_;
+    Point<int16_t> origin_right_;
+    Charset charset_;
+    Text name_left_;
+    Text name_right_;
 };
 }  // namespace ms

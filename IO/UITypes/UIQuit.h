@@ -47,7 +47,7 @@ protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
 private:
-    const CharStats &stats;
+    const CharStats &stats_;
 
     std::string pad_time(int64_t time);
 
@@ -56,51 +56,51 @@ private:
 
     enum Buttons : uint16_t { NO, YES };
 
-    Point<int16_t> screen_adj;
-    ColorBox background;
+    Point<int16_t> screen_adj_;
+    ColorBox background_;
 
     /// Time
-    int64_t minutes;
-    int64_t hours;
+    int64_t minutes_;
+    int64_t hours_;
 
-    Charset time_minutes;
-    Point<int16_t> time_minutes_pos;
-    std::string time_minutes_text;
+    Charset time_minutes_;
+    Point<int16_t> time_minutes_pos_;
+    std::string time_minutes_text_;
 
-    Charset time_hours;
-    Point<int16_t> time_hours_pos;
-    std::string time_hours_text;
+    Charset time_hours_;
+    Point<int16_t> time_hours_pos_;
+    std::string time_hours_text_;
 
-    int64_t time_number_width;
+    int64_t time_number_width_;
 
-    Point<int16_t> time_lt;
-    Point<int16_t> time_rb;
+    Point<int16_t> time_lt_;
+    Point<int16_t> time_rb_;
 
     /// Level
-    Sprite levelupEffect;
+    Sprite levelup_effect_;
 
-    uint16_t uplevel;
+    uint16_t uplevel_;
 
-    Charset levelBefore;
-    Point<int16_t> levelBeforePos;
-    std::string levelBeforeText;
+    Charset level_before_;
+    Point<int16_t> level_before_pos_;
+    std::string level_before_text_;
 
-    uint16_t cur_level;
+    uint16_t cur_level_;
 
-    Charset levelAfter;
-    Point<int16_t> levelAfterPos;
-    std::string levelAfterText;
+    Charset level_after_;
+    Point<int16_t> level_after_pos_;
+    std::string level_after_text_;
 
-    int64_t levelNumberWidth;
-    Point<int16_t> level_adj;
+    int64_t level_number_width_;
+    Point<int16_t> level_adj_;
 
     /// Experience
-    Text expBefore;
-    Point<int16_t> expBeforePos;
+    Text exp_before_;
+    Point<int16_t> exp_before_pos_;
 
-    Text expAfter;
-    Point<int16_t> expAfterPos;
+    Text exp_after_;
+    Point<int16_t> exp_after_pos_;
 
-    Point<int16_t> exp_adj;
+    Point<int16_t> exp_adj_;
 };
 }  // namespace ms

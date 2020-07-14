@@ -27,9 +27,9 @@
 
 namespace ms {
 UITermsOfService::UITermsOfService(std::function<void()> oh) :
-    okhandler(oh),
-    offset(0),
-    unit_rows(1) {
+    okhandler_(oh),
+    offset_(0),
+    unit_rows_(1) {
     nl::node Login = nl::nx::ui["Login.img"];
     nl::node TOS = Login["TOS"];
 
@@ -1541,34 +1541,34 @@ UITermsOfService::UITermsOfService(std::function<void()> oh) :
     EULA += "INTO THIS AGREEMENT.";
 #pragma endregion
 
-    text = Text(Text::Font::A11M,
+    text_ = Text(Text::Font::A11M,
                 Text::Alignment::LEFT,
                 Color::Name::BLACK,
                 EULA,
                 340,
                 true,
                 2);
-    max_rows = text.height() / 300 + 1;
+    max_rows_ = text_.height() / 300 + 1;
 
     int16_t slider_y = 77;
 
-    slider = Slider(Slider::Type::LINE_PUNGA,
+    slider_ = Slider(Slider::Type::LINE_PUNGA,
                     Range<int16_t>(slider_y, slider_y + 305),
                     574,
-                    unit_rows,
-                    max_rows,
+                    unit_rows_,
+                    max_rows_,
                     [&](bool upwards) {
                         int16_t shift = upwards ? -1 : 1;
-                        bool above = offset + shift >= 0;
-                        bool below = offset + shift <= max_rows - unit_rows;
+                        bool above = offset_ + shift >= 0;
+                        bool below = offset_ + shift <= max_rows_ - unit_rows_;
 
                         if (above && below) {
-                            offset += shift;
-                            update_accept(offset);
+                            offset_ += shift;
+                            update_accept(offset_);
                         }
                     });
 
-    update_accept(offset);
+    update_accept(offset_);
 
     position_ = Point<int16_t>(0, 10);
     dimension_ = Texture(TOS).get_dimensions();
@@ -1578,17 +1578,17 @@ void UITermsOfService::draw(float inter) const {
     UIElement::draw(inter);
 
     int16_t range_min = 80;
-    text.draw(position_ + Point<int16_t>(226, 84 - offset * 300),
+    text_.draw(position_ + Point<int16_t>(226, 84 - offset_ * 300),
               Range<int16_t>(range_min, range_min + 316));
-    slider.draw(position_);
+    slider_.draw(position_);
 }
 
 Cursor::State UITermsOfService::send_cursor(bool clicked,
                                             Point<int16_t> cursorpos) {
     Point<int16_t> cursoroffset = cursorpos - position_;
 
-    if (slider.isenabled()) {
-        Cursor::State state = slider.send_cursor(cursoroffset, clicked);
+    if (slider_.isenabled()) {
+        Cursor::State state = slider_.send_cursor(cursoroffset, clicked);
 
         if (state != Cursor::State::IDLE)
             return state;
@@ -1610,7 +1610,7 @@ Button::State UITermsOfService::button_pressed(uint16_t buttonid) {
             break;
         case Buttons::CANCEL:
             deactivate();
-            okhandler();
+            okhandler_();
             break;
         default: break;
     }
@@ -1619,7 +1619,7 @@ Button::State UITermsOfService::button_pressed(uint16_t buttonid) {
 }
 
 void UITermsOfService::update_accept(uint16_t offset) {
-    if (offset == max_rows - unit_rows)
+    if (offset == max_rows_ - unit_rows_)
         buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
     else
         buttons_[Buttons::OK]->set_state(Button::State::DISABLED);

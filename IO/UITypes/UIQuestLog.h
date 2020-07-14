@@ -56,12 +56,12 @@ private:
         MY_LOCATION
     };
 
-    const QuestLog &questlog;
-    uint16_t tab;
-    std::vector<Sprite> notice_sprites;
-    Textfield search;
-    Text placeholder;
-    Slider slider;
-    Texture search_area;
+    const QuestLog &questlog_;
+    uint16_t tab_;
+    std::vector<Sprite> notice_sprites_;
+    Textfield search_;
+    Text placeholder_;
+    Slider slider_;
+    Texture search_area_;
 };
 }  // namespace ms

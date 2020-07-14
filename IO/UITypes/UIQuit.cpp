@@ -29,7 +29,7 @@
 #include "Timer.h"
 
 namespace ms {
-UIQuit::UIQuit(const CharStats &st) : screen_adj(212, 114), stats(st) {
+UIQuit::UIQuit(const CharStats &st) : screen_adj_(212, 114), stats_(st) {
     nl::node askReward = nl::nx::ui["UIWindow6.img"]["askReward"];
     nl::node userLog = askReward["userLog"];
     nl::node exp = userLog["exp"];
@@ -37,7 +37,7 @@ UIQuit::UIQuit(const CharStats &st) : screen_adj(212, 114), stats(st) {
     nl::node time = userLog["time"];
     nl::node backgrnd = userLog["backgrnd"];
 
-    sprites_.emplace_back(backgrnd, -screen_adj);
+    sprites_.emplace_back(backgrnd, -screen_adj_);
 
     buttons_[Buttons::NO] =
         std::make_unique<MapleButton>(askReward["btNo"], Point<int16_t>(0, 37));
@@ -49,120 +49,120 @@ UIQuit::UIQuit(const CharStats &st) : screen_adj(212, 114), stats(st) {
 
     /// Time
     int64_t uptime = stage.get_uptime() / 1000 / 1000;
-    minutes = uptime / 60;
-    hours = minutes / 60;
+    minutes_ = uptime / 60;
+    hours_ = minutes_ / 60;
 
-    minutes -= hours * 60;
+    minutes_ -= hours_ * 60;
 
-    time_minutes = Charset(time["number"], Charset::Alignment::LEFT);
-    time_minutes_pos = time["posM"];
-    time_minutes_text = pad_time(minutes);
+    time_minutes_ = Charset(time["number"], Charset::Alignment::LEFT);
+    time_minutes_pos_ = time["posM"];
+    time_minutes_text_ = pad_time(minutes_);
 
-    time_hours = Charset(time["number"], Charset::Alignment::LEFT);
-    time_hours_pos = time["posH"];
-    time_hours_text = pad_time(hours);
+    time_hours_ = Charset(time["number"], Charset::Alignment::LEFT);
+    time_hours_pos_ = time["posH"];
+    time_hours_text_ = pad_time(hours_);
 
-    time_number_width = time["numberWidth"];
+    time_number_width_ = time["numberWidth"];
 
-    time_lt = time["tooltip"]["lt"];
-    time_rb = time["tooltip"]["rb"];
+    time_lt_ = time["tooltip"]["lt"];
+    time_rb_ = time["tooltip"]["rb"];
 
     /// Level
-    levelupEffect = level["levelupEffect"];
+    levelup_effect_ = level["levelupEffect"];
 
-    uplevel = stage.get_uplevel();
+    uplevel_ = stage.get_uplevel();
 
-    levelBefore = Charset(level["number"], Charset::Alignment::LEFT);
-    levelBeforePos = level["posBefore"];
-    levelBeforeText = std::to_string(uplevel);
+    level_before_ = Charset(level["number"], Charset::Alignment::LEFT);
+    level_before_pos_ = level["posBefore"];
+    level_before_text_ = std::to_string(uplevel_);
 
-    cur_level = stats.get_stat(MapleStat::Id::LEVEL);
+    cur_level_ = stats_.get_stat(MapleStat::Id::LEVEL);
 
-    levelAfter = Charset(level["number"], Charset::Alignment::LEFT);
-    levelAfterPos = level["posAfter"];
-    levelAfterText = std::to_string(cur_level);
+    level_after_ = Charset(level["number"], Charset::Alignment::LEFT);
+    level_after_pos_ = level["posAfter"];
+    level_after_text_ = std::to_string(cur_level_);
 
-    levelNumberWidth = level["numberWidth"];
+    level_number_width_ = level["numberWidth"];
 
-    level_adj = Point<int16_t>(40, 0);
+    level_adj_ = Point<int16_t>(40, 0);
 
     /// Experience
     int64_t upexp = stage.get_upexp();
-    float expPercentBefore = getexppercent(uplevel, upexp);
+    float expPercentBefore = getexppercent(uplevel_, upexp);
     std::string expBeforeString = std::to_string(100 * expPercentBefore);
     std::string expBeforeText =
         expBeforeString.substr(0, expBeforeString.find('.') + 3) + '%';
 
-    expBefore = Text(Text::Font::A11M,
+    exp_before_ = Text(Text::Font::A11M,
                      Text::Alignment::LEFT,
                      Color::Name::WHITE,
                      expBeforeText);
-    expBeforePos = exp["posBefore"];
+    exp_before_pos_ = exp["posBefore"];
 
-    int64_t cur_exp = stats.get_exp();
-    float expPercentAfter = getexppercent(cur_level, cur_exp);
+    int64_t cur_exp = stats_.get_exp();
+    float expPercentAfter = getexppercent(cur_level_, cur_exp);
     std::string expAfterString = std::to_string(100 * expPercentAfter);
     std::string expAfterText =
         expAfterString.substr(0, expAfterString.find('.') + 3) + '%';
 
-    expAfter = Text(Text::Font::A11M,
+    exp_after_ = Text(Text::Font::A11M,
                     Text::Alignment::LEFT,
                     Color::Name::ELECTRICLIME,
                     expAfterText);
-    expAfterPos = exp["posAfter"];
+    exp_after_pos_ = exp["posAfter"];
 
-    exp_adj = Point<int16_t>(0, 6);
+    exp_adj_ = Point<int16_t>(0, 6);
 
     int16_t width = Constants::Constants::get().get_viewwidth();
     int16_t height = Constants::Constants::get().get_viewheight();
 
-    background = ColorBox(width, height, Color::Name::BLACK, 0.5f);
+    background_ = ColorBox(width, height, Color::Name::BLACK, 0.5f);
     position_ = Point<int16_t>(width / 2, height / 2);
     dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 void UIQuit::draw(float inter) const {
-    background.draw(Point<int16_t>(0, 0));
+    background_.draw(Point<int16_t>(0, 0));
 
     UIElement::draw(inter);
 
-    time_minutes.draw(time_minutes_text,
-                      time_number_width,
-                      position_ + time_minutes_pos - screen_adj);
-    time_hours.draw(time_hours_text,
-                    time_number_width,
-                    position_ + time_hours_pos - screen_adj);
+    time_minutes_.draw(time_minutes_text_,
+                      time_number_width_,
+                      position_ + time_minutes_pos_ - screen_adj_);
+    time_hours_.draw(time_hours_text_,
+                    time_number_width_,
+                    position_ + time_hours_pos_ - screen_adj_);
 
-    levelBefore.draw(levelBeforeText,
-                     levelNumberWidth,
-                     position_ + levelBeforePos + level_adj - screen_adj);
-    levelAfter.draw(levelAfterText,
-                    levelNumberWidth,
-                    position_ + levelAfterPos + level_adj - screen_adj);
+    level_before_.draw(level_before_text_,
+                     level_number_width_,
+                     position_ + level_before_pos_ + level_adj_ - screen_adj_);
+    level_after_.draw(level_after_text_,
+                    level_number_width_,
+                    position_ + level_after_pos_ + level_adj_ - screen_adj_);
 
-    if (cur_level > uplevel)
-        levelupEffect.draw(position_ - screen_adj, inter);
+    if (cur_level_ > uplevel_)
+        levelup_effect_.draw(position_ - screen_adj_, inter);
 
-    expBefore.draw(position_ + expBeforePos - exp_adj - screen_adj);
-    expAfter.draw(position_ + expAfterPos - exp_adj - screen_adj);
+    exp_before_.draw(position_ + exp_before_pos_ - exp_adj_ - screen_adj_);
+    exp_after_.draw(position_ + exp_after_pos_ - exp_adj_ - screen_adj_);
 }
 
 void UIQuit::update() {
     UIElement::update();
 
-    levelupEffect.update();
+    levelup_effect_.update();
 }
 
 Cursor::State UIQuit::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    auto lt = position_ + time_lt - screen_adj;
-    auto rb = position_ + time_rb - screen_adj;
+    auto lt = position_ + time_lt_ - screen_adj_;
+    auto rb = position_ + time_rb_ - screen_adj_;
 
     auto bounds = Rectangle<int16_t>(lt, rb);
 
     if (bounds.contains(cursorpos))
         UI::get().show_text(Tooltip::Parent::TEXT,
-                            std::to_string(hours) + "Hour "
-                                + std::to_string(minutes) + "Minute");
+                            std::to_string(hours_) + "Hour "
+                                + std::to_string(minutes_) + "Minute");
     else
         UI::get().clear_tooltip(Tooltip::Parent::TEXT);
 

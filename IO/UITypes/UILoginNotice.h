@@ -41,8 +41,8 @@ private:
 
     enum Buttons { OK };
 
-    std::function<void()> okhandler;
-    bool login;
+    std::function<void()> okhandler_;
+    bool login_;
 };
 
 class UIKeySelect : public UIElement {
@@ -63,8 +63,8 @@ protected:
 private:
     enum Buttons { CLOSE, TYPEA, TYPEB };
 
-    std::function<void(bool)> okhandler;
-    bool login;
+    std::function<void(bool)> okhandler_;
+    bool login_;
 };
 
 class UIClassConfirm : public UIElement {
@@ -119,7 +119,7 @@ private:
         ARK,
     };
 
-    std::function<void()> okhandler;
+    std::function<void()> okhandler_;
 };
 
 class UIQuitConfirm : public UIElement {
@@ -290,9 +290,9 @@ protected:
 private:
     enum Buttons : uint16_t { YES, NO };
 
-    bool saveid;
-    bool multiple;
-    std::function<void()> okhandler;
-    std::function<void()> cancelhandler;
+    bool saveid_;
+    bool multiple_;
+    std::function<void()> okhandler_;
+    std::function<void()> cancel_handler_;
 };
 }  // namespace ms

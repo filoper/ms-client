@@ -34,12 +34,12 @@
 
 namespace ms {
 UICashShop::UICashShop() :
-    preview_index(0),
-    menu_index(1),
-    promotion_index(0),
-    mvp_grade(1),
-    mvp_exp(0.07f),
-    list_offset(0) {
+    preview_index_(0),
+    menu_index_(1),
+    promotion_index_(0),
+    mvp_grade_(1),
+    mvp_exp_(0.07f),
+    list_offset_(0) {
     nl::node CashShop = nl::nx::ui["CashShop.img"];
     nl::node Base = CashShop["Base"];
     nl::node backgrnd = Base["backgrnd"];
@@ -58,10 +58,10 @@ UICashShop::UICashShop() :
     sprites_.emplace_back(backgrnd);
     sprites_.emplace_back(BestNew, Point<int16_t>(139, 346));
 
-    BestNew_dim = Texture(BestNew).get_dimensions();
+    best_new_dim_ = Texture(BestNew).get_dimensions();
 
     for (size_t i = 0; i < 3; i++)
-        preview_sprites[i] = Preview[i];
+        preview_sprites_[i] = Preview[i];
 
     for (size_t i = 0; i < 3; i++)
         buttons_[Buttons::BtPreview1 + i] = std::make_unique<TwoSpriteButton>(
@@ -81,7 +81,7 @@ UICashShop::UICashShop() :
                                       Point<int16_t>(92, 554));
 
     for (size_t i = 0; i < 9; i++)
-        menu_tabs[i] = CSTab["Tab"][i];
+        menu_tabs_[i] = CSTab["Tab"][i];
 
     buttons_[Buttons::BtChargeRefresh] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
@@ -101,40 +101,40 @@ UICashShop::UICashShop() :
 
     Charset tab;
 
-    job_label = Text(Text::Font::A11B,
+    job_label_ = Text(Text::Font::A11B,
                      Text::Alignment::LEFT,
                      Color::Name::SUPERNOVA,
                      "Illium");
-    name_label = Text(Text::Font::A11B,
+    name_label_ = Text(Text::Font::A11B,
                       Text::Alignment::LEFT,
                       Color::Name::WHITE,
                       "ShomeiZekkou");
 
-    promotion_pos = Point<int16_t>(138, 40);
-    sprites_.emplace_back(CSPromotionBanner["shadow"], promotion_pos);
+    promotion_pos_ = Point<int16_t>(138, 40);
+    sprites_.emplace_back(CSPromotionBanner["shadow"], promotion_pos_);
 
-    promotion_sprites.emplace_back(CSPromotionBanner["basic"]);
+    promotion_sprites_.emplace_back(CSPromotionBanner["basic"]);
 
     buttons_[Buttons::BtNext] =
         std::make_unique<MapleButton>(CSPromotionBanner["BtNext"],
-                                      promotion_pos);
+                                      promotion_pos_);
     buttons_[Buttons::BtPrev] =
         std::make_unique<MapleButton>(CSPromotionBanner["BtPrev"],
-                                      promotion_pos);
+                                      promotion_pos_);
 
     for (size_t i = 0; i < 7; i++)
-        mvp_sprites[i] = CSMVPBanner["grade"][i];
+        mvp_sprites_[i] = CSMVPBanner["grade"][i];
 
-    mvp_pos = Point<int16_t>(63, 681);
+    mvp_pos_ = Point<int16_t>(63, 681);
     buttons_[Buttons::BtDetailPackage] =
-        std::make_unique<MapleButton>(CSMVPBanner["BtDetailPackage"], mvp_pos);
+        std::make_unique<MapleButton>(CSMVPBanner["BtDetailPackage"], mvp_pos_);
     buttons_[Buttons::BtNonGrade] =
-        std::make_unique<MapleButton>(CSMVPBanner["BtNonGrade"], mvp_pos);
+        std::make_unique<MapleButton>(CSMVPBanner["BtNonGrade"], mvp_pos_);
 
-    buttons_[Buttons::BtDetailPackage]->set_active(mvp_grade);
-    buttons_[Buttons::BtNonGrade]->set_active(!mvp_grade);
+    buttons_[Buttons::BtDetailPackage]->set_active(mvp_grade_);
+    buttons_[Buttons::BtNonGrade]->set_active(!mvp_grade_);
 
-    mvp_gauge = Gauge(Gauge::Type::CASHSHOP,
+    mvp_gauge_ = Gauge(Gauge::Type::CASHSHOP,
                       CSMVPBanner["gage"][0],
                       CSMVPBanner["gage"][2],
                       CSMVPBanner["gage"][1],
@@ -162,31 +162,31 @@ UICashShop::UICashShop() :
         std::make_unique<MapleButton>(CSChar["BtTakeoffAvatar"],
                                       Point<int16_t>(790, 305));
 
-    charge_charset = Charset(CSGLChargeNX["Number"], Charset::Alignment::RIGHT);
+    charge_charset_ = Charset(CSGLChargeNX["Number"], Charset::Alignment::RIGHT);
 
-    item_base = CSList["Base"];
-    item_line = Base["line"];
-    item_none = Base["noItem"];
+    item_base_ = CSList["Base"];
+    item_line_ = Base["line"];
+    item_none_ = Base["noItem"];
 
     for (nl::node item_label : CSEffect)
-        item_labels.emplace_back(item_label);
+        item_labels_.emplace_back(item_label);
 
-    items.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
-    items.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
-    items.push_back({ 5220000, Item::Label::HOT, 0, 0 });
-    items.push_back({ 5220000, Item::Label::HOT, 0, 0 });
-    items.push_back({ 5220000, Item::Label::HOT, 10000, 11 });
-    items.push_back({ 5220000, Item::Label::NEW, 0, 0 });
-    items.push_back({ 5220000, Item::Label::SALE, 7000, 0 });
-    items.push_back({ 5220000, Item::Label::NEW, 13440, 0 });
-    items.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
-    items.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
-    items.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
-    items.push_back({ 5220000, Item::Label::NONE, 12000, 11 });
-    items.push_back({ 5220000, Item::Label::NONE, 22000, 11 });
-    items.push_back({ 5220000, Item::Label::NONE, 0, 0 });
-    items.push_back({ 5220000, Item::Label::NONE, 0, 0 });
-    items.push_back({ 5220000, Item::Label::MASTER, 0, 15 });
+    items_.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
+    items_.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
+    items_.push_back({ 5220000, Item::Label::HOT, 0, 0 });
+    items_.push_back({ 5220000, Item::Label::HOT, 0, 0 });
+    items_.push_back({ 5220000, Item::Label::HOT, 10000, 11 });
+    items_.push_back({ 5220000, Item::Label::NEW, 0, 0 });
+    items_.push_back({ 5220000, Item::Label::SALE, 7000, 0 });
+    items_.push_back({ 5220000, Item::Label::NEW, 13440, 0 });
+    items_.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
+    items_.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
+    items_.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
+    items_.push_back({ 5220000, Item::Label::NONE, 12000, 11 });
+    items_.push_back({ 5220000, Item::Label::NONE, 22000, 11 });
+    items_.push_back({ 5220000, Item::Label::NONE, 0, 0 });
+    items_.push_back({ 5220000, Item::Label::NONE, 0, 0 });
+    items_.push_back({ 5220000, Item::Label::MASTER, 0, 15 });
 
     for (size_t i = 0; i < MAX_ITEMS; i++) {
         div_t div = std::div(i, 7);
@@ -196,33 +196,33 @@ UICashShop::UICashShop() :
             Point<int16_t>(146, 523)
                 + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
-        item_name[i] = Text(Text::Font::A11B,
+        item_name_[i] = Text(Text::Font::A11B,
                             Text::Alignment::CENTER,
                             Color::Name::MINESHAFT);
-        item_price[i] =
+        item_price_[i] =
             Text(Text::Font::A11M, Text::Alignment::CENTER, Color::Name::GRAY);
-        item_discount[i] = Text(Text::Font::A11M,
+        item_discount_[i] = Text(Text::Font::A11M,
                                 Text::Alignment::CENTER,
                                 Color::Name::SILVERCHALICE);
-        item_percent[i] = Text(Text::Font::A11M,
+        item_percent_[i] = Text(Text::Font::A11M,
                                Text::Alignment::CENTER,
                                Color::Name::TORCHRED);
     }
 
     Point<int16_t> slider_pos = Point<int16_t>(1007, 372);
 
-    list_slider = Slider(Slider::Type::THIN_MINESHAFT,
+    list_slider_ = Slider(Slider::Type::THIN_MINESHAFT,
                          Range<int16_t>(slider_pos.y(), slider_pos.y() + 381),
                          slider_pos.x(),
                          2,
                          7,
                          [&](bool upwards) {
                              int16_t shift = upwards ? -7 : 7;
-                             bool above = list_offset >= 0;
-                             bool below = list_offset + shift < items.size();
+                             bool above = list_offset_ >= 0;
+                             bool below = list_offset_ + shift < items_.size();
 
                              if (above && below) {
-                                 list_offset += shift;
+                                 list_offset_ += shift;
 
                                  update_items();
                              }
@@ -234,50 +234,50 @@ UICashShop::UICashShop() :
 }
 
 void UICashShop::draw(float inter) const {
-    preview_sprites[preview_index].draw(position_ + Point<int16_t>(644, 65),
+    preview_sprites_[preview_index_].draw(position_ + Point<int16_t>(644, 65),
                                         inter);
 
     UIElement::draw_sprites(inter);
 
-    menu_tabs[menu_index].draw(position_ + Point<int16_t>(0, 63), inter);
+    menu_tabs_[menu_index_].draw(position_ + Point<int16_t>(0, 63), inter);
 
     Point<int16_t> label_pos = position_ + Point<int16_t>(4, 3);
-    job_label.draw(label_pos);
+    job_label_.draw(label_pos);
 
-    size_t length = job_label.width();
-    name_label.draw(label_pos + Point<int16_t>(length + 10, 0));
+    size_t length = job_label_.width();
+    name_label_.draw(label_pos + Point<int16_t>(length + 10, 0));
 
-    promotion_sprites[promotion_index].draw(position_ + promotion_pos, inter);
+    promotion_sprites_[promotion_index_].draw(position_ + promotion_pos_, inter);
 
-    mvp_sprites[mvp_grade].draw(position_ + mvp_pos, inter);
-    mvp_gauge.draw(position_ + mvp_pos);
+    mvp_sprites_[mvp_grade_].draw(position_ + mvp_pos_, inter);
+    mvp_gauge_.draw(position_ + mvp_pos_);
 
     Point<int16_t> charge_pos = position_ + Point<int16_t>(107, 388);
 
-    charge_charset.draw("0", charge_pos + Point<int16_t>(0, 30 * 1));
-    charge_charset.draw("3,300", charge_pos + Point<int16_t>(0, 30 * 2));
-    charge_charset.draw("0", charge_pos + Point<int16_t>(0, 30 * 3));
-    charge_charset.draw("8,698,565", charge_pos + Point<int16_t>(0, 30 * 4));
-    charge_charset.draw("0", charge_pos + Point<int16_t>(0, 30 * 5));
+    charge_charset_.draw("0", charge_pos + Point<int16_t>(0, 30 * 1));
+    charge_charset_.draw("3,300", charge_pos + Point<int16_t>(0, 30 * 2));
+    charge_charset_.draw("0", charge_pos + Point<int16_t>(0, 30 * 3));
+    charge_charset_.draw("8,698,565", charge_pos + Point<int16_t>(0, 30 * 4));
+    charge_charset_.draw("0", charge_pos + Point<int16_t>(0, 30 * 5));
 
-    if (items.size() > 0)
-        item_line.draw(position_ + Point<int16_t>(139, 566), inter);
+    if (items_.size() > 0)
+        item_line_.draw(position_ + Point<int16_t>(139, 566), inter);
     else
-        item_none.draw(
+        item_none_.draw(
             position_ + Point<int16_t>(137, 372)
-                + Point<int16_t>(BestNew_dim.x() / 2,
-                                 list_slider.getvertical().length() / 2)
-                - item_none.get_dimensions() / 2,
+                + Point<int16_t>(best_new_dim_.x() / 2,
+                                 list_slider_.getvertical().length() / 2)
+                - item_none_.get_dimensions() / 2,
             inter);
 
     for (size_t i = 0; i < MAX_ITEMS; i++) {
-        int16_t index = i + list_offset;
+        int16_t index = i + list_offset_;
 
-        if (index < items.size()) {
+        if (index < items_.size()) {
             div_t div = std::div(i, 7);
-            Item item = items[index];
+            Item item = items_[index];
 
-            item_base.draw(position_ + Point<int16_t>(137, 372)
+            item_base_.draw(position_ + Point<int16_t>(137, 372)
                                + Point<int16_t>(124 * div.rem, 205 * div.quot),
                            inter);
             item.draw(DrawArgument(
@@ -287,35 +287,35 @@ void UICashShop::draw(float inter) const {
                 2.0f));
 
             if (item.label != Item::Label::NONE)
-                item_labels[item.label + 1].draw(
+                item_labels_[item.label + 1].draw(
                     position_ + Point<int16_t>(152, 372)
                         + Point<int16_t>(124 * div.rem, 205 * div.quot),
                     inter);
 
-            item_name[i].draw(position_ + Point<int16_t>(192, 480)
+            item_name_[i].draw(position_ + Point<int16_t>(192, 480)
                               + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
-            if (item_discount[i].get_text() == "") {
-                item_price[i].draw(
+            if (item_discount_[i].get_text() == "") {
+                item_price_[i].draw(
                     position_ + Point<int16_t>(195, 499)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
             } else {
-                item_price[i].draw(
+                item_price_[i].draw(
                     position_ + Point<int16_t>(196, 506)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
-                item_discount[i].draw(
+                item_discount_[i].draw(
                     position_ + Point<int16_t>(185, 495)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
-                item_percent[i].draw(
+                item_percent_[i].draw(
                     position_
-                    + Point<int16_t>(198 + (item_discount[i].width() / 2), 495)
+                    + Point<int16_t>(198 + (item_discount_[i].width() / 2), 495)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
             }
         }
     }
 
-    list_slider.draw(position_);
+    list_slider_.draw(position_);
 
     UIElement::draw_buttons(inter);
 }
@@ -323,7 +323,7 @@ void UICashShop::draw(float inter) const {
 void UICashShop::update() {
     UIElement::update();
 
-    mvp_gauge.update(mvp_exp);
+    mvp_gauge_.update(mvp_exp_);
 }
 
 Button::State UICashShop::button_pressed(uint16_t buttonid) {
@@ -331,9 +331,9 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
         case Buttons::BtPreview1:
         case Buttons::BtPreview2:
         case Buttons::BtPreview3:
-            buttons_[preview_index]->set_state(Button::State::NORMAL);
+            buttons_[preview_index_]->set_state(Button::State::NORMAL);
 
-            preview_index = buttonid;
+            preview_index_ = buttonid;
             return Button::State::PRESSED;
         case Buttons::BtExit: {
             uint16_t width = Setting<Width>::get().load();
@@ -356,22 +356,22 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
             return Button::State::NORMAL;
         }
         case Buttons::BtNext: {
-            size_t size = promotion_sprites.size() - 1;
+            size_t size = promotion_sprites_.size() - 1;
 
-            promotion_index++;
+            promotion_index_++;
 
-            if (promotion_index > size)
-                promotion_index = 0;
+            if (promotion_index_ > size)
+                promotion_index_ = 0;
 
             return Button::State::NORMAL;
         }
         case Buttons::BtPrev: {
-            size_t size = promotion_sprites.size() - 1;
+            size_t size = promotion_sprites_.size() - 1;
 
-            promotion_index--;
+            promotion_index_--;
 
-            if (promotion_index < 0)
-                promotion_index = size;
+            if (promotion_index_ < 0)
+                promotion_index_ = size;
 
             return Button::State::NORMAL;
         }
@@ -389,9 +389,9 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
     }
 
     if (buttonid >= Buttons::BtBuy) {
-        int16_t index = buttonid - Buttons::BtBuy + list_offset;
+        int16_t index = buttonid - Buttons::BtBuy + list_offset_;
 
-        Item item = items[index];
+        Item item = items_[index];
 
         // TODO: Purchase item
 
@@ -404,8 +404,8 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 Cursor::State UICashShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Point<int16_t> cursor_relative = cursorpos - position_;
 
-    if (list_slider.isenabled()) {
-        Cursor::State state = list_slider.send_cursor(cursor_relative, clicked);
+    if (list_slider_.isenabled()) {
+        Cursor::State state = list_slider_.send_cursor(cursor_relative, clicked);
 
         if (state != Cursor::State::IDLE)
             return state;
@@ -440,8 +440,8 @@ void UICashShop::exit_cashshop() {
 
 void UICashShop::update_items() {
     for (size_t i = 0; i < MAX_ITEMS; i++) {
-        int16_t index = i + list_offset;
-        bool found_item = index < items.size();
+        int16_t index = i + list_offset_;
+        bool found_item = index < items_.size();
 
         buttons_[Buttons::BtBuy + i]->set_active(found_item);
 
@@ -451,7 +451,7 @@ void UICashShop::update_items() {
         std::string percent_text = "";
 
         if (found_item) {
-            Item item = items[index];
+            Item item = items_[index];
 
             name = item.get_name();
 
@@ -481,12 +481,12 @@ void UICashShop::update_items() {
                 price_text += "(" + std::to_string(item.count) + ")";
         }
 
-        item_name[i].change_text(name);
-        item_price[i].change_text(price_text);
-        item_discount[i].change_text(discount_text);
-        item_percent[i].change_text(percent_text);
+        item_name_[i].change_text(name);
+        item_price_[i].change_text(price_text);
+        item_discount_[i].change_text(discount_text);
+        item_percent_[i].change_text(percent_text);
 
-        string_format::format_with_ellipsis(item_name[i], 92);
+        string_format::format_with_ellipsis(item_name_[i], 92);
     }
 }
 }  // namespace ms

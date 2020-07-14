@@ -76,52 +76,52 @@ private:
     };
 
     /// Main Window
-    Text name;
-    Text job;
-    Text level;
-    Text fame;
-    Text guild;
-    Text alliance;
+    Text name_;
+    Text job_;
+    Text level_;
+    Text fame_;
+    Text guild_;
+    Text alliance_;
 
-    Char *target_character;
+    Char *target_character_;
 
     /// Sub Windows
-    Point<int16_t> bottom_window_adj;
-    Point<int16_t> right_window_adj;
+    Point<int16_t> bottom_window_adj_;
+    Point<int16_t> right_window_adj_;
 
     /// Farm
-    Text farm_name;
-    Sprite loading;
-    bool is_loading;
-    uint16_t timestep;
-    Charset farm_level;
-    Point<int16_t> farm_dim;
-    Point<int16_t> farm_adj;
-    std::string farm_level_text;
+    Text farm_name_;
+    Sprite loading_;
+    bool is_loading_;
+    uint16_t timestep_;
+    Charset farm_level_;
+    Point<int16_t> farm_dim_;
+    Point<int16_t> farm_adj_;
+    std::string farm_level_text_;
 
     /// Personality
-    bool personality_enabled;
-    std::vector<Sprite> personality_sprites;
-    BoolPair<std::vector<Sprite>> personality_sprites_enabled;
-    Point<int16_t> personality_dimensions;
+    bool personality_enabled_;
+    std::vector<Sprite> personality_sprites_;
+    BoolPair<std::vector<Sprite>> personality_sprites_enabled_;
+    Point<int16_t> personality_dimensions_;
 
     /// Collect
-    bool collect_enabled;
-    std::vector<Sprite> collect_sprites;
-    Point<int16_t> collect_dimensions;
-    Point<int16_t> collect_adj;
-    Sprite default_medal;
-    Text medal_text;
-    Text medal_total;
+    bool collect_enabled_;
+    std::vector<Sprite> collect_sprites_;
+    Point<int16_t> collect_dimensions_;
+    Point<int16_t> collect_adj_;
+    Sprite default_medal_;
+    Text medal_text_;
+    Text medal_total_;
 
     /// Damage
-    bool damage_enabled;
-    std::vector<Sprite> damage_sprites;
-    Point<int16_t> damage_dimensions;
+    bool damage_enabled_;
+    std::vector<Sprite> damage_sprites_;
+    Point<int16_t> damage_dimensions_;
 
     /// Item
-    bool item_enabled;
-    std::vector<Sprite> item_sprites;
-    Point<int16_t> item_dimensions;
+    bool item_enabled_;
+    std::vector<Sprite> item_sprites_;
+    Point<int16_t> item_dimensions_;
 };
 }  // namespace ms

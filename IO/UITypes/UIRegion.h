@@ -42,7 +42,7 @@ private:
 
     enum Buttons : uint16_t { NA, EU, EXIT };
 
-    Rectangle<int16_t> na_rect;
-    Rectangle<int16_t> eu_rect;
+    Rectangle<int16_t> na_rect_;
+    Rectangle<int16_t> eu_rect_;
 };
 }  // namespace ms

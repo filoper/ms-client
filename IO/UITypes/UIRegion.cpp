@@ -47,20 +47,20 @@ UIRegion::UIRegion() :
     Point<int16_t> na_dim = Texture(na["normal"]["0"]).get_dimensions();
     Point<int16_t> eu_dim = Texture(eu["normal"]["0"]).get_dimensions();
 
-    na_rect = Rectangle<int16_t>(na_pos, na_pos + na_dim);
-    eu_rect = Rectangle<int16_t>(eu_pos, eu_pos + eu_dim);
+    na_rect_ = Rectangle<int16_t>(na_pos, na_pos + na_dim);
+    eu_rect_ = Rectangle<int16_t>(eu_pos, eu_pos + eu_dim);
 }
 
 Cursor::State UIRegion::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     clear_tooltip();
 
-    if (na_rect.contains(cursorpos))
+    if (na_rect_.contains(cursorpos))
         UI::get().show_text(
             Tooltip::Parent::TEXT,
             "Warning: You may experience latency and connection issues when "
             "connecting to the NA server from Europe.");
 
-    if (eu_rect.contains(cursorpos))
+    if (eu_rect_.contains(cursorpos))
         UI::get().show_text(
             Tooltip::Parent::TEXT,
             "Warning: You may experience latency and connection issues when "

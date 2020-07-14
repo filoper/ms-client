@@ -58,8 +58,8 @@ private:
 
     std::string to_lower(std::string value) const;
 
-    static constexpr uint8_t INDEX_COUNT = 5;
-    static constexpr uint8_t CLASS_COUNT = 26;
+    static constexpr uint8_t INDEX_COUNT_ = 5;
+    static constexpr uint8_t CLASS_COUNT_ = 26;
 
     enum Buttons : uint16_t {
         BACK,
@@ -103,33 +103,33 @@ private:
         ARK,
     };
 
-    Text version;
-    Point<int16_t> pos;
-    Point<int16_t> posZero;
-    nl::node order;
-    nl::node hotlist;
-    nl::node newlist;
-    nl::node bgm;
-    Sprite hotlabel;
-    Sprite hotlabelZero;
-    Sprite newlabel;
-    Sprite hotbtn;
-    Sprite newbtn;
-    uint8_t class_index[INDEX_COUNT];
-    bool mouseover[INDEX_COUNT];
-    uint8_t selected_class;
-    uint8_t index_shift;
-    uint16_t selected_index;
-    bool class_isdisabled[CLASS_COUNT];
-    BoolPair<Texture> class_disabled[CLASS_COUNT];
-    BoolPair<Texture> class_normal[CLASS_COUNT];
-    Texture class_background[CLASS_COUNT];
-    Texture class_details[CLASS_COUNT];
-    Texture class_title[CLASS_COUNT];
-    Texture back;
-    Texture backZero;
-    Sprite back_ani;
-    Texture class_details_background;
-    Texture class_details_backgroundZero;
+    Text version_;
+    Point<int16_t> pos_;
+    Point<int16_t> pos_zero_;
+    nl::node order_;
+    nl::node hotlist_;
+    nl::node newlist_;
+    nl::node bgm_;
+    Sprite hotlabel_;
+    Sprite hotlabel_zero_;
+    Sprite newlabel_;
+    Sprite hotbtn_;
+    Sprite newbtn_;
+    uint8_t class_index_[INDEX_COUNT_];
+    bool mouseover_[INDEX_COUNT_];
+    uint8_t selected_class_;
+    uint8_t index_shift_;
+    uint16_t selected_index_;
+    bool class_isdisabled_[CLASS_COUNT_];
+    BoolPair<Texture> class_disabled_[CLASS_COUNT_];
+    BoolPair<Texture> class_normal_[CLASS_COUNT_];
+    Texture class_background_[CLASS_COUNT_];
+    Texture class_details_[CLASS_COUNT_];
+    Texture class_title_[CLASS_COUNT_];
+    Texture back_;
+    Texture back_zero_;
+    Sprite back_ani_;
+    Texture class_details_background_;
+    Texture class_details_background_zero_;
 };
 }  // namespace ms

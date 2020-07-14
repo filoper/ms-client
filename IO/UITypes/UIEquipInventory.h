@@ -72,7 +72,7 @@ private:
         Icon::IconType get_type() override;
 
     private:
-        int16_t source;
+        int16_t source_;
     };
 
     enum Buttons : uint16_t {
@@ -90,23 +90,23 @@ private:
         BT_SHOP
     };
 
-    const Inventory &inventory;
+    const Inventory &inventory_;
 
-    EnumMap<EquipSlot::Id, Point<int16_t>> iconpositions;
-    EnumMap<EquipSlot::Id, std::unique_ptr<Icon>> icons;
+    EnumMap<EquipSlot::Id, Point<int16_t>> icon_positions_;
+    EnumMap<EquipSlot::Id, std::unique_ptr<Icon>> icons_;
 
-    uint16_t tab;
-    std::string tab_source[Buttons::BT_TABE];
-    Texture tabbar;
-    Texture background[Buttons::BT_TABE];
-    Texture disabled;
-    Texture disabled2;
-    std::vector<Texture> Slots[Buttons::BT_TABE];
+    uint16_t tab_;
+    std::string tab_source_[Buttons::BT_TABE];
+    Texture tab_bar_;
+    Texture background_[Buttons::BT_TABE];
+    Texture disabled_;
+    Texture disabled2_;
+    std::vector<Texture> slots_[Buttons::BT_TABE];
 
-    Point<int16_t> totem_dimensions;
-    Point<int16_t> totem_adj;
+    Point<int16_t> totem_dimensions_;
+    Point<int16_t> totem_adj_;
 
-    bool hasPendantSlot;
-    bool hasPocketSlot;
+    bool has_pendant_slot_;
+    bool has_pocket_slot_;
 };
 }  // namespace ms

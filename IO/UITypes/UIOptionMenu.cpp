@@ -25,7 +25,7 @@
 #include "../KeyAction.h"
 
 namespace ms {
-UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
+UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab_(0) {
     nl::node OptionMenu = nl::nx::ui["StatusBar3.img"]["OptionMenu"];
     nl::node backgrnd = OptionMenu["backgrnd"];
 
@@ -34,11 +34,11 @@ UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
 
     nl::node graphic = OptionMenu["graphic"];
 
-    tab_background[Buttons::TAB0] = graphic["layer:backgrnd"];
-    tab_background[Buttons::TAB1] = OptionMenu["sound"]["layer:backgrnd"];
-    tab_background[Buttons::TAB2] = OptionMenu["game"]["layer:backgrnd"];
-    tab_background[Buttons::TAB3] = OptionMenu["invite"]["layer:backgrnd"];
-    tab_background[Buttons::TAB4] = OptionMenu["screenshot"]["layer:backgrnd"];
+    tab_background_[Buttons::TAB0] = graphic["layer:backgrnd"];
+    tab_background_[Buttons::TAB1] = OptionMenu["sound"]["layer:backgrnd"];
+    tab_background_[Buttons::TAB2] = OptionMenu["game"]["layer:backgrnd"];
+    tab_background_[Buttons::TAB3] = OptionMenu["invite"]["layer:backgrnd"];
+    tab_background_[Buttons::TAB4] = OptionMenu["screenshot"]["layer:backgrnd"];
 
     buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(OptionMenu["button:Cancel"]);
@@ -114,7 +114,7 @@ UIOptionMenu::UIOptionMenu() : UIDragElement<PosOPTIONMENU>(), selected_tab(0) {
 void UIOptionMenu::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
-    tab_background[selected_tab].draw(position_);
+    tab_background_[selected_tab_].draw(position_);
 
     UIElement::draw_buttons(inter);
 }
@@ -130,7 +130,7 @@ Button::State UIOptionMenu::button_pressed(uint16_t buttonid) {
             return Button::State::IDENTITY;
         case Buttons::CANCEL: deactivate(); return Button::State::NORMAL;
         case Buttons::OK:
-            switch (selected_tab) {
+            switch (selected_tab_) {
                 case Buttons::TAB0: {
                     uint16_t selected_value =
                         buttons_[Buttons::SELECT_RES]->get_selected();
@@ -225,10 +225,10 @@ UIElement::Type UIOptionMenu::get_type() const {
 }
 
 void UIOptionMenu::change_tab(uint16_t tabid) {
-    buttons_[selected_tab]->set_state(Button::State::NORMAL);
+    buttons_[selected_tab_]->set_state(Button::State::NORMAL);
     buttons_[tabid]->set_state(Button::State::PRESSED);
 
-    selected_tab = tabid;
+    selected_tab_ = tabid;
 
     switch (tabid) {
         case Buttons::TAB0:

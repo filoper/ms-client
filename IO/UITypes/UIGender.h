@@ -43,8 +43,8 @@ protected:
 private:
     enum Buttons : uint16_t { NO, YES, SELECT };
 
-    Texture gender_sprites[3];
-    uint16_t CUR_TIMESTEP;
-    std::function<void()> okhandler;
+    Texture gender_sprites_[3];
+    uint16_t cur_timestep_;
+    std::function<void()> okhandler_;
 };
 }  // namespace ms

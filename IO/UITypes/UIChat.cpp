@@ -25,7 +25,7 @@
 
 namespace ms {
 UIChat::UIChat() : UIDragElement<PosMAPLECHAT>() {
-    show_weekly = Configuration::get().get_show_weekly();
+    show_weekly_ = Configuration::get().get_show_weekly();
 
     nl::node socialChatEnter = nl::nx::ui["UIWindow2.img"]["socialChatEnter"];
 
@@ -33,16 +33,16 @@ UIChat::UIChat() : UIDragElement<PosMAPLECHAT>() {
     nl::node backgrnd4 = socialChatEnter["backgrnd4"];
     nl::node backgrnd5 = socialChatEnter["backgrnd5"];
 
-    rank_shift = Point<int16_t>(86, 130);
-    name_shift = Point<int16_t>(50, 5);
+    rank_shift_ = Point<int16_t>(86, 130);
+    name_shift_ = Point<int16_t>(50, 5);
 
-    origin_left = Texture(backgrnd4).get_origin();
-    origin_right = Texture(backgrnd5).get_origin();
+    origin_left_ = Texture(backgrnd4).get_origin();
+    origin_right_ = Texture(backgrnd5).get_origin();
 
-    origin_left =
-        Point<int16_t>(std::abs(origin_left.x()), std::abs(origin_left.y()));
-    origin_right =
-        Point<int16_t>(std::abs(origin_right.x()), std::abs(origin_right.y()));
+    origin_left_ =
+        Point<int16_t>(std::abs(origin_left_.x()), std::abs(origin_left_.y()));
+    origin_right_ =
+        Point<int16_t>(std::abs(origin_right_.x()), std::abs(origin_right_.y()));
 
     sprites_.emplace_back(socialChatEnter["ribbon"]);
     sprites_.emplace_back(backgrnd);
@@ -60,27 +60,27 @@ UIChat::UIChat() : UIDragElement<PosMAPLECHAT>() {
     buttons_[Buttons::CHAT_RANDOM] =
         std::make_unique<MapleButton>(socialChatEnter["groupChatRnd"]);
 
-    charset = Charset(socialChatEnter["number"], Charset::Alignment::RIGHT);
+    charset_ = Charset(socialChatEnter["number"], Charset::Alignment::RIGHT);
 
-    name_left =
+    name_left_ =
         Text(Text::Font::A12B, Text::Alignment::CENTER, Color::Name::WHITE);
-    name_right =
+    name_right_ =
         Text(Text::Font::A12B, Text::Alignment::CENTER, Color::Name::WHITE);
 
     dimension_ = Texture(backgrnd).get_dimensions();
 
-    if (show_weekly)
+    if (show_weekly_)
         UI::get().emplace<UIRank>();
 }
 
 void UIChat::draw(float inter) const {
     UIElement::draw(inter);
 
-    charset.draw("0", position_ + origin_left + rank_shift);
-    charset.draw("0", position_ + origin_right + rank_shift);
+    charset_.draw("0", position_ + origin_left_ + rank_shift_);
+    charset_.draw("0", position_ + origin_right_ + rank_shift_);
 
-    name_left.draw(position_ + origin_left + name_shift);
-    name_right.draw(position_ + origin_right + name_shift);
+    name_left_.draw(position_ + origin_left_ + name_shift_);
+    name_right_.draw(position_ + origin_right_ + name_shift_);
 }
 
 void UIChat::send_key(int32_t keycode, bool pressed, bool escape) {
@@ -117,16 +117,16 @@ UIRank::UIRank() : UIDragElement<PosMAPLECHAT>() {
     nl::node backgrnd4 = socialRank["backgrnd4"];
     nl::node backgrnd5 = socialRank["backgrnd5"];
 
-    rank_shift = Point<int16_t>(86, 130);
-    name_shift = Point<int16_t>(52, 4);
+    rank_shift_ = Point<int16_t>(86, 130);
+    name_shift_ = Point<int16_t>(52, 4);
 
-    origin_left = Texture(backgrnd4).get_origin();
-    origin_right = Texture(backgrnd5).get_origin();
+    origin_left_ = Texture(backgrnd4).get_origin();
+    origin_right_ = Texture(backgrnd5).get_origin();
 
-    origin_left = Point<int16_t>(std::abs(origin_left.x()) - 1,
-                                 std::abs(origin_left.y()));
-    origin_right =
-        Point<int16_t>(std::abs(origin_right.x()), std::abs(origin_right.y()));
+    origin_left_ = Point<int16_t>(std::abs(origin_left_.x()) - 1,
+                                 std::abs(origin_left_.y()));
+    origin_right_ =
+        Point<int16_t>(std::abs(origin_right_.x()), std::abs(origin_right_.y()));
 
     sprites_.emplace_back(socialRank["ribbon"]);
     sprites_.emplace_back(backgrnd);
@@ -137,11 +137,11 @@ UIRank::UIRank() : UIDragElement<PosMAPLECHAT>() {
 
     buttons_[Buttons::CLOSE] = std::make_unique<MapleButton>(socialRank["btX"]);
 
-    charset = Charset(socialRank["number"], Charset::Alignment::RIGHT);
+    charset_ = Charset(socialRank["number"], Charset::Alignment::RIGHT);
 
-    name_left =
+    name_left_ =
         Text(Text::Font::A12B, Text::Alignment::CENTER, Color::Name::WHITE);
-    name_right =
+    name_right_ =
         Text(Text::Font::A12B, Text::Alignment::CENTER, Color::Name::WHITE);
 
     dimension_ = Texture(backgrnd).get_dimensions();
@@ -151,11 +151,11 @@ UIRank::UIRank() : UIDragElement<PosMAPLECHAT>() {
 void UIRank::draw(float inter) const {
     UIElement::draw(inter);
 
-    charset.draw("0", position_ + origin_left + rank_shift);
-    charset.draw("0", position_ + origin_right + rank_shift);
+    charset_.draw("0", position_ + origin_left_ + rank_shift_);
+    charset_.draw("0", position_ + origin_right_ + rank_shift_);
 
-    name_left.draw(position_ + origin_left + name_shift);
-    name_right.draw(position_ + origin_right + name_shift);
+    name_left_.draw(position_ + origin_left_ + name_shift_);
+    name_right_.draw(position_ + origin_right_ + name_shift_);
 }
 
 void UIRank::send_key(int32_t keycode, bool pressed, bool escape) {

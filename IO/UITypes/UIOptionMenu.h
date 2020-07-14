@@ -56,7 +56,7 @@ private:
         SELECT_RES
     };
 
-    uint16_t selected_tab;
-    Texture tab_background[Buttons::CANCEL];
+    uint16_t selected_tab_;
+    Texture tab_background_[Buttons::CANCEL];
 };
 }  // namespace ms

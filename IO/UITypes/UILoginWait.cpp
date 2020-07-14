@@ -27,7 +27,7 @@ namespace ms {
 UILoginWait::UILoginWait() : UILoginWait([]() {}) {}
 
 UILoginWait::UILoginWait(std::function<void()> okhandler) :
-    okhandler(okhandler) {
+    okhandler_(okhandler) {
     nl::node Loading = nl::nx::ui["Login.img"]["Notice"]["Loading"];
     nl::node backgrnd = Loading["backgrnd"];
 
@@ -48,11 +48,11 @@ UIElement::Type UILoginWait::get_type() const {
 
 void UILoginWait::close() {
     deactivate();
-    okhandler();
+    okhandler_();
 }
 
 std::function<void()> UILoginWait::get_handler() {
-    return okhandler;
+    return okhandler_;
 }
 
 Button::State UILoginWait::button_pressed(uint16_t id) {

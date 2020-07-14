@@ -40,17 +40,17 @@ protected:
     int16_t box2offset(bool textfield) const;
 
 private:
-    Texture top;
-    Texture center;
-    Texture centerbox;
-    Texture box;
-    Texture box2;
-    Texture bottom;
-    Texture bottombox;
-    Text question;
-    int16_t height;
-    NoticeType type;
-    Text::Alignment alignment;
+    Texture top_;
+    Texture center_;
+    Texture centerbox_;
+    Texture box_;
+    Texture box2_;
+    Texture bottom_;
+    Texture bottombox_;
+    Text question_;
+    int16_t height_;
+    NoticeType type_;
+    Text::Alignment alignment_;
 };
 
 class UIYesNo : public UINotice {
@@ -73,7 +73,7 @@ protected:
 private:
     enum Buttons : int16_t { YES, NO };
 
-    std::function<void(bool yes)> yesnohandler;
+    std::function<void(bool yes)> yesno_handler_;
 };
 
 class UIEnterNumber : public UINotice {
@@ -122,6 +122,6 @@ protected:
 private:
     enum Buttons : int16_t { OK };
 
-    std::function<void(bool ok)> okhandler;
+    std::function<void(bool ok)> okhandler_;
 };
 }  // namespace ms

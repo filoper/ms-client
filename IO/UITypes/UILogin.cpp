@@ -38,7 +38,7 @@ UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
     Music("BgmUI.img/Title").play();
 
     std::string version_text = Configuration::get().get_version();
-    version = Text(Text::Font::A11M,
+    version_ = Text(Text::Font::A11M,
                    Text::Alignment::LEFT,
                    Color::Name::LEMONGRASS,
                    "Ver. " + version_text);
@@ -83,49 +83,49 @@ UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
         std::make_unique<MapleButton>(title["BtQuit"],
                                       Point<int16_t>(435, 352));
 
-    checkbox[false] = title["check"]["0"];
-    checkbox[true] = title["check"]["1"];
+    checkbox_[false] = title["check"]["0"];
+    checkbox_[true] = title["check"]["1"];
 
-    account = Textfield(
+    account_ = Textfield(
         Text::Font::A13M,
         Text::Alignment::LEFT,
         Color::Name::WHITE,
         Rectangle<int16_t>(Point<int16_t>(296, 279), Point<int16_t>(446, 303)),
         12);
 
-    account.set_key_callback(KeyAction::Id::TAB, [&] {
-        account.set_state(Textfield::State::NORMAL);
-        password.set_state(Textfield::State::FOCUSED);
+    account_.set_key_callback(KeyAction::Id::TAB, [&] {
+        account_.set_state(Textfield::State::NORMAL);
+        password_.set_state(Textfield::State::FOCUSED);
     });
 
-    account.set_enter_callback([&](std::string msg) { login(); });
+    account_.set_enter_callback([&](std::string msg) { login(); });
 
-    accountbg = title["ID"];
+    accountbg_ = title["ID"];
 
-    password = Textfield(
+    password_ = Textfield(
         Text::Font::A13M,
         Text::Alignment::LEFT,
         Color::Name::WHITE,
         Rectangle<int16_t>(Point<int16_t>(296, 305), Point<int16_t>(446, 329)),
         12);
 
-    password.set_key_callback(KeyAction::Id::TAB, [&] {
-        account.set_state(Textfield::State::FOCUSED);
-        password.set_state(Textfield::State::NORMAL);
+    password_.set_key_callback(KeyAction::Id::TAB, [&] {
+        account_.set_state(Textfield::State::FOCUSED);
+        password_.set_state(Textfield::State::NORMAL);
     });
 
-    password.set_enter_callback([&](std::string msg) { login(); });
+    password_.set_enter_callback([&](std::string msg) { login(); });
 
-    password.set_cryptchar('*');
-    passwordbg = title["PW"];
+    password_.set_cryptchar('*');
+    passwordbg_ = title["PW"];
 
-    saveid = Setting<SaveLogin>::get().load();
+    saveid_ = Setting<SaveLogin>::get().load();
 
-    if (saveid) {
-        account.change_text(Setting<DefaultAccount>::get().load());
-        password.set_state(Textfield::State::FOCUSED);
+    if (saveid_) {
+        account_.change_text(Setting<DefaultAccount>::get().load());
+        password_.set_state(Textfield::State::FOCUSED);
     } else {
-        account.set_state(Textfield::State::FOCUSED);
+        account_.set_state(Textfield::State::FOCUSED);
     }
 
     if (Configuration::get().get_auto_login()) {
@@ -143,41 +143,41 @@ UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
 void UILogin::draw(float alpha) const {
     UIElement::draw(alpha);
 
-    version.draw(position_ + Point<int16_t>(707, 1));
-    account.draw(position_);
-    password.draw(position_);
+    version_.draw(position_ + Point<int16_t>(707, 1));
+    account_.draw(position_);
+    password_.draw(position_);
 
-    if (account.get_state() == Textfield::State::NORMAL && account.empty())
-        accountbg.draw(DrawArgument(position_ + Point<int16_t>(291, 279)));
+    if (account_.get_state() == Textfield::State::NORMAL && account_.empty())
+        accountbg_.draw(DrawArgument(position_ + Point<int16_t>(291, 279)));
 
-    if (password.get_state() == Textfield::State::NORMAL && password.empty())
-        passwordbg.draw(DrawArgument(position_ + Point<int16_t>(291, 305)));
+    if (password_.get_state() == Textfield::State::NORMAL && password_.empty())
+        passwordbg_.draw(DrawArgument(position_ + Point<int16_t>(291, 305)));
 
-    checkbox[saveid].draw(DrawArgument(position_ + Point<int16_t>(291, 335)));
+    checkbox_[saveid_].draw(DrawArgument(position_ + Point<int16_t>(291, 335)));
 }
 
 void UILogin::update() {
     UIElement::update();
 
-    account.update(position_);
-    password.update(position_);
+    account_.update(position_);
+    password_.update(position_);
 }
 
 void UILogin::login() {
-    account.set_state(Textfield::State::DISABLED);
-    password.set_state(Textfield::State::DISABLED);
+    account_.set_state(Textfield::State::DISABLED);
+    password_.set_state(Textfield::State::DISABLED);
 
-    std::string account_text = account.get_text();
-    std::string password_text = password.get_text();
+    std::string account_text = account_.get_text();
+    std::string password_text = password_.get_text();
 
     std::function<void()> okhandler = [&, password_text]() {
-        account.set_state(Textfield::State::NORMAL);
-        password.set_state(Textfield::State::NORMAL);
+        account_.set_state(Textfield::State::NORMAL);
+        password_.set_state(Textfield::State::NORMAL);
 
         if (!password_text.empty())
-            password.set_state(Textfield::State::FOCUSED);
+            password_.set_state(Textfield::State::FOCUSED);
         else
-            account.set_state(Textfield::State::FOCUSED);
+            account_.set_state(Textfield::State::FOCUSED);
     };
 
     if (account_text.empty()) {
@@ -229,8 +229,8 @@ Button::State UILogin::button_pressed(uint16_t id) {
         case Buttons::BT_PASSLOST:
         case Buttons::BT_IDLOST: open_url(id); return Button::State::NORMAL;
         case Buttons::BT_SAVEID:
-            saveid = !saveid;
-            Setting<SaveLogin>::get().save(saveid);
+            saveid_ = !saveid_;
+            Setting<SaveLogin>::get().save(saveid_);
 
             return Button::State::MOUSEOVER;
         case Buttons::BT_QUIT: UI::get().quit(); return Button::State::PRESSED;
@@ -239,10 +239,10 @@ Button::State UILogin::button_pressed(uint16_t id) {
 }
 
 Cursor::State UILogin::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    if (Cursor::State new_state = account.send_cursor(cursorpos, clicked))
+    if (Cursor::State new_state = account_.send_cursor(cursorpos, clicked))
         return new_state;
 
-    if (Cursor::State new_state = password.send_cursor(cursorpos, clicked))
+    if (Cursor::State new_state = password_.send_cursor(cursorpos, clicked))
         return new_state;
 
     return UIElement::send_cursor(clicked, cursorpos);

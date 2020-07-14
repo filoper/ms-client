@@ -43,6 +43,6 @@ protected:
 private:
     enum Buttons : uint16_t { CANCEL };
 
-    std::function<void()> okhandler;
+    std::function<void()> okhandler_;
 };
 }  // namespace ms

@@ -76,11 +76,11 @@ private:
 
     Rectangle<int16_t> getbounds(Point<int16_t> additional_area) const;
 
-    static constexpr int16_t CHATROWHEIGHT = 13;
-    static constexpr int16_t MINCHATROWS = 1;
-    static constexpr int16_t MAXCHATROWS = 16;
-    static constexpr int16_t DIMENSION_Y = 17;
-    static constexpr time_t MESSAGE_COOLDOWN = 1'000;
+    static constexpr int16_t CHAT_ROW_HEIGHT_ = 13;
+    static constexpr int16_t MIN_CHAT_ROWS_ = 1;
+    static constexpr int16_t MAX_CHAT_ROWS_ = 16;
+    static constexpr int16_t DIMENSION_Y_ = 17;
+    static constexpr time_t MESSAGE_COOLDOWN_ = 1'000;
 
     enum Buttons : uint16_t {
         BT_OPENCHAT,
@@ -108,34 +108,34 @@ private:
         NUM_CHATTAB
     };
 
-    std::vector<std::string> ChatTabText = { "All",    "Battle", "Party",
+    std::vector<std::string> chat_tab_text_ = { "All",    "Battle", "Party",
                                              "Friend", "Guild",  "Alliance" };
 
-    bool chatopen;
-    bool chatopen_persist;
-    bool chatfieldopen;
-    Texture chatspace[4];
-    Texture chatenter;
-    Texture chatcover;
-    Textfield chatfield;
-    Point<int16_t> closechat;
+    bool chatopen_;
+    bool chatopen_persist_;
+    bool chatfield_open_;
+    Texture chatspace_[4];
+    Texture chatenter_;
+    Texture chatcover_;
+    Textfield chatfield_;
+    Point<int16_t> closechat_;
 
-    Text chattab_text[UIChatBar::ChatTab::NUM_CHATTAB];
-    int16_t chattab_x;
-    int16_t chattab_y;
-    int16_t chattab_span;
+    Text chattab_text_[UIChatBar::ChatTab::NUM_CHATTAB];
+    int16_t chattab_x_;
+    int16_t chattab_y_;
+    int16_t chattab_span_;
 
-    Slider slider;
+    Slider slider_;
 
-    EnumMap<Messages::Type, time_t> message_cooldowns;
-    std::vector<std::string> lastentered;
-    size_t lastpos;
+    EnumMap<Messages::Type, time_t> message_cooldowns_;
+    std::vector<std::string> last_entered_;
+    size_t last_pos_;
 
-    int16_t chatrows;
-    int16_t rowpos;
-    int16_t rowmax;
-    std::unordered_map<int16_t, Text> rowtexts;
+    int16_t chat_rows_;
+    int16_t row_pos_;
+    int16_t row_max_;
+    std::unordered_map<int16_t, Text> row_texts_;
 
-    bool dragchattop;
+    bool drag_chat_top_;
 };
 }  // namespace ms

@@ -31,30 +31,30 @@
 namespace ms {
 UIItemInventory::UIItemInventory(const Inventory &invent) :
     UIDragElement<PosINV>(),
-    inventory(invent),
-    ignore_tooltip(false),
-    tab(InventoryType::Id::EQUIP),
-    sort_enabled(false) {
+    inventory_(invent),
+    ignore_tooltip_(false),
+    tab_(InventoryType::Id::EQUIP),
+    sort_enabled_(false) {
     nl::node Item = nl::nx::ui["UIWindow2.img"]["Item"];
 
     // TODO: Change these to production
-    backgrnd = Item["backgrnd"];
-    backgrnd2 = Item["productionBackgrnd2"];
-    backgrnd3 = Item["backgrnd3"];
+    backgrnd_ = Item["backgrnd"];
+    backgrnd2_ = Item["productionBackgrnd2"];
+    backgrnd3_ = Item["backgrnd3"];
 
-    full_backgrnd = Item["FullBackgrnd"];
-    full_backgrnd2 = Item["FullBackgrnd2"];
-    full_backgrnd3 = Item["FullBackgrnd3"];
+    full_backgrnd_ = Item["FullBackgrnd"];
+    full_backgrnd2_ = Item["FullBackgrnd2"];
+    full_backgrnd3_ = Item["FullBackgrnd3"];
 
-    bg_dimensions = backgrnd.get_dimensions();
-    bg_full_dimensions = full_backgrnd.get_dimensions();
+    bg_dimensions_ = backgrnd_.get_dimensions();
+    bg_full_dimensions_ = full_backgrnd_.get_dimensions();
 
     nl::node New = Item["New"];
-    newitemslot = New["inventory"];
-    newitemtab = New["Tab0"];
+    new_item_slot_ = New["inventory"];
+    new_item_tab_ = New["Tab0"];
 
-    projectile = Item["activeIcon"];
-    disabled = Item["disabled"];
+    projectile_ = Item["activeIcon"];
+    disabled_ = Item["disabled"];
 
     nl::node Tab = Item["Tab"];
     nl::node taben = Tab["enabled"];
@@ -126,35 +126,35 @@ UIItemInventory::UIItemInventory(const Inventory &invent) :
     buttons_[Buttons::BT_EXTRACT_SM]->set_state(Button::State::DISABLED);
     buttons_[Buttons::BT_DISASSEMBLE]->set_state(Button::State::DISABLED);
     buttons_[Buttons::BT_DISASSEMBLE_SM]->set_state(Button::State::DISABLED);
-    buttons_[button_by_tab(tab)]->set_state(Button::State::PRESSED);
+    buttons_[button_by_tab(tab_)]->set_state(Button::State::PRESSED);
 
-    mesolabel =
+    meso_label_ =
         Text(Text::Font::A11M, Text::Alignment::RIGHT, Color::Name::BLACK);
-    maplepointslabel =
+    maple_points_label_ =
         Text(Text::Font::A11M, Text::Alignment::RIGHT, Color::Name::BLACK);
-    maplepointslabel.change_text("0");  // TODO: Implement
+    maple_points_label_.change_text("0");  // TODO: Implement
 
-    slotrange[InventoryType::Id::EQUIPPED] = { 1, 24 };
-    slotrange[InventoryType::Id::EQUIP] = { 1, 24 };
-    slotrange[InventoryType::Id::USE] = { 1, 24 };
-    slotrange[InventoryType::Id::SETUP] = { 1, 24 };
-    slotrange[InventoryType::Id::ETC] = { 1, 24 };
-    slotrange[InventoryType::Id::CASH] = { 1, 24 };
+    slot_range_[InventoryType::Id::EQUIPPED] = { 1, 24 };
+    slot_range_[InventoryType::Id::EQUIP] = { 1, 24 };
+    slot_range_[InventoryType::Id::USE] = { 1, 24 };
+    slot_range_[InventoryType::Id::SETUP] = { 1, 24 };
+    slot_range_[InventoryType::Id::ETC] = { 1, 24 };
+    slot_range_[InventoryType::Id::CASH] = { 1, 24 };
 
-    slider = Slider(Slider::Type::DEFAULT_SILVER,
+    slider_ = Slider(Slider::Type::DEFAULT_SILVER,
                     Range<int16_t>(50, 245),
                     152,
                     6,
-                    1 + inventory.get_slotmax(tab) / COLUMNS,
+                    1 + inventory_.get_slotmax(tab_) / COLUMNS_,
                     [&](bool upwards) {
-                        int16_t shift = upwards ? -COLUMNS : COLUMNS;
-                        bool above = slotrange[tab].first + shift > 0;
-                        bool below = slotrange[tab].second + shift
-                                     < inventory.get_slotmax(tab) + 1 + COLUMNS;
+                        int16_t shift = upwards ? -COLUMNS_ : COLUMNS_;
+                        bool above = slot_range_[tab_].first + shift > 0;
+                        bool below = slot_range_[tab_].second + shift
+                                     < inventory_.get_slotmax(tab_) + 1 + COLUMNS_;
 
                         if (above && below) {
-                            slotrange[tab].first += shift;
-                            slotrange[tab].second += shift;
+                            slot_range_[tab_].first += shift;
+                            slot_range_[tab_].second += shift;
                         }
                     });
 
@@ -169,56 +169,56 @@ void UIItemInventory::draw(float alpha) const {
     Point<int16_t> mesolabel_pos = position_ + Point<int16_t>(127, 262);
     Point<int16_t> maplepointslabel_pos = position_ + Point<int16_t>(159, 279);
 
-    if (full_enabled) {
-        full_backgrnd.draw(position_);
-        full_backgrnd2.draw(position_);
-        full_backgrnd3.draw(position_);
+    if (full_enabled_) {
+        full_backgrnd_.draw(position_);
+        full_backgrnd2_.draw(position_);
+        full_backgrnd3_.draw(position_);
 
-        mesolabel.draw(mesolabel_pos + Point<int16_t>(3, 70));
-        maplepointslabel.draw(maplepointslabel_pos + Point<int16_t>(181, 53));
+        meso_label_.draw(mesolabel_pos + Point<int16_t>(3, 70));
+        maple_points_label_.draw(maplepointslabel_pos + Point<int16_t>(181, 53));
     } else {
-        backgrnd.draw(position_);
-        backgrnd2.draw(position_);
-        backgrnd3.draw(position_);
+        backgrnd_.draw(position_);
+        backgrnd2_.draw(position_);
+        backgrnd3_.draw(position_);
 
-        slider.draw(position_ + Point<int16_t>(0, 1));
+        slider_.draw(position_ + Point<int16_t>(0, 1));
 
-        mesolabel.draw(mesolabel_pos);
-        maplepointslabel.draw(maplepointslabel_pos);
+        meso_label_.draw(mesolabel_pos);
+        maple_points_label_.draw(maplepointslabel_pos);
     }
 
-    auto range = slotrange.at(tab);
+    auto range = slot_range_.at(tab_);
 
-    size_t numslots = inventory.get_slotmax(tab);
-    size_t firstslot = full_enabled ? 1 : range.first;
-    size_t lastslot = full_enabled ? MAXFULLSLOTS : range.second;
+    size_t numslots = inventory_.get_slotmax(tab_);
+    size_t firstslot = full_enabled_ ? 1 : range.first;
+    size_t lastslot = full_enabled_ ? MAX_FULL_SLOTS_ : range.second;
 
-    for (size_t i = 0; i <= MAXFULLSLOTS; i++) {
+    for (size_t i = 0; i <= MAX_FULL_SLOTS_; i++) {
         Point<int16_t> slotpos =
-            full_enabled ? get_full_slotpos(i) : get_slotpos(i);
+            full_enabled_ ? get_full_slotpos(i) : get_slotpos(i);
 
-        if (icons.find(i) != icons.end()) {
-            auto &icon = icons.at(i);
+        if (icons_.find(i) != icons_.end()) {
+            auto &icon = icons_.at(i);
 
             if (icon && i >= firstslot && i <= lastslot)
                 icon->draw(position_ + slotpos);
         } else {
             if (i > numslots && i <= lastslot)
-                disabled.draw(position_ + slotpos);
+                disabled_.draw(position_ + slotpos);
         }
     }
 
-    int16_t bulletslot = inventory.get_bulletslot();
+    int16_t bulletslot = inventory_.get_bulletslot();
 
-    if (tab == InventoryType::Id::USE && is_visible(bulletslot))
-        projectile.draw(position_ + get_slotpos(bulletslot));
+    if (tab_ == InventoryType::Id::USE && is_visible(bulletslot))
+        projectile_.draw(position_ + get_slotpos(bulletslot));
 
-    if (tab == newtab) {
-        newitemtab.draw(position_ + get_tabpos(newtab), alpha);
+    if (tab_ == new_tab_) {
+        new_item_tab_.draw(position_ + get_tabpos(new_tab_), alpha);
 
-        if (is_visible(newslot))
-            newitemslot.draw(
-                position_ + get_slotpos(newslot) + Point<int16_t>(1, 1),
+        if (is_visible(new_slot_))
+            new_item_slot_.draw(
+                position_ + get_slotpos(new_slot_) + Point<int16_t>(1, 1),
                 alpha);
     }
 
@@ -228,32 +228,32 @@ void UIItemInventory::draw(float alpha) const {
 void UIItemInventory::update() {
     UIElement::update();
 
-    newitemtab.update(6);
-    newitemslot.update(6);
+    new_item_tab_.update(6);
+    new_item_slot_.update(6);
 
-    std::string meso_str = std::to_string(inventory.get_meso());
+    std::string meso_str = std::to_string(inventory_.get_meso());
     string_format::split_number(meso_str);
 
-    mesolabel.change_text(meso_str);
+    meso_label_.change_text(meso_str);
 }
 
 void UIItemInventory::update_slot(int16_t slot) {
-    if (int32_t item_id = inventory.get_item_id(tab, slot)) {
+    if (int32_t item_id = inventory_.get_item_id(tab_, slot)) {
         int16_t count;
 
-        if (tab == InventoryType::Id::EQUIP)
+        if (tab_ == InventoryType::Id::EQUIP)
             count = -1;
         else
-            count = inventory.get_item_count(tab, slot);
+            count = inventory_.get_item_count(tab_, slot);
 
         const bool untradable = ItemData::get(item_id).is_untradable();
         const bool cashitem = ItemData::get(item_id).is_cashitem();
         const Texture &texture = ItemData::get(item_id).get_icon(false);
-        EquipSlot::Id eqslot = inventory.find_equipslot(item_id);
+        EquipSlot::Id eqslot = inventory_.find_equipslot(item_id);
 
-        icons[slot] =
+        icons_[slot] =
             std::make_unique<Icon>(std::make_unique<ItemIcon>(*this,
-                                                              tab,
+                                                              tab_,
                                                               eqslot,
                                                               slot,
                                                               item_id,
@@ -262,35 +262,35 @@ void UIItemInventory::update_slot(int16_t slot) {
                                                               cashitem),
                                    texture,
                                    count);
-    } else if (icons.count(slot)) {
-        icons.erase(slot);
+    } else if (icons_.count(slot)) {
+        icons_.erase(slot);
     }
 }
 
 void UIItemInventory::load_icons() {
-    icons.clear();
+    icons_.clear();
 
-    uint8_t numslots = inventory.get_slotmax(tab);
+    uint8_t numslots = inventory_.get_slotmax(tab_);
 
-    for (size_t i = 0; i <= MAXFULLSLOTS; i++)
+    for (size_t i = 0; i <= MAX_FULL_SLOTS_; i++)
         if (i <= numslots)
             update_slot(i);
 }
 
 Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
-    InventoryType::Id oldtab = tab;
+    InventoryType::Id oldtab = tab_;
 
     switch (buttonid) {
         case Buttons::BT_CLOSE: toggle_active(); return Button::State::NORMAL;
-        case Buttons::BT_TAB_EQUIP: tab = InventoryType::Id::EQUIP; break;
-        case Buttons::BT_TAB_USE: tab = InventoryType::Id::USE; break;
-        case Buttons::BT_TAB_SETUP: tab = InventoryType::Id::SETUP; break;
-        case Buttons::BT_TAB_ETC: tab = InventoryType::Id::ETC; break;
-        case Buttons::BT_TAB_CASH: tab = InventoryType::Id::CASH; break;
+        case Buttons::BT_TAB_EQUIP: tab_ = InventoryType::Id::EQUIP; break;
+        case Buttons::BT_TAB_USE: tab_ = InventoryType::Id::USE; break;
+        case Buttons::BT_TAB_SETUP: tab_ = InventoryType::Id::SETUP; break;
+        case Buttons::BT_TAB_ETC: tab_ = InventoryType::Id::ETC; break;
+        case Buttons::BT_TAB_CASH: tab_ = InventoryType::Id::CASH; break;
         case Buttons::BT_GATHER:
-        case Buttons::BT_GATHER_SM: GatherItemsPacket(tab).dispatch(); break;
+        case Buttons::BT_GATHER_SM: GatherItemsPacket(tab_).dispatch(); break;
         case Buttons::BT_SORT:
-        case Buttons::BT_SORT_SM: SortItemsPacket(tab).dispatch(); break;
+        case Buttons::BT_SORT_SM: SortItemsPacket(tab_).dispatch(); break;
         case Buttons::BT_FULL:
         case Buttons::BT_FULL_SM: set_full(true); return Button::State::NORMAL;
         case Buttons::BT_SMALL:
@@ -316,12 +316,12 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
         case Buttons::BT_CASHSHOP: return Button::State::NORMAL;
     }
 
-    if (tab != oldtab) {
-        uint16_t row = slotrange.at(tab).first / COLUMNS;
-        slider.setrows(row, 6, 1 + inventory.get_slotmax(tab) / COLUMNS);
+    if (tab_ != oldtab) {
+        uint16_t row = slot_range_.at(tab_).first / COLUMNS_;
+        slider_.setrows(row, 6, 1 + inventory_.get_slotmax(tab_) / COLUMNS_);
 
         buttons_[button_by_tab(oldtab)]->set_state(Button::State::NORMAL);
-        buttons_[button_by_tab(tab)]->set_state(Button::State::PRESSED);
+        buttons_[button_by_tab(tab_)]->set_state(Button::State::PRESSED);
 
         load_icons();
         set_sort(false);
@@ -333,12 +333,12 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
 void UIItemInventory::doubleclick(Point<int16_t> cursorpos) {
     int16_t slot = slot_by_position(cursorpos - position_);
 
-    if (icons.count(slot) && is_visible(slot)) {
-        if (int32_t item_id = inventory.get_item_id(tab, slot)) {
-            switch (tab) {
+    if (icons_.count(slot) && is_visible(slot)) {
+        if (int32_t item_id = inventory_.get_item_id(tab_, slot)) {
+            switch (tab_) {
                 case InventoryType::Id::EQUIP:
                     if (can_wear_equip(slot))
-                        EquipItemPacket(slot, inventory.find_equipslot(item_id))
+                        EquipItemPacket(slot, inventory_.find_equipslot(item_id))
                             .dispatch();
 
                     break;
@@ -354,21 +354,21 @@ bool UIItemInventory::send_icon(const Icon &icon, Point<int16_t> cursorpos) {
     int16_t slot = slot_by_position(cursorpos - position_);
 
     if (slot > 0) {
-        int32_t item_id = inventory.get_item_id(tab, slot);
+        int32_t item_id = inventory_.get_item_id(tab_, slot);
         EquipSlot::Id eqslot;
         bool equip;
 
-        if (item_id && tab == InventoryType::Id::EQUIP) {
-            eqslot = inventory.find_equipslot(item_id);
+        if (item_id && tab_ == InventoryType::Id::EQUIP) {
+            eqslot = inventory_.find_equipslot(item_id);
             equip = true;
         } else {
             eqslot = EquipSlot::Id::NONE;
             equip = false;
         }
 
-        ignore_tooltip = true;
+        ignore_tooltip_ = true;
 
-        return icon.drop_on_items(tab, eqslot, slot, equip);
+        return icon.drop_on_items(tab_, eqslot, slot, equip);
     }
 
     return true;
@@ -386,8 +386,8 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
 
     Point<int16_t> cursor_relative = cursorpos - position_;
 
-    if (!full_enabled && slider.isenabled()) {
-        Cursor::State sstate = slider.send_cursor(cursor_relative, pressed);
+    if (!full_enabled_ && slider_.isenabled()) {
+        Cursor::State sstate = slider_.send_cursor(cursor_relative, pressed);
 
         if (sstate != Cursor::State::IDLE) {
             clear_tooltip();
@@ -409,12 +409,12 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
             clear_tooltip();
 
             return Cursor::State::GRABBING;
-        } else if (!ignore_tooltip) {
+        } else if (!ignore_tooltip_) {
             show_item(slot);
 
             return Cursor::State::CANGRAB;
         } else {
-            ignore_tooltip = false;
+            ignore_tooltip_ = false;
 
             return Cursor::State::CANGRAB;
         }
@@ -434,7 +434,7 @@ void UIItemInventory::send_key(int32_t keycode, bool pressed, bool escape) {
 
             InventoryType::Id newtab;
 
-            switch (tab) {
+            switch (tab_) {
                 case InventoryType::Id::EQUIP:
                     newtab = InventoryType::Id::USE;
                     break;
@@ -468,12 +468,12 @@ void UIItemInventory::modify(InventoryType::Id type,
     if (slot <= 0)
         return;
 
-    if (type == tab) {
+    if (type == tab_) {
         switch (mode) {
             case Inventory::Modification::ADD:
                 update_slot(slot);
-                newtab = type;
-                newslot = slot;
+                new_tab_ = type;
+                new_slot_ = slot;
                 break;
             case Inventory::Modification::CHANGECOUNT:
             case Inventory::Modification::ADDCOUNT:
@@ -495,13 +495,13 @@ void UIItemInventory::modify(InventoryType::Id type,
     switch (mode) {
         case Inventory::Modification::ADD:
         case Inventory::Modification::ADDCOUNT:
-            newtab = type;
-            newslot = slot;
+            new_tab_ = type;
+            new_slot_ = slot;
             break;
         case Inventory::Modification::CHANGECOUNT:
         case Inventory::Modification::SWAP:
         case Inventory::Modification::REMOVE:
-            if (newslot == slot && newtab == type)
+            if (new_slot_ == slot && new_tab_ == type)
                 clear_new();
 
             break;
@@ -509,10 +509,10 @@ void UIItemInventory::modify(InventoryType::Id type,
 }
 
 void UIItemInventory::set_sort(bool enabled) {
-    sort_enabled = enabled;
+    sort_enabled_ = enabled;
 
-    if (full_enabled) {
-        if (sort_enabled) {
+    if (full_enabled_) {
+        if (sort_enabled_) {
             buttons_[Buttons::BT_SORT]->set_active(false);
             buttons_[Buttons::BT_SORT_SM]->set_active(true);
             buttons_[Buttons::BT_GATHER]->set_active(false);
@@ -524,7 +524,7 @@ void UIItemInventory::set_sort(bool enabled) {
             buttons_[Buttons::BT_GATHER_SM]->set_active(true);
         }
     } else {
-        if (sort_enabled) {
+        if (sort_enabled_) {
             buttons_[Buttons::BT_SORT]->set_active(true);
             buttons_[Buttons::BT_SORT_SM]->set_active(false);
             buttons_[Buttons::BT_GATHER]->set_active(false);
@@ -543,8 +543,8 @@ void UIItemInventory::change_tab(InventoryType::Id type) {
 }
 
 void UIItemInventory::clear_new() {
-    newtab = InventoryType::Id::NONE;
-    newslot = 0;
+    new_tab_ = InventoryType::Id::NONE;
+    new_slot_ = 0;
 }
 
 void UIItemInventory::toggle_active() {
@@ -559,14 +559,14 @@ void UIItemInventory::toggle_active() {
 void UIItemInventory::remove_cursor() {
     UIDragElement::remove_cursor();
 
-    slider.remove_cursor();
+    slider_.remove_cursor();
 }
 
 void UIItemInventory::show_item(int16_t slot) {
-    if (tab == InventoryType::Id::EQUIP) {
+    if (tab_ == InventoryType::Id::EQUIP) {
         UI::get().show_equip(Tooltip::Parent::ITEMINVENTORY, slot);
     } else {
-        int32_t item_id = inventory.get_item_id(tab, slot);
+        int32_t item_id = inventory_.get_item_id(tab_, slot);
         UI::get().show_item(Tooltip::Parent::ITEMINVENTORY, item_id);
     }
 }
@@ -580,9 +580,9 @@ bool UIItemInventory::is_visible(int16_t slot) const {
 }
 
 bool UIItemInventory::is_not_visible(int16_t slot) const {
-    auto range = slotrange.at(tab);
+    auto range = slot_range_.at(tab_);
 
-    if (full_enabled)
+    if (full_enabled_)
         return slot < 1 || slot > 24;
     else
         return slot < range.first || slot > range.second;
@@ -602,7 +602,7 @@ bool UIItemInventory::can_wear_equip(int16_t slot) const {
     }
 
     const int32_t item_id =
-        inventory.get_item_id(InventoryType::Id::EQUIP, slot);
+        inventory_.get_item_id(InventoryType::Id::EQUIP, slot);
     const EquipData &equipdata = EquipData::get(item_id);
     const ItemData &itemdata = equipdata.get_itemdata();
 
@@ -678,27 +678,27 @@ int16_t UIItemInventory::slot_by_position(Point<int16_t> cursorpos) const {
     if (xoff < 1 || xoff > 143 || yoff < 1)
         return 0;
 
-    int16_t slot = (full_enabled ? 1 : slotrange.at(tab).first)
-                   + (xoff / ICON_WIDTH) + COLUMNS * (yoff / ICON_HEIGHT);
+    int16_t slot = (full_enabled_ ? 1 : slot_range_.at(tab_).first)
+                   + (xoff / ICON_WIDTH_) + COLUMNS_ * (yoff / ICON_HEIGHT_);
 
     return is_visible(slot) ? slot : 0;
 }
 
 Point<int16_t> UIItemInventory::get_slotpos(int16_t slot) const {
-    int16_t absslot = slot - slotrange.at(tab).first;
+    int16_t absslot = slot - slot_range_.at(tab_).first;
 
-    return Point<int16_t>(10 + (absslot % COLUMNS) * ICON_WIDTH,
-                          51 + (absslot / COLUMNS) * ICON_HEIGHT);
+    return Point<int16_t>(10 + (absslot % COLUMNS_) * ICON_WIDTH_,
+                          51 + (absslot / COLUMNS_) * ICON_HEIGHT_);
 }
 
 Point<int16_t> UIItemInventory::get_full_slotpos(int16_t slot) const {
     int16_t absslot = slot - 1;
-    div_t div = std::div(absslot, MAXSLOTS);
-    int16_t new_slot = absslot - (div.quot * MAXSLOTS);
-    int16_t adj_x = div.quot * COLUMNS * ICON_WIDTH;
+    div_t div = std::div(absslot, MAX_SLOTS_);
+    int16_t new_slot = absslot - (div.quot * MAX_SLOTS_);
+    int16_t adj_x = div.quot * COLUMNS_ * ICON_WIDTH_;
 
-    return Point<int16_t>(10 + adj_x + (new_slot % COLUMNS) * ICON_WIDTH,
-                          51 + (new_slot / COLUMNS) * ICON_HEIGHT);
+    return Point<int16_t>(10 + adj_x + (new_slot % COLUMNS_) * ICON_WIDTH_,
+                          51 + (new_slot / COLUMNS_) * ICON_HEIGHT_);
 }
 
 Point<int16_t> UIItemInventory::get_tabpos(InventoryType::Id tb) const {
@@ -723,26 +723,26 @@ uint16_t UIItemInventory::button_by_tab(InventoryType::Id tb) const {
 }
 
 Icon *UIItemInventory::get_icon(int16_t slot) {
-    auto iter = icons.find(slot);
+    auto iter = icons_.find(slot);
 
-    if (iter != icons.end())
+    if (iter != icons_.end())
         return iter->second.get();
     else
         return nullptr;
 }
 
 void UIItemInventory::set_full(bool enabled) {
-    full_enabled = enabled;
+    full_enabled_ = enabled;
 
-    if (full_enabled) {
-        dimension_ = bg_full_dimensions;
+    if (full_enabled_) {
+        dimension_ = bg_full_dimensions_;
 
         buttons_[Buttons::BT_FULL]->set_active(false);
         buttons_[Buttons::BT_FULL_SM]->set_active(false);
         buttons_[Buttons::BT_SMALL]->set_active(false);
         buttons_[Buttons::BT_SMALL_SM]->set_active(true);
     } else {
-        dimension_ = bg_dimensions;
+        dimension_ = bg_dimensions_;
 
         buttons_[Buttons::BT_FULL]->set_active(true);
         buttons_[Buttons::BT_FULL_SM]->set_active(false);
@@ -752,7 +752,7 @@ void UIItemInventory::set_full(bool enabled) {
 
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
-    int16_t adj_x = full_enabled ? 20 : 22;
+    int16_t adj_x = full_enabled_ ? 20 : 22;
     buttons_[Buttons::BT_CLOSE]->set_position(
         Point<int16_t>(dimension_.x() - adj_x, 6));
 
@@ -776,12 +776,12 @@ void UIItemInventory::set_full(bool enabled) {
     buttons_[Buttons::BT_TOAD_SM]->set_active(enabled);
     buttons_[Buttons::BT_CASHSHOP]->set_active(enabled);
 
-    set_sort(sort_enabled);
+    set_sort(sort_enabled_);
     load_icons();
 }
 
 void UIItemInventory::ItemIcon::set_count(int16_t c) {
-    count = c;
+    count_ = c;
 }
 
 Icon::IconType UIItemInventory::ItemIcon::get_type() {
@@ -796,14 +796,14 @@ UIItemInventory::ItemIcon::ItemIcon(const UIItemInventory &parent,
                                     int16_t c,
                                     bool u,
                                     bool cash) :
-    parent(parent) {
-    sourcetab = st;
-    eqsource = eqs;
-    source = s;
-    item_id = iid;
-    count = c;
-    untradable = u;
-    cashitem = cash;
+    parent_(parent) {
+    source_tab_ = st;
+    eqsource_ = eqs;
+    source_ = s;
+    item_id_ = iid;
+    count_ = c;
+    untradable_ = u;
+    cash_item_ = cash;
 }
 
 void UIItemInventory::ItemIcon::drop_on_stage() const {
@@ -813,58 +813,58 @@ void UIItemInventory::ItemIcon::drop_on_stage() const {
         "it?";
     constexpr char *cashmessage = "You can't drop this item.";
 
-    if (cashitem) {
+    if (cash_item_) {
         UI::get().emplace<UIOk>(cashmessage, [](bool) {});
     } else {
-        if (untradable) {
+        if (untradable_) {
             auto onok = [&, dropmessage](bool ok) {
                 if (ok) {
-                    if (count <= 1) {
-                        MoveItemPacket(sourcetab, source, 0, 1).dispatch();
+                    if (count_ <= 1) {
+                        MoveItemPacket(source_tab_, source_, 0, 1).dispatch();
                     } else {
                         auto onenter = [&](int32_t qty) {
-                            MoveItemPacket(sourcetab, source, 0, qty)
+                            MoveItemPacket(source_tab_, source_, 0, qty)
                                 .dispatch();
                         };
 
                         UI::get().emplace<UIEnterNumber>(dropmessage,
                                                          onenter,
-                                                         count,
-                                                         count);
+                                                         count_,
+                                                         count_);
                     }
                 }
             };
 
             UI::get().emplace<UIYesNo>(untradablemessage, onok);
         } else {
-            if (count <= 1) {
-                MoveItemPacket(sourcetab, source, 0, 1).dispatch();
+            if (count_ <= 1) {
+                MoveItemPacket(source_tab_, source_, 0, 1).dispatch();
             } else {
                 auto onenter = [&](int32_t qty) {
-                    MoveItemPacket(sourcetab, source, 0, qty).dispatch();
+                    MoveItemPacket(source_tab_, source_, 0, qty).dispatch();
                 };
 
                 UI::get().emplace<UIEnterNumber>(dropmessage,
                                                  onenter,
-                                                 count,
-                                                 count);
+                                                 count_,
+                                                 count_);
             }
         }
     }
 }
 
 void UIItemInventory::ItemIcon::drop_on_equips(EquipSlot::Id eqslot) const {
-    switch (sourcetab) {
+    switch (source_tab_) {
         case InventoryType::Id::EQUIP:
-            if (eqsource == eqslot)
-                if (parent.can_wear_equip(source))
-                    EquipItemPacket(source, eqslot).dispatch();
+            if (eqsource_ == eqslot)
+                if (parent_.can_wear_equip(source_))
+                    EquipItemPacket(source_, eqslot).dispatch();
 
             Sound(Sound::Name::DRAGEND).play();
 
             break;
         case InventoryType::Id::USE:
-            ScrollEquipPacket(source, eqslot).dispatch();
+            ScrollEquipPacket(source_, eqslot).dispatch();
             break;
     }
 }
@@ -873,20 +873,20 @@ bool UIItemInventory::ItemIcon::drop_on_items(InventoryType::Id tab,
                                               EquipSlot::Id,
                                               int16_t slot,
                                               bool) const {
-    if (tab != sourcetab || slot == source)
+    if (tab != source_tab_ || slot == source_)
         return true;
 
-    MoveItemPacket(tab, source, slot, 1).dispatch();
+    MoveItemPacket(tab, source_, slot, 1).dispatch();
 
     return true;
 }
 
 void UIItemInventory::ItemIcon::drop_on_bindings(Point<int16_t> cursorposition,
                                                  bool remove) const {
-    if (sourcetab == InventoryType::Id::USE
-        || sourcetab == InventoryType::Id::SETUP) {
+    if (source_tab_ == InventoryType::Id::USE
+        || source_tab_ == InventoryType::Id::SETUP) {
         auto keyconfig = UI::get().get_element<UIKeyConfig>();
-        Keyboard::Mapping mapping = Keyboard::Mapping(KeyType::ITEM, item_id);
+        Keyboard::Mapping mapping = Keyboard::Mapping(KeyType::ITEM, item_id_);
 
         if (remove)
             keyconfig->unstage_mapping(mapping);

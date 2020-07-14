@@ -61,16 +61,16 @@ private:
 
     enum Buttons : uint16_t { CLOSE };
 
-    int16_t offset;
-    int16_t event_count;
-    ShadowText event_title[3];
-    Text event_date[3];
-    Slider slider;
-    Texture item_reward;
-    Texture text_reward;
-    Texture next;
-    Texture label_on;
-    Texture label_next;
-    std::vector<BoolPair<bool>> events;
+    int16_t offset_;
+    int16_t event_count_;
+    ShadowText event_title_[3];
+    Text event_date_[3];
+    Slider slider_;
+    Texture item_reward_;
+    Texture text_reward_;
+    Texture next_;
+    Texture label_on_;
+    Texture label_next_;
+    std::vector<BoolPair<bool>> events_;
 };
 }  // namespace ms

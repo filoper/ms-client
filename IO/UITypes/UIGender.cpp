@@ -29,15 +29,15 @@
 namespace ms {
 UIGender::UIGender(std::function<void()> oh) :
     UIElement(Point<int16_t>(0, 15), Point<int16_t>(0, 0)),
-    okhandler(oh) {
-    CUR_TIMESTEP = 0;
+    okhandler_(oh) {
+    cur_timestep_ = 0;
 
     nl::node Login = nl::nx::ui["Login.img"];
     nl::node Gender = Login["Gender"];
     nl::node scroll = Gender["scroll"][0];
 
     for (size_t i = 0; i < 3; i++)
-        gender_sprites[i] = scroll[i];
+        gender_sprites_[i] = scroll[i];
 
     sprites_.emplace_back(Gender["text"][0], Point<int16_t>(601, 326));
 
@@ -62,18 +62,18 @@ UIGender::UIGender(std::function<void()> oh) :
                                         Point<int16_t>(510, 283),
                                         65);
 
-    dimension_ = Texture(gender_sprites[2]).get_dimensions();
+    dimension_ = Texture(gender_sprites_[2]).get_dimensions();
 }
 
 void UIGender::draw(float inter) const {
     Point<int16_t> gender_pos = Point<int16_t>(355, 185);
 
-    if (CUR_TIMESTEP == 0) {
-        gender_sprites[0].draw(position_ + gender_pos);
-    } else if (CUR_TIMESTEP == Constants::TIMESTEP * 3) {
-        gender_sprites[1].draw(position_ + gender_pos);
-    } else if (CUR_TIMESTEP >= Constants::TIMESTEP * 6) {
-        gender_sprites[2].draw(position_ + gender_pos);
+    if (cur_timestep_ == 0) {
+        gender_sprites_[0].draw(position_ + gender_pos);
+    } else if (cur_timestep_ == Constants::TIMESTEP * 3) {
+        gender_sprites_[1].draw(position_ + gender_pos);
+    } else if (cur_timestep_ >= Constants::TIMESTEP * 6) {
+        gender_sprites_[2].draw(position_ + gender_pos);
 
         UIElement::draw(inter);
     }
@@ -82,8 +82,8 @@ void UIGender::draw(float inter) const {
 void UIGender::update() {
     UIElement::update();
 
-    if (CUR_TIMESTEP <= Constants::TIMESTEP * 6)
-        CUR_TIMESTEP += Constants::TIMESTEP;
+    if (cur_timestep_ <= Constants::TIMESTEP * 6)
+        cur_timestep_ += Constants::TIMESTEP;
 }
 
 Cursor::State UIGender::send_cursor(bool clicked, Point<int16_t> cursorpos) {
@@ -104,7 +104,7 @@ Button::State UIGender::button_pressed(uint16_t buttonid) {
     switch (buttonid) {
         case Buttons::NO:
             deactivate();
-            okhandler();
+            okhandler_();
             break;
         case Buttons::YES: {
             UI::get().emplace<UILoginWait>();

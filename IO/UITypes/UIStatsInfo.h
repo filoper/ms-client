@@ -110,19 +110,19 @@ private:
         BT_DETAIL_DETAILCLOSE
     };
 
-    const CharStats &stats;
+    const CharStats &stats_;
 
     enum Ability { RARE, EPIC, UNIQUE, LEGENDARY, NONE, NUM_ABILITIES };
 
-    std::array<Texture, Ability::NUM_ABILITIES> abilities;
-    BoolPair<Texture> inner_ability;
+    std::array<Texture, Ability::NUM_ABILITIES> abilities_;
+    BoolPair<Texture> inner_ability_;
 
-    std::vector<Texture> textures_detail;
-    bool showdetail;
+    std::vector<Texture> textures_detail_;
+    bool show_detail_;
 
-    bool hasap;
+    bool has_ap_;
 
-    Text statlabels[StatLabel::NUM_LABELS];
-    Point<int16_t> statoffsets[StatLabel::NUM_LABELS];
+    Text stat_labels_[StatLabel::NUM_LABELS];
+    Point<int16_t> stat_offsets_[StatLabel::NUM_LABELS];
 };
 }  // namespace ms

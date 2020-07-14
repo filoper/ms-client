@@ -52,14 +52,14 @@ private:
 
     enum Buttons : uint16_t { CANCEL, CHANGE, CH };
 
-    uint8_t current_channel;
-    uint8_t selected_channel;
-    uint8_t channel_count;
-    BoolPair<Texture> channel;
-    std::vector<Sprite> ch;
-    int16_t current_channel_x;
-    int16_t current_channel_y;
-    int16_t selected_channel_x;
-    int16_t selected_channel_y;
+    uint8_t current_channel_;
+    uint8_t selected_channel_;
+    uint8_t channel_count_;
+    BoolPair<Texture> channel_;
+    std::vector<Sprite> ch_;
+    int16_t current_channel_x_;
+    int16_t current_channel_y_;
+    int16_t selected_channel_x_;
+    int16_t selected_channel_y_;
 };
 }  // namespace ms

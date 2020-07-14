@@ -33,12 +33,12 @@ public:
     bool update();
 
 private:
-    Text text;
-    Text shadow;
-    Linear<float> opacity;
+    Text text_;
+    Text shadow_;
+    Linear<float> opacity_;
 
     // 8 seconds.
-    static constexpr int64_t FADE_DURATION = 8'000;
+    static constexpr int64_t FADE_DURATION_ = 8'000;
 };
 
 class UIStatusMessenger : public UIElement {
@@ -60,8 +60,8 @@ public:
     void show_status(Color::Name color, const std::string &message);
 
 private:
-    static constexpr size_t MAX_MESSAGES = 6;
+    static constexpr size_t MAX_MESSAGES_ = 6;
 
-    std::deque<StatusInfo> statusinfos;
+    std::deque<StatusInfo> status_infos_;
 };
 }  // namespace ms

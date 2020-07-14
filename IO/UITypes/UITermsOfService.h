@@ -45,11 +45,11 @@ private:
 
     enum Buttons : uint16_t { OK, CANCEL };
 
-    Text text;
-    Slider slider;
-    std::function<void()> okhandler;
-    uint16_t offset;
-    int16_t unit_rows;
-    int16_t max_rows;
+    Text text_;
+    Slider slider_;
+    std::function<void()> okhandler_;
+    uint16_t offset_;
+    int16_t unit_rows_;
+    int16_t max_rows_;
 };
 }  // namespace ms

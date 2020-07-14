@@ -137,34 +137,34 @@ private:
         TESPIA = 100
     };
 
-    Text version;
-    Text recommended_message;
-    Texture worlds_background;
-    Texture channels_background;
-    Point<int16_t> worldsrc_pos;
-    Point<int16_t> channelsrc_pos;
-    ChatBalloonHorizontal chatballoon;
+    Text version_;
+    Text recommended_message_;
+    Texture worlds_background_;
+    Texture channels_background_;
+    Point<int16_t> world_src_pos_;
+    Point<int16_t> channel_src_pos_;
+    ChatBalloonHorizontal chatballoon_;
 
-    uint8_t worldid;
-    uint8_t recommended_worldid;
-    uint8_t channelid;
-    uint8_t worldcount;
-    uint8_t recommended_worldcount;
+    uint8_t worldid_;
+    uint8_t recommended_worldid_;
+    uint8_t channelid_;
+    uint8_t world_count_;
+    uint8_t recommended_world_count_;
 
-    std::vector<World> worlds;
-    std::vector<RecommendedWorld> recommended_worlds;
-    std::vector<Texture> world_textures;
-    std::vector<Texture> recommended_world_textures;
-    std::vector<Texture> recommended_textures;
-    std::map<uint16_t, uint16_t> world_map;
+    std::vector<World> worlds_;
+    std::vector<RecommendedWorld> recommended_worlds_;
+    std::vector<Texture> world_textures_;
+    std::vector<Texture> recommended_world_textures_;
+    std::vector<Texture> recommended_textures_;
+    std::map<uint16_t, uint16_t> world_map_;
 
-    bool world_selected;
-    bool use_recommended;
-    bool show_recommended;
-    bool draw_chatballoon;
+    bool world_selected_;
+    bool use_recommended_;
+    bool show_recommended_;
+    bool draw_chatballoon_;
 
-    nl::node worldselect;
-    nl::node worldsrc;
-    nl::node channelsrc;
+    nl::node world_select_;
+    nl::node world_src_;
+    nl::node channel_src_;
 };
 }  // namespace ms

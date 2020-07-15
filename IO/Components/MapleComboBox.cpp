@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "MapleComboBox.h"
 
 #include <nlnx/nx.hpp>
@@ -59,9 +56,9 @@ MapleComboBox::MapleComboBox(Type type,
 
     for (auto &option : options_)
         option_text_.push_back(Text(Text::Font::A12M,
-                                   Text::Alignment::LEFT,
-                                   Color::Name::BLACK,
-                                   option));
+                                    Text::Alignment::LEFT,
+                                    Color::Name::BLACK,
+                                    option));
 
     Text::Font selected_font = Text::Font::A12M;
     Color::Name selected_color = Color::Name::BLACK;
@@ -74,25 +71,26 @@ MapleComboBox::MapleComboBox(Type type,
     }
 
     selected_ = Text(selected_font,
-                    Text::Alignment::LEFT,
-                    selected_color,
-                    options_[selected_index_]);
+                     Text::Alignment::LEFT,
+                     selected_color,
+                     options_[selected_index_]);
 
     state_ = Button::State::NORMAL;
     background_ = ColorBox(width(),
-                          options_.size() * HEIGHT,
-                          Color::Name::DUSTYGRAY,
-                          1.0f);
+                           options_.size() * HEIGHT,
+                           Color::Name::DUSTYGRAY,
+                           1.0f);
     rect_ = ColorBox(width() - 2,
-                    options_.size() * HEIGHT - 2,
-                    Color::Name::GALLERY,
-                    1.0f);
+                     options_.size() * HEIGHT - 2,
+                     Color::Name::GALLERY,
+                     1.0f);
     current_rect_ =
         ColorBox(width() - 2, HEIGHT - 2, Color::Name::GRAYOLIVE, 1.0f);
 
     Point<int16_t> option_pos =
-        Point<int16_t>(position_.x(),
-                       position_.y() + textures_[state_][0].get_dimensions().y())
+        Point<int16_t>(
+            position_.x(),
+            position_.y() + textures_[state_][0].get_dimensions().y())
         + parent_pos_;
 
     for (size_t i = 0; i < option_text_.size(); i++)
@@ -163,7 +161,8 @@ Rectangle<int16_t> MapleComboBox::bounds(Point<int16_t>) const {
 }
 
 int16_t MapleComboBox::width() const {
-    return textures_[state_][0].width() + textures_[state_][2].width() + rwidth_;
+    return textures_[state_][0].width() + textures_[state_][2].width()
+           + rwidth_;
 }
 
 Point<int16_t> MapleComboBox::origin() const {

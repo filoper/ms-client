@@ -13,10 +13,10 @@ membuf::membuf(const char *data, unsigned int len) :
                const_cast<char_type *>(end_));
 }
 
-membuf::pos_type membuf::seekoff(off_type off,
-                                 std::ios_base::seekdir dir,
-                                 std::ios_base::openmode which
-                                 = std::ios_base::in) {
+membuf::pos_type membuf::seekoff(
+    off_type off,
+    std::ios_base::seekdir dir,
+    std::ios_base::openmode which = std::ios_base::in) {
     if (dir == std::ios_base::cur)
         gbump(off);
     else if (dir == std::ios_base::end)

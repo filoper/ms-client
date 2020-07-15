@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Gauge.h"
 
 namespace ms {
@@ -63,8 +60,8 @@ void Gauge::draw(const DrawArgument &args) const {
     if (length > 0) {
         if (type_ == Type::GAME) {
             bar_front_.draw(args
-                          + DrawArgument(Point<int16_t>(0, 0),
-                                         Point<int16_t>(length, 0)));
+                            + DrawArgument(Point<int16_t>(0, 0),
+                                           Point<int16_t>(length, 0)));
             bar_mid_.draw(args);
             bar_end_.draw(args + Point<int16_t>(length + 8, 20));
         } else if (type_ == Type::CASHSHOP) {
@@ -72,10 +69,10 @@ void Gauge::draw(const DrawArgument &args) const {
 
             bar_front_.draw(args - pos_adj);
             bar_mid_.draw(args
-                        + DrawArgument(Point<int16_t>(0, 0),
-                                       Point<int16_t>(length, 0)));
+                          + DrawArgument(Point<int16_t>(0, 0),
+                                         Point<int16_t>(length, 0)));
             bar_end_.draw(args - pos_adj
-                        + Point<int16_t>(length + bar_front_.width(), 0));
+                          + Point<int16_t>(length + bar_front_.width(), 0));
         }
     }
 }

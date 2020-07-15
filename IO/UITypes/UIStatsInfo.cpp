@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIStatsInfo.h"
 
 #include <nlnx/nx.hpp>
@@ -217,7 +214,8 @@ bool UIStatsInfo::is_in_range(Point<int16_t> cursorpos) const {
     else
         pos_adj = Point<int16_t>(0, 0);
 
-    auto bounds = Rectangle<int16_t>(position_, position_ + dimension_ + pos_adj);
+    auto bounds =
+        Rectangle<int16_t>(position_, position_ + dimension_ + pos_adj);
     return bounds.contains(cursorpos);
 }
 
@@ -264,7 +262,8 @@ void UIStatsInfo::update_all_stats() {
     stat_labels_[StatLabel::IGNORE_DEFENSE].change_text(
         std::to_string(static_cast<int32_t>(stats_.get_ignoredef())) + "%");
     stat_labels_[StatLabel::CRITICAL_RATE].change_text(
-        std::to_string(static_cast<int32_t>(stats_.get_critical() * 100)) + "%");
+        std::to_string(static_cast<int32_t>(stats_.get_critical() * 100))
+        + "%");
     stat_labels_[StatLabel::CRITICAL_DAMAGE].change_text("0.00%");
     stat_labels_[StatLabel::STATUS_RESISTANCE].change_text(
         std::to_string(static_cast<int32_t>(stats_.get_resistance())));
@@ -276,7 +275,8 @@ void UIStatsInfo::update_all_stats() {
         std::to_string(stats_.get_total(EquipStat::Id::SPEED)) + "%");
     stat_labels_[StatLabel::JUMP].change_text(
         std::to_string(stats_.get_total(EquipStat::Id::JUMP)) + "%");
-    stat_labels_[StatLabel::HONOR].change_text(std::to_string(stats_.get_honor()));
+    stat_labels_[StatLabel::HONOR].change_text(
+        std::to_string(stats_.get_honor()));
 }
 
 void UIStatsInfo::update_stat(MapleStat::Id stat) {

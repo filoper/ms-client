@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIUserList.h"
 
 #include <nlnx/nx.hpp>
@@ -59,10 +56,10 @@ UIUserList::UIUserList(uint16_t t) :
         party_mine_grid_[i] = user_list_["Sheet2"][i];
 
     party_mine_name_ = Text(Text::Font::A12M,
-                           Text::Alignment::LEFT,
-                           Color::Name::BLACK,
-                           "none",
-                           0);
+                            Text::Alignment::LEFT,
+                            Color::Name::BLACK,
+                            "none",
+                            0);
 
     nl::node party_taben = Party["Tab"]["enabled"];
     nl::node party_tabdis = Party["Tab"]["disabled"];
@@ -101,11 +98,11 @@ UIUserList::UIUserList(uint16_t t) :
     int16_t party_unitrows = 6;
     int16_t party_rowmax = 6;
     party_slider_ = Slider(Slider::Type::DEFAULT_SILVER,
-                          Range<int16_t>(party_y, party_height),
-                          party_x,
-                          party_unitrows,
-                          party_rowmax,
-                          [](bool) {});
+                           Range<int16_t>(party_y, party_height),
+                           party_x,
+                           party_unitrows,
+                           party_rowmax,
+                           [](bool) {});
 
     // Buddy Tab
     nl::node Friend = Main["Friend"];
@@ -128,26 +125,26 @@ UIUserList::UIUserList(uint16_t t) :
     std::string text = "(" + std::to_string(friend_count_) + std::string("/")
                        + std::to_string(friend_total_) + std::string(")");
     friends_online_text_ = Text(Text::Font::A11M,
-                               Text::Alignment::LEFT,
-                               Color::Name::WHITE,
-                               text,
-                               0);
+                                Text::Alignment::LEFT,
+                                Color::Name::WHITE,
+                                text,
+                                0);
 
     friends_cur_location_ = Text(Text::Font::A11M,
-                                Text::Alignment::LEFT,
-                                Color::Name::LIGHTGREY,
-                                "My Location - " + get_cur_location(),
-                                0);
+                                 Text::Alignment::LEFT,
+                                 Color::Name::LIGHTGREY,
+                                 "My Location - " + get_cur_location(),
+                                 0);
     friends_name_ = Text(Text::Font::A11M,
-                        Text::Alignment::LEFT,
-                        Color::Name::BLACK,
-                        "none",
-                        0);
+                         Text::Alignment::LEFT,
+                         Color::Name::BLACK,
+                         "none",
+                         0);
     friends_group_name_ = Text(Text::Font::A11M,
-                              Text::Alignment::LEFT,
-                              Color::Name::WHITE,
-                              "Default Group (0/0)",
-                              0);
+                               Text::Alignment::LEFT,
+                               Color::Name::WHITE,
+                               "Default Group (0/0)",
+                               0);
 
     buttons_[Buttons::BT_FRIEND_ADD] =
         std::make_unique<MapleButton>(Friend["BtAddFriend"]);
@@ -172,11 +169,11 @@ UIUserList::UIUserList(uint16_t t) :
     int16_t friends_unitrows = 6;
     int16_t friends_rowmax = 6;
     friends_slider_ = Slider(Slider::Type::DEFAULT_SILVER,
-                            Range<int16_t>(friends_y, friends_height),
-                            friends_x,
-                            friends_unitrows,
-                            friends_rowmax,
-                            [](bool) {});
+                             Range<int16_t>(friends_y, friends_height),
+                             friends_x,
+                             friends_unitrows,
+                             friends_rowmax,
+                             [](bool) {});
 
     // Boss tab
     nl::node Boss = Main["Boss"];
@@ -230,10 +227,10 @@ UIUserList::UIUserList(uint16_t t) :
         blacklist_grid_[i] = user_list_["Sheet6"][i];
 
     blacklist_name_ = Text(Text::Font::A12M,
-                          Text::Alignment::LEFT,
-                          Color::Name::BLACK,
-                          "none",
-                          0);
+                           Text::Alignment::LEFT,
+                           Color::Name::BLACK,
+                           "none",
+                           0);
 
     nl::node blacklist_taben = Blacklist["Tab"]["enabled"];
     nl::node blacklist_tabdis = Blacklist["Tab"]["disabled"];
@@ -362,8 +359,8 @@ void UIUserList::change_tab(uint8_t tabid) {
     tab_ = tabid;
 
     background_ = tabid == Buttons::BT_TAB_BOSS
-                     ? user_list_["Main"]["Boss"]["backgrnd3"]
-                     : user_list_["Main"]["backgrnd2"];
+                      ? user_list_["Main"]["Boss"]["backgrnd3"]
+                      : user_list_["Main"]["backgrnd2"];
 
     if (oldtab != tab_)
         buttons_[Buttons::BT_TAB_FRIEND + oldtab]->set_state(

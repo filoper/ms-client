@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Slider.h"
 
 #include <nlnx/nx.hpp>
@@ -155,8 +152,9 @@ void Slider::remove_cursor() {
 }
 
 Point<int16_t> Slider::getthumbpos() const {
-    int16_t y = row_ < row_max_ ? vertical_.first() + row_ * row_height_ + button_height_
-                             : vertical_.second() - button_height_ * 2 - 2;
+    int16_t y = row_ < row_max_
+                    ? vertical_.first() + row_ * row_height_ + button_height_
+                    : vertical_.second() - button_height_ * 2 - 2;
 
     return Point<int16_t>(x_, y);
 }
@@ -247,7 +245,8 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
 
     if (cursor.y() < vertical_.second()) {
         if (pressed) {
-            auto yoffset = static_cast<double>(relative.y() - button_height_ * 2);
+            auto yoffset =
+                static_cast<double>(relative.y() - button_height_ * 2);
             auto cursorrow =
                 static_cast<int16_t>(std::round(yoffset / row_height_));
 

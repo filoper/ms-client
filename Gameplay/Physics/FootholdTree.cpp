@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "FootholdTree.h"
 
 #include <iostream>
@@ -133,7 +130,7 @@ void FootholdTree::limit_movement(PhysicsObject &phobj) const {
 void FootholdTree::update_fh(PhysicsObject &phobj) const {
     if (phobj.type == PhysicsObject::Type::FIXATED && phobj.fhid > 0)
         return;
-        
+
     const Foothold &curfh = get_fh(phobj.fhid);
     bool checkslope = false;
 
@@ -152,7 +149,7 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
             checkslope = true;
     } else {
         phobj.fhid = get_fhid_below(x, y);
-        if (phobj.fhid == 0) // fix for stuttering slope walk
+        if (phobj.fhid == 0)  // fix for stuttering slope walk
             return;
     }
 

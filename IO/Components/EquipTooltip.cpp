@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "EquipTooltip.h"
 
 #include <nlnx/nx.hpp>
@@ -208,32 +205,32 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
                 switch (prank_preview_) {
                     case Equip::Potential::POT_HIDDEN:
                         potflag_preview_ = Text(Text::Font::A11M,
-                                               Text::Alignment::CENTER,
-                                               Color::Name::RED);
+                                                Text::Alignment::CENTER,
+                                                Color::Name::RED);
                         potflag_preview_.change_text("(Hidden Potential)");
                         break;
                     case Equip::Potential::POT_RARE:
                         potflag_preview_ = Text(Text::Font::A11M,
-                                               Text::Alignment::CENTER,
-                                               Color::Name::WHITE);
+                                                Text::Alignment::CENTER,
+                                                Color::Name::WHITE);
                         potflag_preview_.change_text("(Rare Item)");
                         break;
                     case Equip::Potential::POT_EPIC:
                         potflag_preview_ = Text(Text::Font::A11M,
-                                               Text::Alignment::CENTER,
-                                               Color::Name::WHITE);
+                                                Text::Alignment::CENTER,
+                                                Color::Name::WHITE);
                         potflag_preview_.change_text("(Epic Item)");
                         break;
                     case Equip::Potential::POT_UNIQUE:
                         potflag_preview_ = Text(Text::Font::A11M,
-                                               Text::Alignment::CENTER,
-                                               Color::Name::WHITE);
+                                                Text::Alignment::CENTER,
+                                                Color::Name::WHITE);
                         potflag_preview_.change_text("(Unique Item)");
                         break;
                     case Equip::Potential::POT_LEGENDARY:
                         potflag_preview_ = Text(Text::Font::A11M,
-                                               Text::Alignment::CENTER,
-                                               Color::Name::WHITE);
+                                                Text::Alignment::CENTER,
+                                                Color::Name::WHITE);
                         potflag_preview_.change_text("(Legendary Item)");
                         break;
                     default: height_preview_ -= 16; break;
@@ -282,31 +279,31 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
                 }
 
                 name_preview_ = Text(Text::Font::A12B,
-                                    Text::Alignment::LEFT,
-                                    namecolor,
-                                    namestr,
-                                    400);
+                                     Text::Alignment::LEFT,
+                                     namecolor,
+                                     namestr,
+                                     400);
                 atkinc_preview_ = Text(Text::Font::A11M,
-                                      Text::Alignment::RIGHT,
-                                      Color::Name::DUSTYGRAY,
-                                      "ATT INCREASE");
+                                       Text::Alignment::RIGHT,
+                                       Color::Name::DUSTYGRAY,
+                                       "ATT INCREASE");
 
                 std::string desctext = itemdata.get_desc();
                 has_desc_preview_ = desctext.size() > 0;
 
                 if (has_desc_preview_) {
                     desc_preview_ = Text(Text::Font::A12M,
-                                        Text::Alignment::LEFT,
-                                        Color::Name::WHITE,
-                                        desctext,
-                                        250);
+                                         Text::Alignment::LEFT,
+                                         Color::Name::WHITE,
+                                         desctext,
+                                         250);
                     height_preview_ += desc_preview_.height() + 10;
                 }
 
                 category_preview_ = Text(Text::Font::A11M,
-                                        Text::Alignment::LEFT,
-                                        Color::Name::WHITE,
-                                        "Type: " + equipdata.get_type());
+                                         Text::Alignment::LEFT,
+                                         Color::Name::WHITE,
+                                         "Type: " + equipdata.get_type());
 
                 is_weapon_preview_ = equipdata.is_weapon();
 
@@ -338,9 +335,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
                         vicious.append(" (MAX) ");
 
                     hammers_preview_ = Text(Text::Font::A11M,
-                                           Text::Alignment::LEFT,
-                                           Color::Name::WHITE,
-                                           "Hammers Applied: " + vicious);
+                                            Text::Alignment::LEFT,
+                                            Color::Name::WHITE,
+                                            "Hammers Applied: " + vicious);
                 } else {
                     height_preview_ -= 36;
                 }
@@ -447,32 +444,32 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
     switch (prank_) {
         case Equip::Potential::POT_HIDDEN:
             potflag_ = Text(Text::Font::A11M,
-                           Text::Alignment::CENTER,
-                           Color::Name::RED);
+                            Text::Alignment::CENTER,
+                            Color::Name::RED);
             potflag_.change_text("(Hidden Potential)");
             break;
         case Equip::Potential::POT_RARE:
             potflag_ = Text(Text::Font::A11M,
-                           Text::Alignment::CENTER,
-                           Color::Name::WHITE);
+                            Text::Alignment::CENTER,
+                            Color::Name::WHITE);
             potflag_.change_text("(Rare Item)");
             break;
         case Equip::Potential::POT_EPIC:
             potflag_ = Text(Text::Font::A11M,
-                           Text::Alignment::CENTER,
-                           Color::Name::WHITE);
+                            Text::Alignment::CENTER,
+                            Color::Name::WHITE);
             potflag_.change_text("(Epic Item)");
             break;
         case Equip::Potential::POT_UNIQUE:
             potflag_ = Text(Text::Font::A11M,
-                           Text::Alignment::CENTER,
-                           Color::Name::WHITE);
+                            Text::Alignment::CENTER,
+                            Color::Name::WHITE);
             potflag_.change_text("(Unique Item)");
             break;
         case Equip::Potential::POT_LEGENDARY:
             potflag_ = Text(Text::Font::A11M,
-                           Text::Alignment::CENTER,
-                           Color::Name::WHITE);
+                            Text::Alignment::CENTER,
+                            Color::Name::WHITE);
             potflag_.change_text("(Legendary Item)");
             break;
         default: height_ -= 16; break;
@@ -513,35 +510,35 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
     name_ =
         Text(Text::Font::A12B, Text::Alignment::LEFT, namecolor, namestr, 400);
     atkinc_ = Text(Text::Font::A11M,
-                  Text::Alignment::RIGHT,
-                  Color::Name::DUSTYGRAY,
-                  "ATT INCREASE");
+                   Text::Alignment::RIGHT,
+                   Color::Name::DUSTYGRAY,
+                   "ATT INCREASE");
 
     std::string desctext = itemdata.get_desc();
     has_desc_ = desctext.size() > 0;
 
     if (has_desc_) {
         desc_ = Text(Text::Font::A12M,
-                    Text::Alignment::LEFT,
-                    Color::Name::WHITE,
-                    desctext,
-                    250);
+                     Text::Alignment::LEFT,
+                     Color::Name::WHITE,
+                     desctext,
+                     250);
         height_ += desc_.height() + 10;
     }
 
     category_ = Text(Text::Font::A11M,
-                    Text::Alignment::LEFT,
-                    Color::Name::WHITE,
-                    "Type: " + equipdata.get_type());
+                     Text::Alignment::LEFT,
+                     Color::Name::WHITE,
+                     "Type: " + equipdata.get_type());
 
     is_weapon_ = equipdata.is_weapon();
 
     if (is_weapon_) {
         const WeaponData &weapon = WeaponData::get(item_id);
         wepspeed_ = Text(Text::Font::A11M,
-                        Text::Alignment::LEFT,
-                        Color::Name::WHITE,
-                        "Attack Speed: " + weapon.getspeedstring());
+                         Text::Alignment::LEFT,
+                         Color::Name::WHITE,
+                         "Attack Speed: " + weapon.getspeedstring());
     } else {
         height_ -= 18;
     }
@@ -561,9 +558,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
             vicious.append(" (MAX) ");
 
         hammers_ = Text(Text::Font::A11M,
-                       Text::Alignment::LEFT,
-                       Color::Name::WHITE,
-                       "Hammers Applied: " + vicious);
+                        Text::Alignment::LEFT,
+                        Color::Name::WHITE,
+                        "Hammers Applied: " + vicious);
     } else {
         height_ -= 36;
     }
@@ -675,12 +672,12 @@ void EquipTooltip::draw(Point<int16_t> pos) const {
 
         if (ms != MapleStat::Id::LEVEL)
             reqset_[reqok].draw(req_stat_strings_[ms],
-                               6,
-                               pos + reqpos + Point<int16_t>(54, 0));
+                                6,
+                                pos + reqpos + Point<int16_t>(54, 0));
         else
             lvset_[reqok].draw(req_stat_strings_[ms],
-                              6,
-                              pos + reqpos + Point<int16_t>(54, 0));
+                               6,
+                               pos + reqpos + Point<int16_t>(54, 0));
     }
 
     pos.shift_y(88);
@@ -751,7 +748,7 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
 
     top_.draw(pos);
     mid_.draw(DrawArgument(pos + Point<int16_t>(0, 13),
-                          Point<int16_t>(0, height_preview_)));
+                           Point<int16_t>(0, height_preview_)));
     bot_.draw(pos + Point<int16_t>(0, height_preview_ + 13));
     cover_.draw(pos);
 
@@ -804,12 +801,12 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
 
         if (ms != MapleStat::Id::LEVEL)
             reqset_[reqok].draw(req_stat_strings_preview_[ms],
-                               6,
-                               pos + reqpos + Point<int16_t>(54, 0));
+                                6,
+                                pos + reqpos + Point<int16_t>(54, 0));
         else
             lvset_[reqok].draw(req_stat_strings_preview_[ms],
-                              6,
-                              pos + reqpos + Point<int16_t>(54, 0));
+                               6,
+                               pos + reqpos + Point<int16_t>(54, 0));
     }
 
     pos.shift_y(88);
@@ -818,7 +815,8 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
     jobs_back_.draw(job_position);
 
     for (auto &jbit : okjobs_preview_)
-        jobs_[can_equip_preview_[MapleStat::Id::JOB]].at(jbit).draw(job_position);
+        jobs_[can_equip_preview_[MapleStat::Id::JOB]].at(jbit).draw(
+            job_position);
 
     line_.draw(pos + Point<int16_t>(0, 47));
 

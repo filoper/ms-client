@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIMiniMap.h"
 
 #include <nlnx/nx.hpp>
@@ -115,7 +112,8 @@ void UIMiniMap::draw(float alpha) const {
                     position_ + sprite.second + Point<int16_t>(0, MAX_ADJ_),
                     alpha);
 
-            draw_movable_markers(position_ + Point<int16_t>(0, MAX_ADJ_), alpha);
+            draw_movable_markers(position_ + Point<int16_t>(0, MAX_ADJ_),
+                                 alpha);
 
             if (list_npc_enabled_)
                 draw_npclist(max_dimensions_, alpha);
@@ -203,11 +201,11 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     if (list_npc_enabled_) {
         Point<int16_t> relative_point =
             cursor_relative
-            - Point<int16_t>(
-                10
-                    + (type_ == Type::MAX ? max_dimensions_ : normal_dimensions_)
-                          .x(),
-                23);
+            - Point<int16_t>(10
+                                 + (type_ == Type::MAX ? max_dimensions_
+                                                       : normal_dimensions_)
+                                       .x(),
+                             23);
         Rectangle<int16_t> list_bounds =
             Rectangle<int16_t>(0,
                                LISTNPC_ITEM_WIDTH_,
@@ -310,12 +308,12 @@ Button::State UIMiniMap::button_pressed(uint16_t buttonid) {
             type_ -= 1;
             toggle_buttons();
             return type_ == Type::MIN ? Button::State::DISABLED
-                                     : Button::State::NORMAL;
+                                      : Button::State::NORMAL;
         case BT_MAX:
             type_ += 1;
             toggle_buttons();
             return type_ == Type::MAX ? Button::State::DISABLED
-                                     : Button::State::NORMAL;
+                                      : Button::State::NORMAL;
         case BT_SMALL:
         case BT_BIG:
             big_map_ = !big_map_;
@@ -478,7 +476,8 @@ void UIMiniMap::update_canvas() {
 
     c_stretch = std::max(0, window_width - 128);
     ur_x_offset = CENTER_START_X_ + c_stretch;
-    map_draw_origin_x_ = std::max(10, window_width / 2 - map_dimensions.x() / 2);
+    map_draw_origin_x_ =
+        std::max(10, window_width / 2 - map_dimensions.x() / 2);
 
     if (map_dimensions.y() <= 20) {
         m_stretch = 5;
@@ -543,11 +542,12 @@ void UIMiniMap::update_canvas() {
     if (has_map_)
         normal_sprites_.emplace_back(
             map_["miniMap"]["canvas"],
-            DrawArgument(Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_)));
+            DrawArgument(
+                Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_)));
 
-    normal_sprites_.emplace_back(
-        Normal[MiddleLeft],
-        DrawArgument(Point<int16_t>(0, ML_MR_Y_), Point<int16_t>(0, m_stretch)));
+    normal_sprites_.emplace_back(Normal[MiddleLeft],
+                                 DrawArgument(Point<int16_t>(0, ML_MR_Y_),
+                                              Point<int16_t>(0, m_stretch)));
     normal_sprites_.emplace_back(
         Normal[MiddleRight],
         DrawArgument(Point<int16_t>(middle_right_x_, ML_MR_Y_),
@@ -565,9 +565,9 @@ void UIMiniMap::update_canvas() {
         DrawArgument(Point<int16_t>(CENTER_START_X_, down_y_offset + 18),
                      Point<int16_t>(c_stretch, 0)));
     normal_sprites_.emplace_back(Normal[DownLeft],
-                                Point<int16_t>(0, down_y_offset));
+                                 Point<int16_t>(0, down_y_offset));
     normal_sprites_.emplace_back(Normal[DownRight],
-                                Point<int16_t>(ur_x_offset, down_y_offset));
+                                 Point<int16_t>(ur_x_offset, down_y_offset));
 
     normal_dimensions_ = Point<int16_t>(ur_x_offset + 64, down_y_offset + 27);
 
@@ -583,9 +583,10 @@ void UIMiniMap::update_canvas() {
             DrawArgument(Point<int16_t>(map_draw_origin_x_,
                                         map_draw_origin_y_ + MAX_ADJ_)));
 
-    max_sprites_.emplace_back(Max[MiddleLeft],
-                             DrawArgument(Point<int16_t>(0, ML_MR_Y_ + MAX_ADJ_),
-                                          Point<int16_t>(0, m_stretch)));
+    max_sprites_.emplace_back(
+        Max[MiddleLeft],
+        DrawArgument(Point<int16_t>(0, ML_MR_Y_ + MAX_ADJ_),
+                     Point<int16_t>(0, m_stretch)));
     max_sprites_.emplace_back(
         Max[MiddleRight],
         DrawArgument(Point<int16_t>(middle_right_x_, ML_MR_Y_ + MAX_ADJ_),
@@ -604,7 +605,7 @@ void UIMiniMap::update_canvas() {
             Point<int16_t>(CENTER_START_X_, down_y_offset + MAX_ADJ_ + 18),
             Point<int16_t>(c_stretch, 0)));
     max_sprites_.emplace_back(Max[DownLeft],
-                             Point<int16_t>(0, down_y_offset + MAX_ADJ_));
+                              Point<int16_t>(0, down_y_offset + MAX_ADJ_));
     max_sprites_.emplace_back(
         Max[DownRight],
         Point<int16_t>(ur_x_offset, down_y_offset + MAX_ADJ_));
@@ -756,20 +757,21 @@ void UIMiniMap::update_npclist() {
     int16_t m_stretch = 102;
 
     if (list_npc_names_.size() > 8) {
-        list_npc_slider_ = Slider(
-            Slider::DEFAULT_SILVER,
-            Range<int16_t>(23, 11 + LISTNPC_ITEM_HEIGHT_ * 8),
-            listNpc_pos.x() + LISTNPC_ITEM_WIDTH_ + 1,
-            8,
-            list_npc_names_.size(),
-            [&](bool upwards) {
-                int16_t shift = upwards ? -1 : 1;
-                bool above = list_npc_offset_ + shift >= 0;
-                bool below = list_npc_offset_ + 8 + shift <= list_npc_names_.size();
+        list_npc_slider_ =
+            Slider(Slider::DEFAULT_SILVER,
+                   Range<int16_t>(23, 11 + LISTNPC_ITEM_HEIGHT_ * 8),
+                   listNpc_pos.x() + LISTNPC_ITEM_WIDTH_ + 1,
+                   8,
+                   list_npc_names_.size(),
+                   [&](bool upwards) {
+                       int16_t shift = upwards ? -1 : 1;
+                       bool above = list_npc_offset_ + shift >= 0;
+                       bool below = list_npc_offset_ + 8 + shift
+                                    <= list_npc_names_.size();
 
-                if (above && below)
-                    list_npc_offset_ += shift;
-            });
+                       if (above && below)
+                           list_npc_offset_ += shift;
+                   });
 
         c_stretch += 12;
     } else {
@@ -812,12 +814,12 @@ void UIMiniMap::update_npclist() {
         DrawArgument(listNpc_pos + Point<int16_t>(0, M_START_ + m_stretch)));
     list_npc_sprites_.emplace_back(
         list_npc_["se"],
-        DrawArgument(
-            listNpc_pos
-            + Point<int16_t>(CENTER_START_X_ + c_stretch, M_START_ + m_stretch)));
+        DrawArgument(listNpc_pos
+                     + Point<int16_t>(CENTER_START_X_ + c_stretch,
+                                      M_START_ + m_stretch)));
 
     list_npc_dimensions_ = Point<int16_t>(CENTER_START_X_ * 2 + c_stretch,
-                                        M_START_ + m_stretch + 30);
+                                          M_START_ + m_stretch + 30);
 
     update_dimensions();
 }
@@ -831,7 +833,8 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
     Point<int16_t> listNpc_pos =
         position_ + Point<int16_t>(minimap_dims.x() + 10, 23);
 
-    for (int8_t i = 0; i + list_npc_offset_ < list_npc_list_.size() && i < 8; i++) {
+    for (int8_t i = 0; i + list_npc_offset_ < list_npc_list_.size() && i < 8;
+         i++) {
         if (selected_ - list_npc_offset_ == i) {
             ColorBox highlight = ColorBox(
                 LISTNPC_ITEM_WIDTH_ - (list_npc_slider_.isenabled() ? 0 : 30),
@@ -856,9 +859,11 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
 
     if (selected_ >= 0) {
         Point<int16_t> npc_pos =
-            (list_npc_list_[selected_]->get_position() + center_offset_) / scale_
+            (list_npc_list_[selected_]->get_position() + center_offset_)
+                / scale_
             + Point<int16_t>(map_draw_origin_x_,
-                             map_draw_origin_y_ - npc_marker.get_dimensions().y()
+                             map_draw_origin_y_
+                                 - npc_marker.get_dimensions().y()
                                  + (type_ == Type::MAX ? MAX_ADJ_ : 0));
 
         selected_marker_.draw(position_ + npc_pos, 0.5f);

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ChatBalloon.h"
 
 #include <nlnx/nx.hpp>
@@ -40,10 +37,10 @@ ChatBalloon::ChatBalloon(int8_t type) {
     frame_ = src;
 
     text_label_ = Text(Text::Font::A11M,
-                     Text::Alignment::CENTER,
-                     Color::Name::BLACK,
-                     "",
-                     80);
+                       Text::Alignment::CENTER,
+                       Color::Name::BLACK,
+                       "",
+                       80);
 
     duration_ = 0;
 }
@@ -97,10 +94,10 @@ ChatBalloonHorizontal::ChatBalloonHorizontal() {
     ytile_ = std::max<int16_t>(west_.height(), 1);
 
     text_label_ = Text(Text::Font::A12B,
-                     Text::Alignment::LEFT,
-                     Color::Name::BLACK,
-                     "",
-                     300);
+                       Text::Alignment::LEFT,
+                       Color::Name::BLACK,
+                       "",
+                       300);
 }
 
 void ChatBalloonHorizontal::draw(Point<int16_t> position) const {
@@ -121,7 +118,7 @@ void ChatBalloonHorizontal::draw(Point<int16_t> position) const {
     }
 
     center_.draw(DrawArgument(Point<int16_t>(left - 8, top),
-                             Point<int16_t>(width + 8, height)));
+                              Point<int16_t>(width + 8, height)));
 
     for (int16_t x = left; x < right; x += xtile_) {
         north_.draw(DrawArgument(x, top));

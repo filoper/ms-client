@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UINotice.h"
 
 #include <nlnx/nx.hpp>
@@ -41,31 +38,34 @@ UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
 
     if (type_ == NoticeType::YESNO) {
         position_.shift_y(-8);
-        question_ =
-            Text(Text::Font::A11M, alignment_, Color::Name::WHITE, message, 200);
+        question_ = Text(Text::Font::A11M,
+                         alignment_,
+                         Color::Name::WHITE,
+                         message,
+                         200);
     } else if (type_ == NoticeType::ENTERNUMBER) {
         position_.shift_y(-16);
         question_ = Text(Text::Font::A12M,
-                        Text::Alignment::LEFT,
-                        Color::Name::WHITE,
-                        message,
-                        200);
+                         Text::Alignment::LEFT,
+                         Color::Name::WHITE,
+                         message,
+                         200);
     } else if (type_ == NoticeType::OK) {
         uint16_t maxwidth = top_.width() - 6;
 
         position_.shift_y(-8);
         question_ = Text(Text::Font::A11M,
-                        Text::Alignment::CENTER,
-                        Color::Name::WHITE,
-                        message,
-                        maxwidth);
+                         Text::Alignment::CENTER,
+                         Color::Name::WHITE,
+                         message,
+                         maxwidth);
     }
 
     height_ = question_.height();
-    dimension_ =
-        Point<int16_t>(top_.width(), top_.height() + height_ + bottom_.height());
+    dimension_ = Point<int16_t>(top_.width(),
+                                top_.height() + height_ + bottom_.height());
     position_ = Point<int16_t>(position_.x() - dimension_.x() / 2,
-                              position_.y() - dimension_.y() / 2);
+                               position_.y() - dimension_.y() / 2);
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
     if (type_ != NoticeType::ENTERNUMBER)
@@ -112,8 +112,8 @@ void UINotice::draw(bool textfield) const {
 }
 
 int16_t UINotice::box2offset(bool textfield) const {
-    int16_t offset = top_.height() + centerbox_.height() + box_.height() + height_
-                     - (textfield ? 0 : 16);
+    int16_t offset = top_.height() + centerbox_.height() + box_.height()
+                     + height_ - (textfield ? 0 : 16);
 
     if (type_ == NoticeType::OK)
         if (height_ < 34)

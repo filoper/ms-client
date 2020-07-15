@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Clothing.h"
 
 #include <nlnx/nx.hpp>
@@ -39,15 +35,16 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
     constexpr size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
     constexpr size_t WEAPON_TYPES = 20;
 
-    constexpr Clothing::Layer layers[NON_WEAPON_TYPES]
-        = { Clothing::Layer::CAP,     Clothing::Layer::FACEACC,
-            Clothing::Layer::EYEACC,  Clothing::Layer::EARRINGS,
-            Clothing::Layer::TOP,     Clothing::Layer::MAIL,
-            Clothing::Layer::PANTS,   Clothing::Layer::SHOES,
-            Clothing::Layer::GLOVE,   Clothing::Layer::SHIELD,
-            Clothing::Layer::CAPE,    Clothing::Layer::RING,
-            Clothing::Layer::PENDANT, Clothing::Layer::BELT,
-            Clothing::Layer::MEDAL };
+    constexpr Clothing::Layer layers[NON_WEAPON_TYPES] = {
+        Clothing::Layer::CAP,     Clothing::Layer::FACEACC,
+        Clothing::Layer::EYEACC,  Clothing::Layer::EARRINGS,
+        Clothing::Layer::TOP,     Clothing::Layer::MAIL,
+        Clothing::Layer::PANTS,   Clothing::Layer::SHOES,
+        Clothing::Layer::GLOVE,   Clothing::Layer::SHIELD,
+        Clothing::Layer::CAPE,    Clothing::Layer::RING,
+        Clothing::Layer::PENDANT, Clothing::Layer::BELT,
+        Clothing::Layer::MEDAL
+    };
 
     Clothing::Layer chlayer;
     size_t index = (item_id_ / 10000) - 100;
@@ -206,27 +203,27 @@ const std::string &Clothing::get_vslot() const {
     return vslot_;
 }
 
-const std::unordered_map<std::string, Clothing::Layer> Clothing::sub_layer_names_
-    = {
-          // WEAPON
-          { "weaponOverHand", Clothing::Layer::WEAPON_OVER_HAND },
-          { "weaponOverGlove", Clothing::Layer::WEAPON_OVER_GLOVE },
-          { "weaponOverBody", Clothing::Layer::WEAPON_OVER_BODY },
-          { "weaponBelowArm", Clothing::Layer::WEAPON_BELOW_ARM },
-          { "weaponBelowBody", Clothing::Layer::WEAPON_BELOW_BODY },
-          { "backWeaponOverShield", Clothing::Layer::BACKWEAPON },
-          // SHIELD
-          { "shieldOverHair", Clothing::Layer::SHIELD_OVER_HAIR },
-          { "shieldBelowBody", Clothing::Layer::SHIELD_BELOW_BODY },
-          { "backShield", Clothing::Layer::BACKSHIELD },
-          // GLOVE
-          { "gloveWrist", Clothing::Layer::WRIST },
-          { "gloveOverHair", Clothing::Layer::GLOVE_OVER_HAIR },
-          { "gloveOverBody", Clothing::Layer::GLOVE_OVER_BODY },
-          { "gloveWristOverHair", Clothing::Layer::WRIST_OVER_HAIR },
-          { "gloveWristOverBody", Clothing::Layer::WRIST_OVER_BODY },
-          // CAP
-          { "capOverHair", Clothing::Layer::CAP_OVER_HAIR },
-          { "capBelowBody", Clothing::Layer::CAP_BELOW_BODY },
-      };
+const std::unordered_map<std::string, Clothing::Layer>
+    Clothing::sub_layer_names_ = {
+        // WEAPON
+        { "weaponOverHand", Clothing::Layer::WEAPON_OVER_HAND },
+        { "weaponOverGlove", Clothing::Layer::WEAPON_OVER_GLOVE },
+        { "weaponOverBody", Clothing::Layer::WEAPON_OVER_BODY },
+        { "weaponBelowArm", Clothing::Layer::WEAPON_BELOW_ARM },
+        { "weaponBelowBody", Clothing::Layer::WEAPON_BELOW_BODY },
+        { "backWeaponOverShield", Clothing::Layer::BACKWEAPON },
+        // SHIELD
+        { "shieldOverHair", Clothing::Layer::SHIELD_OVER_HAIR },
+        { "shieldBelowBody", Clothing::Layer::SHIELD_BELOW_BODY },
+        { "backShield", Clothing::Layer::BACKSHIELD },
+        // GLOVE
+        { "gloveWrist", Clothing::Layer::WRIST },
+        { "gloveOverHair", Clothing::Layer::GLOVE_OVER_HAIR },
+        { "gloveOverBody", Clothing::Layer::GLOVE_OVER_BODY },
+        { "gloveWristOverHair", Clothing::Layer::WRIST_OVER_HAIR },
+        { "gloveWristOverBody", Clothing::Layer::WRIST_OVER_BODY },
+        // CAP
+        { "capOverHair", Clothing::Layer::CAP_OVER_HAIR },
+        { "capBelowBody", Clothing::Layer::CAP_BELOW_BODY },
+    };
 }  // namespace ms

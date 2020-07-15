@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIWorldMap.h"
 
 #include <nlnx/nx.hpp>
@@ -77,10 +74,10 @@ UIWorldMap::UIWorldMap() : UIDragElement<PosMAP>() {
         Rectangle<int16_t>(search_text_pos, search_text_pos + search_box_dim);
 
     search_text_ = Textfield(Text::Font::A11M,
-                            Text::Alignment::LEFT,
-                            Color::Name::BLACK,
-                            search_text_dim,
-                            8);
+                             Text::Alignment::LEFT,
+                             Color::Name::BLACK,
+                             search_text_dim,
+                             8);
 
     set_search(true);
 
@@ -129,7 +126,8 @@ void UIWorldMap::draw(float alpha) const {
                     npc_pos_[spot.second.type].draw(
                         spot.first + position_ + base_position_,
                         alpha);
-                    cur_pos_.draw(spot.first + position_ + base_position_, alpha);
+                    cur_pos_.draw(spot.first + position_ + base_position_,
+                                  alpha);
                     break;
                 }
             }
@@ -256,7 +254,8 @@ void UIWorldMap::set_search(bool enable) {
 
     if (enable) {
         search_text_.set_state(Textfield::State::NORMAL);
-        dimension_ = bg_dimensions_ + Point<int16_t>(bg_search_dimensions_.x(), 0);
+        dimension_ =
+            bg_dimensions_ + Point<int16_t>(bg_search_dimensions_.x(), 0);
     } else {
         search_text_.set_state(Textfield::State::DISABLED);
         dimension_ = bg_dimensions_;

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UICharInfo.h"
 
 #include <nlnx/nx.hpp>
@@ -60,7 +57,8 @@ UICharInfo::UICharInfo(int32_t cid) :
         std::make_unique<MapleButton>(character["BtParty"]);
     buttons_[Buttons::BtPersonality] =
         std::make_unique<MapleButton>(character["BtPersonality"]);
-    buttons_[Buttons::BtPet] = std::make_unique<MapleButton>(character["BtPet"]);
+    buttons_[Buttons::BtPet] =
+        std::make_unique<MapleButton>(character["BtPet"]);
     buttons_[Buttons::BtPopDown] =
         std::make_unique<MapleButton>(character["BtPopDown"]);
     buttons_[Buttons::BtPopUp] =
@@ -72,9 +70,11 @@ UICharInfo::UICharInfo(int32_t cid) :
 
     name_ = Text(Text::Font::A12M, Text::Alignment::CENTER, Color::Name::WHITE);
     job_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
-    level_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
+    level_ =
+        Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
     fame_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
-    guild_ = Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
+    guild_ =
+        Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
     alliance_ =
         Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
 
@@ -114,14 +114,14 @@ UICharInfo::UICharInfo(int32_t cid) :
 
     personality_sprites_.emplace_back(personality_backgrnd, bottom_window_adj_);
     personality_sprites_.emplace_back(personality["backgrnd2"],
-                                     bottom_window_adj_);
+                                      bottom_window_adj_);
 
     personality_sprites_enabled_[true].emplace_back(personality["backgrnd3"],
-                                                   bottom_window_adj_);
+                                                    bottom_window_adj_);
     personality_sprites_enabled_[true].emplace_back(personality["backgrnd4"],
-                                                   bottom_window_adj_);
+                                                    bottom_window_adj_);
     personality_sprites_enabled_[true].emplace_back(personality["center"],
-                                                   bottom_window_adj_);
+                                                    bottom_window_adj_);
     personality_sprites_enabled_[false].emplace_back(
         personality["before30level"],
         bottom_window_adj_);
@@ -138,19 +138,20 @@ UICharInfo::UICharInfo(int32_t cid) :
     default_medal_ = collect["icon1"];
 
     buttons_[Buttons::BtArrayGet] =
-        std::make_unique<MapleButton>(collect["BtArrayGet"], bottom_window_adj_);
+        std::make_unique<MapleButton>(collect["BtArrayGet"],
+                                      bottom_window_adj_);
     buttons_[Buttons::BtArrayName] =
         std::make_unique<MapleButton>(collect["BtArrayName"],
                                       bottom_window_adj_);
 
     medal_text_ = Text(Text::Font::A11M,
-                      Text::Alignment::LEFT,
-                      Color::Name::EMPEROR,
-                      "Junior Adventurer");
-    medal_total_ = Text(Text::Font::A11M,
                        Text::Alignment::LEFT,
                        Color::Name::EMPEROR,
-                       "2");
+                       "Junior Adventurer");
+    medal_total_ = Text(Text::Font::A11M,
+                        Text::Alignment::LEFT,
+                        Color::Name::EMPEROR,
+                        "2");
 
     collect_dimensions_ = Texture(collect_backgrnd).get_dimensions();
 
@@ -209,7 +210,7 @@ void UICharInfo::draw(float inter) const {
     job_.draw(text_pos + Point<int16_t>(0, row_height * 1));
     fame_.draw(text_pos + Point<int16_t>(0, row_height * 2));
     guild_.draw(text_pos + Point<int16_t>(0, row_height * 3)
-               + Point<int16_t>(0, 1));
+                + Point<int16_t>(0, 1));
     alliance_.draw(text_pos + Point<int16_t>(0, row_height * 4));
 
     /// Farm
@@ -253,7 +254,7 @@ void UICharInfo::draw(float inter) const {
 
         medal_text_.draw(position_ + bottom_window_adj_ + text_pos);
         medal_total_.draw(position_ + bottom_window_adj_ + text_pos
-                         + Point<int16_t>(0, 19));
+                          + Point<int16_t>(0, 19));
     }
 
     /// Damage
@@ -342,7 +343,8 @@ bool UICharInfo::is_in_range(Point<int16_t> cursorpos) const {
     }
 
     if (item_enabled_) {
-        right_bounds = Rectangle<int16_t>(position_, position_ + item_dimensions_);
+        right_bounds =
+            Rectangle<int16_t>(position_, position_ + item_dimensions_);
         right_bounds.shift(right_window_adj_);
     }
 

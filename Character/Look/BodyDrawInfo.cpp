@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "BodyDrawInfo.h"
 
 #include <nlnx/nx.hpp>
@@ -35,8 +31,8 @@ void BodyDrawInfo::init() {
 
         for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
-            bool isaction
-                = framenode["action"].data_type() == nl::node::type::string;
+            bool isaction =
+                framenode["action"].data_type() == nl::node::type::string;
 
             if (isaction) {
                 BodyAction action = framenode;
@@ -78,31 +74,31 @@ void BodyDrawInfo::init() {
                     bodyshiftmap[Body::Layer::HEAD].emplace(mapnode.name(),
                                                             mapnode);
 
-                body_positions[stance][frame]
-                    = bodyshiftmap[Body::Layer::BODY]["navel"];
+                body_positions[stance][frame] =
+                    bodyshiftmap[Body::Layer::BODY]["navel"];
 
-                arm_positions[stance][frame]
-                    = bodyshiftmap.count(Body::Layer::ARM)
-                          ? (bodyshiftmap[Body::Layer::ARM]["hand"]
-                             - bodyshiftmap[Body::Layer::ARM]["navel"]
-                             + bodyshiftmap[Body::Layer::BODY]["navel"])
-                          : (bodyshiftmap[Body::Layer::ARM_OVER_HAIR]["hand"]
-                             - bodyshiftmap[Body::Layer::ARM_OVER_HAIR]["navel"]
-                             + bodyshiftmap[Body::Layer::BODY]["navel"]);
+                arm_positions[stance][frame] =
+                    bodyshiftmap.count(Body::Layer::ARM)
+                        ? (bodyshiftmap[Body::Layer::ARM]["hand"]
+                           - bodyshiftmap[Body::Layer::ARM]["navel"]
+                           + bodyshiftmap[Body::Layer::BODY]["navel"])
+                        : (bodyshiftmap[Body::Layer::ARM_OVER_HAIR]["hand"]
+                           - bodyshiftmap[Body::Layer::ARM_OVER_HAIR]["navel"]
+                           + bodyshiftmap[Body::Layer::BODY]["navel"]);
 
-                hand_positions[stance][frame]
-                    = bodyshiftmap[Body::Layer::HAND_BELOW_WEAPON]["handMove"];
-                head_positions[stance][frame]
-                    = bodyshiftmap[Body::Layer::BODY]["neck"]
-                      - bodyshiftmap[Body::Layer::HEAD]["neck"];
-                face_positions[stance][frame]
-                    = bodyshiftmap[Body::Layer::BODY]["neck"]
-                      - bodyshiftmap[Body::Layer::HEAD]["neck"]
-                      + bodyshiftmap[Body::Layer::HEAD]["brow"];
-                hair_positions[stance][frame]
-                    = bodyshiftmap[Body::Layer::HEAD]["brow"]
-                      - bodyshiftmap[Body::Layer::HEAD]["neck"]
-                      + bodyshiftmap[Body::Layer::BODY]["neck"];
+                hand_positions[stance][frame] =
+                    bodyshiftmap[Body::Layer::HAND_BELOW_WEAPON]["handMove"];
+                head_positions[stance][frame] =
+                    bodyshiftmap[Body::Layer::BODY]["neck"]
+                    - bodyshiftmap[Body::Layer::HEAD]["neck"];
+                face_positions[stance][frame] =
+                    bodyshiftmap[Body::Layer::BODY]["neck"]
+                    - bodyshiftmap[Body::Layer::HEAD]["neck"]
+                    + bodyshiftmap[Body::Layer::HEAD]["brow"];
+                hair_positions[stance][frame] =
+                    bodyshiftmap[Body::Layer::HEAD]["brow"]
+                    - bodyshiftmap[Body::Layer::HEAD]["neck"]
+                    + bodyshiftmap[Body::Layer::BODY]["neck"];
             }
         }
     }

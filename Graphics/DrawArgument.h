@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Template/Rectangle.h"
@@ -150,24 +146,27 @@ public:
 
     constexpr DrawArgument operator+(Point<int16_t> argpos) const {
         return { pos_ + argpos, center_ + argpos, stretch_, xscale_,
-                 yscale_,       color_,          angle_ };
+                 yscale_,       color_,           angle_ };
     }
 
     constexpr DrawArgument operator+(float argopc) const {
-        return { pos_,  center_, stretch_, xscale_, yscale_, color_.a() * argopc,
+        return { pos_,    center_, stretch_,
+                 xscale_, yscale_, color_.a() * argopc,
                  angle_ };
     }
 
     constexpr DrawArgument operator+(const DrawArgument &o) const {
-        return { pos_ + o.pos_,       center_ + o.center_, stretch_ + o.stretch_,
-                 xscale_ * o.xscale_, yscale_ * o.yscale_, color_ * o.color_,
-                 angle_+ o.angle_ };
+        return { pos_ + o.pos_,         center_ + o.center_,
+                 stretch_ + o.stretch_, xscale_ * o.xscale_,
+                 yscale_ * o.yscale_,   color_ * o.color_,
+                 angle_ + o.angle_ };
     }
 
     constexpr DrawArgument operator-(const DrawArgument &o) const {
-        return { pos_ - o.pos_,       center_ - o.center_, stretch_ - o.stretch_,
-                 xscale_ / o.xscale_, yscale_ / o.yscale_, color_ / o.color_,
-                 angle_- o.angle_ };
+        return { pos_ - o.pos_,         center_ - o.center_,
+                 stretch_ - o.stretch_, xscale_ / o.xscale_,
+                 yscale_ / o.yscale_,   color_ / o.color_,
+                 angle_ - o.angle_ };
     }
 
     Rectangle<int16_t> get_rectangle(Point<int16_t> origin,

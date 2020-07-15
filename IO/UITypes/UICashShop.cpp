@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UICashShop.h"
 
 #include "../../Gameplay/Stage.h"
@@ -102,13 +99,13 @@ UICashShop::UICashShop() :
     Charset tab;
 
     job_label_ = Text(Text::Font::A11B,
-                     Text::Alignment::LEFT,
-                     Color::Name::SUPERNOVA,
-                     "Illium");
-    name_label_ = Text(Text::Font::A11B,
                       Text::Alignment::LEFT,
-                      Color::Name::WHITE,
-                      "ShomeiZekkou");
+                      Color::Name::SUPERNOVA,
+                      "Illium");
+    name_label_ = Text(Text::Font::A11B,
+                       Text::Alignment::LEFT,
+                       Color::Name::WHITE,
+                       "ShomeiZekkou");
 
     promotion_pos_ = Point<int16_t>(138, 40);
     sprites_.emplace_back(CSPromotionBanner["shadow"], promotion_pos_);
@@ -135,16 +132,16 @@ UICashShop::UICashShop() :
     buttons_[Buttons::BtNonGrade]->set_active(!mvp_grade_);
 
     mvp_gauge_ = Gauge(Gauge::Type::CASHSHOP,
-                      CSMVPBanner["gage"][0],
-                      CSMVPBanner["gage"][2],
-                      CSMVPBanner["gage"][1],
-                      84,
-                      0.0f);
+                       CSMVPBanner["gage"][0],
+                       CSMVPBanner["gage"][2],
+                       CSMVPBanner["gage"][1],
+                       84,
+                       0.0f);
 
     Point<int16_t> search_pos = Point<int16_t>(0, 36);
     sprites_.emplace_back(CSItemSearch["backgrnd"], search_pos);
     sprites_.emplace_back(CSItemSearch["search"],
-                         search_pos + Point<int16_t>(35, 8));
+                          search_pos + Point<int16_t>(35, 8));
 
     buttons_[Buttons::BtBuyAvatar] =
         std::make_unique<MapleButton>(CSChar["BtBuyAvatar"],
@@ -162,7 +159,8 @@ UICashShop::UICashShop() :
         std::make_unique<MapleButton>(CSChar["BtTakeoffAvatar"],
                                       Point<int16_t>(790, 305));
 
-    charge_charset_ = Charset(CSGLChargeNX["Number"], Charset::Alignment::RIGHT);
+    charge_charset_ =
+        Charset(CSGLChargeNX["Number"], Charset::Alignment::RIGHT);
 
     item_base_ = CSList["Base"];
     item_line_ = Base["line"];
@@ -197,36 +195,36 @@ UICashShop::UICashShop() :
                 + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
         item_name_[i] = Text(Text::Font::A11B,
-                            Text::Alignment::CENTER,
-                            Color::Name::MINESHAFT);
+                             Text::Alignment::CENTER,
+                             Color::Name::MINESHAFT);
         item_price_[i] =
             Text(Text::Font::A11M, Text::Alignment::CENTER, Color::Name::GRAY);
         item_discount_[i] = Text(Text::Font::A11M,
-                                Text::Alignment::CENTER,
-                                Color::Name::SILVERCHALICE);
+                                 Text::Alignment::CENTER,
+                                 Color::Name::SILVERCHALICE);
         item_percent_[i] = Text(Text::Font::A11M,
-                               Text::Alignment::CENTER,
-                               Color::Name::TORCHRED);
+                                Text::Alignment::CENTER,
+                                Color::Name::TORCHRED);
     }
 
     Point<int16_t> slider_pos = Point<int16_t>(1007, 372);
 
     list_slider_ = Slider(Slider::Type::THIN_MINESHAFT,
-                         Range<int16_t>(slider_pos.y(), slider_pos.y() + 381),
-                         slider_pos.x(),
-                         2,
-                         7,
-                         [&](bool upwards) {
-                             int16_t shift = upwards ? -7 : 7;
-                             bool above = list_offset_ >= 0;
-                             bool below = list_offset_ + shift < items_.size();
+                          Range<int16_t>(slider_pos.y(), slider_pos.y() + 381),
+                          slider_pos.x(),
+                          2,
+                          7,
+                          [&](bool upwards) {
+                              int16_t shift = upwards ? -7 : 7;
+                              bool above = list_offset_ >= 0;
+                              bool below = list_offset_ + shift < items_.size();
 
-                             if (above && below) {
-                                 list_offset_ += shift;
+                              if (above && below) {
+                                  list_offset_ += shift;
 
-                                 update_items();
-                             }
-                         });
+                                  update_items();
+                              }
+                          });
 
     update_items();
 
@@ -235,7 +233,7 @@ UICashShop::UICashShop() :
 
 void UICashShop::draw(float inter) const {
     preview_sprites_[preview_index_].draw(position_ + Point<int16_t>(644, 65),
-                                        inter);
+                                          inter);
 
     UIElement::draw_sprites(inter);
 
@@ -247,7 +245,8 @@ void UICashShop::draw(float inter) const {
     size_t length = job_label_.width();
     name_label_.draw(label_pos + Point<int16_t>(length + 10, 0));
 
-    promotion_sprites_[promotion_index_].draw(position_ + promotion_pos_, inter);
+    promotion_sprites_[promotion_index_].draw(position_ + promotion_pos_,
+                                              inter);
 
     mvp_sprites_[mvp_grade_].draw(position_ + mvp_pos_, inter);
     mvp_gauge_.draw(position_ + mvp_pos_);
@@ -278,8 +277,8 @@ void UICashShop::draw(float inter) const {
             Item item = items_[index];
 
             item_base_.draw(position_ + Point<int16_t>(137, 372)
-                               + Point<int16_t>(124 * div.rem, 205 * div.quot),
-                           inter);
+                                + Point<int16_t>(124 * div.rem, 205 * div.quot),
+                            inter);
             item.draw(DrawArgument(
                 position_ + Point<int16_t>(164, 473)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot),
@@ -293,7 +292,7 @@ void UICashShop::draw(float inter) const {
                     inter);
 
             item_name_[i].draw(position_ + Point<int16_t>(192, 480)
-                              + Point<int16_t>(124 * div.rem, 205 * div.quot));
+                               + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
             if (item_discount_[i].get_text() == "") {
                 item_price_[i].draw(
@@ -405,7 +404,8 @@ Cursor::State UICashShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Point<int16_t> cursor_relative = cursorpos - position_;
 
     if (list_slider_.isenabled()) {
-        Cursor::State state = list_slider_.send_cursor(cursor_relative, clicked);
+        Cursor::State state =
+            list_slider_.send_cursor(cursor_relative, clicked);
 
         if (state != Cursor::State::IDLE)
             return state;

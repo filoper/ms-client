@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UISkillBook.h"
 
 #include <nlnx/nx.hpp>
@@ -55,21 +52,21 @@ UISkillBook::SkillDisplayMeta::SkillDisplayMeta(int32_t i, int32_t l) :
     Texture dtx = data.get_icon(SkillData::Icon::DISABLED);
     Texture motx = data.get_icon(SkillData::Icon::MOUSEOVER);
     icon_ = std::make_unique<StatefulIcon>(std::make_unique<SkillIcon>(id_),
-                                          ntx,
-                                          dtx,
-                                          motx);
+                                           ntx,
+                                           dtx,
+                                           motx);
 
     std::string namestr = data.get_name();
     std::string levelstr = std::to_string(level_);
 
     name_text_ = Text(Text::Font::A11M,
-                     Text::Alignment::LEFT,
-                     Color::Name::EMPEROR,
-                     namestr);
-    level_text_ = Text(Text::Font::A11M,
                       Text::Alignment::LEFT,
                       Color::Name::EMPEROR,
-                      levelstr);
+                      namestr);
+    level_text_ = Text(Text::Font::A11M,
+                       Text::Alignment::LEFT,
+                       Color::Name::EMPEROR,
+                       levelstr);
 
     constexpr uint16_t MAX_NAME_WIDTH = 97;
     size_t overhang = 3;
@@ -120,11 +117,13 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     skillb_ = main["skillBlank"];
     line_ = main["line"];
 
-    buttons_[Buttons::BT_HYPER] = std::make_unique<MapleButton>(main["BtHyper"]);
+    buttons_[Buttons::BT_HYPER] =
+        std::make_unique<MapleButton>(main["BtHyper"]);
     buttons_[Buttons::BT_GUILDSKILL] =
         std::make_unique<MapleButton>(main["BtGuildSkill"]);
     buttons_[Buttons::BT_RIDE] = std::make_unique<MapleButton>(main["BtRide"]);
-    buttons_[Buttons::BT_MACRO] = std::make_unique<MapleButton>(main["BtMacro"]);
+    buttons_[Buttons::BT_MACRO] =
+        std::make_unique<MapleButton>(main["BtMacro"]);
 
     buttons_[Buttons::BT_HYPER]->set_state(Button::State::DISABLED);
     buttons_[Buttons::BT_GUILDSKILL]->set_state(Button::State::DISABLED);
@@ -214,26 +213,26 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     }
 
     book_text_ = Text(Text::Font::A11M,
-                    Text::Alignment::CENTER,
-                    Color::Name::WHITE,
-                    "",
-                    150);
+                      Text::Alignment::CENTER,
+                      Color::Name::WHITE,
+                      "",
+                      150);
     sp_label_ =
         Text(Text::Font::A12M, Text::Alignment::RIGHT, Color::Name::BLACK);
 
     slider_ = Slider(Slider::Type::DEFAULT_SILVER,
-                    Range<int16_t>(93, 317),
-                    295,
-                    ROWS_,
-                    1,
-                    [&](bool upwards) {
-                        int16_t shift = upwards ? -1 : 1;
-                        bool above = offset_ + shift >= 0;
-                        bool below = offset_ + 4 + shift <= skill_count_;
+                     Range<int16_t>(93, 317),
+                     295,
+                     ROWS_,
+                     1,
+                     [&](bool upwards) {
+                         int16_t shift = upwards ? -1 : 1;
+                         bool above = offset_ + shift >= 0;
+                         bool below = offset_ + 4 + shift <= skill_count_;
 
-                        if (above && below)
-                            change_offset(offset_ + shift);
-                    });
+                         if (above && below)
+                             change_offset(offset_ + shift);
+                     });
 
     change_job(stats_.get_stat(MapleStat::Id::JOB));
 
@@ -296,7 +295,8 @@ void UISkillBook::draw(float alpha) const {
     }
 
     if (sp_enabled_) {
-        Point<int16_t> sp_pos = position_ + Point<int16_t>(bg_dimensions_.x(), 0);
+        Point<int16_t> sp_pos =
+            position_ + Point<int16_t>(bg_dimensions_.x(), 0);
 
         sp_backgrnd_.draw(sp_pos);
         sp_backgrnd2_.draw(sp_pos);
@@ -305,7 +305,9 @@ void UISkillBook::draw(float alpha) const {
         Point<int16_t> sp_level_pos = sp_pos + Point<int16_t>(78, 149);
 
         sp_before_.draw(sp_before_text_, 12, sp_level_pos);
-        sp_after_.draw(sp_after_text_, 11, sp_level_pos + Point<int16_t>(78, 0));
+        sp_after_.draw(sp_after_text_,
+                       11,
+                       sp_level_pos + Point<int16_t>(78, 0));
         sp_used_.draw(sp_pos + Point<int16_t>(82, 87));
         sp_remaining_.draw(sp_pos + Point<int16_t>(76, 65));
         sp_name_.draw(sp_pos + Point<int16_t>(97, 35));
@@ -490,7 +492,7 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                     if (skill_level > 0
                         && !SkillData::get(skill_id).is_passive()) {
                         skills_[i].get_icon()->start_drag(cursorpos
-                                                         - skill_position);
+                                                          - skill_position);
                         UI::get().drag_icon(skills_[i].get_icon());
 
                         return Cursor::State::GRABBING;
@@ -651,7 +653,7 @@ void UISkillBook::change_offset(uint16_t new_offset) {
             int32_t skill_id = skills_[row].get_id();
             bool canraise = can_raise(skill_id);
             buttons_[index]->set_state(canraise ? Button::State::NORMAL
-                                               : Button::State::DISABLED);
+                                                : Button::State::DISABLED);
         }
     }
 }
@@ -816,7 +818,7 @@ void UISkillBook::set_macro(bool enabled) {
 
     if (macro_enabled_)
         dimension_ = bg_dimensions_
-                    + Point<int16_t>(macro_backgrnd_.get_dimensions().x(), 0);
+                     + Point<int16_t>(macro_backgrnd_.get_dimensions().x(), 0);
     else if (!sp_enabled_)
         dimension_ = bg_dimensions_;
 
@@ -830,8 +832,8 @@ void UISkillBook::set_skillpoint(bool enabled) {
     sp_enabled_ = enabled;
 
     if (sp_enabled_)
-        dimension_ =
-            bg_dimensions_ + Point<int16_t>(sp_backgrnd_.get_dimensions().x(), 0);
+        dimension_ = bg_dimensions_
+                     + Point<int16_t>(sp_backgrnd_.get_dimensions().x(), 0);
     else if (!macro_enabled_)
         dimension_ = bg_dimensions_;
 

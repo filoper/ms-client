@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIWorldSelect.h"
 
 #include <nlnx/nx.hpp>
@@ -43,17 +40,17 @@ UIWorldSelect::UIWorldSelect() :
 
     std::string version_text = Configuration::get().get_version();
     version_ = Text(Text::Font::A11M,
-                   Text::Alignment::LEFT,
-                   Color::Name::LEMONGRASS,
-                   "Ver. " + version_text);
+                    Text::Alignment::LEFT,
+                    Color::Name::LEMONGRASS,
+                    "Ver. " + version_text);
 
     recommended_message_ = Text(Text::Font::A11M,
-                               Text::Alignment::CENTER,
-                               Color::Name::JAMBALAYA,
-                               "",
-                               100,
-                               true,
-                               5);
+                                Text::Alignment::CENTER,
+                                Color::Name::JAMBALAYA,
+                                "",
+                                100,
+                                true,
+                                5);
 
     Point<int16_t> background_pos = Point<int16_t>(400, 301);
     channel_src_pos_ = Point<int16_t>(203, 164);
@@ -82,10 +79,10 @@ UIWorldSelect::UIWorldSelect() :
             int32_t index = randomizer.next_int(backgrounds_size);
 
             sprites_.emplace_back(obj["WorldSelect"][backgrounds[index]][0],
-                                 background_pos);
+                                  background_pos);
         } else {
             sprites_.emplace_back(obj["WorldSelect"][backgrounds[0]][0],
-                                 background_pos);
+                                  background_pos);
         }
     }
 
@@ -113,7 +110,7 @@ UIWorldSelect::UIWorldSelect() :
 
     buttons_[Buttons::BT_VIEWALL]->set_active(false);
     buttons_[Buttons::BT_VIEWRECOMMENDED]->set_active(use_recommended_ ? true
-                                                                     : false);
+                                                                       : false);
     buttons_[Buttons::BT_VIEWRECOMMENDED_SELECT]->set_active(false);
     buttons_[Buttons::BT_VIEWRECOMMENDED_CANCEL]->set_active(false);
     buttons_[Buttons::BT_VIEWRECOMMENDED_PREV]->set_active(false);
@@ -376,8 +373,8 @@ void UIWorldSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                     if (found)
                         button_pressed(selected_world + Buttons::BT_WORLD0);
                     else
-                        buttons_[Buttons::BT_WORLD0 + selected_world]->set_state(
-                            Button::State::PRESSED);
+                        buttons_[Buttons::BT_WORLD0 + selected_world]
+                            ->set_state(Button::State::PRESSED);
                 }
             }
         }
@@ -501,7 +498,8 @@ Button::State UIWorldSelect::button_pressed(uint16_t id) {
 
         return Button::State::NORMAL;
     } else if (id == Buttons::BT_VIEWRECOMMENDED_SELECT) {
-        buttons_[Buttons::BT_WORLD0 + worldid_]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_WORLD0 + worldid_]->set_state(
+            Button::State::NORMAL);
 
         worldid_ = recommended_worldid_;
 
@@ -544,7 +542,8 @@ Button::State UIWorldSelect::button_pressed(uint16_t id) {
     } else if (id >= Buttons::BT_WORLD0 && id < Buttons::BT_CHANNEL0) {
         toggle_recommended(false);
 
-        buttons_[Buttons::BT_WORLD0 + worldid_]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_WORLD0 + worldid_]->set_state(
+            Button::State::NORMAL);
 
         worldid_ = id - Buttons::BT_WORLD0;
 

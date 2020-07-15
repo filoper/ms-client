@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIKeyConfig.h"
 
 #include <nlnx/nx.hpp>
@@ -27,7 +24,6 @@
 #include "../UI.h"
 #include "../UITypes/UILoginNotice.h"
 #include "../UITypes/UINotice.h"
-
 
 namespace ms {
 UIKeyConfig::UIKeyConfig(const Inventory &in_inventory,
@@ -100,7 +96,8 @@ void UIKeyConfig::load_keys_pos() {
 
     int16_t row_special_x = row_one_x;
 
-    keys_pos_[KeyConfig::Key::ESCAPE] = Point<int16_t>(row_one_x, row_special_y);
+    keys_pos_[KeyConfig::Key::ESCAPE] =
+        Point<int16_t>(row_one_x, row_special_y);
 
     row_special_x += slot_width * 2;
 
@@ -1148,9 +1145,9 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
 
 bool UIKeyConfig::send_icon(const Icon &icon, Point<int16_t> cursorpos) {
     for (auto iter : unbound_actions_pos_) {
-        Rectangle<int16_t> icon_rect =
-            Rectangle<int16_t>(position_ + iter.second,
-                               position_ + iter.second + Point<int16_t>(32, 32));
+        Rectangle<int16_t> icon_rect = Rectangle<int16_t>(
+            position_ + iter.second,
+            position_ + iter.second + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos))
             icon.drop_on_bindings(cursorpos, true);
@@ -1441,9 +1438,9 @@ Texture UIKeyConfig::get_skill_texture(int32_t skill_id) const {
 
 KeyConfig::Key UIKeyConfig::key_by_position(Point<int16_t> cursorpos) const {
     for (auto iter : keys_pos_) {
-        Rectangle<int16_t> icon_rect =
-            Rectangle<int16_t>(position_ + iter.second,
-                               position_ + iter.second + Point<int16_t>(32, 32));
+        Rectangle<int16_t> icon_rect = Rectangle<int16_t>(
+            position_ + iter.second,
+            position_ + iter.second + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos))
             return iter.first;
@@ -1459,9 +1456,9 @@ KeyAction::Id UIKeyConfig::unbound_action_by_position(
             != bound_actions_.end())
             continue;
 
-        Rectangle<int16_t> icon_rect =
-            Rectangle<int16_t>(position_ + iter.second,
-                               position_ + iter.second + Point<int16_t>(32, 32));
+        Rectangle<int16_t> icon_rect = Rectangle<int16_t>(
+            position_ + iter.second,
+            position_ + iter.second + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos))
             return iter.first;

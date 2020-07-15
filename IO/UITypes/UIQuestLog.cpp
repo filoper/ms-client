@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIQuestLog.h"
 
 #include <nlnx/nx.hpp>
@@ -69,21 +66,21 @@ UIQuestLog::UIQuestLog(const QuestLog &ql) :
     auto search_dim = search_pos + search_area_dim + search_dim_adj;
 
     search_ = Textfield(Text::Font::A11M,
-                       Text::Alignment::LEFT,
-                       Color::Name::BOULDER,
-                       Rectangle<int16_t>(search_pos, search_dim),
-                       19);
+                        Text::Alignment::LEFT,
+                        Color::Name::BOULDER,
+                        Rectangle<int16_t>(search_pos, search_dim),
+                        19);
     placeholder_ = Text(Text::Font::A11M,
-                       Text::Alignment::LEFT,
-                       Color::Name::BOULDER,
-                       "Enter the quest name.");
+                        Text::Alignment::LEFT,
+                        Color::Name::BOULDER,
+                        "Enter the quest name.");
 
     slider_ = Slider(Slider::Type::DEFAULT_SILVER,
-                    Range<int16_t>(0, 279),
-                    150,
-                    20,
-                    5,
-                    [](bool) {});
+                     Range<int16_t>(0, 279),
+                     150,
+                     20,
+                     5,
+                     [](bool) {});
 
     change_tab(tab_);
 

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "GraphicsGL.h"
 
 #include "../Configuration.h"
@@ -176,9 +173,9 @@ Error GraphicsGL::init() {
     uniform_yoffset = glGetUniformLocation(shader_program_, "yoffset");
     uniform_font_region_ = glGetUniformLocation(shader_program_, "fontregion");
 
-    if (attribute_coord_ == -1 || attribute_color_ == -1 || uniform_texture_ == -1
-        || uniform_atlas_size_ == -1 || uniform_screen_size_ == -1
-        || uniform_yoffset == -1)
+    if (attribute_coord_ == -1 || attribute_color_ == -1
+        || uniform_texture_ == -1 || uniform_atlas_size_ == -1
+        || uniform_screen_size_ == -1 || uniform_yoffset == -1)
         return Error::Code::SHADER_VARS;
 
     // Vertex Buffer Object
@@ -425,13 +422,13 @@ const GraphicsGL::Offset &GraphicsGL::getoffset(const nl::bitmap &bmp) {
 
             if (width >= MINLOSIZE) {
                 leftovers_.add(rlid_,
-                              Leftover(x, y + height, width, height_delta));
+                               Leftover(x, y + height, width, height_delta));
                 rlid_++;
             }
 
             if (height >= MINLOSIZE) {
                 leftovers_.add(rlid_,
-                              Leftover(x + width, y, width_delta, height));
+                               Leftover(x + width, y, width_delta, height));
                 rlid_++;
             }
         } else if (width_delta >= MINLOSIZE) {
@@ -463,9 +460,11 @@ const GraphicsGL::Offset &GraphicsGL::getoffset(const nl::bitmap &bmp) {
 
         if (height > y_range_.second()) {
             if (x >= MINLOSIZE && height - y_range_.second() >= MINLOSIZE) {
-                leftovers_.add(
-                    rlid_,
-                    Leftover(0, y_range_.first(), x, height - y_range_.second()));
+                leftovers_.add(rlid_,
+                               Leftover(0,
+                                        y_range_.first(),
+                                        x,
+                                        height - y_range_.second()));
                 rlid_++;
             }
 
@@ -476,10 +475,10 @@ const GraphicsGL::Offset &GraphicsGL::getoffset(const nl::bitmap &bmp) {
             if (width >= MINLOSIZE
                 && y_range_.first() - y - height >= MINLOSIZE) {
                 leftovers_.add(rlid_,
-                              Leftover(x,
-                                       y + height,
-                                       width,
-                                       y_range_.first() - y - height));
+                               Leftover(x,
+                                        y + height,
+                                        width,
+                                        y_range_.first() - y - height));
                 rlid_++;
             }
 
@@ -526,12 +525,12 @@ void GraphicsGL::draw(const nl::bitmap &bmp,
         return;
 
     quads_.emplace_back(rect.left(),
-                       rect.right(),
-                       rect.top(),
-                       rect.bottom(),
-                       getoffset(bmp),
-                       color,
-                       angle);
+                        rect.right(),
+                        rect.top(),
+                        rect.bottom(),
+                        getoffset(bmp),
+                        color,
+                        angle);
 }
 
 Text::Layout GraphicsGL::createlayout(const std::string &text,
@@ -750,26 +749,26 @@ void GraphicsGL::drawtext(const DrawArgument &args,
                 Color ntcolor = Color(0.0f, 0.0f, 0.0f, 0.6f);
 
                 quads_.emplace_back(left,
-                                   right,
-                                   top,
-                                   bottom,
-                                   null_offset_,
-                                   ntcolor,
-                                   0.0f);
+                                    right,
+                                    top,
+                                    bottom,
+                                    null_offset_,
+                                    ntcolor,
+                                    0.0f);
                 quads_.emplace_back(left - 1,
-                                   left,
-                                   top + 1,
-                                   bottom - 1,
-                                   null_offset_,
-                                   ntcolor,
-                                   0.0f);
+                                    left,
+                                    top + 1,
+                                    bottom - 1,
+                                    null_offset_,
+                                    ntcolor,
+                                    0.0f);
                 quads_.emplace_back(right,
-                                   right + 1,
-                                   top + 1,
-                                   bottom - 1,
-                                   null_offset_,
-                                   ntcolor,
-                                   0.0f);
+                                    right + 1,
+                                    top + 1,
+                                    bottom - 1,
+                                    null_offset_,
+                                    ntcolor,
+                                    0.0f);
             }
 
             break;
@@ -827,12 +826,12 @@ void GraphicsGL::drawtext(const DrawArgument &args,
                     continue;
 
                 quads_.emplace_back(char_x,
-                                   char_x + char_width,
-                                   char_y,
-                                   char_bottom,
-                                   offset,
-                                   abscolor,
-                                   0.0f);
+                                    char_x + char_width,
+                                    char_y,
+                                    char_bottom,
+                                    offset,
+                                    abscolor,
+                                    0.0f);
             }
         }
     }
@@ -850,12 +849,12 @@ void GraphicsGL::drawrectangle(int16_t x,
         return;
 
     quads_.emplace_back(x,
-                       x + width,
-                       y,
-                       y + height,
-                       null_offset_,
-                       Color(red, green, blue, alpha),
-                       0.0f);
+                        x + width,
+                        y,
+                        y + height,
+                        null_offset_,
+                        Color(red, green, blue, alpha),
+                        0.0f);
 }
 
 void GraphicsGL::drawscreenfill(float red,
@@ -881,12 +880,12 @@ void GraphicsGL::flush(float opacity) {
         Color color = Color(0.0f, 0.0f, 0.0f, complement);
 
         quads_.emplace_back(SCREEN.left(),
-                           SCREEN.right(),
-                           SCREEN.top(),
-                           SCREEN.bottom(),
-                           null_offset_,
-                           color,
-                           0.0f);
+                            SCREEN.right(),
+                            SCREEN.top(),
+                            SCREEN.bottom(),
+                            null_offset_,
+                            color,
+                            0.0f);
     }
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);

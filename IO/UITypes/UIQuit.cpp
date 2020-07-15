@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIQuit.h"
 
 #include <nlnx/nx.hpp>
@@ -94,9 +91,9 @@ UIQuit::UIQuit(const CharStats &st) : screen_adj_(212, 114), stats_(st) {
         expBeforeString.substr(0, expBeforeString.find('.') + 3) + '%';
 
     exp_before_ = Text(Text::Font::A11M,
-                     Text::Alignment::LEFT,
-                     Color::Name::WHITE,
-                     expBeforeText);
+                       Text::Alignment::LEFT,
+                       Color::Name::WHITE,
+                       expBeforeText);
     exp_before_pos_ = exp["posBefore"];
 
     int64_t cur_exp = stats_.get_exp();
@@ -106,9 +103,9 @@ UIQuit::UIQuit(const CharStats &st) : screen_adj_(212, 114), stats_(st) {
         expAfterString.substr(0, expAfterString.find('.') + 3) + '%';
 
     exp_after_ = Text(Text::Font::A11M,
-                    Text::Alignment::LEFT,
-                    Color::Name::ELECTRICLIME,
-                    expAfterText);
+                      Text::Alignment::LEFT,
+                      Color::Name::ELECTRICLIME,
+                      expAfterText);
     exp_after_pos_ = exp["posAfter"];
 
     exp_adj_ = Point<int16_t>(0, 6);
@@ -127,18 +124,19 @@ void UIQuit::draw(float inter) const {
     UIElement::draw(inter);
 
     time_minutes_.draw(time_minutes_text_,
-                      time_number_width_,
-                      position_ + time_minutes_pos_ - screen_adj_);
+                       time_number_width_,
+                       position_ + time_minutes_pos_ - screen_adj_);
     time_hours_.draw(time_hours_text_,
-                    time_number_width_,
-                    position_ + time_hours_pos_ - screen_adj_);
+                     time_number_width_,
+                     position_ + time_hours_pos_ - screen_adj_);
 
-    level_before_.draw(level_before_text_,
-                     level_number_width_,
-                     position_ + level_before_pos_ + level_adj_ - screen_adj_);
+    level_before_.draw(
+        level_before_text_,
+        level_number_width_,
+        position_ + level_before_pos_ + level_adj_ - screen_adj_);
     level_after_.draw(level_after_text_,
-                    level_number_width_,
-                    position_ + level_after_pos_ + level_adj_ - screen_adj_);
+                      level_number_width_,
+                      position_ + level_after_pos_ + level_adj_ - screen_adj_);
 
     if (cur_level_ > uplevel_)
         levelup_effect_.draw(position_ - screen_adj_, inter);

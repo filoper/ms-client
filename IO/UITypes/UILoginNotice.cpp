@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UILoginNotice.h"
 
 #include <nlnx/nx.hpp>
@@ -109,7 +106,7 @@ UIQuitConfirm::UIQuitConfirm() {
 
     sprites_.emplace_back(backgrnd);
     sprites_.emplace_back(notice["text"][UILoginNotice::Message::CONFIRM_EXIT],
-                         Point<int16_t>(17, 13));
+                          Point<int16_t>(17, 13));
 
     buttons_[Buttons::BT_OK] =
         std::make_unique<MapleButton>(notice["BtYes"], Point<int16_t>(70, 106));
@@ -258,8 +255,10 @@ UIKeySelect::UIKeySelect(std::function<void(bool)> oh, bool l) :
 
     sprites_.emplace_back(backgrnd);
 
-    buttons_[Buttons::CLOSE] = std::make_unique<MapleButton>(KeyType["btClose"]);
-    buttons_[Buttons::TYPEA] = std::make_unique<MapleButton>(KeyType["btTypeA"]);
+    buttons_[Buttons::CLOSE] =
+        std::make_unique<MapleButton>(KeyType["btClose"]);
+    buttons_[Buttons::TYPEA] =
+        std::make_unique<MapleButton>(KeyType["btTypeA"]);
     buttons_[Buttons::TYPEB] =
         std::make_unique<MapleButton>(KeyType["btTypeB"], Point<int16_t>(1, 1));
 

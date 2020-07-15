@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "TextTooltip.h"
 
 #include <nlnx/nx.hpp>
@@ -53,8 +50,8 @@ void TextTooltip::draw(Point<int16_t> pos) const {
         pos.shift_y(adj_y * -1);
 
     frame_.draw(pos + Point<int16_t>(fillwidth / 2 + 2, fillheight - 7),
-               fillwidth - 14,
-               fillheight - 18);
+                fillwidth - 14,
+                fillheight - 18);
 
     if (fillheight > 18) {
         cover_.draw(pos + Point<int16_t>(-5, -2));
@@ -75,12 +72,12 @@ bool TextTooltip::set_text(std::string t) {
         return false;
 
     text_label_ = Text(Text::Font::A12M,
-                      Text::Alignment::LEFT,
-                      Color::Name::WHITE,
-                      text_,
-                      340,
-                      true,
-                      2);
+                       Text::Alignment::LEFT,
+                       Color::Name::WHITE,
+                       text_,
+                       340,
+                       true,
+                       2);
 
     return true;
 }

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UINpcTalk.h"
 
 #include <nlnx/nx.hpp>
@@ -51,7 +48,8 @@ UINpcTalk::UINpcTalk() :
         std::make_unique<MapleButton>(UtilDlgEx["BtClose"]);
     buttons_[Buttons::MY_LEVEL] =
         std::make_unique<MapleButton>(UtilDlgEx["BtMyLevel"]);
-    buttons_[Buttons::NEXT] = std::make_unique<MapleButton>(UtilDlgEx["BtNext"]);
+    buttons_[Buttons::NEXT] =
+        std::make_unique<MapleButton>(UtilDlgEx["BtNext"]);
 
     // TODO: Replace when _inlink is fixed
     // buttons[Buttons::NO] = std::make_unique<MapleButton>(UtilDlgEx["BtNo"]);
@@ -60,10 +58,12 @@ UINpcTalk::UINpcTalk() :
 
     buttons_[Buttons::NO] = std::make_unique<MapleButton>(Quest["BtNo"]);
     buttons_[Buttons::OK] = std::make_unique<MapleButton>(UtilDlgEx["BtOK"]);
-    buttons_[Buttons::PREV] = std::make_unique<MapleButton>(UtilDlgEx["BtPrev"]);
+    buttons_[Buttons::PREV] =
+        std::make_unique<MapleButton>(UtilDlgEx["BtPrev"]);
     buttons_[Buttons::QAFTER] =
         std::make_unique<MapleButton>(UtilDlgEx["BtQAfter"]);
-    buttons_[Buttons::QCNO] = std::make_unique<MapleButton>(UtilDlgEx["BtQCNo"]);
+    buttons_[Buttons::QCNO] =
+        std::make_unique<MapleButton>(UtilDlgEx["BtQCNo"]);
     buttons_[Buttons::QCYES] =
         std::make_unique<MapleButton>(UtilDlgEx["BtQCYes"]);
     buttons_[Buttons::QGIVEUP] =
@@ -71,7 +71,8 @@ UINpcTalk::UINpcTalk() :
     buttons_[Buttons::QNO] = std::make_unique<MapleButton>(UtilDlgEx["BtQNo"]);
     buttons_[Buttons::QSTART] =
         std::make_unique<MapleButton>(UtilDlgEx["BtQStart"]);
-    buttons_[Buttons::QYES] = std::make_unique<MapleButton>(UtilDlgEx["BtQYes"]);
+    buttons_[Buttons::QYES] =
+        std::make_unique<MapleButton>(UtilDlgEx["BtQYes"]);
     buttons_[Buttons::YES] = std::make_unique<MapleButton>(UtilDlgEx["BtYes"]);
 
     name_ = Text(Text::Font::A11M, Text::Alignment::CENTER, Color::Name::WHITE);
@@ -178,7 +179,9 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
                     NpcTalkMorePacket(type_, -1).dispatch();
                     break;
                 case Buttons::NO: NpcTalkMorePacket(type_, 0).dispatch(); break;
-                case Buttons::YES: NpcTalkMorePacket(type_, 1).dispatch(); break;
+                case Buttons::YES:
+                    NpcTalkMorePacket(type_, 1).dispatch();
+                    break;
             }
             break;
         case TalkType::SENDACCEPTDECLINE:
@@ -187,7 +190,9 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
                 case Buttons::CLOSE:
                     NpcTalkMorePacket(type_, -1).dispatch();
                     break;
-                case Buttons::QNO: NpcTalkMorePacket(type_, 0).dispatch(); break;
+                case Buttons::QNO:
+                    NpcTalkMorePacket(type_, 0).dispatch();
+                    break;
                 case Buttons::QYES:
                     NpcTalkMorePacket(type_, 1).dispatch();
                     break;
@@ -226,7 +231,8 @@ Cursor::State UINpcTalk::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Point<int16_t> cursor_relative = cursorpos - position_;
 
     if (show_slider_ && slider_.isenabled())
-        if (Cursor::State sstate = slider_.send_cursor(cursor_relative, clicked))
+        if (Cursor::State sstate =
+                slider_.send_cursor(cursor_relative, clicked))
             return sstate;
 
     Cursor::State estate = UIElement::send_cursor(clicked, cursorpos);
@@ -316,10 +322,10 @@ void UINpcTalk::change_text(int32_t npcid,
     formatted_text_ = format_text(tx, npcid);
 
     text_ = Text(Text::Font::A12M,
-                Text::Alignment::LEFT,
-                Color::Name::DARKGREY,
-                formatted_text_,
-                320);
+                 Text::Alignment::LEFT,
+                 Color::Name::DARKGREY,
+                 formatted_text_,
+                 320);
 
     int16_t text_height = text_.height();
 
@@ -352,11 +358,11 @@ void UINpcTalk::change_text(int32_t npcid,
 
             int16_t slider_y = top_.height() - 7;
             slider_ = Slider(Slider::Type::DEFAULT_SILVER,
-                            Range<int16_t>(slider_y, slider_y + height_ - 20),
-                            top_.width() - 26,
-                            unit_rows_,
-                            row_max_,
-                            onmoved_);
+                             Range<int16_t>(slider_y, slider_y + height_ - 20),
+                             top_.width() - 26,
+                             unit_rows_,
+                             row_max_,
+                             onmoved_);
         } else {
             height_ = text_height;
         }
@@ -384,7 +390,7 @@ void UINpcTalk::change_text(int32_t npcid,
             buttons_[Buttons::YES]->set_active(true);
 
             buttons_[Buttons::NO]->set_position(yes_position
-                                               + Point<int16_t>(65, 0));
+                                                + Point<int16_t>(65, 0));
             buttons_[Buttons::NO]->set_active(true);
             break;
         }

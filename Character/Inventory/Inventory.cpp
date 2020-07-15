@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Inventory.h"
 
 #include <iostream>
@@ -70,7 +66,8 @@ void Inventory::recalc_stats(Weapon::Type type) {
     }
 
     if (int32_t bulletid = get_bulletid())
-        total_stats_[EquipStat::Id::WATK] += BulletData::get(bulletid).get_watk();
+        total_stats_[EquipStat::Id::WATK] +=
+            BulletData::get(bulletid).get_watk();
 }
 
 void Inventory::set_meso(int64_t m) {
@@ -168,8 +165,8 @@ void Inventory::swap(InventoryType::Id firsttype,
                      InventoryType::Id secondtype,
                      int16_t secondslot) {
     Slot first = std::move(inventories_[firsttype][firstslot]);
-    inventories_[firsttype][firstslot]
-        = std::move(inventories_[secondtype][secondslot]);
+    inventories_[firsttype][firstslot] =
+        std::move(inventories_[secondtype][secondslot]);
     inventories_[secondtype][secondslot] = std::move(first);
 
     if (!inventories_[firsttype][firstslot].item_id)

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <functional>
@@ -56,8 +53,8 @@ public:
         }
 
         nodes_.emplace(std::piecewise_construct,
-                      std::forward_as_tuple(key),
-                      std::forward_as_tuple(value, parent, 0, 0, 0, 0));
+                       std::forward_as_tuple(key),
+                       std::forward_as_tuple(value, parent, 0, 0, 0, 0));
     }
 
     void erase(K key) {
@@ -188,8 +185,9 @@ private:
 
             while (current) {
                 parent = current;
-                current =
-                    nodes_[parent].addornext(key, nodes_[key].value, comparator_);
+                current = nodes_[parent].addornext(key,
+                                                   nodes_[key].value,
+                                                   comparator_);
             }
 
             nodes_[key].parent = parent;
@@ -231,9 +229,10 @@ private:
                 bottom = 0;
         }
 
-        K addornext(K key,
-                    V val,
-                    std::function<Direction(const V &, const V &)> comparator_) {
+        K addornext(
+            K key,
+            V val,
+            std::function<Direction(const V &, const V &)> comparator_) {
             Direction dir = comparator_(val, value);
             K dirkey = leaf(dir);
 

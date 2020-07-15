@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UICharSelect.h"
 
 #include "../../Audio/Audio.h"
@@ -51,9 +48,9 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
 
     std::string version_text = Configuration::get().get_version();
     version_ = Text(Text::Font::A11M,
-                   Text::Alignment::LEFT,
-                   Color::Name::LEMONGRASS,
-                   "Ver. " + version_text);
+                    Text::Alignment::LEFT,
+                    Color::Name::LEMONGRASS,
+                    "Ver. " + version_text);
 
     page_pos_ = Point<int16_t>(247, 462);
     world_pos_ = Point<int16_t>(586, 46);
@@ -103,11 +100,11 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
 
     world_sprites_.emplace_back(selectWorld, world_pos_);
     world_sprites_.emplace_back(selectedWorld["icon"][world],
-                               world_pos_ - Point<int16_t>(12, -1));
+                                world_pos_ - Point<int16_t>(12, -1));
     world_sprites_.emplace_back(selectedWorld["name"][world],
-                               world_pos_ - Point<int16_t>(8, 1));
+                                world_pos_ - Point<int16_t>(8, 1));
     world_sprites_.emplace_back(selectedWorld["ch"][channel_id],
-                               world_pos_ - Point<int16_t>(0, 1));
+                                world_pos_ - Point<int16_t>(0, 1));
 
     nl::node map = nl::nx::map001["Back"]["login.img"];
     nl::node ani = map["ani"];
@@ -174,15 +171,15 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
 
     level_set_ = Charset(CharSelect["lv"], Charset::Alignment::CENTER);
     name_label_ = OutlinedText(Text::Font::A15B,
-                             Text::Alignment::CENTER,
-                             Color::Name::WHITE,
-                             Color::Name::IRISHCOFFEE);
+                               Text::Alignment::CENTER,
+                               Color::Name::WHITE,
+                               Color::Name::IRISHCOFFEE);
 
     for (size_t i = 0; i < InfoLabel::NUM_LABELS; i++)
         info_labels_[i] = OutlinedText(Text::Font::A11M,
-                                     Text::Alignment::RIGHT,
-                                     Color::Name::WHITE,
-                                     Color::Name::TOBACCOBROWN);
+                                       Text::Alignment::RIGHT,
+                                       Color::Name::WHITE,
+                                       Color::Name::TOBACCOBROWN);
 
     for (auto &entry : characters_) {
         char_looks_.emplace_back(entry.look);
@@ -196,9 +193,9 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
     selected_slot_effect_[1] = CharSelect["effect"][1];
 
     chat_slot_label_ = OutlinedText(Text::Font::A12M,
-                                 Text::Alignment::LEFT,
-                                 Color::Name::PORCELAIN,
-                                 Color::Name::BROWNDERBY);
+                                    Text::Alignment::LEFT,
+                                    Color::Name::PORCELAIN,
+                                    Color::Name::BROWNDERBY);
     chat_slot_label_.change_text(get_slot_text());
 
     update_buttons();
@@ -250,7 +247,7 @@ void UICharSelect::draw(float inter) const {
 
             if (selectedslot) {
                 selected_slot_effect_[1].draw(charpos + Point<int16_t>(-5, 16),
-                                            inter);
+                                              inter);
 
                 int8_t lvy = -115;
                 Point<int16_t> pos_adj = Point<int16_t>(668, 365);
@@ -260,8 +257,10 @@ void UICharSelect::draw(float inter) const {
                 std::string levelstr =
                     std::to_string(character_stats.stats[MapleStat::Id::LEVEL]);
                 int16_t lvx =
-                    level_set_.draw(levelstr, pos_adj + Point<int16_t>(12, lvy));
-                level_set_.draw('l', pos_adj + Point<int16_t>(1 - lvx / 2, lvy));
+                    level_set_.draw(levelstr,
+                                    pos_adj + Point<int16_t>(12, lvy));
+                level_set_.draw('l',
+                                pos_adj + Point<int16_t>(1 - lvx / 2, lvy));
 
                 name_label_.draw(pos_adj + Point<int16_t>(8, -106));
 
@@ -287,8 +286,9 @@ void UICharSelect::draw(float inter) const {
             char_looks_[index].draw(chararg, inter);
 
             if (selectedslot)
-                selected_slot_effect_[0].draw(charpos + Point<int16_t>(-5, -298),
-                                            inter);
+                selected_slot_effect_[0].draw(
+                    charpos + Point<int16_t>(-5, -298),
+                    inter);
         } else if (i < slots_) {
             Point<int16_t> emptyslotpos = get_character_slot_pos(i, 130, 234);
 
@@ -301,7 +301,7 @@ void UICharSelect::draw(float inter) const {
 
     if (tab_active_)
         tab_.draw(position_ + tab_pos_[tab_index_]
-                 + Point<int16_t>(0, tab_move_pos_));
+                  + Point<int16_t>(0, tab_move_pos_));
 
     if (burning_character_) {
         burning_notice_.draw(position_ + Point<int16_t>(190, 502), inter);
@@ -309,14 +309,18 @@ void UICharSelect::draw(float inter) const {
     }
 
     pagebase_.draw(position_ + page_pos_);
-    pagenumber_.draw(current.substr(0, 1),
-                    position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[0]));
-    pagenumber_.draw(current.substr(1, 1),
-                    position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[1]));
-    pagenumber_.draw(total.substr(0, 1),
-                    position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[2]));
-    pagenumber_.draw(total.substr(1, 1),
-                    position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[3]));
+    pagenumber_.draw(
+        current.substr(0, 1),
+        position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[0]));
+    pagenumber_.draw(
+        current.substr(1, 1),
+        position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[1]));
+    pagenumber_.draw(
+        total.substr(0, 1),
+        position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[2]));
+    pagenumber_.draw(
+        total.substr(1, 1),
+        position_ + page_pos_ + Point<int16_t>(pagenumber_pos_[3]));
 }
 
 void UICharSelect::update() {
@@ -611,7 +615,7 @@ bool UICharSelect::update_character(int32_t id, StatsEntry stats) {
             return true;
         }
     }
-            
+
     return false;
 }
 
@@ -749,7 +753,7 @@ Button::State UICharSelect::button_pressed(uint16_t buttonid) {
             if (buttonid >= Buttons::CHARACTER_SLOT0) {
                 uint8_t previous_character = selected_character_;
                 selected_character_ = buttonid - Buttons::CHARACTER_SLOT0
-                                     + selected_page * PAGESIZE_;
+                                      + selected_page * PAGESIZE_;
 
                 if (previous_character != selected_character_) {
                     if (previous_character < characters_count_) {

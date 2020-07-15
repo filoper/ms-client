@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "MapTooltip.h"
 
 #include <nlnx/nx.hpp>
@@ -65,8 +62,8 @@ void MapTooltip::draw(Point<int16_t> pos) const {
                 pos.shift_y(adj_y * -1);
 
             frame_.draw(pos + Point<int16_t>(new_width / 2 + 2, new_height - 7),
-                       new_width - 14,
-                       new_height - 18);
+                        new_width - 14,
+                        new_height - 18);
 
             if (new_height > 18)
                 name_simple_.draw(pos);
@@ -97,10 +94,10 @@ void MapTooltip::draw(Point<int16_t> pos) const {
             int16_t half_width = new_width / 2;
 
             frame_.draw(pos
-                           + Point<int16_t>(half_width + 2,
-                                            new_height - 7 + BOTTOM_PADDING),
-                       new_width - 14,
-                       new_height - 18 + BOTTOM_PADDING);
+                            + Point<int16_t>(half_width + 2,
+                                             new_height - 7 + BOTTOM_PADDING),
+                        new_width - 14,
+                        new_height - 18 + BOTTOM_PADDING);
             cover_.draw(pos + Point<int16_t>(-5, -2));
             name_label_.draw(pos + Point<int16_t>(half_width, -2));
 
@@ -125,10 +122,10 @@ void MapTooltip::draw(Point<int16_t> pos) const {
         int16_t half_width = fill_width_ / 2;
 
         frame_.draw(pos
-                       + Point<int16_t>(half_width + 2,
-                                        fill_height_ - 7 + BOTTOM_PADDING),
-                   fill_width_ - 14,
-                   fill_height_ - 18 + BOTTOM_PADDING);
+                        + Point<int16_t>(half_width + 2,
+                                         fill_height_ - 7 + BOTTOM_PADDING),
+                    fill_width_ - 14,
+                    fill_height_ - 18 + BOTTOM_PADDING);
         cover_.draw(pos + Point<int16_t>(-5, -2));
         name_label_.draw(pos + Point<int16_t>(half_width, 0));
 
@@ -191,13 +188,13 @@ void MapTooltip::set_name(Tooltip::Parent p, std::string n, bool bolded) {
         return;
 
     name_label_ = Text(bolded ? Text::Font::A12B : Text::Font::A12M,
-                      Text::Alignment::CENTER,
-                      Color::Name::WHITE,
-                      name_);
-    name_simple_ = Text(bolded ? Text::Font::A12B : Text::Font::A12M,
-                       Text::Alignment::LEFT,
+                       Text::Alignment::CENTER,
                        Color::Name::WHITE,
                        name_);
+    name_simple_ = Text(bolded ? Text::Font::A12B : Text::Font::A12M,
+                        Text::Alignment::LEFT,
+                        Color::Name::WHITE,
+                        name_);
 
     int16_t width = name_label_.width();
     int16_t height = name_label_.height();
@@ -221,15 +218,15 @@ void MapTooltip::set_desc(std::string d) {
         return;
 
     desc_label_ = Text(Text::Font::A12M,
-                      Text::Alignment::LEFT,
-                      Color::Name::WHITE,
-                      description_,
-                      fill_width_);
-    desc_simple_ = Text(Text::Font::A12M,
-                       Text::Alignment::CENTER,
+                       Text::Alignment::LEFT,
                        Color::Name::WHITE,
                        description_,
                        fill_width_);
+    desc_simple_ = Text(Text::Font::A12M,
+                        Text::Alignment::CENTER,
+                        Color::Name::WHITE,
+                        description_,
+                        fill_width_);
 
     fill_width_ += 17;
 
@@ -256,16 +253,16 @@ void MapTooltip::set_mapid(int32_t mapid) {
 
         if (life_object.first == "m" && m < MAX_LIFE) {
             mob_labels_[m] = Text(Text::Font::A12M,
-                                 Text::Alignment::LEFT,
-                                 Color::Name::CHARTREUSE,
-                                 life_object.second);
+                                  Text::Alignment::LEFT,
+                                  Color::Name::CHARTREUSE,
+                                  life_object.second);
             fill_height_ += mob_labels_->height() + 2;
             m++;
         } else if (life_object.first == "n" && n < MAX_LIFE) {
             npc_labels_[n] = Text(Text::Font::A12M,
-                                 Text::Alignment::LEFT,
-                                 Color::Name::MALIBU,
-                                 life_object.second);
+                                  Text::Alignment::LEFT,
+                                  Color::Name::MALIBU,
+                                  life_object.second);
             fill_height_ += npc_labels_->height() + 2;
             n++;
         }

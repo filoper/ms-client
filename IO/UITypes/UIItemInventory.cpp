@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIItemInventory.h"
 
 #include <nlnx/nx.hpp>
@@ -106,7 +103,8 @@ UIItemInventory::UIItemInventory(const Inventory &invent) :
         std::make_unique<MapleButton>(Item["BtFull4"]);
     buttons_[Buttons::BT_SMALL_SM] =
         std::make_unique<MapleButton>(Item["BtSmall4"]);
-    buttons_[Buttons::BT_POT_SM] = std::make_unique<MapleButton>(Item["BtPot4"]);
+    buttons_[Buttons::BT_POT_SM] =
+        std::make_unique<MapleButton>(Item["BtPot4"]);
     buttons_[Buttons::BT_UPGRADE_SM] =
         std::make_unique<MapleButton>(Item["BtUpgrade4"]);
     buttons_[Buttons::BT_APPRAISE_SM] =
@@ -142,21 +140,22 @@ UIItemInventory::UIItemInventory(const Inventory &invent) :
     slot_range_[InventoryType::Id::CASH] = { 1, 24 };
 
     slider_ = Slider(Slider::Type::DEFAULT_SILVER,
-                    Range<int16_t>(50, 245),
-                    152,
-                    6,
-                    1 + inventory_.get_slotmax(tab_) / COLUMNS_,
-                    [&](bool upwards) {
-                        int16_t shift = upwards ? -COLUMNS_ : COLUMNS_;
-                        bool above = slot_range_[tab_].first + shift > 0;
-                        bool below = slot_range_[tab_].second + shift
-                                     < inventory_.get_slotmax(tab_) + 1 + COLUMNS_;
+                     Range<int16_t>(50, 245),
+                     152,
+                     6,
+                     1 + inventory_.get_slotmax(tab_) / COLUMNS_,
+                     [&](bool upwards) {
+                         int16_t shift = upwards ? -COLUMNS_ : COLUMNS_;
+                         bool above = slot_range_[tab_].first + shift > 0;
+                         bool below =
+                             slot_range_[tab_].second + shift
+                             < inventory_.get_slotmax(tab_) + 1 + COLUMNS_;
 
-                        if (above && below) {
-                            slot_range_[tab_].first += shift;
-                            slot_range_[tab_].second += shift;
-                        }
-                    });
+                         if (above && below) {
+                             slot_range_[tab_].first += shift;
+                             slot_range_[tab_].second += shift;
+                         }
+                     });
 
     set_full(false);
     clear_new();
@@ -175,7 +174,8 @@ void UIItemInventory::draw(float alpha) const {
         full_backgrnd3_.draw(position_);
 
         meso_label_.draw(mesolabel_pos + Point<int16_t>(3, 70));
-        maple_points_label_.draw(maplepointslabel_pos + Point<int16_t>(181, 53));
+        maple_points_label_.draw(maplepointslabel_pos
+                                 + Point<int16_t>(181, 53));
     } else {
         backgrnd_.draw(position_);
         backgrnd2_.draw(position_);
@@ -338,7 +338,8 @@ void UIItemInventory::doubleclick(Point<int16_t> cursorpos) {
             switch (tab_) {
                 case InventoryType::Id::EQUIP:
                     if (can_wear_equip(slot))
-                        EquipItemPacket(slot, inventory_.find_equipslot(item_id))
+                        EquipItemPacket(slot,
+                                        inventory_.find_equipslot(item_id))
                             .dispatch();
 
                     break;

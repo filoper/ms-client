@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIEvent.h"
 
 #include <nlnx/nx.hpp>
@@ -55,9 +52,9 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
 
     for (size_t i = 0; i < 3; i++)
         event_title_[i] = ShadowText(Text::Font::A18M,
-                                    Text::Alignment::LEFT,
-                                    Color::Name::HALFANDHALF,
-                                    Color::Name::ENDEAVOUR);
+                                     Text::Alignment::LEFT,
+                                     Color::Name::HALFANDHALF,
+                                     Color::Name::ENDEAVOUR);
 
     for (size_t i = 0; i < 3; i++)
         event_date_[i] =
@@ -70,18 +67,18 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
     label_next_ = main["label_next"]["0"];
 
     slider_ = Slider(Slider::Type::DEFAULT_SILVER,
-                    Range<int16_t>(86, 449),
-                    396,
-                    3,
-                    event_count_,
-                    [&](bool upwards) {
-                        int16_t shift = upwards ? -1 : 1;
-                        bool above = offset_ + shift >= 0;
-                        bool below = offset_ + shift <= event_count_ - 3;
+                     Range<int16_t>(86, 449),
+                     396,
+                     3,
+                     event_count_,
+                     [&](bool upwards) {
+                         int16_t shift = upwards ? -1 : 1;
+                         bool above = offset_ + shift >= 0;
+                         bool below = offset_ + shift <= event_count_ - 3;
 
-                        if (above && below)
-                            offset_ += shift;
-                    });
+                         if (above && below)
+                             offset_ += shift;
+                     });
 
     dimension_ = bg_dimensions;
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
@@ -174,7 +171,8 @@ Cursor::State UIEvent::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Point<int16_t> cursoroffset = cursorpos - position_;
 
     if (slider_.isenabled())
-        if (Cursor::State new_state = slider_.send_cursor(cursoroffset, clicked))
+        if (Cursor::State new_state =
+                slider_.send_cursor(cursoroffset, clicked))
             return new_state;
 
     int16_t yoff = cursoroffset.y();

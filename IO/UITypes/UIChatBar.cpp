@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIChatBar.h"
 
 #include <nlnx/nx.hpp>
@@ -49,9 +46,9 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
 
     buttons_[Buttons::BT_OPENCHAT] =
         std::make_unique<MapleButton>(view["btMax"], Point<int16_t>(391, -7));
-    buttons_[Buttons::BT_CLOSECHAT] =
-        std::make_unique<MapleButton>(view["btMin"],
-                                      closechat_ + Point<int16_t>(0, chattop_y));
+    buttons_[Buttons::BT_CLOSECHAT] = std::make_unique<MapleButton>(
+        view["btMin"],
+        closechat_ + Point<int16_t>(0, chattop_y));
     buttons_[Buttons::BT_CHAT] =
         std::make_unique<MapleButton>(input["button:chat"],
                                       Point<int16_t>(344, -8));
@@ -78,9 +75,9 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
             Point<int16_t>(chattab_x_ + (i * chattab_span_), chattab_y_));
         buttons_[Buttons::BT_TAB_0 + i]->set_active(chatopen_ ? true : false);
         chattab_text_[ChatTab::CHT_ALL + i] = Text(Text::Font::A12M,
-                                                  Text::Alignment::CENTER,
-                                                  Color::Name::DUSTYGRAY,
-                                                  chat_tab_text_[i]);
+                                                   Text::Alignment::CENTER,
+                                                   Color::Name::DUSTYGRAY,
+                                                   chat_tab_text_[i]);
     }
 
     chattab_text_[ChatTab::CHT_ALL].change_color(Color::Name::WHITE);
@@ -107,7 +104,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
         Rectangle<int16_t>(Point<int16_t>(62, -9), Point<int16_t>(330, 8)),
         0);
     chatfield_.set_state(chatopen_ ? Textfield::State::NORMAL
-                                 : Textfield::State::DISABLED);
+                                   : Textfield::State::DISABLED);
 
     chatfield_.set_enter_callback([&](std::string msg) {
         if (msg.size() > 0) {
@@ -145,7 +142,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
     });
 
     chatfield_.set_key_callback(KeyAction::Id::ESCAPE,
-                               [&]() { toggle_chatfield(false); });
+                                [&]() { toggle_chatfield(false); });
 
     // int16_t slider_x = 394;
     // int16_t slider_y = -80;
@@ -182,7 +179,7 @@ void UIChatBar::draw(float inter) const {
 
         chatspace_[2].draw(position_ + Point<int16_t>(0, -28) + pos_adj);
         chatspace_[3].draw(position_ + Point<int16_t>(0, -15 + chattop)
-                          + pos_adj);
+                           + pos_adj);
 
         // slider_.draw(position);
 
@@ -194,7 +191,8 @@ void UIChatBar::draw(float inter) const {
             if (!row_texts_.count(rowid))
                 break;
 
-            int16_t textheight = row_texts_.at(rowid).height() / CHAT_ROW_HEIGHT_;
+            int16_t textheight =
+                row_texts_.at(rowid).height() / CHAT_ROW_HEIGHT_;
 
             while (textheight > 0) {
                 yshift += CHAT_ROW_HEIGHT_;
@@ -202,7 +200,8 @@ void UIChatBar::draw(float inter) const {
             }
 
             row_texts_.at(rowid).draw(
-                position_ + Point<int16_t>(9, getchattop(chatopen_) - yshift - 21)
+                position_
+                + Point<int16_t>(9, getchattop(chatopen_) - yshift - 21)
                 + pos_adj);
         }
     } else {
@@ -216,14 +215,14 @@ void UIChatBar::draw(float inter) const {
 
         if (row_texts_.count(row_max_))
             row_texts_.at(row_max_).draw(position_ + Point<int16_t>(9, -6)
-                                     + pos_adj);
+                                         + pos_adj);
     }
 
     if (chatfield_open_) {
         chatcover_.draw(DrawArgument(position_ + Point<int16_t>(0, -13),
-                                    Point<int16_t>(409, 0)));
+                                     Point<int16_t>(409, 0)));
         chatenter_.draw(DrawArgument(position_ + Point<int16_t>(0, -13),
-                                    Point<int16_t>(285, 0)));
+                                     Point<int16_t>(285, 0)));
         chatfield_.draw(position_ + Point<int16_t>(-4, -4));
     }
 
@@ -231,7 +230,7 @@ void UIChatBar::draw(float inter) const {
 
     if (chatopen_) {
         auto pos_adj = chatopen_ && !chatfield_open_ ? Point<int16_t>(0, 28)
-                                                  : Point<int16_t>(0, 0);
+                                                     : Point<int16_t>(0, 0);
 
         for (size_t i = 0; i < ChatTab::NUM_CHATTAB; i++)
             chattab_text_[ChatTab::CHT_ALL + i].draw(
@@ -246,7 +245,7 @@ void UIChatBar::update() {
     UIElement::update();
 
     auto pos_adj = chatopen_ && !chatfield_open_ ? Point<int16_t>(0, 28)
-                                              : Point<int16_t>(0, 0);
+                                                 : Point<int16_t>(0, 0);
 
     for (size_t i = 0; i < ChatTab::NUM_CHATTAB; i++)
         buttons_[BT_TAB_0 + i]->set_position(
@@ -345,8 +344,8 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
             }
 
             // slider_.setrows(row_pos_, chat_rows_, row_max_);
-            // slider_.setvertical(Range<int16_t>(0, CHAT_ROW_HEIGHT_ * chat_rows_ -
-            // 14));
+            // slider_.setvertical(Range<int16_t>(0, CHAT_ROW_HEIGHT_ *
+            // chat_rows_ - 14));
 
             chattab_y_ = getchattop(chatopen_) - 33;
             // dimension.set_y(getchatbarheight());
@@ -422,12 +421,12 @@ void UIChatBar::send_chatline(const std::string &line, LineType type) {
     }
 
     row_texts_.emplace(std::piecewise_construct,
-                     std::forward_as_tuple(row_max_),
-                     std::forward_as_tuple(Text::Font::A11M,
-                                           Text::Alignment::LEFT,
-                                           color,
-                                           line,
-                                           480));
+                       std::forward_as_tuple(row_max_),
+                       std::forward_as_tuple(Text::Font::A11M,
+                                             Text::Alignment::LEFT,
+                                             color,
+                                             line,
+                                             480));
 }
 
 void UIChatBar::display_message(Messages::Type line, UIChatBar::LineType type) {

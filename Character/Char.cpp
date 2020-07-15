@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Char.h"
 
 #include <nlnx/nx.hpp>
@@ -28,10 +25,10 @@ Char::Char(int32_t o, const CharLook &lk, const std::string &name) :
     look_(lk),
     look_preview_(lk),
     name_label_(Text(Text::Font::A13M,
-                   Text::Alignment::CENTER,
-                   Color::Name::WHITE,
-                   Text::Background::NAMETAG,
-                   name)) {}
+                     Text::Alignment::CENTER,
+                     Color::Name::WHITE,
+                     Text::Background::NAMETAG,
+                     name)) {}
 
 void Char::draw(double viewx, double viewy, float alpha) const {
     Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
@@ -51,7 +48,9 @@ void Char::draw(double viewx, double viewy, float alpha) const {
 
     look_.draw(DrawArgument(absp, color), alpha);
 
-    after_image_.draw(look_.get_frame(), DrawArgument(absp, facing_right_), alpha);
+    after_image_.draw(look_.get_frame(),
+                      DrawArgument(absp, facing_right_),
+                      alpha);
 
     if (iron_body_) {
         float ibalpha = iron_body_.alpha();
@@ -77,9 +76,9 @@ void Char::draw(double viewx, double viewy, float alpha) const {
 
 void Char::draw_preview(Point<int16_t> position, float alpha) const {
     look_preview_.draw(position,
-                      false,
-                      Stance::Id::STAND1,
-                      Expression::Id::DEFAULT);
+                       false,
+                       Stance::Id::STAND1,
+                       Expression::Id::DEFAULT);
 }
 
 bool Char::update(const Physics &physics, float speed) {
@@ -174,9 +173,9 @@ void Char::show_damage(int32_t damage) {
     int16_t x = phobj_.get_x() - 10;
 
     damage_numbers_.emplace_back(DamageNumber::Type::TOPLAYER,
-                               damage,
-                               start_y,
-                               x);
+                                 damage,
+                                 start_y,
+                                 x);
 
     look_.set_alerted(5000);
     invincible_.set_for(2000);

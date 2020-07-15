@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIStatusBar.h"
 
 #include <nlnx/nx.hpp>
@@ -76,11 +73,11 @@ UIStatusBar::UIStatusBar(const CharStats &st) : stats_(st) {
     int16_t exp_max = VWIDTH_ - 16;
 
     exp_bar_ = Gauge(Gauge::Type::GAME,
-                   EXPBarRes.resolve("layer:gauge"),
-                   EXPBarRes.resolve("layer:cover"),
-                   EXPBar.resolve("layer:effect"),
-                   exp_max,
-                   0.0f);
+                     EXPBarRes.resolve("layer:gauge"),
+                     EXPBarRes.resolve("layer:cover"),
+                     EXPBar.resolve("layer:effect"),
+                     exp_max,
+                     0.0f);
 
     int16_t pos_adj = 0;
 
@@ -159,15 +156,15 @@ UIStatusBar::UIStatusBar(const CharStats &st) : stats_(st) {
     }
 
     hpmp_sprites_.emplace_back(status["backgrnd"],
-                              hpmp_pos_ - Point<int16_t>(1, 0));
+                               hpmp_pos_ - Point<int16_t>(1, 0));
     hpmp_sprites_.emplace_back(status["layer:cover"],
-                              hpmp_pos_ - Point<int16_t>(1, 0));
+                               hpmp_pos_ - Point<int16_t>(1, 0));
 
     if (VWIDTH_ == 800)
         hpmp_sprites_.emplace_back(status["layer:Lv"], hpmp_pos_);
     else
         hpmp_sprites_.emplace_back(status["layer:Lv"],
-                                  hpmp_pos_ - Point<int16_t>(1, 0));
+                                   hpmp_pos_ - Point<int16_t>(1, 0));
 
     int16_t hpmp_max = 139;
 
@@ -175,22 +172,22 @@ UIStatusBar::UIStatusBar(const CharStats &st) : stats_(st) {
         hpmp_max += 30;
 
     hp_bar_ = Gauge(Gauge::Type::GAME,
-                  status.resolve("gauge/hp/layer:0"),
-                  hpmp_max,
-                  0.0f);
+                    status.resolve("gauge/hp/layer:0"),
+                    hpmp_max,
+                    0.0f);
     mp_bar_ = Gauge(Gauge::Type::GAME,
-                  status.resolve("gauge/mp/layer:0"),
-                  hpmp_max,
-                  0.0f);
+                    status.resolve("gauge/mp/layer:0"),
+                    hpmp_max,
+                    0.0f);
 
     stat_set_ = Charset(EXPBar["number"], Charset::Alignment::RIGHT);
     hpmp_set_ = Charset(status["gauge"]["number"], Charset::Alignment::RIGHT);
     level_set_ = Charset(status["lvNumber"], Charset::Alignment::LEFT);
 
     name_label_ = OutlinedText(Text::Font::A13M,
-                             Text::Alignment::LEFT,
-                             Color::Name::GALLERY,
-                             Color::Name::TUNA);
+                               Text::Alignment::LEFT,
+                               Color::Name::GALLERY,
+                               Color::Name::TUNA);
 
     quickslot_[0] = quickSlot["backgrnd"];
     quickslot_[1] = quickSlot["layer:cover"];
@@ -309,7 +306,8 @@ UIStatusBar::UIStatusBar(const CharStats &st) : stats_(st) {
         std::make_unique<MapleButton>(submenu["menu"]["button:Fishing"],
                                       menu_pos_ + Point<int16_t>(3, 1));
     buttons_[Buttons::BT_MENU_HELP] =
-        std::make_unique<MapleButton>(submenu["menu"]["button:Help"], menu_pos_);
+        std::make_unique<MapleButton>(submenu["menu"]["button:Help"],
+                                      menu_pos_);
     buttons_[Buttons::BT_MENU_MEDAL] =
         std::make_unique<MapleButton>(submenu["menu"]["button:medal"],
                                       menu_pos_);
@@ -442,14 +440,14 @@ void UIStatusBar::draw(float alpha) const {
     std::string expstring = std::to_string(100 * getexppercent());
 
     stat_set_.draw(std::to_string(exp) + "["
-                     + expstring.substr(0, expstring.find('.') + 3) + "%]",
-                 position_ + statset_pos_);
+                       + expstring.substr(0, expstring.find('.') + 3) + "%]",
+                   position_ + statset_pos_);
 
     hpmp_set_.draw("[" + std::to_string(hp) + "/" + std::to_string(maxhp) + "]",
-                 position_ + hpset_pos_);
+                   position_ + hpset_pos_);
 
     hpmp_set_.draw("[" + std::to_string(mp) + "/" + std::to_string(maxmp) + "]",
-                 position_ + mpset_pos_);
+                   position_ + mpset_pos_);
 
     level_set_.draw(std::to_string(level), position_ + levelset_pos_);
 
@@ -461,9 +459,9 @@ void UIStatusBar::draw(float alpha) const {
 
     if (VWIDTH_ > 800 && VWIDTH_ < 1366) {
         quickslot_[0].draw(position_ + quickslot_pos_ + Point<int16_t>(-1, 0)
-                          + quickslot_adj_);
+                           + quickslot_adj_);
         quickslot_[1].draw(position_ + quickslot_pos_ + Point<int16_t>(-1, 0)
-                          + quickslot_adj_);
+                           + quickslot_adj_);
     } else {
         quickslot_[0].draw(position_ + quickslot_pos_ + quickslot_adj_);
         quickslot_[1].draw(position_ + quickslot_pos_ + quickslot_adj_);
@@ -517,8 +515,9 @@ void UIStatusBar::draw(float alpha) const {
 
     menu_background_[0].draw(position_ + pos + pos_adj);
     menu_background_[1].draw(DrawArgument(position_ + pos + pos_adj)
-                           + DrawArgument(mid_pos, Point<int16_t>(0, mid_y)));
-    menu_background_[2].draw(position_ + pos + pos_adj + Point<int16_t>(0, end_y));
+                             + DrawArgument(mid_pos, Point<int16_t>(0, mid_y)));
+    menu_background_[2].draw(position_ + pos + pos_adj
+                             + Point<int16_t>(0, end_y));
 
     menu_title_[menutitle_index].draw(position_ + pos + pos_adj);
 
@@ -783,8 +782,8 @@ bool UIStatusBar::is_in_range(Point<int16_t> cursorpos) const {
     Point<int16_t> pos;
     Rectangle<int16_t> bounds;
 
-    if (!character_active_ && !community_active_ && !event_active_ && !menu_active_
-        && !setting_active_) {
+    if (!character_active_ && !community_active_ && !event_active_
+        && !menu_active_ && !setting_active_) {
         pos = Point<int16_t>(position_x_, position_y_);
         bounds = Rectangle<int16_t>(pos, pos + dimension_);
     } else {
@@ -991,8 +990,8 @@ Point<int16_t> UIStatusBar::get_quickslot_pos() const {
 }
 
 bool UIStatusBar::is_menu_active() {
-    return menu_active_ || setting_active_ || community_active_ || character_active_
-           || event_active_;
+    return menu_active_ || setting_active_ || community_active_
+           || character_active_ || event_active_;
 }
 
 float UIStatusBar::getexppercent() const {

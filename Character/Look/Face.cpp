@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Face.h"
 
 #include <iostream>
@@ -35,11 +31,12 @@ Expression::Id Expression::byaction(size_t action) {
     return Expression::Id::DEFAULT;
 }
 
-const EnumMap<Expression::Id, std::string> Expression::names_
-    = { "default", "blink",      "hit",     "smile",   "troubled", "cry",
-        "angry",   "bewildered", "stunned", "blaze",   "bowing",   "cheers",
-        "chu",     "dam",        "despair", "glitter", "hot",      "hum",
-        "love",    "oops",       "pain",    "shine",   "vomit",    "wink" };
+const EnumMap<Expression::Id, std::string> Expression::names_ = {
+    "default", "blink",      "hit",     "smile",   "troubled", "cry",
+    "angry",   "bewildered", "stunned", "blaze",   "bowing",   "cheers",
+    "chu",     "dam",        "despair", "glitter", "hot",      "hum",
+    "love",    "oops",       "pain",    "shine",   "vomit",    "wink"
+};
 
 Face::Face(int32_t faceid) {
     std::string strid = "000" + std::to_string(faceid);
@@ -50,7 +47,7 @@ Face::Face(int32_t faceid) {
 
         if (exp == Expression::Id::DEFAULT) {
             expressions_[Expression::Id::DEFAULT].emplace(0,
-                                                         facenode["default"]);
+                                                          facenode["default"]);
         } else {
             const std::string &expname = iter.second;
             nl::node expnode = facenode[expname];
@@ -63,7 +60,7 @@ Face::Face(int32_t faceid) {
 
     // TODO: (rich) fix
     name_ = std::string(nl::nx::string["Eqp.img"]["Eqp"]["Face"]
-                                     [std::to_string(faceid)]["name"]);
+                                      [std::to_string(faceid)]["name"]);
 }
 
 void Face::draw(Expression::Id expression,

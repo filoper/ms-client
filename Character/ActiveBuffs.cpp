@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ActiveBuffs.h"
 
 namespace ms {
@@ -48,22 +45,22 @@ ActiveBuffs::ActiveBuffs() {
     buffs_[Buffstat::Id::MAPLE_WARRIOR] = std::make_unique<MapleWarriorBuff>();
     buffs_[Buffstat::Id::STANCE] = std::make_unique<StanceBuff>();
     buffs_[Buffstat::Id::BOOSTER] = std::make_unique<BoosterBuff>();
-    buffs_[Buffstat::Id::WATK]
-        = std::make_unique<SimpleStatBuff<EquipStat::Id::WATK>>();
-    buffs_[Buffstat::Id::WDEF]
-        = std::make_unique<SimpleStatBuff<EquipStat::Id::WDEF>>();
-    buffs_[Buffstat::Id::MATK]
-        = std::make_unique<SimpleStatBuff<EquipStat::Id::MAGIC>>();
-    buffs_[Buffstat::Id::MDEF]
-        = std::make_unique<SimpleStatBuff<EquipStat::Id::MDEF>>();
-    buffs_[Buffstat::Id::SPEED]
-        = std::make_unique<SimpleStatBuff<EquipStat::Id::SPEED>>();
-    buffs_[Buffstat::Id::JUMP]
-        = std::make_unique<SimpleStatBuff<EquipStat::Id::JUMP>>();
-    buffs_[Buffstat::Id::HYPERBODYHP]
-        = std::make_unique<PercentageStatBuff<EquipStat::Id::HP>>();
-    buffs_[Buffstat::Id::HYPERBODYMP]
-        = std::make_unique<PercentageStatBuff<EquipStat::Id::MP>>();
+    buffs_[Buffstat::Id::WATK] =
+        std::make_unique<SimpleStatBuff<EquipStat::Id::WATK>>();
+    buffs_[Buffstat::Id::WDEF] =
+        std::make_unique<SimpleStatBuff<EquipStat::Id::WDEF>>();
+    buffs_[Buffstat::Id::MATK] =
+        std::make_unique<SimpleStatBuff<EquipStat::Id::MAGIC>>();
+    buffs_[Buffstat::Id::MDEF] =
+        std::make_unique<SimpleStatBuff<EquipStat::Id::MDEF>>();
+    buffs_[Buffstat::Id::SPEED] =
+        std::make_unique<SimpleStatBuff<EquipStat::Id::SPEED>>();
+    buffs_[Buffstat::Id::JUMP] =
+        std::make_unique<SimpleStatBuff<EquipStat::Id::JUMP>>();
+    buffs_[Buffstat::Id::HYPERBODYHP] =
+        std::make_unique<PercentageStatBuff<EquipStat::Id::HP>>();
+    buffs_[Buffstat::Id::HYPERBODYMP] =
+        std::make_unique<PercentageStatBuff<EquipStat::Id::MP>>();
 }
 
 void ActiveBuffs::apply_buff(CharStats &stats,

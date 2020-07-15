@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIExplorerCreation.h"
 
 #include <nlnx/nx.hpp>
@@ -39,9 +36,9 @@ UIExplorerCreation::UIExplorerCreation() :
 
     std::string version_text = Configuration::get().get_version();
     version_ = Text(Text::Font::A11M,
-                   Text::Alignment::LEFT,
-                   Color::Name::LEMONGRASS,
-                   "Ver. " + version_text);
+                    Text::Alignment::LEFT,
+                    Color::Name::LEMONGRASS,
+                    "Ver. " + version_text);
 
     nl::node Login = nl::nx::ui["Login.img"];
     nl::node Common = Login["Common"];
@@ -57,15 +54,15 @@ UIExplorerCreation::UIExplorerCreation() :
 
     sprites_.emplace_back(back["14"], Point<int16_t>(250, 302));
     sprites_.emplace_back(signboard["2"],
-                         DrawArgument(Point<int16_t>(234, 235), 2.0f));
+                          DrawArgument(Point<int16_t>(234, 235), 2.0f));
     sprites_gender_select_.emplace_back(board["genderTop"],
-                                       Point<int16_t>(486, 95));
+                                        Point<int16_t>(486, 95));
     sprites_gender_select_.emplace_back(board["boardMid"],
-                                       Point<int16_t>(486, 209));
+                                        Point<int16_t>(486, 209));
     sprites_gender_select_.emplace_back(board["boardBottom"],
-                                       Point<int16_t>(486, 329));
+                                        Point<int16_t>(486, 329));
     sprites_lookboard_.emplace_back(CustomizeChar["charSet"],
-                                   Point<int16_t>(486, 95));
+                                    Point<int16_t>(486, 95));
 
     for (size_t i = 0; i <= 5; i++) {
         size_t f = i;
@@ -74,7 +71,7 @@ UIExplorerCreation::UIExplorerCreation() :
             f++;
 
         sprites_lookboard_.emplace_back(CustomizeChar["avatarSel"][i]["normal"],
-                                       Point<int16_t>(497, 197 + (f * 18)));
+                                        Point<int16_t>(497, 197 + (f * 18)));
     }
 
     buttons_[Buttons::BT_CHARC_GENDER_M] =
@@ -403,7 +400,8 @@ void UIExplorerCreation::send_naming_result(bool nameused) {
             auto onok = [&]() {
                 namechar_.set_state(Textfield::State::FOCUSED);
 
-                buttons_[Buttons::BT_CHARC_OK]->set_state(Button::State::NORMAL);
+                buttons_[Buttons::BT_CHARC_OK]->set_state(
+                    Button::State::NORMAL);
                 buttons_[Buttons::BT_CHARC_CANCEL]->set_state(
                     Button::State::NORMAL);
             };
@@ -630,14 +628,14 @@ Button::State UIExplorerCreation::button_pressed(uint16_t buttonid) {
         case Buttons::BT_CHARC_HAIRL:
             hair_ = (hair_ > 0) ? hair_ - 1 : hairs_[female_].size() - 1;
             newchar_.set_hair(hairs_[female_][hair_]
-                             + haircolors_[female_][haircolor_]);
+                              + haircolors_[female_][haircolor_]);
             hairname_.change_text(newchar_.get_hair()->get_name());
 
             return Button::State::NORMAL;
         case Buttons::BT_CHARC_HAIRR:
             hair_ = (hair_ < hairs_[female_].size() - 1) ? hair_ + 1 : 0;
             newchar_.set_hair(hairs_[female_][hair_]
-                             + haircolors_[female_][haircolor_]);
+                              + haircolors_[female_][haircolor_]);
             hairname_.change_text(newchar_.get_hair()->get_name());
 
             return Button::State::NORMAL;
@@ -651,10 +649,10 @@ Button::State UIExplorerCreation::button_pressed(uint16_t buttonid) {
         case Buttons::BT_CHARC_HAIRC7:
             // TODO: These need to be changed so when you click the color it
             // only assigns the color, not the next in the series
-            haircolor_ =
-                (haircolor_ > 0) ? haircolor_ - 1 : haircolors_[female_].size() - 1;
+            haircolor_ = (haircolor_ > 0) ? haircolor_ - 1
+                                          : haircolors_[female_].size() - 1;
             newchar_.set_hair(hairs_[female_][hair_]
-                             + haircolors_[female_][haircolor_]);
+                              + haircolors_[female_][haircolor_]);
 
             return Button::State::NORMAL;
         case Buttons::BT_CHARC_SKINL:
@@ -704,13 +702,15 @@ Button::State UIExplorerCreation::button_pressed(uint16_t buttonid) {
 
             return Button::State::NORMAL;
         case Buttons::BT_CHARC_WEPL:
-            weapon_ = (weapon_ > 0) ? weapon_ - 1 : weapons_[female_].size() - 1;
+            weapon_ =
+                (weapon_ > 0) ? weapon_ - 1 : weapons_[female_].size() - 1;
             newchar_.add_equip(weapons_[female_][weapon_]);
             wepname_.change_text(get_equipname(EquipSlot::Id::WEAPON));
 
             return Button::State::NORMAL;
         case Buttons::BT_CHARC_WEPR:
-            weapon_ = (weapon_ < weapons_[female_].size() - 1) ? weapon_ + 1 : 0;
+            weapon_ =
+                (weapon_ < weapons_[female_].size() - 1) ? weapon_ + 1 : 0;
             newchar_.add_equip(weapons_[female_][weapon_]);
             wepname_.change_text(get_equipname(EquipSlot::Id::WEAPON));
 
@@ -746,7 +746,8 @@ void UIExplorerCreation::randomize_look() {
 
     newchar_.set_body(skins_[female_][skin_]);
     newchar_.set_face(faces_[female_][face_]);
-    newchar_.set_hair(hairs_[female_][hair_] + haircolors_[female_][haircolor_]);
+    newchar_.set_hair(hairs_[female_][hair_]
+                      + haircolors_[female_][haircolor_]);
     newchar_.add_equip(tops_[female_][top_]);
     newchar_.add_equip(bots_[female_][bot_]);
     newchar_.add_equip(shoes_[female_][shoe_]);

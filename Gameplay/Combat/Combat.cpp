@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Combat.h"
 
 #include "../../Character/SkillId.h"
@@ -238,10 +235,10 @@ void Combat::apply_damage_effect(const DamageEffect &effect) {
 
     const SpecialMove &move = get_move(effect.move_id);
     mobs_.apply_damage(effect.target_oid,
-                      effect.damage,
-                      effect.toleft,
-                      effect.user,
-                      move);
+                       effect.damage,
+                       effect.toleft,
+                       effect.user,
+                       move);
 }
 
 void Combat::push_attack(const AttackResult &attack) {
@@ -298,9 +295,9 @@ void Combat::extract_effects(const Char &user,
                     };
 
                     bullet_effects_.emplace(user.get_attackdelay(i),
-                                          std::move(effect),
-                                          bullet,
-                                          head);
+                                            std::move(effect),
+                                            bullet,
+                                            head);
                     i++;
                 }
             }
@@ -314,9 +311,9 @@ void Combat::extract_effects(const Char &user,
             for (uint8_t i = 0; i < result.hitcount; i++) {
                 DamageEffect effect { attackuser, {}, 0, false, 0, 0 };
                 bullet_effects_.emplace(user.get_attackdelay(i),
-                                      std::move(effect),
-                                      bullet,
-                                      target);
+                                        std::move(effect),
+                                        bullet,
+                                        target);
             }
         }
     } else {
@@ -331,12 +328,12 @@ void Combat::extract_effects(const Char &user,
 
                 for (auto &number : numbers) {
                     damage_effects_.emplace(user.get_attackdelay(i),
-                                          attackuser,
-                                          number,
-                                          line.second[i].first,
-                                          result.toleft,
-                                          oid,
-                                          move.get_id());
+                                            attackuser,
+                                            number,
+                                            line.second[i].first,
+                                            result.toleft,
+                                            oid,
+                                            move.get_id());
 
                     i++;
                 }

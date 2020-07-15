@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIEquipInventory.h"
 
 #include <nlnx/nx.hpp>
@@ -162,7 +159,8 @@ void UIEquipInventory::draw(float alpha) const {
 
     if (tab_ == Buttons::BT_TAB0) {
         if (!has_pendant_slot_)
-            disabled_.draw(position_ + icon_positions_[EquipSlot::Id::PENDANT2]);
+            disabled_.draw(position_
+                           + icon_positions_[EquipSlot::Id::PENDANT2]);
 
         if (!has_pocket_slot_)
             disabled_.draw(position_ + icon_positions_[EquipSlot::Id::POCKET]);
@@ -197,8 +195,8 @@ void UIEquipInventory::update_slot(EquipSlot::Id slot) {
         const Texture &texture = ItemData::get(item_id).get_icon(false);
 
         icons_[slot] = std::make_unique<Icon>(std::make_unique<EquipIcon>(slot),
-                                             texture,
-                                             -1);
+                                              texture,
+                                              -1);
     } else if (icons_[slot]) {
         icons_[slot].release();
     }
@@ -326,9 +324,9 @@ EquipSlot::Id UIEquipInventory::slot_by_position(
         return EquipSlot::Id::NONE;
 
     for (auto iter : icon_positions_) {
-        Rectangle<int16_t> iconrect =
-            Rectangle<int16_t>(position_ + iter.second,
-                               position_ + iter.second + Point<int16_t>(32, 32));
+        Rectangle<int16_t> iconrect = Rectangle<int16_t>(
+            position_ + iter.second,
+            position_ + iter.second + Point<int16_t>(32, 32));
 
         if (iconrect.contains(cursorpos))
             return iter.first;

@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "CharLook.h"
 
 #include "../../Data/WeaponData.h"
@@ -63,47 +59,47 @@ void CharLook::draw(const DrawArgument &args,
                     uint8_t interframe,
                     uint8_t interexpframe) const {
     Point<int16_t> faceshift = draw_info_.getfacepos(interstance, interframe);
-    DrawArgument faceargs
-        = args + DrawArgument { faceshift, false, Point<int16_t> {} };
+    DrawArgument faceargs =
+        args + DrawArgument { faceshift, false, Point<int16_t> {} };
 
     if (Stance::is_climbing(interstance)) {
         body_->draw(interstance, Body::Layer::BODY, interframe, args);
         equips_.draw(EquipSlot::Id::GLOVES,
-                    interstance,
-                    Clothing::Layer::GLOVE,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::GLOVE,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::SHOES,
-                    interstance,
-                    Clothing::Layer::SHOES,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::SHOES,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::BOTTOM,
-                    interstance,
-                    Clothing::Layer::PANTS,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::PANTS,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::TOP,
-                    interstance,
-                    Clothing::Layer::TOP,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::TOP,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::TOP,
-                    interstance,
-                    Clothing::Layer::MAIL,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::MAIL,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::CAPE,
-                    interstance,
-                    Clothing::Layer::CAPE,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::CAPE,
+                     interframe,
+                     args);
         body_->draw(interstance, Body::Layer::HEAD, interframe, args);
         equips_.draw(EquipSlot::Id::EARACC,
-                    interstance,
-                    Clothing::Layer::EARRINGS,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::EARRINGS,
+                     interframe,
+                     args);
 
         switch (equips_.getcaptype()) {
             case CharEquips::CapType::NONE:
@@ -111,261 +107,267 @@ void CharLook::draw(const DrawArgument &args,
                 break;
             case CharEquips::CapType::HEADBAND:
                 equips_.draw(EquipSlot::Id::HAT,
-                            interstance,
-                            Clothing::Layer::CAP,
-                            interframe,
-                            args);
+                             interstance,
+                             Clothing::Layer::CAP,
+                             interframe,
+                             args);
                 hair_->draw(interstance, Hair::Layer::BACK, interframe, args);
                 break;
             case CharEquips::CapType::HALFCOVER:
                 hair_->draw(interstance,
-                           Hair::Layer::BELOWCAP,
-                           interframe,
-                           args);
-                equips_.draw(EquipSlot::Id::HAT,
-                            interstance,
-                            Clothing::Layer::CAP,
+                            Hair::Layer::BELOWCAP,
                             interframe,
                             args);
+                equips_.draw(EquipSlot::Id::HAT,
+                             interstance,
+                             Clothing::Layer::CAP,
+                             interframe,
+                             args);
                 break;
             case CharEquips::CapType::FULLCOVER:
                 equips_.draw(EquipSlot::Id::HAT,
-                            interstance,
-                            Clothing::Layer::CAP,
-                            interframe,
-                            args);
+                             interstance,
+                             Clothing::Layer::CAP,
+                             interframe,
+                             args);
                 break;
         }
 
         equips_.draw(EquipSlot::Id::SHIELD,
-                    interstance,
-                    Clothing::Layer::BACKSHIELD,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::BACKSHIELD,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::WEAPON,
-                    interstance,
-                    Clothing::Layer::BACKWEAPON,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::BACKWEAPON,
+                     interframe,
+                     args);
     } else {
         hair_->draw(interstance, Hair::Layer::BELOWBODY, interframe, args);
         equips_.draw(EquipSlot::Id::CAPE,
-                    interstance,
-                    Clothing::Layer::CAPE,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::CAPE,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::SHIELD,
-                    interstance,
-                    Clothing::Layer::SHIELD_BELOW_BODY,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::SHIELD_BELOW_BODY,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::WEAPON,
-                    interstance,
-                    Clothing::Layer::WEAPON_BELOW_BODY,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::WEAPON_BELOW_BODY,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::HAT,
-                    interstance,
-                    Clothing::Layer::CAP_BELOW_BODY,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::CAP_BELOW_BODY,
+                     interframe,
+                     args);
         body_->draw(interstance, Body::Layer::BODY, interframe, args);
         equips_.draw(EquipSlot::Id::GLOVES,
-                    interstance,
-                    Clothing::Layer::WRIST_OVER_BODY,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::WRIST_OVER_BODY,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::GLOVES,
-                    interstance,
-                    Clothing::Layer::GLOVE_OVER_BODY,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::GLOVE_OVER_BODY,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::SHOES,
-                    interstance,
-                    Clothing::Layer::SHOES,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::SHOES,
+                     interframe,
+                     args);
         body_->draw(interstance, Body::Layer::ARM_BELOW_HEAD, interframe, args);
 
         if (equips_.has_overall()) {
             equips_.draw(EquipSlot::Id::TOP,
-                        interstance,
-                        Clothing::Layer::MAIL,
-                        interframe,
-                        args);
+                         interstance,
+                         Clothing::Layer::MAIL,
+                         interframe,
+                         args);
         } else {
             equips_.draw(EquipSlot::Id::BOTTOM,
-                        interstance,
-                        Clothing::Layer::PANTS,
-                        interframe,
-                        args);
+                         interstance,
+                         Clothing::Layer::PANTS,
+                         interframe,
+                         args);
             equips_.draw(EquipSlot::Id::TOP,
-                        interstance,
-                        Clothing::Layer::TOP,
-                        interframe,
-                        args);
+                         interstance,
+                         Clothing::Layer::TOP,
+                         interframe,
+                         args);
         }
 
         body_->draw(interstance,
-                   Body::Layer::ARM_BELOW_HEAD_OVER_MAIL,
-                   interframe,
-                   args);
+                    Body::Layer::ARM_BELOW_HEAD_OVER_MAIL,
+                    interframe,
+                    args);
         hair_->draw(interstance, Hair::Layer::DEFAULT, interframe, args);
         equips_.draw(EquipSlot::Id::SHIELD,
-                    interstance,
-                    Clothing::Layer::SHIELD_OVER_HAIR,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::SHIELD_OVER_HAIR,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::EARACC,
-                    interstance,
-                    Clothing::Layer::EARRINGS,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::EARRINGS,
+                     interframe,
+                     args);
         body_->draw(interstance, Body::Layer::HEAD, interframe, args);
         hair_->draw(interstance, Hair::Layer::SHADE, interframe, args);
         face_->draw(interexpression, interexpframe, faceargs);
         equips_.draw(EquipSlot::Id::FACE,
-                    interstance,
-                    Clothing::Layer::FACEACC,
-                    0,
-                    faceargs);
+                     interstance,
+                     Clothing::Layer::FACEACC,
+                     0,
+                     faceargs);
         equips_.draw(EquipSlot::Id::EYEACC,
-                    interstance,
-                    Clothing::Layer::EYEACC,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::EYEACC,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::SHIELD,
-                    interstance,
-                    Clothing::Layer::SHIELD,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::SHIELD,
+                     interframe,
+                     args);
 
         switch (equips_.getcaptype()) {
             case CharEquips::CapType::NONE:
                 hair_->draw(interstance,
-                           Hair::Layer::OVERHEAD,
-                           interframe,
-                           args);
+                            Hair::Layer::OVERHEAD,
+                            interframe,
+                            args);
                 break;
             case CharEquips::CapType::HEADBAND:
                 equips_.draw(EquipSlot::Id::HAT,
-                            interstance,
-                            Clothing::Layer::CAP,
-                            interframe,
-                            args);
-                hair_->draw(interstance, Hair::Layer::DEFAULT, interframe, args);
+                             interstance,
+                             Clothing::Layer::CAP,
+                             interframe,
+                             args);
                 hair_->draw(interstance,
-                           Hair::Layer::OVERHEAD,
-                           interframe,
-                           args);
-                equips_.draw(EquipSlot::Id::HAT,
-                            interstance,
-                            Clothing::Layer::CAP_OVER_HAIR,
+                            Hair::Layer::DEFAULT,
                             interframe,
                             args);
+                hair_->draw(interstance,
+                            Hair::Layer::OVERHEAD,
+                            interframe,
+                            args);
+                equips_.draw(EquipSlot::Id::HAT,
+                             interstance,
+                             Clothing::Layer::CAP_OVER_HAIR,
+                             interframe,
+                             args);
                 break;
             case CharEquips::CapType::HALFCOVER:
-                hair_->draw(interstance, Hair::Layer::DEFAULT, interframe, args);
-                equips_.draw(EquipSlot::Id::HAT,
-                            interstance,
-                            Clothing::Layer::CAP,
+                hair_->draw(interstance,
+                            Hair::Layer::DEFAULT,
                             interframe,
                             args);
+                equips_.draw(EquipSlot::Id::HAT,
+                             interstance,
+                             Clothing::Layer::CAP,
+                             interframe,
+                             args);
                 break;
             case CharEquips::CapType::FULLCOVER:
                 equips_.draw(EquipSlot::Id::HAT,
-                            interstance,
-                            Clothing::Layer::CAP,
-                            interframe,
-                            args);
+                             interstance,
+                             Clothing::Layer::CAP,
+                             interframe,
+                             args);
                 break;
         }
 
         equips_.draw(EquipSlot::Id::WEAPON,
-                    interstance,
-                    Clothing::Layer::WEAPON_BELOW_ARM,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::WEAPON_BELOW_ARM,
+                     interframe,
+                     args);
         bool twohanded = is_twohanded(interstance);
 
         if (twohanded) {
             equips_.draw(EquipSlot::Id::TOP,
-                        interstance,
-                        Clothing::Layer::MAILARM,
-                        interframe,
-                        args);
+                         interstance,
+                         Clothing::Layer::MAILARM,
+                         interframe,
+                         args);
             body_->draw(interstance, Body::Layer::ARM, interframe, args);
             equips_.draw(EquipSlot::Id::WEAPON,
-                        interstance,
-                        Clothing::Layer::WEAPON,
-                        interframe,
-                        args);
+                         interstance,
+                         Clothing::Layer::WEAPON,
+                         interframe,
+                         args);
         } else {
             equips_.draw(EquipSlot::Id::WEAPON,
-                        interstance,
-                        Clothing::Layer::WEAPON,
-                        interframe,
-                        args);
+                         interstance,
+                         Clothing::Layer::WEAPON,
+                         interframe,
+                         args);
             body_->draw(interstance, Body::Layer::ARM, interframe, args);
             equips_.draw(EquipSlot::Id::TOP,
-                        interstance,
-                        Clothing::Layer::MAILARM,
-                        interframe,
-                        args);
+                         interstance,
+                         Clothing::Layer::MAILARM,
+                         interframe,
+                         args);
         }
 
         equips_.draw(EquipSlot::Id::GLOVES,
-                    interstance,
-                    Clothing::Layer::WRIST,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::WRIST,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::GLOVES,
-                    interstance,
-                    Clothing::Layer::GLOVE,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::GLOVE,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::WEAPON,
-                    interstance,
-                    Clothing::Layer::WEAPON_OVER_GLOVE,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::WEAPON_OVER_GLOVE,
+                     interframe,
+                     args);
 
         body_->draw(interstance,
-                   Body::Layer::HAND_BELOW_WEAPON,
-                   interframe,
-                   args);
+                    Body::Layer::HAND_BELOW_WEAPON,
+                    interframe,
+                    args);
 
         body_->draw(interstance, Body::Layer::ARM_OVER_HAIR, interframe, args);
         body_->draw(interstance,
-                   Body::Layer::ARM_OVER_HAIR_BELOW_WEAPON,
-                   interframe,
-                   args);
-        equips_.draw(EquipSlot::Id::WEAPON,
-                    interstance,
-                    Clothing::Layer::WEAPON_OVER_HAND,
+                    Body::Layer::ARM_OVER_HAIR_BELOW_WEAPON,
                     interframe,
                     args);
         equips_.draw(EquipSlot::Id::WEAPON,
-                    interstance,
-                    Clothing::Layer::WEAPON_OVER_BODY,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::WEAPON_OVER_HAND,
+                     interframe,
+                     args);
+        equips_.draw(EquipSlot::Id::WEAPON,
+                     interstance,
+                     Clothing::Layer::WEAPON_OVER_BODY,
+                     interframe,
+                     args);
         body_->draw(interstance, Body::Layer::HAND_OVER_HAIR, interframe, args);
         body_->draw(interstance,
-                   Body::Layer::HAND_OVER_WEAPON,
-                   interframe,
-                   args);
+                    Body::Layer::HAND_OVER_WEAPON,
+                    interframe,
+                    args);
 
         equips_.draw(EquipSlot::Id::GLOVES,
-                    interstance,
-                    Clothing::Layer::WRIST_OVER_HAIR,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::WRIST_OVER_HAIR,
+                     interframe,
+                     args);
         equips_.draw(EquipSlot::Id::GLOVES,
-                    interstance,
-                    Clothing::Layer::GLOVE_OVER_HAIR,
-                    interframe,
-                    args);
+                     interstance,
+                     Clothing::Layer::GLOVE_OVER_HAIR,
+                     interframe,
+                     args);
     }
 }
 
@@ -475,8 +477,8 @@ bool CharLook::update(uint16_t timestep) {
     if (timestep >= expdelta) {
         exp_elapsed_ = timestep - expdelta;
 
-        uint8_t nextexpframe
-            = face_->nextframe(expression_.get(), exp_frame_.get());
+        uint8_t nextexpframe =
+            face_->nextframe(expression_.get(), exp_frame_.get());
         float fcthreshold = static_cast<float>(expdelta) / timestep;
         exp_frame_.next(nextexpframe, fcthreshold);
 
@@ -624,31 +626,31 @@ Stance::Id CharLook::getattackstance(uint8_t attack, bool degenerate) const {
                             { Stance::Id::NONE },
                             { Stance::Id::SWINGP1, Stance::Id::STABT2 } } };
 
-    static const std::array<std::vector<Stance::Id>, NUM_ATTACKS> attack_stances
-        = { { { Stance::Id::NONE },
-              { Stance::Id::STABO1,
-                Stance::Id::STABO2,
-                Stance::Id::SWINGO1,
-                Stance::Id::SWINGO2,
-                Stance::Id::SWINGO3 },
-              { Stance::Id::STABT1, Stance::Id::SWINGP1 },
-              { Stance::Id::SHOOT1 },
-              { Stance::Id::SHOOT2 },
-              { Stance::Id::STABO1,
-                Stance::Id::STABO2,
-                Stance::Id::SWINGT1,
-                Stance::Id::SWINGT2,
-                Stance::Id::SWINGT3 },
-              { Stance::Id::SWINGO1, Stance::Id::SWINGO2 },
-              { Stance::Id::SWINGO1, Stance::Id::SWINGO2 },
-              { Stance::Id::NONE },
-              { Stance::Id::SHOT } } };
+    static const std::array<std::vector<Stance::Id>, NUM_ATTACKS>
+        attack_stances = { { { Stance::Id::NONE },
+                             { Stance::Id::STABO1,
+                               Stance::Id::STABO2,
+                               Stance::Id::SWINGO1,
+                               Stance::Id::SWINGO2,
+                               Stance::Id::SWINGO3 },
+                             { Stance::Id::STABT1, Stance::Id::SWINGP1 },
+                             { Stance::Id::SHOOT1 },
+                             { Stance::Id::SHOOT2 },
+                             { Stance::Id::STABO1,
+                               Stance::Id::STABO2,
+                               Stance::Id::SWINGT1,
+                               Stance::Id::SWINGT2,
+                               Stance::Id::SWINGT3 },
+                             { Stance::Id::SWINGO1, Stance::Id::SWINGO2 },
+                             { Stance::Id::SWINGO1, Stance::Id::SWINGO2 },
+                             { Stance::Id::NONE },
+                             { Stance::Id::SHOT } } };
 
     if (attack <= Attack::NONE || attack >= Attack::NUM_ATTACKS)
         return Stance::Id::STAND1;
 
-    const auto &stances
-        = degenerate ? degen_stances[attack] : attack_stances[attack];
+    const auto &stances =
+        degenerate ? degen_stances[attack] : attack_stances[attack];
 
     if (stances.empty())
         return Stance::Id::STAND1;

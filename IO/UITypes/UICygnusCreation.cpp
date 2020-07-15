@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UICygnusCreation.h"
 
 #include <nlnx/nx.hpp>
@@ -39,9 +36,9 @@ UICygnusCreation::UICygnusCreation() :
 
     std::string version_text = Configuration::get().get_version();
     version_ = Text(Text::Font::A11M,
-                   Text::Alignment::LEFT,
-                   Color::Name::LEMONGRASS,
-                   "Ver. " + version_text);
+                    Text::Alignment::LEFT,
+                    Color::Name::LEMONGRASS,
+                    "Ver. " + version_text);
 
     nl::node Login = nl::nx::ui["Login.img"];
     nl::node Common = Login["Common"];
@@ -57,17 +54,19 @@ UICygnusCreation::UICygnusCreation() :
 
     sprites_.emplace_back(back["46"], Point<int16_t>(400, 300));
     sprites_.emplace_back(signboard["2"],
-                         DrawArgument(Point<int16_t>(212, 217), 2.0f));
+                          DrawArgument(Point<int16_t>(212, 217), 2.0f));
     sprites_gender_select_.emplace_back(board["genderTop"],
-                                       Point<int16_t>(423, 104));
+                                        Point<int16_t>(423, 104));
     sprites_gender_select_.emplace_back(board["boardMid"],
-                                       Point<int16_t>(423, 222));
+                                        Point<int16_t>(423, 222));
     sprites_gender_select_.emplace_back(board["boardBottom"],
-                                       Point<int16_t>(423, 348));
-    sprites_lookboard_.emplace_back(board["avatarTop"], Point<int16_t>(415, 89));
-    sprites_lookboard_.emplace_back(board["boardMid"], Point<int16_t>(415, 207));
+                                        Point<int16_t>(423, 348));
+    sprites_lookboard_.emplace_back(board["avatarTop"],
+                                    Point<int16_t>(415, 89));
+    sprites_lookboard_.emplace_back(board["boardMid"],
+                                    Point<int16_t>(415, 207));
     sprites_lookboard_.emplace_back(board["boardBottom"],
-                                   Point<int16_t>(415, 351));
+                                    Point<int16_t>(415, 351));
 
     for (size_t i = 0; i <= 6; i++) {
         int16_t y = 0;
@@ -76,7 +75,7 @@ UICygnusCreation::UICygnusCreation() :
             y = 2;
 
         sprites_lookboard_.emplace_back(CustomizeChar["avatarSel"][i]["normal"],
-                                       Point<int16_t>(416, 98 + y));
+                                        Point<int16_t>(416, 98 + y));
     }
 
     buttons_[Buttons::BT_CHARC_GENDER_M] =
@@ -386,7 +385,8 @@ void UICygnusCreation::send_naming_result(bool nameused) {
             auto onok = [&]() {
                 namechar_.set_state(Textfield::State::FOCUSED);
 
-                buttons_[Buttons::BT_CHARC_OK]->set_state(Button::State::NORMAL);
+                buttons_[Buttons::BT_CHARC_OK]->set_state(
+                    Button::State::NORMAL);
                 buttons_[Buttons::BT_CHARC_CANCEL]->set_state(
                     Button::State::NORMAL);
             };
@@ -576,10 +576,10 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
         case Buttons::BT_CHARC_HAIRC7:
             // TODO: These need to be changed so when you click the color it
             // only assigns the color, not the next in the series.
-            haircolor_ =
-                (haircolor_ > 0) ? haircolor_ - 1 : haircolors_[female_].size() - 1;
+            haircolor_ = (haircolor_ > 0) ? haircolor_ - 1
+                                          : haircolors_[female_].size() - 1;
             newchar_.set_hair(hairs_[female_][hair_]
-                             + haircolors_[female_][haircolor_]);
+                              + haircolors_[female_][haircolor_]);
 
             return Button::State::NORMAL;
         case Buttons::BT_CHARC_SKINL:
@@ -595,13 +595,15 @@ Button::State UICygnusCreation::button_pressed(uint16_t buttonid) {
 
             return Button::State::NORMAL;
         case Buttons::BT_CHARC_WEPL:
-            weapon_ = (weapon_ > 0) ? weapon_ - 1 : weapons_[female_].size() - 1;
+            weapon_ =
+                (weapon_ > 0) ? weapon_ - 1 : weapons_[female_].size() - 1;
             newchar_.add_equip(weapons_[female_][weapon_]);
             wepname_.change_text(get_equipname(EquipSlot::Id::WEAPON));
 
             return Button::State::NORMAL;
         case Buttons::BT_CHARC_WEPR:
-            weapon_ = (weapon_ < weapons_[female_].size() - 1) ? weapon_ + 1 : 0;
+            weapon_ =
+                (weapon_ < weapons_[female_].size() - 1) ? weapon_ + 1 : 0;
             newchar_.add_equip(weapons_[female_][weapon_]);
             wepname_.change_text(get_equipname(EquipSlot::Id::WEAPON));
 
@@ -637,7 +639,8 @@ void UICygnusCreation::randomize_look() {
 
     newchar_.set_body(skins_[female_][skin_]);
     newchar_.set_face(faces_[female_][face_]);
-    newchar_.set_hair(hairs_[female_][hair_] + haircolors_[female_][haircolor_]);
+    newchar_.set_hair(hairs_[female_][hair_]
+                      + haircolors_[female_][haircolor_]);
     newchar_.add_equip(tops_[female_][top_]);
     newchar_.add_equip(bots_[female_][bot_]);
     newchar_.add_equip(shoes_[female_][shoe_]);

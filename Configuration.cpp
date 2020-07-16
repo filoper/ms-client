@@ -203,12 +203,12 @@ std::string Configuration::get_chargenx() const {
     return CHARGENX;
 }
 
-void Configuration::set_macs(char *macs) {
-    MACS = macs;
+void Configuration::set_macs(std::string macs) {
+    MACS = std::move(macs);
 }
 
-void Configuration::set_hwid(char *hwid, char *volumeSerialNumber) {
-    VolumeSerialNumber = volumeSerialNumber;
+void Configuration::set_hwid(std::string hwid, std::string volumeSerialNumber) {
+    VolumeSerialNumber = std::move(volumeSerialNumber);
 
     std::string newHWID;
 

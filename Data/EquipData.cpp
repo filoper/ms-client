@@ -15,7 +15,9 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "EquipData.h"
 
+#include <array>
 #include <nlnx/nx.hpp>
+#include <string>
 
 namespace ms {
 EquipData::EquipData(int32_t id) : item_data_(ItemData::get(id)) {
@@ -55,7 +57,7 @@ EquipData::EquipData(int32_t id) : item_data_(ItemData::get(id)) {
     size_t index = (id / 10000) - 100;
 
     if (index < NON_WEAPON_TYPES) {
-        constexpr char *types[NON_WEAPON_TYPES] = {
+        const std::array<std::string, NON_WEAPON_TYPES> types = {
             "HAT",     "FACE ACCESSORY", "EYE ACCESSORY", "EARRINGS", "TOP",
             "OVERALL", "BOTTOM",         "SHOES",         "GLOVES",   "SHIELD",
             "CAPE",    "RING",           "PENDANT",       "BELT",     "MEDAL"
@@ -75,26 +77,28 @@ EquipData::EquipData(int32_t id) : item_data_(ItemData::get(id)) {
         type_ = types[index];
         eq_slot_ = equipslots[index];
     } else if (index >= WEAPON_OFFSET && index < WEAPON_OFFSET + WEAPON_TYPES) {
-        constexpr char *types[WEAPON_TYPES] = { "ONE-HANDED SWORD",
-                                                "ONE-HANDED AXE",
-                                                "ONE-HANDED MACE",
-                                                "DAGGER",
-                                                "",
-                                                "",
-                                                "",
-                                                "WAND",
-                                                "STAFF",
-                                                "",
-                                                "TWO-HANDED SWORD",
-                                                "TWO-HANDED AXE",
-                                                "TWO-HANDED MACE",
-                                                "SPEAR",
-                                                "POLEARM",
-                                                "BOW",
-                                                "CROSSBOW",
-                                                "CLAW",
-                                                "KNUCKLE",
-                                                "GUN" };
+        const std::array<std::string, WEAPON_TYPES> types = {
+            "ONE-HANDED SWORD",
+            "ONE-HANDED AXE",
+            "ONE-HANDED MACE",
+            "DAGGER",
+            "",
+            "",
+            "",
+            "WAND",
+            "STAFF",
+            "",
+            "TWO-HANDED SWORD",
+            "TWO-HANDED AXE",
+            "TWO-HANDED MACE",
+            "SPEAR",
+            "POLEARM",
+            "BOW",
+            "CROSSBOW",
+            "CLAW",
+            "KNUCKLE",
+            "GUN"
+        };
 
         size_t weaponindex = index - WEAPON_OFFSET;
         type_ = types[weaponindex];

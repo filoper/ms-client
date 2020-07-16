@@ -15,7 +15,9 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Body.h"
 
+#include <array>
 #include <nlnx/nx.hpp>
+#include <string>
 
 #include "../../Util/Misc.h"
 
@@ -76,15 +78,13 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
         }
     }
 
-    constexpr size_t NUM_SKINTYPES = 12;
-
-    constexpr char *skintypes[NUM_SKINTYPES] = { "Light", "Tan",  "Dark",
-                                                 "Pale",  "Blue", "Green",
-                                                 "",      "",     "",
-                                                 "Grey",  "Pink", "Red" };
+    const std::array<std::string, 12> skintypes = { "Light", "Tan",  "Dark",
+                                                    "Pale",  "Blue", "Green",
+                                                    "",      "",     "",
+                                                    "Grey",  "Pink", "Red" };
 
     size_t index = skin;
-    name_ = (index < NUM_SKINTYPES) ? skintypes[index] : "";
+    name_ = (index < skintypes.size()) ? skintypes[index] : "";
 }
 
 void Body::draw(Stance::Id stance,

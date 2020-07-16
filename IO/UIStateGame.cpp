@@ -294,7 +294,7 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
         if (cursorstate == Cursor::State::CLICKING) {
             if (drop_icon(*dragged_icon_, cursorpos)) {
                 remove_icon();
-                // time_rel_grabbed = std::chrono::steady_clock::now();
+                time_rel_grabbed = std::chrono::steady_clock::now();
             }
             return cursorstate;
         }
@@ -352,12 +352,14 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
                 }
 
                 // fixes bug with icon in keyconfig being re-grabbed after
-                // assign. (build fails on windows with Mingw-w64 8.1.0)
-                // if (auto duration = duration_cast<std::chrono::milliseconds>(
-                //         std::chrono::steady_clock::now() - time_rel_grabbed);
-                //     duration < MIN_DELAY_NEXT_GRAB_) {
-                //     return Cursor::State::IDLE;
-                // }
+                // assign
+                if (auto duration =
+                        std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now()
+                            - time_rel_grabbed);
+                    duration < MIN_DELAY_NEXT_GRAB_) {
+                    return Cursor::State::IDLE;
+                }
 
                 if (dragged_) {
                     return dragged_->send_cursor(clicked, cursorpos);

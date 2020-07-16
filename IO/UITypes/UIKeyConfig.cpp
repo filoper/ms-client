@@ -16,6 +16,7 @@
 #include "UIKeyConfig.h"
 
 #include <nlnx/nx.hpp>
+#include <string>
 
 #include "../../Data/ItemData.h"
 #include "../../Data/SkillData.h"
@@ -1026,7 +1027,7 @@ Button::State UIKeyConfig::button_pressed(uint16_t buttonid) {
         case Buttons::CLOSE:
         case Buttons::CANCEL: close(); break;
         case Buttons::DEFAULT: {
-            constexpr char *message =
+            const std::string message =
                 "Would you like to revert to default settings?";
 
             auto onok = [&](bool ok) {
@@ -1050,7 +1051,7 @@ Button::State UIKeyConfig::button_pressed(uint16_t buttonid) {
             break;
         }
         case Buttons::DELETE: {
-            constexpr char *message =
+            const std::string message =
                 "Would you like to clear all key bindings?";
 
             auto onok = [&](bool ok) {
@@ -1172,7 +1173,7 @@ UIElement::Type UIKeyConfig::get_type() const {
 
 void UIKeyConfig::safe_close() {
     if (dirty_) {
-        constexpr char *message = "Do you want to save your changes?";
+        const std::string message = "Do you want to save your changes?";
 
         auto onok = [&](bool ok) {
             if (ok) {

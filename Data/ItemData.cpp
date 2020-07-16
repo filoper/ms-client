@@ -15,7 +15,9 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ItemData.h"
 
+#include <array>
 #include <nlnx/nx.hpp>
+#include <string>
 
 namespace ms {
 ItemData::ItemData(int32_t id) : item_id_(id) {
@@ -81,7 +83,7 @@ ItemData::ItemData(int32_t id) : item_id_(id) {
 }
 
 std::string ItemData::get_eqcategory(int32_t id) const {
-    constexpr char *categorynames[15] = {
+    const std::array<std::string, 15> categorynames = {
         "Cap",      "Accessory", "Accessory", "Accessory", "Coat",
         "Longcoat", "Pants",     "Shoes",     "Glove",     "Shield",
         "Cape",     "Ring",      "Accessory", "Accessory", "Accessory"
@@ -89,7 +91,7 @@ std::string ItemData::get_eqcategory(int32_t id) const {
 
     int32_t index = get_item_prefix(id) - 100;
 
-    if (index < 15)
+    if (index < categorynames.size())
         return categorynames[index];
     else if (index >= 30 && index <= 70)
         return "Weapon";

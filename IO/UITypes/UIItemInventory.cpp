@@ -16,6 +16,7 @@
 #include "UIItemInventory.h"
 
 #include <nlnx/nx.hpp>
+#include <string>
 
 #include "../../Data/EquipData.h"
 #include "../../Gameplay/Stage.h"
@@ -808,11 +809,11 @@ UIItemInventory::ItemIcon::ItemIcon(const UIItemInventory &parent,
 }
 
 void UIItemInventory::ItemIcon::drop_on_stage() const {
-    constexpr char *dropmessage = "How many will you drop?";
-    constexpr char *untradablemessage =
+    const std::string dropmessage = "How many will you drop?";
+    const std::string untradablemessage =
         "This item can't be taken back once thrown away.\\nWill you still drop "
         "it?";
-    constexpr char *cashmessage = "You can't drop this item.";
+    const std::string cashmessage = "You can't drop this item.";
 
     if (cash_item_) {
         UI::get().emplace<UIOk>(cashmessage, [](bool) {});

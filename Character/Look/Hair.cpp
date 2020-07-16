@@ -15,8 +15,10 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Hair.h"
 
+#include <array>
 #include <iostream>
 #include <nlnx/nx.hpp>
+#include <string>
 
 namespace ms {
 Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
@@ -60,14 +62,12 @@ Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
     name_ = std::string(nl::nx::string["Eqp.img"]["Eqp"]["Hair"]
                                       [std::to_string(hairid)]["name"]);
 
-    constexpr size_t NUM_COLORS = 8;
-
-    constexpr char *haircolors[NUM_COLORS] = { "Black",  "Red",   "Orange",
-                                               "Blonde", "Green", "Blue",
-                                               "Violet", "Brown" };
+    const std::array<std::string, 8> haircolors = { "Black",  "Red",   "Orange",
+                                                    "Blonde", "Green", "Blue",
+                                                    "Violet", "Brown" };
 
     size_t index = hairid % 10;
-    color_ = (index < NUM_COLORS) ? haircolors[index] : "";
+    color_ = (index < haircolors.size()) ? haircolors[index] : "";
 }
 
 void Hair::draw(Stance::Id stance,

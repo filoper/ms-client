@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <string>
+
 #include "Template/Singleton.h"
 #include "Template/TypeMap.h"
 #include "Util/Misc.h"
@@ -90,10 +92,10 @@ public:
     std::string get_chargenx() const;
 
     // Set private member MACS
-    void set_macs(char *macs);
+    void set_macs(std::string macs);
 
     // Set private member HWID
-    void set_hwid(char *hwid, char *volumeSerialNumber);
+    void set_hwid(std::string hwid, std::string volumeSerialNumber);
 
     // Set private member MAXWIDTH
     void set_max_width(int16_t max_width);

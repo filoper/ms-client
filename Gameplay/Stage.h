@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <chrono>
+
 #include "../Character/Player.h"
 #include "../IO/KeyType.h"
 #include "Combat/Combat.h"

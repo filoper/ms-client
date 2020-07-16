@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <memory>
@@ -81,21 +78,21 @@ private:
         OPTION10
     };
 
-    Texture textures[Button::State::NUM_STATES][3];
-    std::vector<std::string> options;
-    std::vector<Text> option_text;
-    Text selected;
-    ColorBox background;
-    ColorBox rect;
-    ColorBox current_rect;
-    uint16_t rwidth;
+    Texture textures_[Button::State::NUM_STATES][3];
+    std::vector<std::string> options_;
+    std::vector<Text> option_text_;
+    Text selected_;
+    ColorBox background_;
+    ColorBox rect_;
+    ColorBox current_rect_;
+    uint16_t rwidth_;
     static constexpr uint16_t HEIGHT = 16;
-    std::map<uint16_t, std::unique_ptr<Button>> buttons;
-    uint16_t current_pos;
-    bool current_shown;
-    uint16_t last_shown;
-    uint16_t selected_index;
-    Point<int16_t> selected_adj;
-    Point<int16_t> parentpos;
+    std::map<uint16_t, std::unique_ptr<Button>> buttons_;
+    uint16_t current_pos_;
+    bool current_shown_;
+    uint16_t last_shown_;
+    uint16_t selected_index_;
+    Point<int16_t> selected_adj_;
+    Point<int16_t> parent_pos_;
 };
 }  // namespace ms

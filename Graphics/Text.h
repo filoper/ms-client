@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <map>
@@ -72,10 +69,10 @@ public:
         iterator end() const;
 
     private:
-        std::vector<Line> lines;
-        std::vector<int16_t> advances;
-        Point<int16_t> dimensions;
-        Point<int16_t> endoffset;
+        std::vector<Line> lines_;
+        std::vector<int16_t> advances_;
+        Point<int16_t> dimensions_;
+        Point<int16_t> end_offset_;
     };
 
     Text(Font font,
@@ -126,14 +123,14 @@ public:
 private:
     void reset_layout();
 
-    Font font;
-    Alignment alignment;
-    Color::Name color;
-    Background background;
-    Layout layout;
-    uint16_t maxwidth;
-    bool formatted;
-    std::string text;
-    int16_t line_adj;
+    Font font_;
+    Alignment alignment_;
+    Color::Name color_;
+    Background background_;
+    Layout layout_;
+    uint16_t max_width_;
+    bool formatted_;
+    std::string text_;
+    int16_t line_adj_;
 };
 }  // namespace ms

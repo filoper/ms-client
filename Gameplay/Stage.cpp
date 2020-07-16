@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-/// by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-// Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Stage.h"
 
 #include <nlnx/nx.hpp>
@@ -30,16 +26,16 @@
 #include "Timer.h"
 
 namespace ms {
-Stage::Stage() : combat(player, chars, mobs, reactors) {
-    state = State::INACTIVE;
+Stage::Stage() : combat_(player_, chars_, mobs_, reactors_) {
+    state_ = State::INACTIVE;
 }
 
 void Stage::init() {
-    drops.init();
+    drops_.init();
 }
 
 void Stage::load(int32_t mapid, int8_t portalid) {
-    switch (state) {
+    switch (state_) {
         case State::INACTIVE:
             load_map(mapid);
             respawn(portalid);
@@ -47,32 +43,32 @@ void Stage::load(int32_t mapid, int8_t portalid) {
         case State::TRANSITION: respawn(portalid); break;
     }
 
-    state = State::ACTIVE;
+    state_ = State::ACTIVE;
 }
 
 void Stage::loadplayer(const CharEntry &entry) {
-    player = entry;
-    playable = player;
+    player_ = entry;
+    playable_ = player_;
 
-    start = ContinuousTimer::get().start();
+    start_ = ContinuousTimer::get().start();
 
-    CharStats stats = player.get_stats();
-    levelBefore = stats.get_stat(MapleStat::Id::LEVEL);
-    expBefore = stats.get_exp();
+    CharStats stats = player_.get_stats();
+    level_before_ = stats.get_stat(MapleStat::Id::LEVEL);
+    exp_before_ = stats.get_exp();
 }
 
 void Stage::clear() {
-    state = State::INACTIVE;
+    state_ = State::INACTIVE;
 
-    chars.clear();
-    npcs.clear();
-    mobs.clear();
-    drops.clear();
-    reactors.clear();
+    chars_.clear();
+    npcs_.clear();
+    mobs_.clear();
+    drops_.clear();
+    reactors_.clear();
 }
 
 void Stage::load_map(int32_t mapid) {
-    Stage::mapid = mapid;
+    Stage::map_id_ = mapid;
 
     std::string strid = string_format::extend_id(mapid, 9);
     std::string prefix = std::to_string(mapid / 100000000);
@@ -81,77 +77,77 @@ void Stage::load_map(int32_t mapid) {
                        ? nl::nx::ui["CashShopPreview.img"]
                        : nl::nx::map["Map"]["Map" + prefix][strid + ".img"];
 
-    tilesobjs = MapTilesObjs(src);
-    backgrounds = MapBackgrounds(src["back"]);
-    physics = Physics(src["foothold"]);
-    mapinfo = MapInfo(src,
-                      physics.get_fht().get_walls(),
-                      physics.get_fht().get_borders());
-    portals = MapPortals(src["portal"], mapid);
+    tiles_objs_ = MapTilesObjs(src);
+    backgrounds_ = MapBackgrounds(src["back"]);
+    physics_ = Physics(src["foothold"]);
+    map_info_ = MapInfo(src,
+                        physics_.get_fht().get_walls(),
+                        physics_.get_fht().get_borders());
+    portals_ = MapPortals(src["portal"], mapid);
 }
 
 void Stage::respawn(int8_t portalid) {
-    Music(mapinfo.get_bgm()).play();
+    Music(map_info_.get_bgm()).play();
 
-    Point<int16_t> spawnpoint = portals.get_portal_by_id(portalid);
-    Point<int16_t> startpos = physics.get_y_below(spawnpoint);
-    player.respawn(startpos, mapinfo.is_underwater());
-    camera.set_position(startpos);
-    camera.set_view(mapinfo.get_walls(), mapinfo.get_borders());
+    Point<int16_t> spawnpoint = portals_.get_portal_by_id(portalid);
+    Point<int16_t> startpos = physics_.get_y_below(spawnpoint);
+    player_.respawn(startpos, map_info_.is_underwater());
+    camera_.set_position(startpos);
+    camera_.set_view(map_info_.get_walls(), map_info_.get_borders());
 }
 
 void Stage::draw(float alpha) const {
-    if (state != State::ACTIVE)
+    if (state_ != State::ACTIVE)
         return;
 
-    Point<int16_t> viewpos = camera.position(alpha);
-    Point<double> viewrpos = camera.realposition(alpha);
+    Point<int16_t> viewpos = camera_.position(alpha);
+    Point<double> viewrpos = camera_.realposition(alpha);
     double viewx = viewrpos.x();
     double viewy = viewrpos.y();
 
-    backgrounds.drawbackgrounds(viewx, viewy, alpha);
+    backgrounds_.drawbackgrounds(viewx, viewy, alpha);
 
     for (auto id : Layer::IDs) {
-        tilesobjs.draw(id, viewpos, alpha);
-        reactors.draw(id, viewx, viewy, alpha);
-        npcs.draw(id, viewx, viewy, alpha);
-        mobs.draw(id, viewx, viewy, alpha);
-        chars.draw(id, viewx, viewy, alpha);
-        player.draw(id, viewx, viewy, alpha);
-        drops.draw(id, viewx, viewy, alpha);
+        tiles_objs_.draw(id, viewpos, alpha);
+        reactors_.draw(id, viewx, viewy, alpha);
+        npcs_.draw(id, viewx, viewy, alpha);
+        mobs_.draw(id, viewx, viewy, alpha);
+        chars_.draw(id, viewx, viewy, alpha);
+        player_.draw(id, viewx, viewy, alpha);
+        drops_.draw(id, viewx, viewy, alpha);
     }
 
-    combat.draw(viewx, viewy, alpha);
-    portals.draw(viewpos, alpha);
-    backgrounds.drawforegrounds(viewx, viewy, alpha);
-    effect.draw();
+    combat_.draw(viewx, viewy, alpha);
+    portals_.draw(viewpos, alpha);
+    backgrounds_.drawforegrounds(viewx, viewy, alpha);
+    effect_.draw();
 }
 
 void Stage::update() {
-    if (state != State::ACTIVE)
+    if (state_ != State::ACTIVE)
         return;
 
-    combat.update();
-    backgrounds.update();
-    effect.update();
-    tilesobjs.update();
+    combat_.update();
+    backgrounds_.update();
+    effect_.update();
+    tiles_objs_.update();
 
-    reactors.update(physics);
-    npcs.update(physics);
-    mobs.update(physics);
-    chars.update(physics);
-    drops.update(physics);
-    player.update(physics);
+    reactors_.update(physics_);
+    npcs_.update(physics_);
+    mobs_.update(physics_);
+    chars_.update(physics_);
+    drops_.update(physics_);
+    player_.update(physics_);
 
-    portals.update(player.get_position());
-    camera.update(player.get_position());
+    portals_.update(player_.get_position());
+    camera_.update(player_.get_position());
 
-    if (player.is_invincible())
+    if (player_.is_invincible())
         return;
 
-    if (int32_t oid_id = mobs.find_colliding(player.get_phobj())) {
-        if (MobAttack attack = mobs.create_attack(oid_id)) {
-            MobAttackResult result = player.damage(attack);
+    if (int32_t oid_id = mobs_.find_colliding(player_.get_phobj())) {
+        if (MobAttack attack = mobs_.create_attack(oid_id)) {
+            MobAttackResult result = player_.damage(attack);
             TakeDamagePacket(result, TakeDamagePacket::From::TOUCH).dispatch();
         }
     }
@@ -163,17 +159,18 @@ void Stage::show_character_effect(int32_t cid, CharEffect::Id effect) {
 }
 
 void Stage::check_portals() {
-    if (player.is_attacking())
+    if (player_.is_attacking())
         return;
 
-    Point<int16_t> playerpos = player.get_position();
-    Portal::WarpInfo warpinfo = portals.find_warp_at(playerpos);
+    Point<int16_t> playerpos = player_.get_position();
+    Portal::WarpInfo warpinfo = portals_.find_warp_at(playerpos);
 
     if (warpinfo.intramap) {
-        Point<int16_t> spawnpoint = portals.get_portal_by_name(warpinfo.toname);
-        Point<int16_t> startpos = physics.get_y_below(spawnpoint);
+        Point<int16_t> spawnpoint =
+            portals_.get_portal_by_name(warpinfo.toname);
+        Point<int16_t> startpos = physics_.get_y_below(spawnpoint);
 
-        player.respawn(startpos, mapinfo.is_underwater());
+        player_.respawn(startpos, map_info_.is_underwater());
     } else if (warpinfo.valid) {
         ChangeMapPacket(false, -1, warpinfo.name, false).dispatch();
 
@@ -186,32 +183,32 @@ void Stage::check_portals() {
 }
 
 void Stage::check_seats() {
-    if (player.is_sitting() || player.is_attacking())
+    if (player_.is_sitting() || player_.is_attacking())
         return;
 
-    Optional<const Seat> seat = mapinfo.findseat(player.get_position());
-    player.set_seat(seat);
+    Optional<const Seat> seat = map_info_.findseat(player_.get_position());
+    player_.set_seat(seat);
 }
 
 void Stage::check_ladders(bool up) {
-    if (player.is_climbing() || player.is_attacking())
+    if (player_.is_climbing() || player_.is_attacking())
         return;
 
     Optional<const Ladder> ladder =
-        mapinfo.findladder(player.get_position(), up);
-    player.set_ladder(ladder);
+        map_info_.findladder(player_.get_position(), up);
+    player_.set_ladder(ladder);
 }
 
 void Stage::check_drops() {
-    Point<int16_t> playerpos = player.get_position();
-    MapDrops::Loot loot = drops.find_loot_at(playerpos);
+    Point<int16_t> playerpos = player_.get_position();
+    MapDrops::Loot loot = drops_.find_loot_at(playerpos);
 
     if (loot.first)
         PickupItemPacket(loot.first, loot.second).dispatch();
 }
 
 void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
-    if (state != State::ACTIVE || !playable)
+    if (state_ != State::ACTIVE || !playable_)
         return;
 
     switch (type) {
@@ -224,16 +221,16 @@ void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
                         break;
                     case KeyAction::Id::DOWN: check_ladders(false); break;
                     case KeyAction::Id::SIT: check_seats(); break;
-                    case KeyAction::Id::ATTACK: combat.use_move(0); break;
+                    case KeyAction::Id::ATTACK: combat_.use_move(0); break;
                     case KeyAction::Id::PICKUP: check_drops(); break;
                 }
             }
 
-            playable->send_action(KeyAction::actionbyid(action), down);
+            playable_->send_action(KeyAction::actionbyid(action), down);
             break;
-        case KeyType::Id::SKILL: combat.use_move(action); break;
-        case KeyType::Id::ITEM: player.use_item(action); break;
-        case KeyType::Id::FACE: player.set_expression(action); break;
+        case KeyType::Id::SKILL: combat_.use_move(action); break;
+        case KeyType::Id::ITEM: player_.use_item(action); break;
+        case KeyType::Id::FACE: player_.set_expression(action); break;
     }
 }
 
@@ -248,66 +245,66 @@ Cursor::State Stage::send_cursor(bool pressed, Point<int16_t> position) {
             return statusbar->send_cursor(pressed, position);
     }
 
-    return npcs.send_cursor(pressed, position, camera.position());
+    return npcs_.send_cursor(pressed, position, camera_.position());
 }
 
 bool Stage::is_player(int32_t cid) const {
-    return cid == player.get_oid();
+    return cid == player_.get_oid();
 }
 
 MapNpcs &Stage::get_npcs() {
-    return npcs;
+    return npcs_;
 }
 
 MapChars &Stage::get_chars() {
-    return chars;
+    return chars_;
 }
 
 MapMobs &Stage::get_mobs() {
-    return mobs;
+    return mobs_;
 }
 
 MapReactors &Stage::get_reactors() {
-    return reactors;
+    return reactors_;
 }
 
 MapDrops &Stage::get_drops() {
-    return drops;
+    return drops_;
 }
 
 Player &Stage::get_player() {
-    return player;
+    return player_;
 }
 
 Combat &Stage::get_combat() {
-    return combat;
+    return combat_;
 }
 
 Optional<Char> Stage::get_character(int32_t cid) {
     if (is_player(cid))
-        return player;
+        return player_;
     else
-        return chars.get_char(cid);
+        return chars_.get_char(cid);
 }
 
 int Stage::get_mapid() {
-    return mapid;
+    return map_id_;
 }
 
 void Stage::add_effect(std::string path) {
-    effect = MapEffect(path);
+    effect_ = MapEffect(path);
 }
 
 int64_t Stage::get_uptime() {
-    return ContinuousTimer::get().stop(start);
+    return ContinuousTimer::get().stop(start_);
 }
 
 uint16_t Stage::get_uplevel() {
-    return levelBefore;
+    return level_before_;
 }
 
 int64_t Stage::get_upexp() {
-    return expBefore;
+    return exp_before_;
 }
 
 void Stage::transfer_player() {

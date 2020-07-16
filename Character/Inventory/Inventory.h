@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <map>
@@ -173,15 +169,15 @@ private:
         bool cash;
     };
 
-    EnumMap<InventoryType::Id, std::map<int16_t, Slot>> inventories;
-    std::unordered_map<int32_t, Item> items;
-    std::unordered_map<int32_t, Equip> equips;
-    std::unordered_map<int32_t, Pet> pets;
-    int32_t running_uid;
+    EnumMap<InventoryType::Id, std::map<int16_t, Slot>> inventories_;
+    std::unordered_map<int32_t, Item> items_;
+    std::unordered_map<int32_t, Equip> equips_;
+    std::unordered_map<int32_t, Pet> pets_;
+    int32_t running_uid_;
 
-    EnumMap<EquipStat::Id, uint16_t> totalstats;
-    EnumMap<InventoryType::Id, uint8_t> slotmaxima;
-    int64_t meso;
-    int16_t bulletslot;
+    EnumMap<EquipStat::Id, uint16_t> total_stats_;
+    EnumMap<InventoryType::Id, uint8_t> slot_maxima_;
+    int64_t meso_;
+    int16_t bullet_slot_;
 };
 }  // namespace ms

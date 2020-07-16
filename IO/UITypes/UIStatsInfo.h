@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Character/CharStats.h"
@@ -110,19 +107,19 @@ private:
         BT_DETAIL_DETAILCLOSE
     };
 
-    const CharStats &stats;
+    const CharStats &stats_;
 
     enum Ability { RARE, EPIC, UNIQUE, LEGENDARY, NONE, NUM_ABILITIES };
 
-    std::array<Texture, Ability::NUM_ABILITIES> abilities;
-    BoolPair<Texture> inner_ability;
+    std::array<Texture, Ability::NUM_ABILITIES> abilities_;
+    BoolPair<Texture> inner_ability_;
 
-    std::vector<Texture> textures_detail;
-    bool showdetail;
+    std::vector<Texture> textures_detail_;
+    bool show_detail_;
 
-    bool hasap;
+    bool has_ap_;
 
-    Text statlabels[StatLabel::NUM_LABELS];
-    Point<int16_t> statoffsets[StatLabel::NUM_LABELS];
+    Text stat_labels_[StatLabel::NUM_LABELS];
+    Point<int16_t> stat_offsets_[StatLabel::NUM_LABELS];
 };
 }  // namespace ms

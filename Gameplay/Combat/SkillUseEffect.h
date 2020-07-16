@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Character/Char.h"
@@ -32,17 +29,17 @@ protected:
     class Effect {
     public:
         Effect(nl::node src) {
-            animation = src;
-            z = src["z"];
+            animation_ = src;
+            z_ = src["z"];
         }
 
         void apply(Char &target) const {
-            target.show_attack_effect(animation, z);
+            target.show_attack_effect(animation_, z_);
         }
 
     private:
-        Animation animation;
-        int8_t z;
+        Animation animation_;
+        int8_t z_;
     };
 };
 
@@ -60,7 +57,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    Effect effect;
+    Effect effect_;
 };
 
 // An effect which displays an animation over the character's position
@@ -72,7 +69,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    BoolPair<Effect> effects;
+    BoolPair<Effect> effects_;
 };
 
 // An effect which displays multiple animations over the character's position
@@ -83,7 +80,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    std::vector<Effect> effects;
+    std::vector<Effect> effects_;
 };
 
 // The animation changes with the character level
@@ -94,7 +91,7 @@ public:
     void apply(Char &target) const override;
 
 private:
-    std::map<uint16_t, Effect> effects;
+    std::map<uint16_t, Effect> effects_;
 };
 
 // Use effect for Iron Body

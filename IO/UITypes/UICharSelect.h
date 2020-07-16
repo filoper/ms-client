@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <list>
@@ -59,6 +55,8 @@ public:
 
     const CharEntry &get_character(int32_t id);
 
+    bool update_character(int32_t id, StatsEntry stats);
+
 protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
@@ -85,7 +83,7 @@ private:
 
     void check_pic(const std::string entered_pic) const;
 
-    static constexpr uint8_t PAGESIZE = 8;
+    static constexpr uint8_t PAGESIZE_ = 8;
 
     enum Buttons : uint16_t {
         CHARACTER_SELECT,
@@ -100,50 +98,50 @@ private:
         CHARACTER_SLOT0
     };
 
-    std::vector<CharEntry> characters;
-    int8_t characters_count;
-    int32_t slots;
-    int8_t require_pic;
-    Text version;
-    Point<int16_t> pagepos;
-    Point<int16_t> worldpos;
-    Point<int16_t> charinfopos;
-    uint8_t selected_character;
+    std::vector<CharEntry> characters_;
+    int8_t characters_count_;
+    int32_t slots_;
+    int8_t require_pic_;
+    Text version_;
+    Point<int16_t> page_pos_;
+    Point<int16_t> world_pos_;
+    Point<int16_t> charinfo_pos_;
+    uint8_t selected_character_;
     uint8_t selected_page;
-    uint8_t page_count;
-    Texture tab;
-    uint8_t tab_index;
-    bool tab_active;
-    bool tab_move;
-    Point<int16_t> tab_pos[3];
-    int16_t tab_move_pos;
-    std::map<uint8_t, uint16_t> tab_map;
-    Point<int16_t> world_dimensions;
-    Animation burning_notice;
-    Text burning_count;
-    std::vector<Sprite> world_sprites;
-    Texture charinfo;
-    Texture charslot;
-    Texture pagebase;
-    Charset pagenumber;
-    nl::node pagenumberpos;
-    Texture signpost[3];
-    nl::node nametag;
-    Charset levelset;
-    OutlinedText namelabel;
-    std::vector<CharLook> charlooks;
-    std::vector<NameTag> nametags;
-    Animation emptyslot_effect;
-    Texture emptyslot;
-    Animation selectedslot_effect[2];
-    OutlinedText chatslotlabel;
-    int16_t timestamp;
-    uint16_t charslot_y;
-    bool show_timestamp;
-    bool burning_character;
+    uint8_t page_count_;
+    Texture tab_;
+    uint8_t tab_index_;
+    bool tab_active_;
+    bool tab_move_;
+    Point<int16_t> tab_pos_[3];
+    int16_t tab_move_pos_;
+    std::map<uint8_t, uint16_t> tab_map_;
+    Point<int16_t> world_dimensions_;
+    Animation burning_notice_;
+    Text burning_count_;
+    std::vector<Sprite> world_sprites_;
+    Texture charinfo_;
+    Texture charslot_;
+    Texture pagebase_;
+    Charset pagenumber_;
+    nl::node pagenumber_pos_;
+    Texture sign_post_[3];
+    nl::node nametag_;
+    Charset level_set_;
+    OutlinedText name_label_;
+    std::vector<CharLook> char_looks_;
+    std::vector<NameTag> nametags_;
+    Animation empty_slot_effect_;
+    Texture empty_slot_;
+    Animation selected_slot_effect_[2];
+    OutlinedText chat_slot_label_;
+    int16_t timestamp_;
+    uint16_t charslot_y_;
+    bool show_timestamp_;
+    bool burning_character_;
 
     enum InfoLabel : uint8_t { JOB, STR, DEX, INT, LUK, NUM_LABELS };
 
-    OutlinedText infolabels[UICharSelect::InfoLabel::NUM_LABELS];
+    OutlinedText info_labels_[UICharSelect::InfoLabel::NUM_LABELS];
 };
 }  // namespace ms

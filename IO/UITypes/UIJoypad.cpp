@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIJoypad.h"
 
 #include <nlnx/nx.hpp>
@@ -25,33 +22,33 @@
 namespace ms {
 // TODO: Add combo boxes nl::nx::ui["Basic.img"]["ComboBox"] / ["ComboBox5"];
 UIJoypad::UIJoypad() : UIDragElement<PosJOYPAD>() {
-    alternative_settings = false;  // TODO: Get user's key settings type
+    alternative_settings_ = false;  // TODO: Get user's key settings type
 
     nl::node JoyPad = nl::nx::ui["UIWindow.img"]["JoyPad"];
     nl::node Basic = nl::nx::ui["Basic.img"];
 
-    backgrnd[true] = JoyPad["backgrnd_alternative"];
-    backgrnd[false] = JoyPad["backgrnd_classic"];
+    backgrnd_[true] = JoyPad["backgrnd_alternative"];
+    backgrnd_[false] = JoyPad["backgrnd_classic"];
 
-    buttons[Buttons::DEFAULT] =
+    buttons_[Buttons::DEFAULT] =
         std::make_unique<MapleButton>(JoyPad["BtDefault"]);
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(Basic["BtCancel4"],
                                       Point<int16_t>(124, 303));
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(Basic["BtOK4"], Point<int16_t>(82, 303));
 
-    for (auto &text : key_text)
+    for (auto &text : key_text_)
         text = Text(Text::Font::A12M,
                     Text::Alignment::LEFT,
                     Color::Name::BLACK,
                     "None");
 
-    dimension = backgrnd[true].get_dimensions();
+    dimension_ = backgrnd_[true].get_dimensions();
 }
 
 void UIJoypad::draw(float inter) const {
-    backgrnd[alternative_settings].draw(position);
+    backgrnd_[alternative_settings_].draw(position_);
 
     int16_t x = 79;
     int16_t y = 24;
@@ -59,13 +56,13 @@ void UIJoypad::draw(float inter) const {
 
     for (size_t i = 0; i < Setting::SETTING_NUM; i++) {
         if (i == 0)
-            key_text[i].draw(position + Point<int16_t>(x, y));
+            key_text_[i].draw(position_ + Point<int16_t>(x, y));
         else if (i > 0 && i < 4)
-            key_text[i].draw(
-                position + Point<int16_t>(x - 16, y + 44 + y_adj * (i - 1)));
+            key_text_[i].draw(
+                position_ + Point<int16_t>(x - 16, y + 44 + y_adj * (i - 1)));
         else
-            key_text[i].draw(
-                position + Point<int16_t>(x - 16, y + 123 + y_adj * (i - 4)));
+            key_text_[i].draw(
+                position_ + Point<int16_t>(x - 16, y + 123 + y_adj * (i - 4)));
     }
 
     UIElement::draw(inter);

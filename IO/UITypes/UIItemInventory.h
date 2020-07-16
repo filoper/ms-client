@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Components/Slider.h"
@@ -117,22 +114,22 @@ private:
         Icon::IconType get_type() override;
 
     private:
-        InventoryType::Id sourcetab;
-        EquipSlot::Id eqsource;
-        int16_t source;
-        int32_t item_id;
-        int16_t count;
-        bool untradable;
-        bool cashitem;
-        const UIItemInventory &parent;
+        InventoryType::Id source_tab_;
+        EquipSlot::Id eqsource_;
+        int16_t source_;
+        int32_t item_id_;
+        int16_t count_;
+        bool untradable_;
+        bool cash_item_;
+        const UIItemInventory &parent_;
     };
 
-    static constexpr uint16_t ROWS = 8;
-    static constexpr uint16_t COLUMNS = 4;
-    static constexpr uint16_t MAXSLOTS = ROWS * COLUMNS;
-    static constexpr uint16_t MAXFULLSLOTS = COLUMNS * MAXSLOTS;
-    static constexpr uint16_t ICON_WIDTH = 36;
-    static constexpr uint16_t ICON_HEIGHT = 35;
+    static constexpr uint16_t ROWS_ = 8;
+    static constexpr uint16_t COLUMNS_ = 4;
+    static constexpr uint16_t MAX_SLOTS_ = ROWS_ * COLUMNS_;
+    static constexpr uint16_t MAX_FULL_SLOTS_ = COLUMNS_ * MAX_SLOTS_;
+    static constexpr uint16_t ICON_WIDTH_ = 36;
+    static constexpr uint16_t ICON_HEIGHT_ = 35;
 
     enum Buttons {
         BT_CLOSE,
@@ -168,33 +165,33 @@ private:
         BT_CASHSHOP
     };
 
-    const Inventory &inventory;
+    const Inventory &inventory_;
 
-    Animation newitemslot;
-    Animation newitemtab;
-    Texture projectile;
-    Texture disabled;
-    Text mesolabel;
-    Text maplepointslabel;
-    Slider slider;
+    Animation new_item_slot_;
+    Animation new_item_tab_;
+    Texture projectile_;
+    Texture disabled_;
+    Text meso_label_;
+    Text maple_points_label_;
+    Slider slider_;
 
-    std::map<int16_t, std::unique_ptr<Icon>> icons;
-    std::map<InventoryType::Id, std::pair<int16_t, int16_t>> slotrange;
+    std::map<int16_t, std::unique_ptr<Icon>> icons_;
+    std::map<InventoryType::Id, std::pair<int16_t, int16_t>> slot_range_;
 
-    InventoryType::Id tab;
-    InventoryType::Id newtab;
-    int16_t newslot;
-    bool ignore_tooltip;
+    InventoryType::Id tab_;
+    InventoryType::Id new_tab_;
+    int16_t new_slot_;
+    bool ignore_tooltip_;
 
-    bool sort_enabled;
-    bool full_enabled;
-    Texture backgrnd;
-    Texture backgrnd2;
-    Texture backgrnd3;
-    Texture full_backgrnd;
-    Texture full_backgrnd2;
-    Texture full_backgrnd3;
-    Point<int16_t> bg_dimensions;
-    Point<int16_t> bg_full_dimensions;
+    bool sort_enabled_;
+    bool full_enabled_;
+    Texture backgrnd_;
+    Texture backgrnd2_;
+    Texture backgrnd3_;
+    Texture full_backgrnd_;
+    Texture full_backgrnd2_;
+    Texture full_backgrnd3_;
+    Point<int16_t> bg_dimensions_;
+    Point<int16_t> bg_full_dimensions_;
 };
 }  // namespace ms

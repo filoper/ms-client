@@ -1,27 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
+
+#include <chrono>
 
 #include "../Character/CharStats.h"
 #include "../Template/EnumMap.h"
 #include "../Template/Optional.h"
-#include "../Timer.h"
 #include "Components/EquipTooltip.h"
 #include "Components/ItemTooltip.h"
 #include "Components/MapTooltip.h"
@@ -87,7 +85,7 @@ public:
     UIElement *get_front(Point<int16_t> pos) override;
 
 private:
-    const CharStats &stats;
+    const CharStats &stats_;
 
     bool drop_icon(const Icon &icon, Point<int16_t> pos);
 
@@ -101,22 +99,25 @@ private:
     void emplace(Args &&... args);
 
     EnumMap<UIElement::Type, UIElement::UPtr, UIElement::Type::NUM_TYPES>
-        elements;
-    std::list<UIElement::Type> elementorder;
-    UIElement::Type focused;
-    UIElement *dragged;
+        elements_;
+    std::list<UIElement::Type> element_order_;
+    UIElement::Type focused_;
+    UIElement *dragged_;
 
-    EquipTooltip eqtooltip;
-    ItemTooltip ittooltip;
-    SkillTooltip sktooltip;
-    TextTooltip tetooltip;
-    MapTooltip matooltip;
-    Optional<Tooltip> tooltip;
-    Tooltip::Parent tooltipparent;
+    EquipTooltip eq_tooltip_;
+    ItemTooltip it_tooltip_;
+    SkillTooltip sk_tooltip_;
+    TextTooltip te_tooltip_;
+    MapTooltip ma_tooltip_;
+    Optional<Tooltip> tooltip_;
+    Tooltip::Parent tooltip_parent_;
 
-    Optional<Icon> draggedicon;
+    Optional<Icon> dragged_icon_;
+    std::chrono::time_point<std::chrono::steady_clock> time_rel_grabbed =
+        std::chrono::steady_clock::now();
+    static constexpr std::chrono::microseconds MIN_DELAY_NEXT_GRAB_ { 10 };
 
-    std::map<Icon::IconType, UIElement::Type> icon_map = {
+    std::map<Icon::IconType, UIElement::Type> icon_map_ = {
         { Icon::IconType::NONE, UIElement::Type::NONE },
         { Icon::IconType::SKILL, UIElement::Type::SKILLBOOK },
         { Icon::IconType::EQUIP, UIElement::Type::EQUIPINVENTORY },

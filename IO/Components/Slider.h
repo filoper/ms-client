@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <functional>
@@ -88,26 +85,26 @@ public:
 private:
     Point<int16_t> getthumbpos() const;
 
-    std::function<void(bool upwards)> onmoved;
+    std::function<void(bool upwards)> onmoved_;
 
-    Range<int16_t> vertical;
-    Point<int16_t> start;
-    Point<int16_t> end;
-    int16_t type;
-    int16_t buttonheight;
-    int16_t rowheight;
-    int16_t x;
-    int16_t row;
-    int16_t rowmax;
-    bool scrolling;
-    bool enabled;
+    Range<int16_t> vertical_;
+    Point<int16_t> start_;
+    Point<int16_t> end_;
+    int16_t type_;
+    int16_t button_height_;
+    int16_t row_height_;
+    int16_t x_;
+    int16_t row_;
+    int16_t row_max_;
+    bool scrolling_;
+    bool enabled_;
 
-    Texture dbase;
-    Texture dnext;
-    Texture dprev;
-    Texture base;
-    TwoSpriteButton next;
-    TwoSpriteButton prev;
-    TwoSpriteButton thumb;
+    Texture dbase_;
+    Texture dnext_;
+    Texture dprev_;
+    Texture base_;
+    TwoSpriteButton next_;
+    TwoSpriteButton prev_;
+    TwoSpriteButton thumb_;
 };
 }  // namespace ms

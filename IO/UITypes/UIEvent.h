@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Components/Slider.h"
@@ -61,16 +58,16 @@ private:
 
     enum Buttons : uint16_t { CLOSE };
 
-    int16_t offset;
-    int16_t event_count;
-    ShadowText event_title[3];
-    Text event_date[3];
-    Slider slider;
-    Texture item_reward;
-    Texture text_reward;
-    Texture next;
-    Texture label_on;
-    Texture label_next;
-    std::vector<BoolPair<bool>> events;
+    int16_t offset_;
+    int16_t event_count_;
+    ShadowText event_title_[3];
+    Text event_date_[3];
+    Slider slider_;
+    Texture item_reward_;
+    Texture text_reward_;
+    Texture next_;
+    Texture label_on_;
+    Texture label_next_;
+    std::vector<BoolPair<bool>> events_;
 };
 }  // namespace ms

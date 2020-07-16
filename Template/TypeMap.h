@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <memory>
@@ -34,41 +31,41 @@ public:
 
     template<typename D, typename... Args>
     D *emplace(Args &&... args) {
-        auto *ptr = container.emplace(typeid(D), std::make_unique<D>(args...))
+        auto *ptr = container_.emplace(typeid(D), std::make_unique<D>(args...))
                         .first->second.get();
         return static_cast<D *>(ptr);
     }
 
     template<typename D>
     void erase() {
-        container.erase(typeid(D));
+        container_.erase(typeid(D));
     }
 
-    void clear() { container.clear(); }
+    void clear() { container_.clear(); }
 
     template<typename D>
     D *get() {
-        return static_cast<D *>(container[typeid(D)].get());
+        return static_cast<D *>(container_[typeid(D)].get());
     }
 
     template<typename D>
     const D *get() const {
-        return static_cast<D *>(container[typeid(D)].get());
+        return static_cast<D *>(container_[typeid(D)].get());
     }
 
-    typename underlying_map::iterator begin() { return container.begin(); }
+    typename underlying_map::iterator begin() { return container_.begin(); }
 
-    typename underlying_map::iterator end() { return container.end(); }
+    typename underlying_map::iterator end() { return container_.end(); }
 
     typename underlying_map::const_iterator begin() const {
-        return container.begin();
+        return container_.begin();
     }
 
     typename underlying_map::const_iterator end() const {
-        return container.end();
+        return container_.end();
     }
 
 private:
-    underlying_map container;
+    underlying_map container_;
 };
 }  // namespace ms

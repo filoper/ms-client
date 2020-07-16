@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Npc.h"
 
 #include <nlnx/nx.hpp>
@@ -44,84 +41,84 @@ Npc::Npc(int32_t id,
 
     nl::node info = src["info"];
 
-    hidename = info["hideName"].get_bool();
-    mouseonly = info["talkMouseOnly"].get_bool();
-    scripted = info["script"].size() > 0 || info["shop"].get_bool();
+    hide_name_ = info["hideName"].get_bool();
+    mouse_only_ = info["talkMouseOnly"].get_bool();
+    scripted_ = info["script"].size() > 0 || info["shop"].get_bool();
 
     for (auto npcnode : src) {
         std::string state = npcnode.name();
 
         if (state != "info") {
-            animations[state] = npcnode;
-            states.push_back(state);
+            animations_[state] = npcnode;
+            states_.push_back(state);
         }
 
         for (auto speaknode : npcnode["speak"])
-            lines[state].push_back(strsrc[speaknode.get_string()]);
+            lines_[state].push_back(strsrc[speaknode.get_string()]);
     }
 
-    name = std::string(strsrc["name"]);
-    func = std::string(strsrc["func"]);
+    name_ = std::string(strsrc["name"]);
+    func_ = std::string(strsrc["func"]);
 
-    namelabel = Text(Text::Font::A13B,
-                     Text::Alignment::CENTER,
-                     Color::Name::YELLOW,
-                     Text::Background::NAMETAG,
-                     name);
-    funclabel = Text(Text::Font::A13B,
-                     Text::Alignment::CENTER,
-                     Color::Name::YELLOW,
-                     Text::Background::NAMETAG,
-                     func);
+    name_label_ = Text(Text::Font::A13B,
+                       Text::Alignment::CENTER,
+                       Color::Name::YELLOW,
+                       Text::Background::NAMETAG,
+                       name_);
+    func_label_ = Text(Text::Font::A13B,
+                       Text::Alignment::CENTER,
+                       Color::Name::YELLOW,
+                       Text::Background::NAMETAG,
+                       func_);
 
-    npcid = id;
-    flip = !fl;
-    control = cnt;
-    stance = "stand";
+    npc_id_ = id;
+    flip_ = !fl;
+    control_ = cnt;
+    stance_ = "stand";
 
-    phobj.fhid = f;
+    phobj_.fhid = f;
     set_position(position);
 }
 
 void Npc::draw(double viewx, double viewy, float alpha) const {
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
 
-    if (animations.count(stance))
-        animations.at(stance).draw(DrawArgument(absp, flip), alpha);
+    if (animations_.count(stance_))
+        animations_.at(stance_).draw(DrawArgument(absp, flip_), alpha);
 
-    if (!hidename) {
+    if (!hide_name_) {
         // If ever changing code for namelabel confirm placements with map 10000
-        namelabel.draw(absp + Point<int16_t>(0, -4));
-        funclabel.draw(absp + Point<int16_t>(0, 18));
+        name_label_.draw(absp + Point<int16_t>(0, -4));
+        func_label_.draw(absp + Point<int16_t>(0, 18));
     }
 }
 
 int8_t Npc::update(const Physics &physics) {
-    if (!active)
-        return phobj.fhlayer;
+    if (!active_)
+        return phobj_.fhlayer;
 
-    physics.move_object(phobj);
+    physics.move_object(phobj_);
 
-    if (animations.count(stance)) {
-        bool aniend = animations.at(stance).update();
+    if (animations_.count(stance_)) {
+        bool aniend = animations_.at(stance_).update();
 
-        if (aniend && states.size() > 0) {
-            size_t next_stance = random.next_int(states.size());
-            std::string new_stance = states[next_stance];
+        if (aniend && states_.size() > 0) {
+            size_t next_stance = random_.next_int(states_.size());
+            std::string new_stance = states_[next_stance];
             set_stance(new_stance);
         }
     }
 
-    return phobj.fhlayer;
+    return phobj_.fhlayer;
 }
 
 void Npc::set_stance(const std::string &st) {
-    if (stance != st) {
-        stance = st;
+    if (stance_ != st) {
+        stance_ = st;
 
-        auto iter = animations.find(stance);
+        auto iter = animations_.find(stance_);
 
-        if (iter == animations.end())
+        if (iter == animations_.end())
             return;
 
         iter->second.reset();
@@ -129,17 +126,17 @@ void Npc::set_stance(const std::string &st) {
 }
 
 bool Npc::isscripted() const {
-    return scripted;
+    return scripted_;
 }
 
 bool Npc::inrange(Point<int16_t> cursorpos, Point<int16_t> viewpos) const {
-    if (!active)
+    if (!active_)
         return false;
 
     Point<int16_t> absp = get_position() + viewpos;
 
-    Point<int16_t> dim = animations.count(stance)
-                             ? animations.at(stance).get_dimensions()
+    Point<int16_t> dim = animations_.count(stance_)
+                             ? animations_.at(stance_).get_dimensions()
                              : Point<int16_t>();
 
     return Rectangle<int16_t>(absp.x() - dim.x() / 2,
@@ -150,10 +147,10 @@ bool Npc::inrange(Point<int16_t> cursorpos, Point<int16_t> viewpos) const {
 }
 
 std::string Npc::get_name() {
-    return name;
+    return name_;
 }
 
 std::string Npc::get_func() {
-    return func;
+    return func_;
 }
 }  // namespace ms

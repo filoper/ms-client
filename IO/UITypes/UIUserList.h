@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Components/Slider.h"
@@ -102,37 +99,37 @@ private:
         BT_BLACKLIST_DELETE
     };
 
-    uint16_t tab;
-    nl::node UserList;
-    Texture background;
+    uint16_t tab_;
+    nl::node user_list_;
+    Texture background_;
 
     // Party tab
-    uint16_t party_tab;
-    Texture party_title;
-    Texture party_mine_grid[5];
-    Texture party_search_grid[3];
-    Text party_mine_name;
-    Slider party_slider;
+    uint16_t party_tab_;
+    Texture party_title_;
+    Texture party_mine_grid_[5];
+    Texture party_search_grid_[3];
+    Text party_mine_name_;
+    Slider party_slider_;
 
     // Buddy tab
-    uint16_t friend_tab;
-    int friend_count = 0;
-    int friend_total = 50;
-    std::vector<Sprite> friend_sprites;
-    Texture friend_grid[4];
-    Text friends_online_text;
-    Text friends_cur_location;
-    Text friends_name;
-    Text friends_group_name;
-    Slider friends_slider;
+    uint16_t friend_tab_;
+    int friend_count_ = 0;
+    int friend_total_ = 50;
+    std::vector<Sprite> friend_sprites_;
+    Texture friend_grid_[4];
+    Text friends_online_text_;
+    Text friends_cur_location_;
+    Text friends_name_;
+    Text friends_group_name_;
+    Slider friends_slider_;
 
     // Boss tab
-    std::vector<Sprite> boss_sprites;
+    std::vector<Sprite> boss_sprites_;
 
     // Blacklist tab
-    uint16_t blacklist_tab;
-    Texture blacklist_title;
-    Texture blacklist_grid[3];
-    Text blacklist_name;
+    uint16_t blacklist_tab_;
+    Texture blacklist_title_;
+    Texture blacklist_grid_[3];
+    Text blacklist_name_;
 };
 }  // namespace ms

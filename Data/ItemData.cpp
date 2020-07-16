@@ -1,90 +1,89 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ItemData.h"
 
+#include <array>
 #include <nlnx/nx.hpp>
+#include <string>
 
 namespace ms {
-ItemData::ItemData(int32_t id) : itemid(id) {
+ItemData::ItemData(int32_t id) : item_id_(id) {
     untradable = false;
-    unique = false;
-    unsellable = false;
-    cashitem = false;
-    gender = 0;
+    unique_ = false;
+    unsellable_ = false;
+    cash_item_ = false;
+    gender_ = 0;
 
     nl::node src;
     nl::node strsrc;
 
-    std::string strprefix = "0" + std::to_string(get_item_prefix(itemid));
-    std::string strid = "0" + std::to_string(itemid);
-    int32_t prefix = get_prefix(itemid);
+    std::string strprefix = "0" + std::to_string(get_item_prefix(item_id_));
+    std::string strid = "0" + std::to_string(item_id_);
+    int32_t prefix = get_prefix(item_id_);
 
     switch (prefix) {
         case 1:
-            category = get_eqcategory(itemid);
-            src = nl::nx::character[category][strid + ".img"]["info"];
-            strsrc = nl::nx::string["Eqp.img"]["Eqp"][category]
-                                   [std::to_string(itemid)];
+            category_ = get_eqcategory(item_id_);
+            src = nl::nx::character[category_][strid + ".img"]["info"];
+            strsrc = nl::nx::string["Eqp.img"]["Eqp"][category_]
+                                   [std::to_string(item_id_)];
             break;
         case 2:
-            category = "Consume";
+            category_ = "Consume";
             src = nl::nx::item["Consume"][strprefix + ".img"][strid]["info"];
-            strsrc = nl::nx::string["Consume.img"][std::to_string(itemid)];
+            strsrc = nl::nx::string["Consume.img"][std::to_string(item_id_)];
             break;
         case 3:
-            category = "Install";
+            category_ = "Install";
             src = nl::nx::item["Install"][strprefix + ".img"][strid]["info"];
-            strsrc = nl::nx::string["Ins.img"][std::to_string(itemid)];
+            strsrc = nl::nx::string["Ins.img"][std::to_string(item_id_)];
             break;
         case 4:
-            category = "Etc";
+            category_ = "Etc";
             src = nl::nx::item["Etc"][strprefix + ".img"][strid]["info"];
-            strsrc = nl::nx::string["Etc.img"]["Etc"][std::to_string(itemid)];
+            strsrc = nl::nx::string["Etc.img"]["Etc"][std::to_string(item_id_)];
             break;
         case 5:
-            category = "Cash";
+            category_ = "Cash";
             src = nl::nx::item["Cash"][strprefix + ".img"][strid]["info"];
-            strsrc = nl::nx::string["Cash.img"][std::to_string(itemid)];
+            strsrc = nl::nx::string["Cash.img"][std::to_string(item_id_)];
             break;
     }
 
     if (src) {
-        icons[false] = src["icon"];
-        icons[true] = src["iconRaw"];
-        price = src["price"];
+        icons_[false] = src["icon"];
+        icons_[true] = src["iconRaw"];
+        price_ = src["price"];
         untradable = src["tradeBlock"].get_bool();
-        unique = src["only"].get_bool();
-        unsellable = src["notSale"].get_bool();
-        cashitem = src["cash"].get_bool();
-        gender = get_item_gender(itemid);
+        unique_ = src["only"].get_bool();
+        unsellable_ = src["notSale"].get_bool();
+        cash_item_ = src["cash"].get_bool();
+        gender_ = get_item_gender(item_id_);
 
-        name = std::string(strsrc["name"]);
-        desc = std::string(strsrc["desc"]);
+        name_ = std::string(strsrc["name"]);
+        desc_ = std::string(strsrc["desc"]);
 
-        valid = true;
+        valid_ = true;
     } else {
-        valid = false;
+        valid_ = false;
     }
 }
 
 std::string ItemData::get_eqcategory(int32_t id) const {
-    constexpr char *categorynames[15] = {
+    const std::array<std::string, 15> categorynames = {
         "Cap",      "Accessory", "Accessory", "Accessory", "Coat",
         "Longcoat", "Pants",     "Shoes",     "Glove",     "Shield",
         "Cape",     "Ring",      "Accessory", "Accessory", "Accessory"
@@ -92,7 +91,7 @@ std::string ItemData::get_eqcategory(int32_t id) const {
 
     int32_t index = get_item_prefix(id) - 100;
 
-    if (index < 15)
+    if (index < categorynames.size())
         return categorynames[index];
     else if (index >= 30 && index <= 70)
         return "Weapon";
@@ -121,7 +120,7 @@ int8_t ItemData::get_item_gender(int32_t id) const {
 }
 
 bool ItemData::is_valid() const {
-    return valid;
+    return valid_;
 }
 
 bool ItemData::is_untradable() const {
@@ -129,15 +128,15 @@ bool ItemData::is_untradable() const {
 }
 
 bool ItemData::is_unique() const {
-    return unique;
+    return unique_;
 }
 
 bool ItemData::is_unsellable() const {
-    return unsellable;
+    return unsellable_;
 }
 
 bool ItemData::is_cashitem() const {
-    return cashitem;
+    return cash_item_;
 }
 
 ItemData::operator bool() const {
@@ -145,30 +144,30 @@ ItemData::operator bool() const {
 }
 
 int32_t ItemData::get_id() const {
-    return itemid;
+    return item_id_;
 }
 
 int32_t ItemData::get_price() const {
-    return price;
+    return price_;
 }
 
 int8_t ItemData::get_gender() const {
-    return gender;
+    return gender_;
 }
 
 const std::string &ItemData::get_name() const {
-    return name;
+    return name_;
 }
 
 const std::string &ItemData::get_desc() const {
-    return desc;
+    return desc_;
 }
 
 const std::string &ItemData::get_category() const {
-    return category;
+    return category_;
 }
 
 const Texture &ItemData::get_icon(bool raw) const {
-    return icons[raw];
+    return icons_[raw];
 }
 }  // namespace ms

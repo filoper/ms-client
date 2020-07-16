@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-/// by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-// Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Net/Login.h"
@@ -105,31 +101,31 @@ private:
 
     Stance::Id getattackstance(uint8_t attack, bool degenerate) const;
 
-    Nominal<Stance::Id> stance;
-    Nominal<uint8_t> stframe;
-    uint16_t stelapsed;
+    Nominal<Stance::Id> stance_;
+    Nominal<uint8_t> st_frame_;
+    uint16_t st_elapsed_;
 
-    Nominal<Expression::Id> expression;
-    Nominal<uint8_t> expframe;
-    uint16_t expelapsed;
+    Nominal<Expression::Id> expression_;
+    Nominal<uint8_t> exp_frame_;
+    uint16_t exp_elapsed_;
 
-    bool flip;
+    bool flip_;
 
-    const BodyAction *action;
-    std::string actionstr;
-    uint8_t actframe;
+    const BodyAction *action_;
+    std::string actionstr_;
+    uint8_t actframe_;
 
-    const Body *body;
-    const Hair *hair;
-    const Face *face;
-    CharEquips equips;
+    const Body *body_;
+    const Hair *hair_;
+    const Face *face_;
+    CharEquips equips_;
 
-    Randomizer randomizer;
-    TimedBool alerted;
+    Randomizer randomizer_;
+    TimedBool alerted_;
 
-    static BodyDrawInfo drawinfo;
-    static std::unordered_map<int32_t, Hair> hairstyles;
-    static std::unordered_map<int32_t, Face> facetypes;
-    static std::unordered_map<int32_t, Body> bodytypes;
+    static BodyDrawInfo draw_info_;
+    static std::unordered_map<int32_t, Hair> hair_styles_;
+    static std::unordered_map<int32_t, Face> face_types_;
+    static std::unordered_map<int32_t, Body> body_types_;
 };
 }  // namespace ms

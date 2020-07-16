@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Components/Slider.h"
@@ -70,12 +67,12 @@ private:
 
     std::string format_text(const std::string &tx, const int32_t &npcid);
 
-    static constexpr int16_t MAX_HEIGHT = 248;
+    static constexpr int16_t MAX_HEIGHT_ = 248;
 
     enum Buttons {
-        ALLLEVEL,
+        ALL_LEVEL,
         CLOSE,
-        MYLEVEL,
+        MY_LEVEL,
         NEXT,
         NO,
         OK,
@@ -90,29 +87,29 @@ private:
         YES
     };
 
-    Texture top;
-    Texture fill;
-    Texture bottom;
-    Texture nametag;
-    Texture speaker;
+    Texture top_;
+    Texture fill_;
+    Texture bottom_;
+    Texture nametag_;
+    Texture speaker_;
 
-    Text text;
-    Text name;
+    Text text_;
+    Text name_;
 
-    int16_t height;
-    int16_t offset;
-    int16_t unitrows;
-    int16_t rowmax;
-    int16_t min_height;
+    int16_t height_;
+    int16_t offset_;
+    int16_t unit_rows_;
+    int16_t row_max_;
+    int16_t min_height_;
 
-    bool show_slider;
-    bool draw_text;
-    Slider slider;
-    TalkType type;
-    std::string formatted_text;
-    size_t formatted_text_pos;
-    uint16_t timestep;
+    bool show_slider_;
+    bool draw_text_;
+    Slider slider_;
+    TalkType type_;
+    std::string formatted_text_;
+    size_t formatted_text_pos_;
+    uint16_t timestep_;
 
-    std::function<void(bool)> onmoved;
+    std::function<void(bool)> onmoved_;
 };
 }  // namespace ms

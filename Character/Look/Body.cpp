@@ -1,25 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Body.h"
 
+#include <array>
 #include <nlnx/nx.hpp>
+#include <string>
 
 #include "../../Util/Misc.h"
 
@@ -63,53 +61,52 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
                             break;
                     }
 
-                    stances[stance][layer]
+                    stances_[stance][layer]
                         .emplace(frame, partnode)
                         .first->second.shift(shift);
                 }
             }
 
             if (nl::node headsfnode = headnode[stancename][frame]["head"]) {
-                Point<int16_t> shift
-                    = drawinfo.get_head_position(stance, frame);
+                Point<int16_t> shift =
+                    drawinfo.get_head_position(stance, frame);
 
-                stances[stance][Body::Layer::HEAD]
+                stances_[stance][Body::Layer::HEAD]
                     .emplace(frame, headsfnode)
                     .first->second.shift(shift);
             }
         }
     }
 
-    constexpr size_t NUM_SKINTYPES = 12;
-
-    constexpr char *skintypes[NUM_SKINTYPES]
-        = { "Light", "Tan", "Dark", "Pale", "Blue", "Green",
-            "",      "",    "",     "Grey", "Pink", "Red" };
+    const std::array<std::string, 12> skintypes = { "Light", "Tan",  "Dark",
+                                                    "Pale",  "Blue", "Green",
+                                                    "",      "",     "",
+                                                    "Grey",  "Pink", "Red" };
 
     size_t index = skin;
-    name = (index < NUM_SKINTYPES) ? skintypes[index] : "";
+    name_ = (index < skintypes.size()) ? skintypes[index] : "";
 }
 
 void Body::draw(Stance::Id stance,
                 Layer layer,
                 uint8_t frame,
                 const DrawArgument &args) const {
-    auto frameit = stances[stance][layer].find(frame);
+    auto frameit = stances_[stance][layer].find(frame);
 
-    if (frameit == stances[stance][layer].end())
+    if (frameit == stances_[stance][layer].end())
         return;
 
     frameit->second.draw(args);
 }
 
 const std::string &Body::get_name() const {
-    return name;
+    return name_;
 }
 
 Body::Layer Body::layer_by_name(const std::string &name) {
-    auto layer_iter = layers_by_name.find(name);
+    auto layer_iter = layers_by_name_.find(name);
 
-    if (layer_iter == layers_by_name.end()) {
+    if (layer_iter == layers_by_name_.end()) {
         if (name != "")
             std::cout << "Unknown Body::Layer name: [" << name << "]"
                       << std::endl;
@@ -120,16 +117,17 @@ Body::Layer Body::layer_by_name(const std::string &name) {
     return layer_iter->second;
 }
 
-const std::unordered_map<std::string, Body::Layer> Body::layers_by_name
-    = { { "body", Body::Layer::BODY },
-        { "backBody", Body::Layer::BODY },
-        { "arm", Body::Layer::ARM },
-        { "armBelowHead", Body::Layer::ARM_BELOW_HEAD },
-        { "armBelowHeadOverMailChest", Body::Layer::ARM_BELOW_HEAD_OVER_MAIL },
-        { "armOverHair", Body::Layer::ARM_OVER_HAIR },
-        { "armOverHairBelowWeapon", Body::Layer::ARM_OVER_HAIR_BELOW_WEAPON },
-        { "handBelowWeapon", Body::Layer::HAND_BELOW_WEAPON },
-        { "handOverHair", Body::Layer::HAND_OVER_HAIR },
-        { "handOverWeapon", Body::Layer::HAND_OVER_WEAPON },
-        { "head", Body::Layer::HEAD } };
+const std::unordered_map<std::string, Body::Layer> Body::layers_by_name_ = {
+    { "body", Body::Layer::BODY },
+    { "backBody", Body::Layer::BODY },
+    { "arm", Body::Layer::ARM },
+    { "armBelowHead", Body::Layer::ARM_BELOW_HEAD },
+    { "armBelowHeadOverMailChest", Body::Layer::ARM_BELOW_HEAD_OVER_MAIL },
+    { "armOverHair", Body::Layer::ARM_OVER_HAIR },
+    { "armOverHairBelowWeapon", Body::Layer::ARM_OVER_HAIR_BELOW_WEAPON },
+    { "handBelowWeapon", Body::Layer::HAND_BELOW_WEAPON },
+    { "handOverHair", Body::Layer::HAND_OVER_HAIR },
+    { "handOverWeapon", Body::Layer::HAND_OVER_WEAPON },
+    { "head", Body::Layer::HEAD }
+};
 }  // namespace ms

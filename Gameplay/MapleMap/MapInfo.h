@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <vector>
@@ -34,7 +31,7 @@ public:
     Point<int16_t> getpos() const;
 
 private:
-    Point<int16_t> pos;
+    Point<int16_t> pos_;
 };
 
 class Ladder {
@@ -50,10 +47,10 @@ public:
     int16_t get_x() const;
 
 private:
-    int16_t x;
-    int16_t y1;
-    int16_t y2;
-    bool ladder;
+    int16_t x_;
+    int16_t y1_;
+    int16_t y2_;
+    bool ladder_;
 };
 
 class MapInfo {
@@ -78,19 +75,19 @@ public:
                                       bool upwards) const;
 
 private:
-    int32_t fieldlimit;
-    bool cloud;
-    std::string bgm;
-    std::string mapdesc;
-    std::string mapname;
-    std::string streetname;
-    std::string mapmark;
-    bool swim;
-    bool town;
-    bool hideminimap;
-    Range<int16_t> mapwalls;
-    Range<int16_t> mapborders;
-    std::vector<Seat> seats;
-    std::vector<Ladder> ladders;
+    int32_t field_limit_;
+    bool cloud_;
+    std::string bgm_;
+    std::string map_desc_;
+    std::string map_name_;
+    std::string street_name_;
+    std::string map_mark_;
+    bool swim_;
+    bool town_;
+    bool hide_minimap_;
+    Range<int16_t> map_walls_;
+    Range<int16_t> map_borders_;
+    std::vector<Seat> seats_;
+    std::vector<Ladder> ladders_;
 };
 }  // namespace ms

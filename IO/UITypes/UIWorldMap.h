@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Components/AreaButton.h"
@@ -49,7 +46,7 @@ protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
 private:
-    static constexpr uint8_t MAPSPOT_TYPE_MAX = 4u;
+    static constexpr uint8_t MAPSPOT_TYPE_MAX_ = 4u;
 
     void set_search(bool enable);
 
@@ -84,32 +81,32 @@ private:
         std::vector<int32_t> map_ids;
     };
 
-    bool search;
-    bool show_path_img;
+    bool search_;
+    bool show_path_img_;
 
-    int32_t mapid;
+    int32_t mapid_;
 
-    std::string parent_map;
-    std::string user_map;
+    std::string parent_map_;
+    std::string user_map_;
 
-    Texture search_background;
-    Texture search_notice;
-    Texture base_img;
-    Texture path_img;
+    Texture search_background_;
+    Texture search_notice_;
+    Texture base_img_;
+    Texture path_img_;
 
-    Animation cur_pos;
-    Animation npc_pos[MAPSPOT_TYPE_MAX];
+    Animation cur_pos_;
+    Animation npc_pos_[MAPSPOT_TYPE_MAX_];
 
-    Textfield search_text;
+    Textfield search_text_;
 
-    std::map<uint16_t, Texture> link_images;
-    std::map<uint16_t, std::string> link_maps;
+    std::map<uint16_t, Texture> link_images_;
+    std::map<uint16_t, std::string> link_maps_;
 
-    std::vector<std::pair<Point<int16_t>, MapSpot>> map_spots;
+    std::vector<std::pair<Point<int16_t>, MapSpot>> map_spots_;
 
-    Point<int16_t> bg_dimensions;
-    Point<int16_t> bg_search_dimensions;
-    Point<int16_t> background_dimensions;
-    Point<int16_t> base_position;
+    Point<int16_t> bg_dimensions_;
+    Point<int16_t> bg_search_dimensions_;
+    Point<int16_t> background_dimensions_;
+    Point<int16_t> base_position_;
 };
 }  // namespace ms

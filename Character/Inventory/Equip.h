@@ -1,24 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <string>
+
 #include "EquipQuality.h"
 
 namespace ms {
@@ -41,8 +39,8 @@ public:
           uint8_t slots,
           uint8_t level,
           const EnumMap<EquipStat::Id, uint16_t> &stats,
-          uint8_t itemlevel,
-          int16_t itemexp,
+          uint8_t item_level,
+          int16_t item_exp,
           int32_t vicious);
 
     int32_t get_item_id() const;
@@ -68,17 +66,17 @@ public:
     EquipQuality::Id get_quality() const;
 
 private:
-    EnumMap<EquipStat::Id, uint16_t> stats;
-    int32_t item_id;
-    int64_t expiration;
-    std::string owner;
-    int16_t flags;
-    uint8_t slots;
-    uint8_t level;
-    uint8_t itemlevel;
-    int16_t itemexp;
-    int32_t vicious;
-    Potential potrank;
-    EquipQuality::Id quality;
+    EnumMap<EquipStat::Id, uint16_t> stats_;
+    int32_t item_id_;
+    int64_t expiration_;
+    std::string owner_;
+    int16_t flags_;
+    uint8_t slots_;
+    uint8_t level_;
+    uint8_t item_level_;
+    int16_t item_exp_;
+    int32_t vicious_;
+    Potential potential_rank_;
+    EquipQuality::Id quality_;
 };
 }  // namespace ms

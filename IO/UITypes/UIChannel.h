@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Template/BoolPair.h"
@@ -52,14 +49,14 @@ private:
 
     enum Buttons : uint16_t { CANCEL, CHANGE, CH };
 
-    uint8_t current_channel;
-    uint8_t selected_channel;
-    uint8_t channel_count;
-    BoolPair<Texture> channel;
-    std::vector<Sprite> ch;
-    int16_t current_channel_x;
-    int16_t current_channel_y;
-    int16_t selected_channel_x;
-    int16_t selected_channel_y;
+    uint8_t current_channel_;
+    uint8_t selected_channel_;
+    uint8_t channel_count_;
+    BoolPair<Texture> channel_;
+    std::vector<Sprite> ch_;
+    int16_t current_channel_x_;
+    int16_t current_channel_y_;
+    int16_t selected_channel_x_;
+    int16_t selected_channel_y_;
 };
 }  // namespace ms

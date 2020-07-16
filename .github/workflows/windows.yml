@@ -5,12 +5,12 @@ on:
     paths-ignore:
     - 'docs/**'
     - '**.md'
-    branches: [master, dev, dev/**]
+    branches: [master, dev, experiment]
   pull_request:
     paths-ignore:
     - 'docs/**'
     - '**.md'
-    branches: [master, dev, dev/**]
+    branches: [master, dev, experiment]
     
 env:
   BUILD_TYPE: Release
@@ -18,7 +18,31 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    
+    name: ${{ matrix.config.os }}-${{ matrix.config.compiler }}-${{ matrix.config.version }}
+    runs-on: ${{ matrix.config.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: windows-2016
+            compiler: MSVC
+            cc: cl
+            cxx: cl
+            version: "2017"
+
+          - os: windows-latest
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+            version: "8.1.0"
+
+          - os: windows-latest
+            compiler: MSVC
+            cc: cl
+            cxx: cl
+            version: "2019"
 
     steps:
     - uses: actions/checkout@v2
@@ -33,27 +57,19 @@ jobs:
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@v1
       
-    #- name: Set system environment variables
-    #  run: .github/workflows/winenv.bat
+    - name: Set system environment variables 2017
+      if: matrix.config.os == 'windows-2016'
+      run: .github/workflows/winenv2017.bat
 
-    - name: Install Openal-soft
+    - name: Set system environment variables
+      if: matrix.config.os == 'windows-latest'
+      run: .github/workflows/winenv.bat
+
+    - name: Install Bass
       run: |
         mkdir thirdparty
         cd thirdparty
-        git clone https://github.com/kcat/openal-soft
-        cd openal-soft
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION"
-        cmake --build build --config "$env:BUILD_TYPE"
-        cmake --install build --config "$env:BUILD_TYPE"
-
-    - name: Install Alure
-      run: |
-        cd thirdparty
-        git clone https://github.com/kcat/alure
-        cd alure
-        cmake -Bbuild -GNinja -DCMAKE_PREFIX_PATH="$env:INSTALL_LOCATION" -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION"
-        cmake --build build --config "$env:BUILD_TYPE"
-      # cmake --install build --config "$env:BUILD_TYPE"
+        git clone https://github.com/filoper/bass24.git
 
     - name: Install lz4
       run: |
@@ -61,9 +77,6 @@ jobs:
         Invoke-WebRequest -Uri https://github.com/lz4/lz4/releases/download/v1.9.2/lz4_win64_v1_9_2.zip -OutFile lz4.zip
         Expand-Archive ./lz4.zip -DestinationPath ./lz4
         Remove-Item lz4.zip
-        ls lz4/dll
-        echo ----
-        ls  lz4/static
        # $content = Get-Content -Path 'Makefile'
        # $content = $content -replace 'BUILD_STATIC:=yes', 'BUILD_STATIC:=yes`nCC = cl.exe'
        # $content | Set-Content -Path 'Makefile'
@@ -72,7 +85,6 @@ jobs:
     - name: Install Nx library
       run: |
         cd thirdparty
-        ls
         mkdir NoLifeNx
         cd NoLifeNx
         git clone https://github.com/lain3d/NoLifeNx nlnx
@@ -83,9 +95,8 @@ jobs:
         $content | Set-Content -Path 'CMakeLists.txt'
         $content_check = Get-Content -Path 'CMakeLists.txt'
         echo $content_check
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
         cmake --build build --config "$env:BUILD_TYPE"
-        ls build
        # cmake --install build --config "$env:BUILD_TYPE"
 
     - name: Install Freetype
@@ -100,7 +111,7 @@ jobs:
         cd thirdparty
         git clone https://github.com/Dav1dde/glad.git
         cd glad
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
         cmake --build build --config "$env:BUILD_TYPE"
        # cmake --install build --config "$env:BUILD_TYPE"
 
@@ -109,9 +120,8 @@ jobs:
         cd thirdparty
         git clone https://github.com/glfw/glfw 
         cd glfw
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
         cmake --build build --config "$env:BUILD_TYPE"
-        ls build/src
       # cmake --install build --config "$env:BUILD_TYPE"
 
     - name: Install Asio
@@ -129,13 +139,13 @@ jobs:
         cd thirdparty
         git clone https://github.com/google/googletest.git --branch release-1.10.0
         cd googletest
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE" -Dgtest_force_shared_crt=1
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE" -Dgtest_force_shared_crt=1
         cmake --build build --config "$env:BUILD_TYPE"
         cmake --build build --target install --config "$env:BUILD_TYPE"
 
     - name: Configure
       run: | 
-        cmake -Bbuild -GNinja -DCMAKE_PREFIX_PATH="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE" -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DENABLE_CODE_COVERAGE=1 -DBOOST_ROOT="$env:BOOST_ROOT_1_72_0"
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_PREFIX_PATH="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE" -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DENABLE_CODE_COVERAGE=1
 
     - name: Build
       run: cmake --build build --config "$env:BUILD_TYPE"

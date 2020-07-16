@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Char.h"
 
 #include <nlnx/nx.hpp>
@@ -25,23 +22,23 @@
 namespace ms {
 Char::Char(int32_t o, const CharLook &lk, const std::string &name) :
     MapObject(o),
-    look(lk),
-    look_preview(lk),
-    namelabel(Text(Text::Font::A13M,
-                   Text::Alignment::CENTER,
-                   Color::Name::WHITE,
-                   Text::Background::NAMETAG,
-                   name)) {}
+    look_(lk),
+    look_preview_(lk),
+    name_label_(Text(Text::Font::A13M,
+                     Text::Alignment::CENTER,
+                     Color::Name::WHITE,
+                     Text::Background::NAMETAG,
+                     name)) {}
 
 void Char::draw(double viewx, double viewy, float alpha) const {
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
 
-    effects.drawbelow(absp, alpha);
+    effects_.drawbelow(absp, alpha);
 
     Color color;
 
-    if (invincible) {
-        float phi = invincible.alpha() * 30;
+    if (invincible_) {
+        float phi = invincible_.alpha() * 30;
         float rgb = 0.9f - 0.5f * std::abs(std::sin(phi));
 
         color = Color(rgb, rgb, rgb, 1.0f);
@@ -49,51 +46,53 @@ void Char::draw(double viewx, double viewy, float alpha) const {
         color = Color::Code::CWHITE;
     }
 
-    look.draw(DrawArgument(absp, color), alpha);
+    look_.draw(DrawArgument(absp, color), alpha);
 
-    afterimage.draw(look.get_frame(), DrawArgument(absp, facing_right), alpha);
+    after_image_.draw(look_.get_frame(),
+                      DrawArgument(absp, facing_right_),
+                      alpha);
 
-    if (ironbody) {
-        float ibalpha = ironbody.alpha();
+    if (iron_body_) {
+        float ibalpha = iron_body_.alpha();
         float scale = 1.0f + ibalpha;
         float opacity = 1.0f - ibalpha;
 
-        look.draw(DrawArgument(absp, scale, scale, opacity), alpha);
+        look_.draw(DrawArgument(absp, scale, scale, opacity), alpha);
     }
 
-    for (auto &pet : pets)
+    for (auto &pet : pets_)
         if (pet.get_itemid())
             pet.draw(viewx, viewy, alpha);
 
     // If ever changing code for namelabel confirm placements with map 10000
-    namelabel.draw(absp + Point<int16_t>(0, -4));
-    chatballoon.draw(absp - Point<int16_t>(0, 85));
+    name_label_.draw(absp + Point<int16_t>(0, -4));
+    chat_balloon_.draw(absp - Point<int16_t>(0, 85));
 
-    effects.drawabove(absp, alpha);
+    effects_.drawabove(absp, alpha);
 
-    for (auto &number : damagenumbers)
+    for (auto &number : damage_numbers_)
         number.draw(viewx, viewy, alpha);
 }
 
 void Char::draw_preview(Point<int16_t> position, float alpha) const {
-    look_preview.draw(position,
-                      false,
-                      Stance::Id::STAND1,
-                      Expression::Id::DEFAULT);
+    look_preview_.draw(position,
+                       false,
+                       Stance::Id::STAND1,
+                       Expression::Id::DEFAULT);
 }
 
 bool Char::update(const Physics &physics, float speed) {
-    damagenumbers.remove_if(
+    damage_numbers_.remove_if(
         [](DamageNumber &number) { return number.update(); });
 
-    effects.update();
-    chatballoon.update();
-    invincible.update();
-    ironbody.update();
+    effects_.update();
+    chat_balloon_.update();
+    invincible_.update();
+    iron_body_.update();
 
-    for (auto &pet : pets) {
+    for (auto &pet : pets_) {
         if (pet.get_itemid()) {
-            switch (state) {
+            switch (state_) {
                 case State::LADDER:
                 case State::ROPE: pet.set_stance(PetLook::Stance::HANG); break;
                 case State::SWIM: pet.set_stance(PetLook::Stance::FLY); break;
@@ -114,19 +113,19 @@ bool Char::update(const Physics &physics, float speed) {
     if (speed >= 1.0f / Constants::TIMESTEP)
         stancespeed = static_cast<uint16_t>(Constants::TIMESTEP * speed);
 
-    afterimage.update(look.get_frame(), stancespeed);
+    after_image_.update(look_.get_frame(), stancespeed);
 
-    return look.update(stancespeed);
+    return look_.update(stancespeed);
 }
 
 float Char::get_stancespeed() const {
-    if (attacking)
+    if (attacking_)
         return get_real_attackspeed();
 
-    switch (state) {
-        case State::WALK: return static_cast<float>(std::abs(phobj.hspeed));
+    switch (state_) {
+        case State::WALK: return static_cast<float>(std::abs(phobj_.hspeed));
         case State::LADDER:
-        case State::ROPE: return static_cast<float>(std::abs(phobj.vspeed));
+        case State::ROPE: return static_cast<float>(std::abs(phobj_.vspeed));
         default: return 1.0f;
     }
 }
@@ -138,8 +137,8 @@ float Char::get_real_attackspeed() const {
 }
 
 uint16_t Char::get_attackdelay(size_t no) const {
-    uint8_t first_frame = afterimage.get_first_frame();
-    uint16_t delay = look.get_attackdelay(no, first_frame);
+    uint8_t first_frame = after_image_.get_first_frame();
+    uint16_t delay = look_.get_attackdelay(no, first_frame);
     float fspeed = get_real_attackspeed();
 
     return static_cast<uint16_t>(delay / fspeed);
@@ -152,45 +151,45 @@ int8_t Char::update(const Physics &physics) {
 }
 
 int8_t Char::get_layer() const {
-    return is_climbing() ? 7 : phobj.fhlayer;
+    return is_climbing() ? 7 : phobj_.fhlayer;
 }
 
 void Char::show_attack_effect(Animation toshow, int8_t z) {
     float attackspeed = get_real_attackspeed();
 
-    effects.add(toshow, DrawArgument(facing_right), z, attackspeed);
+    effects_.add(toshow, DrawArgument(facing_right_), z, attackspeed);
 }
 
 void Char::show_effect_id(CharEffect::Id toshow) {
-    effects.add(chareffects[toshow]);
+    effects_.add(char_effects_[toshow]);
 }
 
 void Char::show_iron_body() {
-    ironbody.set_for(500);
+    iron_body_.set_for(500);
 }
 
 void Char::show_damage(int32_t damage) {
-    int16_t start_y = phobj.get_y() - 60;
-    int16_t x = phobj.get_x() - 10;
+    int16_t start_y = phobj_.get_y() - 60;
+    int16_t x = phobj_.get_x() - 10;
 
-    damagenumbers.emplace_back(DamageNumber::Type::TOPLAYER,
-                               damage,
-                               start_y,
-                               x);
+    damage_numbers_.emplace_back(DamageNumber::Type::TOPLAYER,
+                                 damage,
+                                 start_y,
+                                 x);
 
-    look.set_alerted(5000);
-    invincible.set_for(2000);
+    look_.set_alerted(5000);
+    invincible_.set_for(2000);
 }
 
 void Char::speak(const std::string &line) {
-    chatballoon.change_text(line);
+    chat_balloon_.change_text(line);
 }
 
 void Char::change_look(MapleStat::Id stat, int32_t id) {
     switch (stat) {
-        case MapleStat::Id::SKIN: look.set_body(id); break;
-        case MapleStat::Id::FACE: look.set_face(id); break;
-        case MapleStat::Id::HAIR: look.set_hair(id); break;
+        case MapleStat::Id::SKIN: look_.set_body(id); break;
+        case MapleStat::Id::FACE: look_.set_face(id); break;
+        case MapleStat::Id::HAIR: look_.set_hair(id); break;
     }
 }
 
@@ -209,60 +208,60 @@ void Char::set_state(uint8_t statebyte) {
 
 void Char::set_expression(int32_t expid) {
     Expression::Id expression = Expression::byaction(expid);
-    look.set_expression(expression);
+    look_.set_expression(expression);
 }
 
 void Char::attack(const std::string &action) {
-    look.set_action(action);
+    look_.set_action(action);
 
-    attacking = true;
-    look.set_alerted(5000);
+    attacking_ = true;
+    look_.set_alerted(5000);
 }
 
 void Char::attack(Stance::Id stance) {
-    look.attack(stance);
+    look_.attack(stance);
 
-    attacking = true;
-    look.set_alerted(5000);
+    attacking_ = true;
+    look_.set_alerted(5000);
 }
 
 void Char::attack(bool degenerate) {
-    look.attack(degenerate);
+    look_.attack(degenerate);
 
-    attacking = true;
-    look.set_alerted(5000);
+    attacking_ = true;
+    look_.set_alerted(5000);
 }
 
 void Char::set_afterimage(int32_t skill_id) {
-    int32_t weapon_id = look.get_equips().get_weapon();
+    int32_t weapon_id = look_.get_equips().get_weapon();
 
     if (weapon_id <= 0)
         return;
 
     const WeaponData &weapon = WeaponData::get(weapon_id);
 
-    std::string stance_name = Stance::names[look.get_stance()];
+    std::string stance_name = Stance::names[look_.get_stance()];
     int16_t weapon_level =
         weapon.get_equipdata().get_reqstat(MapleStat::Id::LEVEL);
     const std::string &ai_name = weapon.get_afterimage();
 
-    afterimage = Afterimage(skill_id, ai_name, stance_name, weapon_level);
+    after_image_ = Afterimage(skill_id, ai_name, stance_name, weapon_level);
 }
 
 const Afterimage &Char::get_afterimage() const {
-    return afterimage;
+    return after_image_;
 }
 
 void Char::set_direction(bool f) {
-    facing_right = f;
-    look.set_direction(f);
+    facing_right_ = f;
+    look_.set_direction(f);
 }
 
 void Char::set_state(State st) {
-    state = st;
+    state_ = st;
 
-    Stance::Id stance = Stance::by_state(state);
-    look.set_stance(stance);
+    Stance::Id stance = Stance::by_state(state_);
+    look_.set_stance(stance);
 }
 
 void Char::add_pet(uint8_t index,
@@ -275,14 +274,14 @@ void Char::add_pet(uint8_t index,
     if (index > 2)
         return;
 
-    pets[index] = PetLook(iid, name, uniqueid, pos, stance, fhid);
+    pets_[index] = PetLook(iid, name, uniqueid, pos, stance, fhid);
 }
 
 void Char::remove_pet(uint8_t index, bool hunger) {
     if (index > 2)
         return;
 
-    pets[index] = PetLook();
+    pets_[index] = PetLook();
 
     if (hunger) {
         // TODO: Empty
@@ -290,23 +289,23 @@ void Char::remove_pet(uint8_t index, bool hunger) {
 }
 
 bool Char::is_invincible() const {
-    return invincible == true;
+    return invincible_ == true;
 }
 
 bool Char::is_sitting() const {
-    return state == State::SIT;
+    return state_ == State::SIT;
 }
 
 bool Char::is_climbing() const {
-    return state == State::LADDER || state == State::ROPE;
+    return state_ == State::LADDER || state_ == State::ROPE;
 }
 
 bool Char::is_twohanded() const {
-    return look.get_equips().is_twohanded();
+    return look_.get_equips().is_twohanded();
 }
 
 Weapon::Type Char::get_weapontype() const {
-    int32_t weapon_id = look.get_equips().get_weapon();
+    int32_t weapon_id = look_.get_equips().get_weapon();
 
     if (weapon_id <= 0)
         return Weapon::Type::NONE;
@@ -315,23 +314,23 @@ Weapon::Type Char::get_weapontype() const {
 }
 
 bool Char::getflip() const {
-    return facing_right;
+    return facing_right_;
 }
 
 std::string Char::get_name() const {
-    return namelabel.get_text();
+    return name_label_.get_text();
 }
 
 CharLook &Char::get_look() {
-    return look;
+    return look_;
 }
 
 const CharLook &Char::get_look() const {
-    return look;
+    return look_;
 }
 
 PhysicsObject &Char::get_phobj() {
-    return phobj;
+    return phobj_;
 }
 
 void Char::init() {
@@ -340,8 +339,8 @@ void Char::init() {
     nl::node src = nl::nx::effect["BasicEff.img"];
 
     for (auto iter : CharEffect::PATHS)
-        chareffects.emplace(iter.first, src.resolve(iter.second));
+        char_effects_.emplace(iter.first, src.resolve(iter.second));
 }
 
-EnumMap<CharEffect::Id, Animation> Char::chareffects;
+EnumMap<CharEffect::Id, Animation> Char::char_effects_;
 }  // namespace ms

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Geometry.h"
 
 namespace ms {
@@ -35,27 +32,27 @@ void Geometry::draw(int16_t x,
 }
 
 ColorBox::ColorBox(int16_t w, int16_t h, Color::Name c, float o) :
-    width(w),
-    height(h),
-    color(c),
-    opacity(o) {}
+    width_(w),
+    height_(h),
+    color_(c),
+    opacity_(o) {}
 
 ColorBox::ColorBox() : ColorBox(0, 0, Color::Name::BLACK, 0.0f) {}
 
 void ColorBox::setwidth(int16_t w) {
-    width = w;
+    width_ = w;
 }
 
 void ColorBox::setheight(int16_t h) {
-    height = h;
+    height_ = h;
 }
 
 void ColorBox::set_color(Color::Name c) {
-    color = c;
+    color_ = c;
 }
 
 void ColorBox::setopacity(float o) {
-    opacity = o;
+    opacity_ = o;
 }
 
 void ColorBox::draw(const DrawArgument &args) const {
@@ -63,38 +60,38 @@ void ColorBox::draw(const DrawArgument &args) const {
     int16_t absw = args.getstretch().x();
 
     if (absw == 0)
-        absw = width;
+        absw = width_;
 
     int16_t absh = args.getstretch().y();
 
     if (absh == 0)
-        absh = height;
+        absh = height_;
 
     absw = static_cast<int16_t>(absw * args.get_xscale());
     absh = static_cast<int16_t>(absh * args.get_yscale());
 
-    float absopc = opacity * args.get_color().a();
+    float absopc = opacity_ * args.get_color().a();
 
-    Geometry::draw(absp.x(), absp.y(), absw, absh, color, absopc);
+    Geometry::draw(absp.x(), absp.y(), absw, absh, color_, absopc);
 }
 
 ColorLine::ColorLine(int16_t w, Color::Name c, float o) :
-    width(w),
-    color(c),
-    opacity(o) {}
+    width_(w),
+    color_(c),
+    opacity_(o) {}
 
 ColorLine::ColorLine() : ColorLine(0, Color::Name::BLACK, 0.0f) {}
 
 void ColorLine::setwidth(int16_t w) {
-    width = w;
+    width_ = w;
 }
 
 void ColorLine::set_color(Color::Name c) {
-    color = c;
+    color_ = c;
 }
 
 void ColorLine::setopacity(float o) {
-    opacity = o;
+    opacity_ = o;
 }
 
 void ColorLine::draw(const DrawArgument &args) const {
@@ -102,7 +99,7 @@ void ColorLine::draw(const DrawArgument &args) const {
     int16_t absw = args.getstretch().x();
 
     if (absw == 0)
-        absw = width;
+        absw = width_;
 
     int16_t absh = args.getstretch().y();
 
@@ -112,9 +109,9 @@ void ColorLine::draw(const DrawArgument &args) const {
     absw = static_cast<int16_t>(absw * args.get_xscale());
     absh = static_cast<int16_t>(absh * args.get_yscale());
 
-    float absopc = opacity * args.get_color().a();
+    float absopc = opacity_ * args.get_color().a();
 
-    Geometry::draw(absp.x(), absp.y(), absw, absh, color, absopc);
+    Geometry::draw(absp.x(), absp.y(), absw, absh, color_, absopc);
 }
 
 void MobHpBar::draw(Point<int16_t> position, int16_t hppercent) const {

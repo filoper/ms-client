@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIRegion.h"
 
 #include <nlnx/nx.hpp>
@@ -32,35 +29,35 @@ UIRegion::UIRegion() :
     nl::node na = Gateway["BtButton0"];
     nl::node eu = Gateway["BtButton1"];
 
-    sprites.emplace_back(Gateway["backgrnd2"]);
-    sprites.emplace_back(Common["frame"], Point<int16_t>(400, 300));
+    sprites_.emplace_back(Gateway["backgrnd2"]);
+    sprites_.emplace_back(Common["frame"], Point<int16_t>(400, 300));
 
     int16_t pos_y = 84;
     Point<int16_t> na_pos = Point<int16_t>(155, pos_y);
     Point<int16_t> eu_pos = Point<int16_t>(424, pos_y);
 
-    buttons[Buttons::NA] = std::make_unique<MapleButton>(na, na_pos);
-    buttons[Buttons::EU] = std::make_unique<MapleButton>(eu, eu_pos);
-    buttons[Buttons::EXIT] =
+    buttons_[Buttons::NA] = std::make_unique<MapleButton>(na, na_pos);
+    buttons_[Buttons::EU] = std::make_unique<MapleButton>(eu, eu_pos);
+    buttons_[Buttons::EXIT] =
         std::make_unique<MapleButton>(Common["BtExit"], Point<int16_t>(0, 540));
 
     Point<int16_t> na_dim = Texture(na["normal"]["0"]).get_dimensions();
     Point<int16_t> eu_dim = Texture(eu["normal"]["0"]).get_dimensions();
 
-    na_rect = Rectangle<int16_t>(na_pos, na_pos + na_dim);
-    eu_rect = Rectangle<int16_t>(eu_pos, eu_pos + eu_dim);
+    na_rect_ = Rectangle<int16_t>(na_pos, na_pos + na_dim);
+    eu_rect_ = Rectangle<int16_t>(eu_pos, eu_pos + eu_dim);
 }
 
 Cursor::State UIRegion::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     clear_tooltip();
 
-    if (na_rect.contains(cursorpos))
+    if (na_rect_.contains(cursorpos))
         UI::get().show_text(
             Tooltip::Parent::TEXT,
             "Warning: You may experience latency and connection issues when "
             "connecting to the NA server from Europe.");
 
-    if (eu_rect.contains(cursorpos))
+    if (eu_rect_.contains(cursorpos))
         UI::get().show_text(
             Tooltip::Parent::TEXT,
             "Warning: You may experience latency and connection issues when "

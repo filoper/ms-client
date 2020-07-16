@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Character/EquipStat.h"
@@ -58,14 +55,14 @@ private:
     // Load an equip from the game files.
     EquipData(int32_t id);
 
-    const ItemData &itemdata;
+    const ItemData &item_data_;
 
-    EnumMap<MapleStat::Id, int16_t> reqstats;
-    EnumMap<EquipStat::Id, int16_t> defstats;
-    std::string type;
-    EquipSlot::Id eqslot;
-    uint8_t slots;
-    bool cash;
-    bool tradeblock;
+    EnumMap<MapleStat::Id, int16_t> req_stats_;
+    EnumMap<EquipStat::Id, int16_t> def_stats_;
+    std::string type_;
+    EquipSlot::Id eq_slot_;
+    uint8_t slots_;
+    bool cash_;
+    bool trade_block_;
 };
 }  // namespace ms

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "MapBackgrounds.h"
 
 #include <nlnx/nx.hpp>
@@ -31,18 +28,18 @@ Background::Background(nl::node src) {
 
     nl::node backsrc = nl::nx::map["Back"];
 
-    animated = src["ani"].get_bool();
-    animation =
-        backsrc[src["bS"] + ".img"][animated ? "ani" : "back"][src["no"]];
-    opacity = src["a"];
-    flipped = src["f"].get_bool();
-    cx = src["cx"];
-    cy = src["cy"];
-    rx = src["rx"];
-    ry = src["ry"];
+    animated_ = src["ani"].get_bool();
+    animation_ =
+        backsrc[src["bS"] + ".img"][animated_ ? "ani" : "back"][src["no"]];
+    opacity_ = src["a"];
+    flipped_ = src["f"].get_bool();
+    cx_ = src["cx"];
+    cy_ = src["cy"];
+    rx_ = src["rx"];
+    ry_ = src["ry"];
 
-    moveobj.set_x(src["x"]);
-    moveobj.set_y(src["y"]);
+    move_obj_.set_x(src["x"]);
+    move_obj_.set_y(src["y"]);
 
     Type type = typebyid(src["type"]);
 
@@ -50,92 +47,92 @@ Background::Background(nl::node src) {
 }
 
 void Background::settype(Type type) {
-    int16_t dim_x = animation.get_dimensions().x();
-    int16_t dim_y = animation.get_dimensions().y();
+    int16_t dim_x = animation_.get_dimensions().x();
+    int16_t dim_y = animation_.get_dimensions().y();
 
     // TODO: Double check for zero. Is this a WZ reading issue?
-    if (cx == 0)
-        cx = (dim_x > 0) ? dim_x : 1;
+    if (cx_ == 0)
+        cx_ = (dim_x > 0) ? dim_x : 1;
 
-    if (cy == 0)
-        cy = (dim_y > 0) ? dim_y : 1;
+    if (cy_ == 0)
+        cy_ = (dim_y > 0) ? dim_y : 1;
 
-    htile = 1;
-    vtile = 1;
+    htile_ = 1;
+    vtile_ = 1;
 
     switch (type) {
         case Type::HTILED:
-        case Type::HMOVEA: htile = VWIDTH / cx + 3; break;
+        case Type::HMOVEA: htile_ = VWIDTH / cx_ + 3; break;
         case Type::VTILED:
-        case Type::VMOVEA: vtile = VHEIGHT / cy + 3; break;
+        case Type::VMOVEA: vtile_ = VHEIGHT / cy_ + 3; break;
         case Type::TILED:
         case Type::HMOVEB:
         case Type::VMOVEB:
-            htile = VWIDTH / cx + 3;
-            vtile = VHEIGHT / cy + 3;
+            htile_ = VWIDTH / cx_ + 3;
+            vtile_ = VHEIGHT / cy_ + 3;
             break;
     }
 
     switch (type) {
         case Type::HMOVEA:
-        case Type::HMOVEB: moveobj.hspeed = rx / 16; break;
+        case Type::HMOVEB: move_obj_.hspeed = rx_ / 16; break;
         case Type::VMOVEA:
-        case Type::VMOVEB: moveobj.vspeed = ry / 16; break;
+        case Type::VMOVEB: move_obj_.vspeed = ry_ / 16; break;
     }
 }
 
 void Background::draw(double viewx, double viewy, float alpha) const {
     double x;
 
-    if (moveobj.hmobile()) {
-        x = moveobj.get_absolute_x(viewx, alpha);
+    if (move_obj_.hmobile()) {
+        x = move_obj_.get_absolute_x(viewx, alpha);
     } else {
-        double shift_x = rx * (WOFFSET - viewx) / 100 + WOFFSET;
-        x = moveobj.get_absolute_x(shift_x, alpha);
+        double shift_x = rx_ * (WOFFSET - viewx) / 100 + WOFFSET;
+        x = move_obj_.get_absolute_x(shift_x, alpha);
     }
 
     double y;
 
-    if (moveobj.vmobile()) {
-        y = moveobj.get_absolute_y(viewy, alpha);
+    if (move_obj_.vmobile()) {
+        y = move_obj_.get_absolute_y(viewy, alpha);
     } else {
-        double shift_y = ry * (HOFFSET - viewy) / 100 + HOFFSET;
-        y = moveobj.get_absolute_y(shift_y, alpha);
+        double shift_y = ry_ * (HOFFSET - viewy) / 100 + HOFFSET;
+        y = move_obj_.get_absolute_y(shift_y, alpha);
     }
 
-    if (htile > 1) {
+    if (htile_ > 1) {
         while (x > 0)
-            x -= cx;
+            x -= cx_;
 
-        while (x < -cx)
-            x += cx;
+        while (x < -cx_)
+            x += cx_;
     }
 
-    if (vtile > 1) {
+    if (vtile_ > 1) {
         while (y > 0)
-            y -= cy;
+            y -= cy_;
 
-        while (y < -cy)
-            y += cy;
+        while (y < -cy_)
+            y += cy_;
     }
 
     int16_t ix = static_cast<int16_t>(std::round(x));
     int16_t iy = static_cast<int16_t>(std::round(y));
 
-    int16_t tw = cx * htile;
-    int16_t th = cy * vtile;
+    int16_t tw = cx_ * htile_;
+    int16_t th = cy_ * vtile_;
 
-    for (int16_t tx = 0; tx < tw; tx += cx)
-        for (int16_t ty = 0; ty < th; ty += cy)
-            animation.draw(DrawArgument(Point<int16_t>(ix + tx, iy + ty),
-                                        flipped,
-                                        opacity / 255),
-                           alpha);
+    for (int16_t tx = 0; tx < tw; tx += cx_)
+        for (int16_t ty = 0; ty < th; ty += cy_)
+            animation_.draw(DrawArgument(Point<int16_t>(ix + tx, iy + ty),
+                                         flipped_,
+                                         opacity_ / 255),
+                            alpha);
 }
 
 void Background::update() {
-    moveobj.move();
-    animation.update();
+    move_obj_.move();
+    animation_.update();
 }
 
 MapBackgrounds::MapBackgrounds(nl::node src) {
@@ -146,15 +143,15 @@ MapBackgrounds::MapBackgrounds(nl::node src) {
         bool front = back["front"].get_bool();
 
         if (front)
-            foregrounds.push_back(back);
+            foregrounds_.push_back(back);
         else
-            backgrounds.push_back(back);
+            backgrounds_.push_back(back);
 
         no++;
         back = src[std::to_string(no)];
     }
 
-    black = src["0"]["bS"].get_string() == "";
+    black_ = src["0"]["bS"].get_string() == "";
 }
 
 MapBackgrounds::MapBackgrounds() {}
@@ -162,25 +159,25 @@ MapBackgrounds::MapBackgrounds() {}
 void MapBackgrounds::drawbackgrounds(double viewx,
                                      double viewy,
                                      float alpha) const {
-    if (black)
+    if (black_)
         GraphicsGL::get().drawscreenfill(0.0f, 0.0f, 0.0f, 1.0f);
 
-    for (auto &background : backgrounds)
+    for (auto &background : backgrounds_)
         background.draw(viewx, viewy, alpha);
 }
 
 void MapBackgrounds::drawforegrounds(double viewx,
                                      double viewy,
                                      float alpha) const {
-    for (auto &foreground : foregrounds)
+    for (auto &foreground : foregrounds_)
         foreground.draw(viewx, viewy, alpha);
 }
 
 void MapBackgrounds::update() {
-    for (auto &background : backgrounds)
+    for (auto &background : backgrounds_)
         background.update();
 
-    for (auto &foreground : foregrounds)
+    for (auto &foreground : foregrounds_)
         foreground.update();
 }
 }  // namespace ms

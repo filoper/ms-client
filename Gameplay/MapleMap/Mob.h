@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Audio/Audio.h"
@@ -146,52 +143,52 @@ private:
     // Return the current 'head' position
     Point<int16_t> get_head_position(Point<int16_t> position) const;
 
-    std::map<Stance, Animation> animations;
-    std::string name;
-    Sound hitsound;
-    Sound diesound;
-    uint16_t level;
-    float speed;
-    float flyspeed;
-    uint16_t watk;
-    uint16_t matk;
-    uint16_t wdef;
-    uint16_t mdef;
-    uint16_t accuracy;
-    uint16_t avoid;
-    uint16_t knockback;
-    bool undead;
-    bool touchdamage;
-    bool noflip;
-    bool notattack;
-    bool canmove;
-    bool canjump;
-    bool canfly;
+    std::map<Stance, Animation> animations_;
+    std::string name_;
+    Sound hit_sound_;
+    Sound die_sound_;
+    uint16_t level_;
+    float speed_;
+    float fly_speed_;
+    uint16_t watk_;
+    uint16_t matk_;
+    uint16_t wdef_;
+    uint16_t mdef_;
+    uint16_t accuracy_;
+    uint16_t avoid_;
+    uint16_t knockback_;
+    bool undead_;
+    bool touch_damage_;
+    bool no_flip_;
+    bool not_attack_;
+    bool can_move_;
+    bool can_jump_;
+    bool can_fly_;
 
-    EffectLayer effects;
-    Text namelabel;
-    MobHpBar hpbar;
-    Randomizer randomizer;
+    EffectLayer effects_;
+    Text name_label_;
+    MobHpBar hp_bar_;
+    Randomizer randomizer_;
 
-    TimedBool showhp;
+    TimedBool show_hp_;
 
-    std::vector<Movement> movements;
-    uint16_t counter;
+    std::vector<Movement> movements_;
+    uint16_t counter_;
 
-    int32_t id;
-    int8_t effect;
-    int8_t team;
-    bool dying;
-    bool dead;
-    bool control;
-    bool aggro;
-    Stance stance;
-    bool flip;
-    FlyDirection flydirection;
-    float walkforce;
-    int8_t hppercent;
-    bool fading;
-    bool fadein;
-    Linear<float> opacity;
+    int32_t id_;
+    int8_t effect_;
+    int8_t team_;
+    bool dying_;
+    bool dead_;
+    bool control_;
+    bool aggro_;
+    Stance stance_;
+    bool flip_;
+    FlyDirection fly_direction_;
+    float walk_force_;
+    int8_t hp_percent_;
+    bool fading_;
+    bool fade_in_;
+    Linear<float> opacity_;
 };
 }  // namespace ms

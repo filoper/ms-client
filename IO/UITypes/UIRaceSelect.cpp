@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIRaceSelect.h"
 
 #include <cctype>
@@ -36,10 +33,10 @@ namespace ms {
 UIRaceSelect::UIRaceSelect() :
     UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
     std::string version_text = Configuration::get().get_version();
-    version = Text(Text::Font::A11M,
-                   Text::Alignment::LEFT,
-                   Color::Name::LEMONGRASS,
-                   "Ver. " + version_text);
+    version_ = Text(Text::Font::A11M,
+                    Text::Alignment::LEFT,
+                    Color::Name::LEMONGRASS,
+                    "Ver. " + version_text);
 
     nl::node Login = nl::nx::ui["Login.img"];
     nl::node Common = Login["Common"];
@@ -48,174 +45,175 @@ UIRaceSelect::UIRaceSelect() :
     Point<int16_t> make_pos = RaceSelect["make"]["pos"];
     Point<int16_t> make_posZero = RaceSelect["make"]["posZero"];
 
-    pos = Point<int16_t>(std::abs(make_pos.x()), std::abs(make_pos.y()));
-    posZero =
+    pos_ = Point<int16_t>(std::abs(make_pos.x()), std::abs(make_pos.y()));
+    pos_zero_ =
         Point<int16_t>(std::abs(make_posZero.x()), std::abs(make_posZero.y()));
 
     uint8_t selected_list = 1;
 
-    order = RaceSelect["order"][selected_list];
-    hotlist = RaceSelect["hotList"][selected_list];
-    newlist = RaceSelect["newList"][selected_list];
-    bgm = RaceSelect["bgm"];
+    order_ = RaceSelect["order"][selected_list];
+    hotlist_ = RaceSelect["hotList"][selected_list];
+    newlist_ = RaceSelect["newList"][selected_list];
+    bgm_ = RaceSelect["bgm"];
 
-    hotlabel = RaceSelect["hotLabel"];
-    hotlabelZero = RaceSelect["hotLabel2"];
-    newlabel = RaceSelect["newLabel"];
-    hotbtn = RaceSelect["hot"];
-    newbtn = RaceSelect["new"];
+    hotlabel_ = RaceSelect["hotLabel"];
+    hotlabel_zero_ = RaceSelect["hotLabel2"];
+    newlabel_ = RaceSelect["newLabel"];
+    hotbtn_ = RaceSelect["hot"];
+    newbtn_ = RaceSelect["new"];
 
-    class_index[0] = order[0];
-    class_index[1] = order[1];
-    class_index[2] = order[2];
-    class_index[3] = order[3];
-    class_index[4] = order[4];
-    mouseover[0] = true;
-    mouseover[1] = false;
-    mouseover[2] = false;
-    mouseover[3] = false;
-    mouseover[4] = false;
+    class_index_[0] = order_[0];
+    class_index_[1] = order_[1];
+    class_index_[2] = order_[2];
+    class_index_[3] = order_[3];
+    class_index_[4] = order_[4];
+    mouseover_[0] = true;
+    mouseover_[1] = false;
+    mouseover_[2] = false;
+    mouseover_[3] = false;
+    mouseover_[4] = false;
 
-    class_isdisabled[Classes::RESISTANCE] = true;
-    class_isdisabled[Classes::EXPLORER] = false;
-    class_isdisabled[Classes::CYGNUSKNIGHTS] = false;
-    class_isdisabled[Classes::ARAN] = false;
-    class_isdisabled[Classes::EVAN] = true;
-    class_isdisabled[Classes::MERCEDES] = true;
-    class_isdisabled[Classes::DEMON] = true;
-    class_isdisabled[Classes::PHANTOM] = true;
-    class_isdisabled[Classes::DUALBLADE] = true;
-    class_isdisabled[Classes::MIHILE] = true;
-    class_isdisabled[Classes::LUMINOUS] = true;
-    class_isdisabled[Classes::KAISER] = true;
-    class_isdisabled[Classes::ANGELICBUSTER] = true;
-    class_isdisabled[Classes::CANNONEER] = true;
-    class_isdisabled[Classes::XENON] = true;
-    class_isdisabled[Classes::ZERO] = true;
-    class_isdisabled[Classes::SHADE] = true;
-    class_isdisabled[Classes::JETT] = true;
-    class_isdisabled[Classes::HAYATO] = true;
-    class_isdisabled[Classes::KANNA] = true;
-    class_isdisabled[Classes::CHASE] = true;
-    class_isdisabled[Classes::PINKBEAN] = true;
-    class_isdisabled[Classes::KINESIS] = true;
-    class_isdisabled[Classes::CADENA] = true;
-    class_isdisabled[Classes::ILLIUM] = true;
-    class_isdisabled[Classes::ARK] = true;
+    class_isdisabled_[Classes::RESISTANCE] = true;
+    class_isdisabled_[Classes::EXPLORER] = false;
+    class_isdisabled_[Classes::CYGNUSKNIGHTS] = false;
+    class_isdisabled_[Classes::ARAN] = false;
+    class_isdisabled_[Classes::EVAN] = true;
+    class_isdisabled_[Classes::MERCEDES] = true;
+    class_isdisabled_[Classes::DEMON] = true;
+    class_isdisabled_[Classes::PHANTOM] = true;
+    class_isdisabled_[Classes::DUALBLADE] = true;
+    class_isdisabled_[Classes::MIHILE] = true;
+    class_isdisabled_[Classes::LUMINOUS] = true;
+    class_isdisabled_[Classes::KAISER] = true;
+    class_isdisabled_[Classes::ANGELICBUSTER] = true;
+    class_isdisabled_[Classes::CANNONEER] = true;
+    class_isdisabled_[Classes::XENON] = true;
+    class_isdisabled_[Classes::ZERO] = true;
+    class_isdisabled_[Classes::SHADE] = true;
+    class_isdisabled_[Classes::JETT] = true;
+    class_isdisabled_[Classes::HAYATO] = true;
+    class_isdisabled_[Classes::KANNA] = true;
+    class_isdisabled_[Classes::CHASE] = true;
+    class_isdisabled_[Classes::PINKBEAN] = true;
+    class_isdisabled_[Classes::KINESIS] = true;
+    class_isdisabled_[Classes::CADENA] = true;
+    class_isdisabled_[Classes::ILLIUM] = true;
+    class_isdisabled_[Classes::ARK] = true;
 
-    sprites.emplace_back(Common["frame"], Point<int16_t>(400, 300));
+    sprites_.emplace_back(Common["frame"], Point<int16_t>(400, 300));
 
-    back = RaceSelect["Back"]["1"]["0"];
-    backZero = RaceSelect["Back"]["2"]["0"];
-    back_ani = RaceSelect["BackAni"];
-    class_details_background = RaceSelect["Back1"]["0"]["0"];
-    class_details_backgroundZero = RaceSelect["Back1"]["1"]["0"];
+    back_ = RaceSelect["Back"]["1"]["0"];
+    back_zero_ = RaceSelect["Back"]["2"]["0"];
+    back_ani_ = RaceSelect["BackAni"];
+    class_details_background_ = RaceSelect["Back1"]["0"]["0"];
+    class_details_background_zero_ = RaceSelect["Back1"]["1"]["0"];
 
-    for (size_t i = 0; i < CLASS_COUNT; i++) {
-        class_normal[i][false] = RaceSelect["button"][i]["normal"]["0"];
-        class_normal[i][true] = RaceSelect["button"][i]["mouseOver"]["0"];
+    for (size_t i = 0; i < CLASS_COUNT_; i++) {
+        class_normal_[i][false] = RaceSelect["button"][i]["normal"]["0"];
+        class_normal_[i][true] = RaceSelect["button"][i]["mouseOver"]["0"];
 
-        class_disabled[i][false] =
+        class_disabled_[i][false] =
             RaceSelect["buttonDisabled"][i]["normal"]["0"];
-        class_disabled[i][true] =
+        class_disabled_[i][true] =
             RaceSelect["buttonDisabled"][i]["mouseOver"]["0"];
 
-        class_background[i] = RaceSelect["Back0"][i]["0"];
-        class_details[i] = RaceSelect["Back2"][i]["0"];
-        class_title[i] = RaceSelect["Back3"][i]["0"];
+        class_background_[i] = RaceSelect["Back0"][i]["0"];
+        class_details_[i] = RaceSelect["Back2"][i]["0"];
+        class_title_[i] = RaceSelect["Back3"][i]["0"];
     }
 
-    buttons[Buttons::BACK] =
+    buttons_[Buttons::BACK] =
         std::make_unique<MapleButton>(Common["BtStart"],
                                       Point<int16_t>(0, 515));
-    buttons[Buttons::MAKE] = std::make_unique<MapleButton>(RaceSelect["make"]);
-    buttons[Buttons::LEFT] =
+    buttons_[Buttons::MAKE] = std::make_unique<MapleButton>(RaceSelect["make"]);
+    buttons_[Buttons::LEFT] =
         std::make_unique<MapleButton>(RaceSelect["leftArrow"],
                                       Point<int16_t>(41, 458));
-    buttons[Buttons::RIGHT] =
+    buttons_[Buttons::RIGHT] =
         std::make_unique<MapleButton>(RaceSelect["rightArrow"],
                                       Point<int16_t>(718, 458));
 
     for (size_t i = 0; i <= Buttons::CLASS0; i++)
-        buttons[Buttons::CLASS0 + i] = std::make_unique<AreaButton>(
+        buttons_[Buttons::CLASS0 + i] = std::make_unique<AreaButton>(
             get_class_pos(i),
-            class_normal[0][true].get_dimensions());
+            class_normal_[0][true].get_dimensions());
 
-    index_shift = 0;
-    selected_index = 0;
-    selected_class = class_index[selected_index];
+    index_shift_ = 0;
+    selected_index_ = 0;
+    selected_class_ = class_index_[selected_index_];
 
-    buttons[Buttons::LEFT]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::LEFT]->set_state(Button::State::DISABLED);
 
     Sound(Sound::Name::RACESELECT).play();
 }
 
 void UIRaceSelect::draw(float inter) const {
-    if (selected_class == Classes::ZERO)
-        backZero.draw(position);
+    if (selected_class_ == Classes::ZERO)
+        back_zero_.draw(position_);
     else
-        back.draw(position);
+        back_.draw(position_);
 
     UIElement::draw_sprites(inter);
 
-    version.draw(position + Point<int16_t>(707, 1));
+    version_.draw(position_ + Point<int16_t>(707, 1));
 
-    if (selected_class == Classes::KANNA || selected_class == Classes::CHASE) {
-        if (selected_class == Classes::ZERO)
-            class_details_backgroundZero.draw(position);
+    if (selected_class_ == Classes::KANNA
+        || selected_class_ == Classes::CHASE) {
+        if (selected_class_ == Classes::ZERO)
+            class_details_background_zero_.draw(position_);
         else
-            class_details_background.draw(position);
+            class_details_background_.draw(position_);
 
-        class_background[selected_class].draw(position);
+        class_background_[selected_class_].draw(position_);
     } else {
-        class_background[selected_class].draw(position);
+        class_background_[selected_class_].draw(position_);
 
-        if (selected_class == Classes::ZERO)
-            class_details_backgroundZero.draw(position);
+        if (selected_class_ == Classes::ZERO)
+            class_details_background_zero_.draw(position_);
         else
-            class_details_background.draw(position);
+            class_details_background_.draw(position_);
     }
 
-    class_details[selected_class].draw(position);
-    class_title[selected_class].draw(position);
+    class_details_[selected_class_].draw(position_);
+    class_title_[selected_class_].draw(position_);
 
-    for (const auto &node : hotlist) {
-        if (node.get_integer() == selected_class) {
-            if (selected_class == Classes::ZERO)
-                hotlabelZero.draw(position, inter);
+    for (const auto &node : hotlist_) {
+        if (node.get_integer() == selected_class_) {
+            if (selected_class_ == Classes::ZERO)
+                hotlabel_zero_.draw(position_, inter);
             else
-                hotlabel.draw(position, inter);
+                hotlabel_.draw(position_, inter);
 
             break;
         }
     }
 
-    for (const auto &node : newlist) {
-        if (node.get_integer() == selected_class) {
-            newlabel.draw(position, inter);
+    for (const auto &node : newlist_) {
+        if (node.get_integer() == selected_class_) {
+            newlabel_.draw(position_, inter);
             break;
         }
     }
 
-    for (size_t i = 0; i < INDEX_COUNT; i++) {
+    for (size_t i = 0; i < INDEX_COUNT_; i++) {
         Point<int16_t> button_pos = get_class_pos(i);
 
-        class_isdisabled[class_index[i]]
-            ? class_disabled[class_index[i]][mouseover[i]].draw(position
-                                                                + button_pos)
-            : class_normal[class_index[i]][mouseover[i]].draw(position
-                                                              + button_pos);
+        class_isdisabled_[class_index_[i]]
+            ? class_disabled_[class_index_[i]][mouseover_[i]].draw(position_
+                                                                   + button_pos)
+            : class_normal_[class_index_[i]][mouseover_[i]].draw(position_
+                                                                 + button_pos);
 
-        for (const auto &node : hotlist) {
-            if (node.get_integer() == class_index[i]) {
-                hotbtn.draw(position + button_pos, inter);
+        for (const auto &node : hotlist_) {
+            if (node.get_integer() == class_index_[i]) {
+                hotbtn_.draw(position_ + button_pos, inter);
                 break;
             }
         }
 
-        for (const auto &node : newlist) {
-            if (node.get_integer() == selected_class) {
-                newbtn.draw(position + button_pos, inter);
+        for (const auto &node : newlist_) {
+            if (node.get_integer() == selected_class_) {
+                newbtn_.draw(position_ + button_pos, inter);
                 break;
             }
         }
@@ -223,29 +221,29 @@ void UIRaceSelect::draw(float inter) const {
 
     UIElement::draw_buttons(inter);
 
-    back_ani.draw(position, inter);
+    back_ani_.draw(position_, inter);
 }
 
 void UIRaceSelect::update() {
     UIElement::update();
 
-    hotlabel.update();
-    hotlabelZero.update();
-    newlabel.update();
-    hotbtn.update();
-    newbtn.update();
+    hotlabel_.update();
+    hotlabel_zero_.update();
+    newlabel_.update();
+    hotbtn_.update();
+    newbtn_.update();
 
-    if (selected_class == Classes::ZERO)
-        buttons[Buttons::MAKE]->set_position(position + posZero);
+    if (selected_class_ == Classes::ZERO)
+        buttons_[Buttons::MAKE]->set_position(position_ + pos_zero_);
     else
-        buttons[Buttons::MAKE]->set_position(position + pos);
+        buttons_[Buttons::MAKE]->set_position(position_ + pos_);
 
-    back_ani.update();
+    back_ani_.update();
 
-    for (const auto node : bgm) {
+    for (const auto node : bgm_) {
         uint8_t name = std::stoi(node.name());
 
-        if (name == selected_class) {
+        if (name == selected_class_) {
             std::string found_bgm = node["bgm"];
             std::size_t found_img = found_bgm.find(".img");
 
@@ -271,14 +269,14 @@ void UIRaceSelect::update() {
 
 Cursor::State UIRaceSelect::send_cursor(bool clicked,
                                         Point<int16_t> cursorpos) {
-    for (auto &btit : buttons) {
+    for (auto &btit : buttons_) {
         if (btit.second->is_active()
-            && btit.second->bounds(position).contains(cursorpos)) {
+            && btit.second->bounds(position_).contains(cursorpos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTONOVER).play();
 
                 if (btit.first >= Buttons::CLASS0)
-                    mouseover[btit.first - Buttons::CLASS0] = true;
+                    mouseover_[btit.first - Buttons::CLASS0] = true;
 
                 btit.second->set_state(Button::State::MOUSEOVER);
             } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
@@ -288,12 +286,12 @@ Cursor::State UIRaceSelect::send_cursor(bool clicked,
                     btit.second->set_state(button_pressed(btit.first));
                 } else {
                     if (btit.first >= Buttons::CLASS0)
-                        mouseover[btit.first - Buttons::CLASS0] = true;
+                        mouseover_[btit.first - Buttons::CLASS0] = true;
                 }
             }
         } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
             if (btit.first >= Buttons::CLASS0)
-                mouseover[btit.first - Buttons::CLASS0] = false;
+                mouseover_[btit.first - Buttons::CLASS0] = false;
 
             btit.second->set_state(Button::State::NORMAL);
         }
@@ -308,11 +306,11 @@ void UIRaceSelect::send_key(int32_t keycode, bool pressed, bool escape) {
             show_charselect();
         } else if (keycode == KeyAction::Id::LEFT
                    || keycode == KeyAction::Id::DOWN) {
-            if (buttons[Buttons::LEFT]->get_state() == Button::State::NORMAL)
+            if (buttons_[Buttons::LEFT]->get_state() == Button::State::NORMAL)
                 button_pressed(Buttons::LEFT);
         } else if (keycode == KeyAction::Id::RIGHT
                    || keycode == KeyAction::Id::UP) {
-            if (buttons[Buttons::RIGHT]->get_state() == Button::State::NORMAL)
+            if (buttons_[Buttons::RIGHT]->get_state() == Button::State::NORMAL)
                 button_pressed(Buttons::RIGHT);
         } else if (keycode == KeyAction::Id::RETURN) {
             button_pressed(Buttons::MAKE);
@@ -339,13 +337,13 @@ bool UIRaceSelect::check_name(std::string name) const {
 }
 
 void UIRaceSelect::send_naming_result(bool nameused) {
-    if (selected_class == Classes::EXPLORER) {
+    if (selected_class_ == Classes::EXPLORER) {
         if (auto explorercreation = UI::get().get_element<UIExplorerCreation>())
             explorercreation->send_naming_result(nameused);
-    } else if (selected_class == Classes::CYGNUSKNIGHTS) {
+    } else if (selected_class_ == Classes::CYGNUSKNIGHTS) {
         if (auto cygnuscreation = UI::get().get_element<UICygnusCreation>())
             cygnuscreation->send_naming_result(nameused);
-    } else if (selected_class == Classes::ARAN) {
+    } else if (selected_class_ == Classes::ARAN) {
         if (auto arancreation = UI::get().get_element<UIAranCreation>())
             arancreation->send_naming_result(nameused);
     }
@@ -358,45 +356,45 @@ Button::State UIRaceSelect::button_pressed(uint16_t buttonid) {
         return Button::State::NORMAL;
     } else if (buttonid == Buttons::MAKE) {
         auto okhandler = [&]() {
-            if (!class_isdisabled[selected_class]) {
+            if (!class_isdisabled_[selected_class_]) {
                 Sound(Sound::Name::SCROLLUP).play();
 
                 deactivate();
 
-                if (selected_class == Classes::EXPLORER)
+                if (selected_class_ == Classes::EXPLORER)
                     UI::get().emplace<UIExplorerCreation>();
-                else if (selected_class == Classes::CYGNUSKNIGHTS)
+                else if (selected_class_ == Classes::CYGNUSKNIGHTS)
                     UI::get().emplace<UICygnusCreation>();
-                else if (selected_class == Classes::ARAN)
+                else if (selected_class_ == Classes::ARAN)
                     UI::get().emplace<UIAranCreation>();
             }
         };
 
-        UI::get().emplace<UIClassConfirm>(selected_class,
-                                          class_isdisabled[selected_class],
+        UI::get().emplace<UIClassConfirm>(selected_class_,
+                                          class_isdisabled_[selected_class_],
                                           okhandler);
 
         return Button::State::NORMAL;
     } else if (buttonid == Buttons::LEFT) {
-        uint8_t new_index = selected_index - 1;
+        uint8_t new_index = selected_index_ - 1;
 
-        int size = sizeof(class_index) / sizeof(class_index[0]);
+        int size = sizeof(class_index_) / sizeof(class_index_[0]);
 
-        int selected = class_index[selected_index - index_shift];
+        int selected = class_index_[selected_index_ - index_shift_];
         auto selected_itr =
-            std::find(class_index, class_index + size, selected);
+            std::find(class_index_, class_index_ + size, selected);
 
-        if (selected_itr != std::end(class_index)) {
-            auto button_index = std::distance(class_index, selected_itr);
+        if (selected_itr != std::end(class_index_)) {
+            auto button_index = std::distance(class_index_, selected_itr);
 
             if (button_index == 0) {
-                index_shift--;
+                index_shift_--;
 
-                class_index[0] = order[new_index + 4 - Buttons::CLASS0];
-                class_index[1] = order[new_index + 5 - Buttons::CLASS0];
-                class_index[2] = order[new_index + 6 - Buttons::CLASS0];
-                class_index[3] = order[new_index + 7 - Buttons::CLASS0];
-                class_index[4] = order[new_index + 8 - Buttons::CLASS0];
+                class_index_[0] = order_[new_index + 4 - Buttons::CLASS0];
+                class_index_[1] = order_[new_index + 5 - Buttons::CLASS0];
+                class_index_[2] = order_[new_index + 6 - Buttons::CLASS0];
+                class_index_[3] = order_[new_index + 7 - Buttons::CLASS0];
+                class_index_[4] = order_[new_index + 8 - Buttons::CLASS0];
             }
         }
 
@@ -404,25 +402,25 @@ Button::State UIRaceSelect::button_pressed(uint16_t buttonid) {
 
         return Button::State::IDENTITY;
     } else if (buttonid == Buttons::RIGHT) {
-        uint8_t new_index = selected_index + 1;
+        uint8_t new_index = selected_index_ + 1;
 
-        int size = sizeof(class_index) / sizeof(class_index[0]);
+        int size = sizeof(class_index_) / sizeof(class_index_[0]);
 
-        int selected = class_index[selected_index - index_shift];
+        int selected = class_index_[selected_index_ - index_shift_];
         auto selected_itr =
-            std::find(class_index, class_index + size, selected);
+            std::find(class_index_, class_index_ + size, selected);
 
-        if (selected_itr != std::end(class_index)) {
-            auto button_index = std::distance(class_index, selected_itr);
+        if (selected_itr != std::end(class_index_)) {
+            auto button_index = std::distance(class_index_, selected_itr);
 
             if (button_index == 4) {
-                index_shift++;
+                index_shift_++;
 
-                class_index[0] = order[new_index + 0 - Buttons::CLASS0];
-                class_index[1] = order[new_index + 1 - Buttons::CLASS0];
-                class_index[2] = order[new_index + 2 - Buttons::CLASS0];
-                class_index[3] = order[new_index + 3 - Buttons::CLASS0];
-                class_index[4] = order[new_index + 4 - Buttons::CLASS0];
+                class_index_[0] = order_[new_index + 0 - Buttons::CLASS0];
+                class_index_[1] = order_[new_index + 1 - Buttons::CLASS0];
+                class_index_[2] = order_[new_index + 2 - Buttons::CLASS0];
+                class_index_[3] = order_[new_index + 3 - Buttons::CLASS0];
+                class_index_[4] = order_[new_index + 4 - Buttons::CLASS0];
             }
         }
 
@@ -430,7 +428,7 @@ Button::State UIRaceSelect::button_pressed(uint16_t buttonid) {
 
         return Button::State::IDENTITY;
     } else if (buttonid >= Buttons::CLASS0) {
-        auto index = buttonid - Buttons::CLASS0 + index_shift;
+        auto index = buttonid - Buttons::CLASS0 + index_shift_;
 
         select_class(index);
 
@@ -441,49 +439,49 @@ Button::State UIRaceSelect::button_pressed(uint16_t buttonid) {
 }
 
 void UIRaceSelect::select_class(uint8_t index) {
-    uint8_t previous_index = selected_index;
-    selected_index = index;
+    uint8_t previous_index = selected_index_;
+    selected_index_ = index;
 
-    if (previous_index != selected_index) {
+    if (previous_index != selected_index_) {
         Sound(Sound::Name::RACESELECT).play();
 
-        int size = sizeof(class_index) / sizeof(class_index[0]);
+        int size = sizeof(class_index_) / sizeof(class_index_[0]);
 
-        int previous = class_index[previous_index - index_shift];
+        int previous = class_index_[previous_index - index_shift_];
         auto previous_itr =
-            std::find(class_index, class_index + size, previous);
+            std::find(class_index_, class_index_ + size, previous);
 
-        if (previous_itr != std::end(class_index)) {
-            auto button_index = std::distance(class_index, previous_itr);
+        if (previous_itr != std::end(class_index_)) {
+            auto button_index = std::distance(class_index_, previous_itr);
 
-            mouseover[previous_index - index_shift] = false;
-            buttons[button_index + Buttons::CLASS0]->set_state(
+            mouseover_[previous_index - index_shift_] = false;
+            buttons_[button_index + Buttons::CLASS0]->set_state(
                 Button::State::NORMAL);
         }
 
-        int selected = class_index[selected_index - index_shift];
+        int selected = class_index_[selected_index_ - index_shift_];
         auto selected_itr =
-            std::find(class_index, class_index + size, selected);
+            std::find(class_index_, class_index_ + size, selected);
 
-        if (selected_itr != std::end(class_index)) {
-            auto button_index = std::distance(class_index, selected_itr);
+        if (selected_itr != std::end(class_index_)) {
+            auto button_index = std::distance(class_index_, selected_itr);
 
-            selected_class = class_index[button_index];
-            mouseover[selected_index - index_shift] = true;
+            selected_class_ = class_index_[button_index];
+            mouseover_[selected_index_ - index_shift_] = true;
         }
     } else {
         button_pressed(Buttons::MAKE);
     }
 
-    if (selected_index > 0)
-        buttons[Buttons::LEFT]->set_state(Button::State::NORMAL);
+    if (selected_index_ > 0)
+        buttons_[Buttons::LEFT]->set_state(Button::State::NORMAL);
     else
-        buttons[Buttons::LEFT]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::LEFT]->set_state(Button::State::DISABLED);
 
-    if (selected_index < CLASS_COUNT - 2)
-        buttons[Buttons::RIGHT]->set_state(Button::State::NORMAL);
+    if (selected_index_ < CLASS_COUNT_ - 2)
+        buttons_[Buttons::RIGHT]->set_state(Button::State::NORMAL);
     else
-        buttons[Buttons::RIGHT]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::RIGHT]->set_state(Button::State::DISABLED);
 }
 
 void UIRaceSelect::show_charselect() {

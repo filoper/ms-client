@@ -1,23 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
+
+#include <chrono>
 
 #include "../Character/Player.h"
 #include "../IO/KeyType.h"
@@ -123,29 +121,29 @@ private:
 
     enum State { INACTIVE, TRANSITION, ACTIVE };
 
-    Camera camera;
-    Physics physics;
-    Player player;
+    Camera camera_;
+    Physics physics_;
+    Player player_;
 
-    Optional<Playable> playable;
-    State state;
-    int32_t mapid;
+    Optional<Playable> playable_;
+    State state_;
+    int32_t map_id_;
 
-    MapInfo mapinfo;
-    MapTilesObjs tilesobjs;
-    MapBackgrounds backgrounds;
-    MapPortals portals;
-    MapReactors reactors;
-    MapNpcs npcs;
-    MapChars chars;
-    MapMobs mobs;
-    MapDrops drops;
-    MapEffect effect;
+    MapInfo map_info_;
+    MapTilesObjs tiles_objs_;
+    MapBackgrounds backgrounds_;
+    MapPortals portals_;
+    MapReactors reactors_;
+    MapNpcs npcs_;
+    MapChars chars_;
+    MapMobs mobs_;
+    MapDrops drops_;
+    MapEffect effect_;
 
-    Combat combat;
+    Combat combat_;
 
-    std::chrono::time_point<std::chrono::steady_clock> start;
-    uint16_t levelBefore;
-    int64_t expBefore;
+    std::chrono::time_point<std::chrono::steady_clock> start_;
+    uint16_t level_before_;
+    int64_t exp_before_;
 };
 }  // namespace ms

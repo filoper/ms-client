@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Physics.h"
 
 namespace ms {
@@ -28,28 +25,28 @@ const double FLYFRICTION = 0.05;
 const double SWIMFRICTION = 0.08;
 
 Physics::Physics(nl::node src) {
-    fht = src;
+    fh_tree_ = src;
 }
 
 Physics::Physics() {}
 
 void Physics::move_object(PhysicsObject &phobj) const {
     // Determine which platform the object is currently on
-    fht.update_fh(phobj);
+    fh_tree_.update_fh(phobj);
 
     // Use the appropriate physics for the terrain the object is on
     switch (phobj.type) {
         case PhysicsObject::Type::NORMAL:
             move_normal(phobj);
-            fht.limit_movement(phobj);
+            fh_tree_.limit_movement(phobj);
             break;
         case PhysicsObject::Type::FLYING:
             move_flying(phobj);
-            fht.limit_movement(phobj);
+            fh_tree_.limit_movement(phobj);
             break;
         case PhysicsObject::Type::SWIMMING:
             move_swimming(phobj);
-            fht.limit_movement(phobj);
+            fh_tree_.limit_movement(phobj);
             break;
         case PhysicsObject::Type::FIXATED:
         default: break;
@@ -134,12 +131,12 @@ void Physics::move_swimming(PhysicsObject &phobj) const {
 }
 
 Point<int16_t> Physics::get_y_below(Point<int16_t> position) const {
-    int16_t ground = fht.get_y_below(position);
+    int16_t ground = fh_tree_.get_y_below(position);
 
     return Point<int16_t>(position.x(), ground - 1);
 }
 
 const FootholdTree &Physics::get_fht() const {
-    return fht;
+    return fh_tree_;
 }
 }  // namespace ms

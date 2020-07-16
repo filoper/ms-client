@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "MapMobs.h"
 
 #include <algorithm>
@@ -29,14 +26,14 @@ void MapMobs::draw(Layer::Id layer,
                    double viewx,
                    double viewy,
                    float alpha) const {
-    mobs.draw(layer, viewx, viewy, alpha);
+    mobs_.draw(layer, viewx, viewy, alpha);
 }
 
 void MapMobs::update(const Physics &physics) {
-    for (; !spawns.empty(); spawns.pop()) {
-        const MobSpawn &spawn = spawns.front();
+    for (; !spawns_.empty(); spawns_.pop()) {
+        const MobSpawn &spawn = spawns_.front();
 
-        if (Optional<Mob> mob = mobs.get(spawn.get_oid())) {
+        if (Optional<Mob> mob = mobs_.get(spawn.get_oid())) {
             int8_t mode = spawn.get_mode();
 
             if (mode > 0)
@@ -44,42 +41,42 @@ void MapMobs::update(const Physics &physics) {
 
             mob->makeactive();
         } else {
-            mobs.add(spawn.instantiate());
+            mobs_.add(spawn.instantiate());
         }
     }
 
-    mobs.update(physics);
+    mobs_.update(physics);
 }
 
 void MapMobs::spawn(MobSpawn &&spawn) {
-    spawns.emplace(std::move(spawn));
+    spawns_.emplace(std::move(spawn));
 }
 
 void MapMobs::remove(int32_t oid, int8_t animation) {
-    if (Optional<Mob> mob = mobs.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid))
         mob->kill(animation);
 }
 
 void MapMobs::clear() {
-    mobs.clear();
+    mobs_.clear();
 }
 
 void MapMobs::set_control(int32_t oid, bool control) {
     int8_t mode = control ? 1 : 0;
 
-    if (Optional<Mob> mob = mobs.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid))
         mob->set_control(mode);
 }
 
 void MapMobs::send_mobhp(int32_t oid, int8_t percent, uint16_t playerlevel) {
-    if (Optional<Mob> mob = mobs.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid))
         mob->show_hp(percent, playerlevel);
 }
 
 void MapMobs::send_movement(int32_t oid,
                             Point<int16_t> start,
                             std::vector<Movement> &&movements) {
-    if (Optional<Mob> mob = mobs.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid))
         mob->send_movement(start, std::move(movements));
 }
 
@@ -88,7 +85,7 @@ void MapMobs::send_attack(AttackResult &result,
                           const std::vector<int32_t> &targets,
                           uint8_t mobcount) {
     for (auto &target : targets) {
-        if (Optional<Mob> mob = mobs.get(target)) {
+        if (Optional<Mob> mob = mobs_.get(target)) {
             result.damagelines[target] = mob->calculate_damage(attack);
             result.mobcount++;
 
@@ -106,7 +103,7 @@ void MapMobs::apply_damage(int32_t oid,
                            bool toleft,
                            const AttackUser &user,
                            const SpecialMove &move) {
-    if (Optional<Mob> mob = mobs.get(oid)) {
+    if (Optional<Mob> mob = mobs_.get(oid)) {
         mob->apply_damage(damage, toleft);
 
         // TODO: Maybe move this into the method above too?
@@ -115,7 +112,7 @@ void MapMobs::apply_damage(int32_t oid,
 }
 
 bool MapMobs::contains(int32_t oid) const {
-    return mobs.contains(oid);
+    return mobs_.contains(oid);
 }
 
 int32_t MapMobs::find_colliding(const MovingObject &moveobj) const {
@@ -130,39 +127,39 @@ int32_t MapMobs::find_colliding(const MovingObject &moveobj) const {
                                        vertical.greater() };
 
     auto iter =
-        std::find_if(mobs.begin(), mobs.end(), [&player_rect](auto &mmo) {
+        std::find_if(mobs_.begin(), mobs_.end(), [&player_rect](auto &mmo) {
             Optional<Mob> mob = mmo.second.get();
             return mob && mob->is_alive() && mob->is_in_range(player_rect);
         });
 
-    if (iter == mobs.end())
+    if (iter == mobs_.end())
         return 0;
 
     return iter->second->get_oid();
 }
 
 MobAttack MapMobs::create_attack(int32_t oid) const {
-    if (Optional<const Mob> mob = mobs.get(oid))
+    if (Optional<const Mob> mob = mobs_.get(oid))
         return mob->create_touch_attack();
     else
         return {};
 }
 
 Point<int16_t> MapMobs::get_mob_position(int32_t oid) const {
-    if (auto mob = mobs.get(oid))
+    if (auto mob = mobs_.get(oid))
         return mob->get_position();
     else
         return Point<int16_t>(0, 0);
 }
 
 Point<int16_t> MapMobs::get_mob_head_position(int32_t oid) const {
-    if (Optional<const Mob> mob = mobs.get(oid))
+    if (Optional<const Mob> mob = mobs_.get(oid))
         return mob->get_head_position();
     else
         return Point<int16_t>(0, 0);
 }
 
 MapObjects *MapMobs::get_mobs() {
-    return &mobs;
+    return &mobs_;
 }
 }  // namespace ms

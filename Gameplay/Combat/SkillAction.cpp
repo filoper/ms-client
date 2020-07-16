@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "SkillAction.h"
 
 #include "../../Util/Misc.h"
@@ -37,21 +34,21 @@ void RegularAction::apply(Char &target, Attack::Type atype) const {
 }
 
 SingleAction::SingleAction(nl::node src) {
-    action = std::string(src["action"]["0"]);
+    action_ = std::string(src["action"]["0"]);
 }
 
 void SingleAction::apply(Char &target, Attack::Type) const {
-    target.attack(action);
+    target.attack(action_);
 }
 
 TwoHandedAction::TwoHandedAction(nl::node src) {
-    actions[false] = std::string(src["action"]["0"]);
-    actions[true] = std::string(src["action"]["1"]);
+    actions_[false] = std::string(src["action"]["0"]);
+    actions_[true] = std::string(src["action"]["1"]);
 }
 
 void TwoHandedAction::apply(Char &target, Attack::Type) const {
     bool twohanded = target.is_twohanded();
-    std::string action = actions[twohanded];
+    std::string action = actions_[twohanded];
 
     target.attack(action);
 }
@@ -59,17 +56,17 @@ void TwoHandedAction::apply(Char &target, Attack::Type) const {
 ByLevelAction::ByLevelAction(nl::node src, int32_t id) {
     for (auto sub : src["level"]) {
         int32_t level = string_conversion::or_zero<int32_t>(sub.name());
-        actions[level] = std::string(sub["action"]);
+        actions_[level] = std::string(sub["action"]);
     }
 
-    skillid = id;
+    skill_id_ = id;
 }
 
 void ByLevelAction::apply(Char &target, Attack::Type) const {
-    int32_t level = target.get_skilllevel(skillid);
-    auto iter = actions.find(level);
+    int32_t level = target.get_skilllevel(skill_id_);
+    auto iter = actions_.find(level);
 
-    if (iter != actions.end())
+    if (iter != actions_.end())
         target.attack(iter->second);
 }
 }  // namespace ms

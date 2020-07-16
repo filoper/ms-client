@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Util/Randomizer.h"
@@ -87,17 +84,17 @@ private:
         NUM9
     };
 
-    static constexpr size_t MIN_SIZE = 6;
-    static constexpr size_t MAX_SIZE = 16;
-    static constexpr uint8_t NUM_KEYS = 10;
+    static constexpr size_t MIN_SIZE_ = 6;
+    static constexpr size_t MAX_SIZE_ = 16;
+    static constexpr uint8_t NUM_KEYS_ = 10;
 
-    OkCallback ok_callback;
-    CancelCallback cancel_callback;
-    Textfield entry;
-    Randomizer random;
-    TextTooltip tetooltip;
-    Optional<Tooltip> tooltip;
-    Point<int16_t> tooltipposition;
-    int16_t timestamp;
+    OkCallback ok_callback_;
+    CancelCallback cancel_callback_;
+    Textfield entry_;
+    Randomizer random_;
+    TextTooltip tetooltip_;
+    Optional<Tooltip> tooltip_;
+    Point<int16_t> tooltip_position_;
+    int16_t timestamp_;
 };
 }  // namespace ms

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Gameplay/Stage.h"
@@ -47,15 +44,15 @@ protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
 private:
-    static constexpr int16_t CENTER_START_X = 64;
-    static constexpr int16_t BTN_MIN_Y = 4;
-    static constexpr int16_t ML_MR_Y = 17;
-    static constexpr int16_t MAX_ADJ = 40;
-    static constexpr int16_t M_START = 36;
-    static constexpr int16_t LISTNPC_ITEM_HEIGHT = 17;
-    static constexpr int16_t LISTNPC_ITEM_WIDTH = 140;
-    static constexpr int16_t LISTNPC_TEXT_WIDTH = 114;
-    static constexpr Point<int16_t> WINDOW_UL_POS = Point<int16_t>(0, 0);
+    static constexpr int16_t CENTER_START_X_ = 64;
+    static constexpr int16_t BTN_MIN_Y_ = 4;
+    static constexpr int16_t ML_MR_Y_ = 17;
+    static constexpr int16_t MAX_ADJ_ = 40;
+    static constexpr int16_t M_START_ = 36;
+    static constexpr int16_t LISTNPC_ITEM_HEIGHT_ = 17;
+    static constexpr int16_t LISTNPC_ITEM_WIDTH_ = 140;
+    static constexpr int16_t LISTNPC_TEXT_WIDTH_ = 114;
+    static constexpr Point<int16_t> WINDOW_UL_POS_ = Point<int16_t>(0, 0);
 
     void update_buttons();
 
@@ -84,50 +81,50 @@ private:
     enum Type { MIN, NORMAL, MAX };
 
     /// Constants
-    int32_t mapid;
-    int8_t type;
-    int8_t user_type;
-    bool simpleMode;
-    bool big_map;
-    bool has_map;
-    int16_t scale;
-    nl::node Map;
-    nl::node MiniMap;
-    nl::node marker;
-    Texture map_sprite;
-    Animation player_marker;
-    int16_t combined_text_width;
-    int16_t middle_right_x;
-    int16_t bt_min_width;
-    int16_t bt_max_width;
-    int16_t bt_map_width;
-    std::vector<Sprite> min_sprites;
-    std::vector<Sprite> normal_sprites;
-    std::vector<Sprite> max_sprites;
-    std::vector<std::pair<std::string, Point<int16_t>>> static_marker_info;
-    int16_t map_draw_origin_x, map_draw_origin_y;
-    Point<int16_t> center_offset;
-    Point<int16_t> min_dimensions;
-    Point<int16_t> normal_dimensions;
-    Point<int16_t> max_dimensions;
-    Text combined_text;
-    Text region_text;
-    Text town_text;
+    int32_t mapid_;
+    int8_t type_;
+    int8_t user_type_;
+    bool simple_mode_;
+    bool big_map_;
+    bool has_map_;
+    int16_t scale_;
+    nl::node map_;
+    nl::node mini_map_;
+    nl::node marker_;
+    Texture map_sprite_;
+    Animation player_marker_;
+    int16_t combined_text_width_;
+    int16_t middle_right_x_;
+    int16_t bt_min_width_;
+    int16_t bt_max_width_;
+    int16_t bt_map_width_;
+    std::vector<Sprite> min_sprites_;
+    std::vector<Sprite> normal_sprites_;
+    std::vector<Sprite> max_sprites_;
+    std::vector<std::pair<std::string, Point<int16_t>>> static_marker_info_;
+    int16_t map_draw_origin_x_, map_draw_origin_y_;
+    Point<int16_t> center_offset_;
+    Point<int16_t> min_dimensions_;
+    Point<int16_t> normal_dimensions_;
+    Point<int16_t> max_dimensions_;
+    Text combined_text_;
+    Text region_text_;
+    Text town_text_;
 
-    bool listNpc_enabled;
-    nl::node listNpc;
-    std::vector<Sprite> listNpc_sprites;
-    std::vector<MapObject *> listNpc_list;
-    std::vector<Text> listNpc_names;
-    std::vector<std::string> listNpc_full_names;
+    bool list_npc_enabled_;
+    nl::node list_npc_;
+    std::vector<Sprite> list_npc_sprites_;
+    std::vector<MapObject *> list_npc_list_;
+    std::vector<Text> list_npc_names_;
+    std::vector<std::string> list_npc_full_names_;
 
-    Point<int16_t> listNpc_dimensions;
+    Point<int16_t> list_npc_dimensions_;
 
-    Slider listNpc_slider;
-    int16_t listNpc_offset;
-    int16_t selected;
-    Animation selected_marker;
+    Slider list_npc_slider_;
+    int16_t list_npc_offset_;
+    int16_t selected_;
+    Animation selected_marker_;
 
-    const CharStats &stats;
+    const CharStats &stats_;
 };
 }  // namespace ms

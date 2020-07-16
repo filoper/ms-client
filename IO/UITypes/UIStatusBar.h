@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Character/CharStats.h"
@@ -56,7 +53,7 @@ protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
 private:
-    static constexpr int16_t QUICKSLOT_MAX = 211;
+    static constexpr int16_t QUICKSLOT_MAX_ = 211;
 
     float getexppercent() const;
 
@@ -116,47 +113,47 @@ private:
         BT_EVENT_DAILY
     };
 
-    const CharStats &stats;
+    const CharStats &stats_;
 
-    Gauge expbar;
-    Gauge hpbar;
-    Gauge mpbar;
-    Charset statset;
-    Charset hpmpset;
-    Charset levelset;
-    Texture quickslot[2];
-    Texture menutitle[5];
-    Texture menubackground[3];
-    OutlinedText namelabel;
-    std::vector<Sprite> hpmp_sprites;
+    Gauge exp_bar_;
+    Gauge hp_bar_;
+    Gauge mp_bar_;
+    Charset stat_set_;
+    Charset hpmp_set_;
+    Charset level_set_;
+    Texture quickslot_[2];
+    Texture menu_title_[5];
+    Texture menu_background_[3];
+    OutlinedText name_label_;
+    std::vector<Sprite> hpmp_sprites_;
 
-    Point<int16_t> exp_pos;
-    Point<int16_t> hpmp_pos;
-    Point<int16_t> hpset_pos;
-    Point<int16_t> mpset_pos;
-    Point<int16_t> statset_pos;
-    Point<int16_t> levelset_pos;
-    Point<int16_t> namelabel_pos;
-    Point<int16_t> quickslot_pos;
-    Point<int16_t> quickslot_adj;
-    Point<int16_t> quickslot_qs_adj;
-    Point<int16_t> menu_pos;
-    Point<int16_t> setting_pos;
-    Point<int16_t> community_pos;
-    Point<int16_t> character_pos;
-    Point<int16_t> event_pos;
-    int16_t quickslot_min;
-    int16_t position_x;
-    int16_t position_y;
+    Point<int16_t> exp_pos_;
+    Point<int16_t> hpmp_pos_;
+    Point<int16_t> hpset_pos_;
+    Point<int16_t> mpset_pos_;
+    Point<int16_t> statset_pos_;
+    Point<int16_t> levelset_pos_;
+    Point<int16_t> namelabel_pos_;
+    Point<int16_t> quickslot_pos_;
+    Point<int16_t> quickslot_adj_;
+    Point<int16_t> quickslot_qs_adj_;
+    Point<int16_t> menu_pos_;
+    Point<int16_t> setting_pos_;
+    Point<int16_t> community_pos_;
+    Point<int16_t> character_pos_;
+    Point<int16_t> event_pos_;
+    int16_t quickslot_min_;
+    int16_t position_x_;
+    int16_t position_y_;
 
-    bool quickslot_active;
-    int16_t VWIDTH;
-    int16_t VHEIGHT;
+    bool quickslot_active_;
+    int16_t VWIDTH_;
+    int16_t VHEIGHT_;
 
-    bool menu_active;
-    bool setting_active;
-    bool community_active;
-    bool character_active;
-    bool event_active;
+    bool menu_active_;
+    bool setting_active_;
+    bool community_active_;
+    bool character_active_;
+    bool event_active_;
 };
 }  // namespace ms

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Gameplay/Combat/DamageNumber.h"
@@ -172,23 +169,23 @@ protected:
     // Get a speed modifier for the current stance.
     float get_stancespeed() const;
 
-    CharLook look;
-    CharLook look_preview;
-    PetLook pets[3];
+    CharLook look_;
+    CharLook look_preview_;
+    PetLook pets_[3];
 
-    State state;
-    bool attacking;
-    bool facing_right;
+    State state_;
+    bool attacking_;
+    bool facing_right_;
 
 private:
-    Text namelabel;
-    ChatBalloon chatballoon;
-    EffectLayer effects;
-    Afterimage afterimage;
-    TimedBool invincible;
-    TimedBool ironbody;
-    std::list<DamageNumber> damagenumbers;
+    Text name_label_;
+    ChatBalloon chat_balloon_;
+    EffectLayer effects_;
+    Afterimage after_image_;
+    TimedBool invincible_;
+    TimedBool iron_body_;
+    std::list<DamageNumber> damage_numbers_;
 
-    static EnumMap<CharEffect::Id, Animation> chareffects;
+    static EnumMap<CharEffect::Id, Animation> char_effects_;
 };
 }  // namespace ms

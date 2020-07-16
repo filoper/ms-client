@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UINotice.h"
 
 #include <nlnx/nx.hpp>
@@ -27,48 +24,51 @@
 namespace ms {
 UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
     UIDragElement<PosNOTICE>(),
-    type(t),
-    alignment(a) {
+    type_(t),
+    alignment_(a) {
     nl::node src = nl::nx::ui["Basic.img"]["Notice6"];
 
-    top = src["t"];
-    center = src["c"];
-    centerbox = src["c_box"];
-    box = src["box"];
-    box2 = src["box2"];
-    bottom = src["s"];
-    bottombox = src["s_box"];
+    top_ = src["t"];
+    center_ = src["c"];
+    centerbox_ = src["c_box"];
+    box_ = src["box"];
+    box2_ = src["box2"];
+    bottom_ = src["s"];
+    bottombox_ = src["s_box"];
 
-    if (type == NoticeType::YESNO) {
-        position.shift_y(-8);
-        question =
-            Text(Text::Font::A11M, alignment, Color::Name::WHITE, message, 200);
-    } else if (type == NoticeType::ENTERNUMBER) {
-        position.shift_y(-16);
-        question = Text(Text::Font::A12M,
-                        Text::Alignment::LEFT,
-                        Color::Name::WHITE,
-                        message,
-                        200);
-    } else if (type == NoticeType::OK) {
-        uint16_t maxwidth = top.width() - 6;
+    if (type_ == NoticeType::YESNO) {
+        position_.shift_y(-8);
+        question_ = Text(Text::Font::A11M,
+                         alignment_,
+                         Color::Name::WHITE,
+                         message,
+                         200);
+    } else if (type_ == NoticeType::ENTERNUMBER) {
+        position_.shift_y(-16);
+        question_ = Text(Text::Font::A12M,
+                         Text::Alignment::LEFT,
+                         Color::Name::WHITE,
+                         message,
+                         200);
+    } else if (type_ == NoticeType::OK) {
+        uint16_t maxwidth = top_.width() - 6;
 
-        position.shift_y(-8);
-        question = Text(Text::Font::A11M,
-                        Text::Alignment::CENTER,
-                        Color::Name::WHITE,
-                        message,
-                        maxwidth);
+        position_.shift_y(-8);
+        question_ = Text(Text::Font::A11M,
+                         Text::Alignment::CENTER,
+                         Color::Name::WHITE,
+                         message,
+                         maxwidth);
     }
 
-    height = question.height();
-    dimension =
-        Point<int16_t>(top.width(), top.height() + height + bottom.height());
-    position = Point<int16_t>(position.x() - dimension.x() / 2,
-                              position.y() - dimension.y() / 2);
-    dragarea = Point<int16_t>(dimension.x(), 20);
+    height_ = question_.height();
+    dimension_ = Point<int16_t>(top_.width(),
+                                top_.height() + height_ + bottom_.height());
+    position_ = Point<int16_t>(position_.x() - dimension_.x() / 2,
+                               position_.y() - dimension_.y() / 2);
+    drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
-    if (type != NoticeType::ENTERNUMBER)
+    if (type_ != NoticeType::ENTERNUMBER)
         Sound(Sound::Name::DLGNOTICE).play();
 }
 
@@ -76,47 +76,47 @@ UINotice::UINotice(std::string message, NoticeType t) :
     UINotice(message, t, Text::Alignment::CENTER) {}
 
 void UINotice::draw(bool textfield) const {
-    Point<int16_t> start = position;
+    Point<int16_t> start = position_;
 
-    top.draw(start);
-    start.shift_y(top.height());
+    top_.draw(start);
+    start.shift_y(top_.height());
 
     if (textfield) {
-        center.draw(start);
-        start.shift_y(center.height());
-        centerbox.draw(start);
-        start.shift_y(centerbox.height() - 1);
-        box2.draw(start);
-        start.shift_y(box2.height());
-        box.draw(DrawArgument(start, Point<int16_t>(0, 29)));
+        center_.draw(start);
+        start.shift_y(center_.height());
+        centerbox_.draw(start);
+        start.shift_y(centerbox_.height() - 1);
+        box2_.draw(start);
+        start.shift_y(box2_.height());
+        box_.draw(DrawArgument(start, Point<int16_t>(0, 29)));
         start.shift_y(29);
 
-        question.draw(position + Point<int16_t>(13, 13));
+        question_.draw(position_ + Point<int16_t>(13, 13));
     } else {
-        int16_t pos_y = height >= 32 ? height : 32;
+        int16_t pos_y = height_ >= 32 ? height_ : 32;
 
-        center.draw(DrawArgument(start, Point<int16_t>(0, pos_y)));
+        center_.draw(DrawArgument(start, Point<int16_t>(0, pos_y)));
         start.shift_y(pos_y);
-        centerbox.draw(start);
-        start.shift_y(centerbox.height());
-        box.draw(start);
-        start.shift_y(box.height());
+        centerbox_.draw(start);
+        start.shift_y(centerbox_.height());
+        box_.draw(start);
+        start.shift_y(box_.height());
 
-        if (type == NoticeType::YESNO && alignment == Text::Alignment::LEFT)
-            question.draw(position + Point<int16_t>(31, 14));
+        if (type_ == NoticeType::YESNO && alignment_ == Text::Alignment::LEFT)
+            question_.draw(position_ + Point<int16_t>(31, 14));
         else
-            question.draw(position + Point<int16_t>(131, 14));
+            question_.draw(position_ + Point<int16_t>(131, 14));
     }
 
-    bottombox.draw(start);
+    bottombox_.draw(start);
 }
 
 int16_t UINotice::box2offset(bool textfield) const {
-    int16_t offset = top.height() + centerbox.height() + box.height() + height
-                     - (textfield ? 0 : 16);
+    int16_t offset = top_.height() + centerbox_.height() + box_.height()
+                     + height_ - (textfield ? 0 : 16);
 
-    if (type == NoticeType::OK)
-        if (height < 34)
+    if (type_ == NoticeType::OK)
+        if (height_ < 34)
             offset += 15;
 
     return offset;
@@ -126,16 +126,16 @@ UIYesNo::UIYesNo(std::string message,
                  std::function<void(bool yes)> yh,
                  Text::Alignment alignment) :
     UINotice(message, NoticeType::YESNO, alignment) {
-    yesnohandler = yh;
+    yesno_handler_ = yh;
 
     int16_t belowtext = box2offset(false);
 
     nl::node src = nl::nx::ui["Basic.img"];
 
-    buttons[Buttons::YES] =
+    buttons_[Buttons::YES] =
         std::make_unique<MapleButton>(src["BtOK4"],
                                       Point<int16_t>(156, belowtext));
-    buttons[Buttons::NO] =
+    buttons_[Buttons::NO] =
         std::make_unique<MapleButton>(src["BtCancel4"],
                                       Point<int16_t>(198, belowtext));
 }
@@ -151,10 +151,10 @@ void UIYesNo::draw(float alpha) const {
 
 void UIYesNo::send_key(int32_t keycode, bool pressed, bool escape) {
     if (keycode == KeyAction::Id::RETURN) {
-        yesnohandler(true);
+        yesno_handler_(true);
         deactivate();
     } else if (escape) {
-        yesnohandler(false);
+        yesno_handler_(false);
         deactivate();
     }
 }
@@ -167,8 +167,8 @@ Button::State UIYesNo::button_pressed(uint16_t buttonid) {
     deactivate();
 
     switch (buttonid) {
-        case Buttons::YES: yesnohandler(true); break;
-        case Buttons::NO: yesnohandler(false); break;
+        case Buttons::YES: yesno_handler_(true); break;
+        case Buttons::NO: yesno_handler_(false); break;
     }
 
     return Button::State::PRESSED;
@@ -187,9 +187,9 @@ UIEnterNumber::UIEnterNumber(std::string message,
 
     nl::node src = nl::nx::ui["Basic.img"];
 
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(src["BtOK4"], 156, pos_y);
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(src["BtCancel4"], 198, pos_y);
 
     numfield = Textfield(Text::Font::A11M,
@@ -211,13 +211,13 @@ void UIEnterNumber::draw(float alpha) const {
     UINotice::draw(true);
     UIElement::draw(alpha);
 
-    numfield.draw(position);
+    numfield.draw(position_);
 }
 
 void UIEnterNumber::update() {
     UIElement::update();
 
-    numfield.update(position);
+    numfield.update(position_);
 }
 
 Cursor::State UIEnterNumber::send_cursor(bool clicked,
@@ -261,7 +261,7 @@ void UIEnterNumber::handlestring(std::string numstr) {
 
     auto okhandler = [&](bool) {
         numfield.set_state(Textfield::State::FOCUSED);
-        buttons[Buttons::OK]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
     };
 
     if (!has_only_digits) {
@@ -290,16 +290,16 @@ void UIEnterNumber::handlestring(std::string numstr) {
         deactivate();
     }
 
-    buttons[Buttons::OK]->set_state(Button::State::NORMAL);
+    buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
 }
 
 UIOk::UIOk(std::string message, std::function<void(bool ok)> oh) :
     UINotice(message, NoticeType::OK) {
-    okhandler = oh;
+    okhandler_ = oh;
 
     nl::node src = nl::nx::ui["Basic.img"];
 
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(src["BtOK4"], 197, box2offset(false));
 }
 
@@ -311,10 +311,10 @@ void UIOk::draw(float alpha) const {
 void UIOk::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
         if (keycode == KeyAction::Id::RETURN) {
-            okhandler(true);
+            okhandler_(true);
             deactivate();
         } else if (escape) {
-            okhandler(false);
+            okhandler_(false);
             deactivate();
         }
     }
@@ -328,7 +328,7 @@ Button::State UIOk::button_pressed(uint16_t buttonid) {
     deactivate();
 
     switch (buttonid) {
-        case Buttons::OK: okhandler(true); break;
+        case Buttons::OK: okhandler_(true); break;
     }
 
     return Button::State::NORMAL;

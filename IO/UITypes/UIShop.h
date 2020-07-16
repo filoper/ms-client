@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Character/Look/CharLook.h"
@@ -113,28 +110,28 @@ private:
         NUM_BUTTONS
     };
 
-    const CharLook &charlook;
-    const Inventory &inventory;
+    const CharLook &charlook_;
+    const Inventory &inventory_;
 
-    Texture npc;
-    Texture buy_selection;
-    Texture sell_selection;
-    Texture meso;
-    Text mesolabel;
+    Texture npc_;
+    Texture buy_selection_;
+    Texture sell_selection_;
+    Texture meso_;
+    Text meso_label_;
 
-    Slider buyslider;
-    Slider sellslider;
+    Slider buy_slider_;
+    Slider sell_slider_;
 
-    int16_t buy_x;
-    int16_t buy_width;
-    int16_t sell_x;
-    int16_t sell_width;
+    int16_t buy_x_;
+    int16_t buy_width_;
+    int16_t sell_x_;
+    int16_t sell_width_;
 
-    BoolPair<Texture> checkBox;
+    BoolPair<Texture> checkbox_;
 
-    bool rightclicksell;
+    bool right_click_sell_;
 
-    Point<int16_t> lastcursorpos;
+    Point<int16_t> last_cursor_pos_;
 
     class BuyItem {
     public:
@@ -153,16 +150,16 @@ private:
         int16_t get_buyable() const;
 
     private:
-        Texture icon;
-        Texture currency;
-        int32_t id;
-        int32_t price;
-        int32_t pitch;
+        Texture icon_;
+        Texture currency_;
+        int32_t id_;
+        int32_t price_;
+        int32_t pitch_;
         int32_t time;
-        int16_t chargeprice;
-        int16_t buyable;
-        Text namelabel;
-        Text pricelabel;
+        int16_t charge_price_;
+        int16_t buyable_;
+        Text name_label_;
+        Text price_label_;
     };
 
     class SellItem {
@@ -182,19 +179,19 @@ private:
         int16_t get_sellable() const;
 
     private:
-        Texture icon;
-        int32_t id;
-        int16_t slot;
-        int16_t sellable;
-        bool showcount;
-        Text namelabel;
-        Text pricelabel;
+        Texture icon_;
+        int32_t id_;
+        int16_t slot_;
+        int16_t sellable_;
+        bool show_count_;
+        Text name_label_;
+        Text price_label_;
     };
 
     struct BuyState {
         std::vector<BuyItem> items;
         int16_t offset;
-        int16_t lastslot;
+        int16_t last_slot;
         int16_t selection;
 
         void reset();
@@ -210,13 +207,13 @@ private:
         void select(int16_t selected);
     };
 
-    BuyState buystate;
+    BuyState buy_state_;
 
     struct SellState {
         std::vector<SellItem> items;
         int16_t offset;
         InventoryType::Id tab;
-        int16_t lastslot;
+        int16_t last_slot;
         int16_t selection;
 
         void reset();
@@ -234,6 +231,6 @@ private:
         void select(int16_t selected);
     };
 
-    SellState sellstate;
+    SellState sell_state_;
 };
 }  // namespace ms

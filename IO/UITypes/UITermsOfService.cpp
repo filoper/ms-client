@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UITermsOfService.h"
 
 #include <nlnx/nx.hpp>
@@ -27,17 +24,17 @@
 
 namespace ms {
 UITermsOfService::UITermsOfService(std::function<void()> oh) :
-    okhandler(oh),
-    offset(0),
-    unit_rows(1) {
+    okhandler_(oh),
+    offset_(0),
+    unit_rows_(1) {
     nl::node Login = nl::nx::ui["Login.img"];
     nl::node TOS = Login["TOS"];
 
-    sprites.emplace_back(TOS, Point<int16_t>(399, 250));
+    sprites_.emplace_back(TOS, Point<int16_t>(399, 250));
 
-    buttons[Buttons::OK] =
+    buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(Login["BtOk"], Point<int16_t>(483, 425));
-    buttons[Buttons::CANCEL] =
+    buttons_[Buttons::CANCEL] =
         std::make_unique<MapleButton>(Login["BtCancel"],
                                       Point<int16_t>(557, 425));
 
@@ -1541,54 +1538,54 @@ UITermsOfService::UITermsOfService(std::function<void()> oh) :
     EULA += "INTO THIS AGREEMENT.";
 #pragma endregion
 
-    text = Text(Text::Font::A11M,
-                Text::Alignment::LEFT,
-                Color::Name::BLACK,
-                EULA,
-                340,
-                true,
-                2);
-    max_rows = text.height() / 300 + 1;
+    text_ = Text(Text::Font::A11M,
+                 Text::Alignment::LEFT,
+                 Color::Name::BLACK,
+                 EULA,
+                 340,
+                 true,
+                 2);
+    max_rows_ = text_.height() / 300 + 1;
 
     int16_t slider_y = 77;
 
-    slider = Slider(Slider::Type::LINE_PUNGA,
-                    Range<int16_t>(slider_y, slider_y + 305),
-                    574,
-                    unit_rows,
-                    max_rows,
-                    [&](bool upwards) {
-                        int16_t shift = upwards ? -1 : 1;
-                        bool above = offset + shift >= 0;
-                        bool below = offset + shift <= max_rows - unit_rows;
+    slider_ = Slider(Slider::Type::LINE_PUNGA,
+                     Range<int16_t>(slider_y, slider_y + 305),
+                     574,
+                     unit_rows_,
+                     max_rows_,
+                     [&](bool upwards) {
+                         int16_t shift = upwards ? -1 : 1;
+                         bool above = offset_ + shift >= 0;
+                         bool below = offset_ + shift <= max_rows_ - unit_rows_;
 
-                        if (above && below) {
-                            offset += shift;
-                            update_accept(offset);
-                        }
-                    });
+                         if (above && below) {
+                             offset_ += shift;
+                             update_accept(offset_);
+                         }
+                     });
 
-    update_accept(offset);
+    update_accept(offset_);
 
-    position = Point<int16_t>(0, 10);
-    dimension = Texture(TOS).get_dimensions();
+    position_ = Point<int16_t>(0, 10);
+    dimension_ = Texture(TOS).get_dimensions();
 }
 
 void UITermsOfService::draw(float inter) const {
     UIElement::draw(inter);
 
     int16_t range_min = 80;
-    text.draw(position + Point<int16_t>(226, 84 - offset * 300),
-              Range<int16_t>(range_min, range_min + 316));
-    slider.draw(position);
+    text_.draw(position_ + Point<int16_t>(226, 84 - offset_ * 300),
+               Range<int16_t>(range_min, range_min + 316));
+    slider_.draw(position_);
 }
 
 Cursor::State UITermsOfService::send_cursor(bool clicked,
                                             Point<int16_t> cursorpos) {
-    Point<int16_t> cursoroffset = cursorpos - position;
+    Point<int16_t> cursoroffset = cursorpos - position_;
 
-    if (slider.isenabled()) {
-        Cursor::State state = slider.send_cursor(cursoroffset, clicked);
+    if (slider_.isenabled()) {
+        Cursor::State state = slider_.send_cursor(cursoroffset, clicked);
 
         if (state != Cursor::State::IDLE)
             return state;
@@ -1610,7 +1607,7 @@ Button::State UITermsOfService::button_pressed(uint16_t buttonid) {
             break;
         case Buttons::CANCEL:
             deactivate();
-            okhandler();
+            okhandler_();
             break;
         default: break;
     }
@@ -1619,9 +1616,9 @@ Button::State UITermsOfService::button_pressed(uint16_t buttonid) {
 }
 
 void UITermsOfService::update_accept(uint16_t offset) {
-    if (offset == max_rows - unit_rows)
-        buttons[Buttons::OK]->set_state(Button::State::NORMAL);
+    if (offset == max_rows_ - unit_rows_)
+        buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
     else
-        buttons[Buttons::OK]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::OK]->set_state(Button::State::DISABLED);
 }
 }  // namespace ms

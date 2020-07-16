@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Skill.h"
 
 #include <nlnx/nx.hpp>
@@ -25,46 +22,46 @@
 #include "../../Util/Misc.h"
 
 namespace ms {
-Skill::Skill(int32_t id) : skillid(id) {
-    const SkillData &data = SkillData::get(skillid);
+Skill::Skill(int32_t id) : skill_id_(id) {
+    const SkillData &data = SkillData::get(skill_id_);
 
     std::string strid;
 
-    if (skillid < 10000000)
-        strid = string_format::extend_id(skillid, 7);
+    if (skill_id_ < 10000000)
+        strid = string_format::extend_id(skill_id_, 7);
     else
-        strid = std::to_string(skillid);
+        strid = std::to_string(skill_id_);
 
     nl::node src = nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid];
 
-    projectile = true;
-    overregular = false;
+    projectile_ = true;
+    over_regular_ = false;
 
-    sound = std::make_unique<SingleSkillSound>(strid);
+    sound_ = std::make_unique<SingleSkillSound>(strid);
 
     bool byleveleffect = src["CharLevel"]["10"]["effect"].size() > 0;
     bool multieffect = src["effect0"].size() > 0;
 
     if (byleveleffect) {
-        useeffect = std::make_unique<ByLevelUseEffect>(src);
+        use_effect_ = std::make_unique<ByLevelUseEffect>(src);
     } else if (multieffect) {
-        useeffect = std::make_unique<MultiUseEffect>(src);
+        use_effect_ = std::make_unique<MultiUseEffect>(src);
     } else {
         bool isanimation =
             src["effect"]["0"].data_type() == nl::node::type::bitmap;
         bool haseffect1 = src["effect"]["1"].size() > 0;
 
         if (isanimation) {
-            useeffect = std::make_unique<SingleUseEffect>(src);
+            use_effect_ = std::make_unique<SingleUseEffect>(src);
         } else if (haseffect1) {
-            useeffect = std::make_unique<TwoHandedUseEffect>(src);
+            use_effect_ = std::make_unique<TwoHandedUseEffect>(src);
         } else {
-            switch (skillid) {
+            switch (skill_id_) {
                 case SkillId::IRON_BODY:
                 case SkillId::MAGIC_ARMOR:
-                    useeffect = std::make_unique<IronBodyUseEffect>();
+                    use_effect_ = std::make_unique<IronBodyUseEffect>();
                     break;
-                default: useeffect = std::make_unique<NoUseEffect>(); break;
+                default: use_effect_ = std::make_unique<NoUseEffect>(); break;
             }
         }
     }
@@ -76,68 +73,68 @@ Skill::Skill(int32_t id) : skillid(id) {
 
     if (bylevelhit) {
         if (hashit0 && hashit1)
-            hiteffect = std::make_unique<ByLevelTwoHandedHitEffect>(src);
+            hit_effect_ = std::make_unique<ByLevelTwoHandedHitEffect>(src);
         else
-            hiteffect = std::make_unique<ByLevelHitEffect>(src);
+            hit_effect_ = std::make_unique<ByLevelHitEffect>(src);
     } else if (byskilllevelhit) {
-        hiteffect = std::make_unique<BySkillLevelHitEffect>(src);
+        hit_effect_ = std::make_unique<BySkillLevelHitEffect>(src);
     } else if (hashit0 && hashit1) {
-        hiteffect = std::make_unique<TwoHandedHitEffect>(src);
+        hit_effect_ = std::make_unique<TwoHandedHitEffect>(src);
     } else if (hashit0) {
-        hiteffect = std::make_unique<SingleHitEffect>(src);
+        hit_effect_ = std::make_unique<SingleHitEffect>(src);
     } else {
-        hiteffect = std::make_unique<NoHitEffect>();
+        hit_effect_ = std::make_unique<NoHitEffect>();
     }
 
     bool hasaction0 = src["action"]["0"].data_type() == nl::node::type::string;
     bool hasaction1 = src["action"]["1"].data_type() == nl::node::type::string;
 
     if (hasaction0 && hasaction1) {
-        action = std::make_unique<TwoHandedAction>(src);
+        action_ = std::make_unique<TwoHandedAction>(src);
     } else if (hasaction0) {
-        action = std::make_unique<SingleAction>(src);
+        action_ = std::make_unique<SingleAction>(src);
     } else if (data.is_attack()) {
         bool bylevel =
             src["level"]["1"]["action"].data_type() == nl::node::type::string;
 
         if (bylevel) {
-            action = std::make_unique<ByLevelAction>(src, skillid);
+            action_ = std::make_unique<ByLevelAction>(src, skill_id_);
         } else {
-            action = std::make_unique<RegularAction>();
-            overregular = true;
+            action_ = std::make_unique<RegularAction>();
+            over_regular_ = true;
         }
     } else {
-        action = std::make_unique<NoAction>();
+        action_ = std::make_unique<NoAction>();
     }
 
     bool hasball = src["ball"].size() > 0;
     bool bylevelball = src["level"]["1"]["ball"].size() > 0;
 
     if (bylevelball) {
-        bullet = std::make_unique<BySkillLevelBullet>(src, skillid);
+        bullet_ = std::make_unique<BySkillLevelBullet>(src, skill_id_);
     } else if (hasball) {
-        bullet = std::make_unique<SingleBullet>(src);
+        bullet_ = std::make_unique<SingleBullet>(src);
     } else {
-        bullet = std::make_unique<RegularBullet>();
-        projectile = false;
+        bullet_ = std::make_unique<RegularBullet>();
+        projectile_ = false;
     }
 }
 
 void Skill::apply_useeffects(Char &user) const {
-    useeffect->apply(user);
+    use_effect_->apply(user);
 
-    sound->play_use();
+    sound_->play_use();
 }
 
 void Skill::apply_actions(Char &user, Attack::Type type) const {
-    action->apply(user, type);
+    action_->apply(user, type);
 }
 
 void Skill::apply_stats(const Char &user, Attack &attack) const {
-    attack.skill = skillid;
+    attack.skill = skill_id_;
 
-    int32_t level = user.get_skilllevel(skillid);
-    const SkillData::Stats stats = SkillData::get(skillid).get_stats(level);
+    int32_t level = user.get_skilllevel(skill_id_);
+    const SkillData::Stats stats = SkillData::get(skill_id_).get_stats(level);
 
     if (stats.fixdamage) {
         attack.fixdamage = stats.fixdamage;
@@ -164,8 +161,8 @@ void Skill::apply_stats(const Char &user, Attack &attack) const {
     if (!stats.range.empty())
         attack.range = stats.range;
 
-    if (projectile && !attack.bullet) {
-        switch (skillid) {
+    if (projectile_ && !attack.bullet) {
+        switch (skill_id_) {
             case SkillId::THREE_SNAILS:
                 switch (level) {
                     case 1: attack.bullet = 4000019; break;
@@ -173,30 +170,30 @@ void Skill::apply_stats(const Char &user, Attack &attack) const {
                     case 3: attack.bullet = 4000016; break;
                 }
                 break;
-            default: attack.bullet = skillid; break;
+            default: attack.bullet = skill_id_; break;
         }
     }
 
-    if (overregular) {
+    if (over_regular_) {
         attack.stance = user.get_look().get_stance();
 
-        if (attack.type == Attack::CLOSE && !projectile)
+        if (attack.type == Attack::CLOSE && !projectile_)
             attack.range = user.get_afterimage().get_range();
     }
 }
 
 void Skill::apply_hiteffects(const AttackUser &user, Mob &target) const {
-    hiteffect->apply(user, target);
+    hit_effect_->apply(user, target);
 
-    sound->play_hit();
+    sound_->play_hit();
 }
 
 Animation Skill::get_bullet(const Char &user, int32_t bulletid) const {
-    return bullet->get(user, bulletid);
+    return bullet_->get(user, bulletid);
 }
 
 bool Skill::is_attack() const {
-    return SkillData::get(skillid).is_attack();
+    return SkillData::get(skill_id_).is_attack();
 }
 
 bool Skill::is_skill() const {
@@ -204,7 +201,7 @@ bool Skill::is_skill() const {
 }
 
 int32_t Skill::get_id() const {
-    return skillid;
+    return skill_id_;
 }
 
 SpecialMove::ForbidReason Skill::can_use(int32_t level,
@@ -213,13 +210,13 @@ SpecialMove::ForbidReason Skill::can_use(int32_t level,
                                          uint16_t hp,
                                          uint16_t mp,
                                          uint16_t bullets) const {
-    if (level <= 0 || level > SkillData::get(skillid).get_masterlevel())
+    if (level <= 0 || level > SkillData::get(skill_id_).get_masterlevel())
         return FBR_OTHER;
 
-    if (job.can_use(skillid) == false)
+    if (job.can_use(skill_id_) == false)
         return FBR_OTHER;
 
-    const SkillData::Stats stats = SkillData::get(skillid).get_stats(level);
+    const SkillData::Stats stats = SkillData::get(skill_id_).get_stats(level);
 
     if (hp <= stats.hpcost)
         return FBR_HPCOST;
@@ -227,7 +224,7 @@ SpecialMove::ForbidReason Skill::can_use(int32_t level,
     if (mp < stats.mpcost)
         return FBR_MPCOST;
 
-    Weapon::Type reqweapon = SkillData::get(skillid).get_required_weapon();
+    Weapon::Type reqweapon = SkillData::get(skill_id_).get_required_weapon();
 
     if (weapon != reqweapon && reqweapon != Weapon::NONE)
         return FBR_WEAPONTYPE;

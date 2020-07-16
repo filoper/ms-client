@@ -1,22 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright
-//(C) 2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published
-///by / 	the Free Software Foundation, either version 3 of the License, or //
-///(at
-// your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-// WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU
-//Affero General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Clothing.h"
 
 #include <nlnx/nx.hpp>
@@ -25,32 +21,33 @@
 #include "../../Data/WeaponData.h"
 
 namespace ms {
-Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
-    const EquipData &equipdata = EquipData::get(itemid);
+Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
+    const EquipData &equipdata = EquipData::get(item_id_);
 
-    eqslot = equipdata.get_eqslot();
+    eq_slot_ = equipdata.get_eqslot();
 
-    if (eqslot == EquipSlot::Id::WEAPON)
-        twohanded = WeaponData::get(itemid).is_twohanded();
+    if (eq_slot_ == EquipSlot::Id::WEAPON)
+        two_handed_ = WeaponData::get(item_id_).is_twohanded();
     else
-        twohanded = false;
+        two_handed_ = false;
 
     constexpr size_t NON_WEAPON_TYPES = 15;
     constexpr size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
     constexpr size_t WEAPON_TYPES = 20;
 
-    constexpr Clothing::Layer layers[NON_WEAPON_TYPES]
-        = { Clothing::Layer::CAP,     Clothing::Layer::FACEACC,
-            Clothing::Layer::EYEACC,  Clothing::Layer::EARRINGS,
-            Clothing::Layer::TOP,     Clothing::Layer::MAIL,
-            Clothing::Layer::PANTS,   Clothing::Layer::SHOES,
-            Clothing::Layer::GLOVE,   Clothing::Layer::SHIELD,
-            Clothing::Layer::CAPE,    Clothing::Layer::RING,
-            Clothing::Layer::PENDANT, Clothing::Layer::BELT,
-            Clothing::Layer::MEDAL };
+    constexpr Clothing::Layer layers[NON_WEAPON_TYPES] = {
+        Clothing::Layer::CAP,     Clothing::Layer::FACEACC,
+        Clothing::Layer::EYEACC,  Clothing::Layer::EARRINGS,
+        Clothing::Layer::TOP,     Clothing::Layer::MAIL,
+        Clothing::Layer::PANTS,   Clothing::Layer::SHOES,
+        Clothing::Layer::GLOVE,   Clothing::Layer::SHIELD,
+        Clothing::Layer::CAPE,    Clothing::Layer::RING,
+        Clothing::Layer::PENDANT, Clothing::Layer::BELT,
+        Clothing::Layer::MEDAL
+    };
 
     Clothing::Layer chlayer;
-    size_t index = (itemid / 10000) - 100;
+    size_t index = (item_id_ / 10000) - 100;
 
     if (index < NON_WEAPON_TYPES)
         chlayer = layers[index];
@@ -59,26 +56,26 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
     else
         chlayer = Clothing::Layer::CAPE;
 
-    std::string strid = "0" + std::to_string(itemid);
+    std::string strid = "0" + std::to_string(item_id_);
     std::string category = equipdata.get_itemdata().get_category();
     nl::node src = nl::nx::character[category][strid + ".img"];
     nl::node info = src["info"];
 
-    vslot = std::string(info["vslot"]);
+    vslot_ = std::string(info["vslot"]);
 
     switch (int32_t standno = info["stand"]) {
-        case 1: stand = Stance::Id::STAND1; break;
-        case 2: stand = Stance::Id::STAND2; break;
+        case 1: stand_ = Stance::Id::STAND1; break;
+        case 2: stand_ = Stance::Id::STAND2; break;
         default:
-            stand = twohanded ? Stance::Id::STAND2 : Stance::Id::STAND1;
+            stand_ = two_handed_ ? Stance::Id::STAND2 : Stance::Id::STAND1;
             break;
     }
 
     switch (int32_t walkno = info["walk"]) {
-        case 1: walk = Stance::Id::WALK1; break;
-        case 2: walk = Stance::Id::WALK2; break;
+        case 1: walk_ = Stance::Id::WALK1; break;
+        case 2: walk_ = Stance::Id::WALK2; break;
         default:
-            walk = twohanded ? Stance::Id::WALK2 : Stance::Id::WALK1;
+            walk_ = two_handed_ ? Stance::Id::WALK2 : Stance::Id::WALK1;
             break;
     }
 
@@ -105,9 +102,9 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
                 if (part == "mailArm") {
                     z = Clothing::Layer::MAILARM;
                 } else {
-                    auto sublayer_iter = sublayernames.find(zs);
+                    auto sublayer_iter = sub_layer_names_.find(zs);
 
-                    if (sublayer_iter != sublayernames.end())
+                    if (sublayer_iter != sub_layer_names_.end())
                         z = sublayer_iter->second;
                 }
 
@@ -124,7 +121,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
                 nl::node mapnode = partnode["map"];
                 Point<int16_t> shift;
 
-                switch (eqslot) {
+                switch (eq_slot_) {
                     case EquipSlot::Id::FACE: shift -= parentpos; break;
                     case EquipSlot::Id::SHOES:
                     case EquipSlot::Id::GLOVES:
@@ -152,7 +149,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
                         break;
                 }
 
-                stances[stance][z]
+                stances_[stance][z]
                     .emplace(frame, partnode)
                     ->second.shift(shift);
             }
@@ -161,72 +158,72 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : itemid(id) {
 
     static const std::unordered_set<int32_t> transparents = { 1002186 };
 
-    transparent = transparents.count(itemid) > 0;
+    transparent_ = transparents.count(item_id_) > 0;
 }
 
 void Clothing::draw(Stance::Id stance,
                     Layer layer,
                     uint8_t frame,
                     const DrawArgument &args) const {
-    auto range = stances[stance][layer].equal_range(frame);
+    auto range = stances_[stance][layer].equal_range(frame);
 
     for (auto iter = range.first; iter != range.second; ++iter)
         iter->second.draw(args);
 }
 
 bool Clothing::contains_layer(Stance::Id stance, Layer layer) const {
-    return !stances[stance][layer].empty();
+    return !stances_[stance][layer].empty();
 }
 
 bool Clothing::is_transparent() const {
-    return transparent;
+    return transparent_;
 }
 
 bool Clothing::is_twohanded() const {
-    return twohanded;
+    return two_handed_;
 }
 
 int32_t Clothing::get_id() const {
-    return itemid;
+    return item_id_;
 }
 
 Stance::Id Clothing::get_stand() const {
-    return stand;
+    return stand_;
 }
 
 Stance::Id Clothing::get_walk() const {
-    return walk;
+    return walk_;
 }
 
 EquipSlot::Id Clothing::get_eqslot() const {
-    return eqslot;
+    return eq_slot_;
 }
 
 const std::string &Clothing::get_vslot() const {
-    return vslot;
+    return vslot_;
 }
 
-const std::unordered_map<std::string, Clothing::Layer> Clothing::sublayernames
-    = {
-          // WEAPON
-          { "weaponOverHand", Clothing::Layer::WEAPON_OVER_HAND },
-          { "weaponOverGlove", Clothing::Layer::WEAPON_OVER_GLOVE },
-          { "weaponOverBody", Clothing::Layer::WEAPON_OVER_BODY },
-          { "weaponBelowArm", Clothing::Layer::WEAPON_BELOW_ARM },
-          { "weaponBelowBody", Clothing::Layer::WEAPON_BELOW_BODY },
-          { "backWeaponOverShield", Clothing::Layer::BACKWEAPON },
-          // SHIELD
-          { "shieldOverHair", Clothing::Layer::SHIELD_OVER_HAIR },
-          { "shieldBelowBody", Clothing::Layer::SHIELD_BELOW_BODY },
-          { "backShield", Clothing::Layer::BACKSHIELD },
-          // GLOVE
-          { "gloveWrist", Clothing::Layer::WRIST },
-          { "gloveOverHair", Clothing::Layer::GLOVE_OVER_HAIR },
-          { "gloveOverBody", Clothing::Layer::GLOVE_OVER_BODY },
-          { "gloveWristOverHair", Clothing::Layer::WRIST_OVER_HAIR },
-          { "gloveWristOverBody", Clothing::Layer::WRIST_OVER_BODY },
-          // CAP
-          { "capOverHair", Clothing::Layer::CAP_OVER_HAIR },
-          { "capBelowBody", Clothing::Layer::CAP_BELOW_BODY },
-      };
+const std::unordered_map<std::string, Clothing::Layer>
+    Clothing::sub_layer_names_ = {
+        // WEAPON
+        { "weaponOverHand", Clothing::Layer::WEAPON_OVER_HAND },
+        { "weaponOverGlove", Clothing::Layer::WEAPON_OVER_GLOVE },
+        { "weaponOverBody", Clothing::Layer::WEAPON_OVER_BODY },
+        { "weaponBelowArm", Clothing::Layer::WEAPON_BELOW_ARM },
+        { "weaponBelowBody", Clothing::Layer::WEAPON_BELOW_BODY },
+        { "backWeaponOverShield", Clothing::Layer::BACKWEAPON },
+        // SHIELD
+        { "shieldOverHair", Clothing::Layer::SHIELD_OVER_HAIR },
+        { "shieldBelowBody", Clothing::Layer::SHIELD_BELOW_BODY },
+        { "backShield", Clothing::Layer::BACKSHIELD },
+        // GLOVE
+        { "gloveWrist", Clothing::Layer::WRIST },
+        { "gloveOverHair", Clothing::Layer::GLOVE_OVER_HAIR },
+        { "gloveOverBody", Clothing::Layer::GLOVE_OVER_BODY },
+        { "gloveWristOverHair", Clothing::Layer::WRIST_OVER_HAIR },
+        { "gloveWristOverBody", Clothing::Layer::WRIST_OVER_BODY },
+        // CAP
+        { "capOverHair", Clothing::Layer::CAP_OVER_HAIR },
+        { "capBelowBody", Clothing::Layer::CAP_BELOW_BODY },
+    };
 }  // namespace ms

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "MapObjects.h"
 
 namespace ms {
@@ -23,7 +20,7 @@ void MapObjects::draw(Layer::Id layer,
                       double viewx,
                       double viewy,
                       float alpha) const {
-    for (auto &oid : layers[layer]) {
+    for (auto &oid : layers_[layer]) {
         auto mmo = get(oid);
 
         if (mmo && mmo->is_active())
@@ -32,7 +29,7 @@ void MapObjects::draw(Layer::Id layer,
 }
 
 void MapObjects::update(const Physics &physics) {
-    for (auto iter = objects.begin(); iter != objects.end();) {
+    for (auto iter = objects_.begin(); iter != objects_.end();) {
         bool remove_mob = false;
 
         if (auto &mmo = iter->second) {
@@ -43,78 +40,78 @@ void MapObjects::update(const Physics &physics) {
                 remove_mob = true;
             } else if (newlayer != oldlayer) {
                 int32_t oid = iter->first;
-                layers[oldlayer].erase(oid);
-                layers[newlayer].insert(oid);
+                layers_[oldlayer].erase(oid);
+                layers_[newlayer].insert(oid);
             }
         } else {
             remove_mob = true;
         }
 
         if (remove_mob)
-            iter = objects.erase(iter);
+            iter = objects_.erase(iter);
         else
             iter++;
     }
 }
 
 void MapObjects::clear() {
-    objects.clear();
+    objects_.clear();
 
-    for (auto &layer : layers)
+    for (auto &layer : layers_)
         layer.clear();
 }
 
 bool MapObjects::contains(int32_t oid) const {
-    return objects.count(oid) > 0;
+    return objects_.count(oid) > 0;
 }
 
 void MapObjects::add(std::unique_ptr<MapObject> toadd) {
     int32_t oid = toadd->get_oid();
     int8_t layer = toadd->get_layer();
-    objects[oid] = std::move(toadd);
-    layers[layer].insert(oid);
+    objects_[oid] = std::move(toadd);
+    layers_[layer].insert(oid);
 }
 
 void MapObjects::remove(int32_t oid) {
-    auto iter = objects.find(oid);
+    auto iter = objects_.find(oid);
 
-    if (iter != objects.end() && iter->second) {
+    if (iter != objects_.end() && iter->second) {
         int8_t layer = iter->second->get_layer();
-        objects.erase(iter);
+        objects_.erase(iter);
 
-        layers[layer].erase(oid);
+        layers_[layer].erase(oid);
     }
 }
 
 Optional<MapObject> MapObjects::get(int32_t oid) {
-    auto iter = objects.find(oid);
+    auto iter = objects_.find(oid);
 
-    return iter != objects.end() ? iter->second.get() : nullptr;
+    return iter != objects_.end() ? iter->second.get() : nullptr;
 }
 
 Optional<const MapObject> MapObjects::get(int32_t oid) const {
-    auto iter = objects.find(oid);
+    auto iter = objects_.find(oid);
 
-    return iter != objects.end() ? iter->second.get() : nullptr;
+    return iter != objects_.end() ? iter->second.get() : nullptr;
 }
 
 MapObjects::underlying_t::iterator MapObjects::begin() {
-    return objects.begin();
+    return objects_.begin();
 }
 
 MapObjects::underlying_t::iterator MapObjects::end() {
-    return objects.end();
+    return objects_.end();
 }
 
 MapObjects::underlying_t::const_iterator MapObjects::begin() const {
-    return objects.begin();
+    return objects_.begin();
 }
 
 MapObjects::underlying_t::const_iterator MapObjects::end() const {
-    return objects.end();
+    return objects_.end();
 }
 
 MapObjects::underlying_t::size_type MapObjects::size() const {
-    return objects.size();
+    return objects_.size();
 }
 }  // namespace ms

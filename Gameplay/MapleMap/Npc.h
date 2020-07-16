@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Graphics/Animation.h"
@@ -59,22 +56,22 @@ public:
     std::string get_func();
 
 private:
-    std::map<std::string, Animation> animations;
-    std::map<std::string, std::vector<std::string>> lines;
-    std::vector<std::string> states;
-    std::string name;
-    std::string func;
-    bool hidename;
-    bool scripted;
-    bool mouseonly;
+    std::map<std::string, Animation> animations_;
+    std::map<std::string, std::vector<std::string>> lines_;
+    std::vector<std::string> states_;
+    std::string name_;
+    std::string func_;
+    bool hide_name_;
+    bool scripted_;
+    bool mouse_only_;
 
-    int32_t npcid;
-    bool flip;
-    std::string stance;
-    bool control;
+    int32_t npc_id_;
+    bool flip_;
+    std::string stance_;
+    bool control_;
 
-    Randomizer random;
-    Text namelabel;
-    Text funclabel;
+    Randomizer random_;
+    Text name_label_;
+    Text func_label_;
 };
 }  // namespace ms

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Components/Textfield.h"
@@ -40,17 +37,17 @@ protected:
     int16_t box2offset(bool textfield) const;
 
 private:
-    Texture top;
-    Texture center;
-    Texture centerbox;
-    Texture box;
-    Texture box2;
-    Texture bottom;
-    Texture bottombox;
-    Text question;
-    int16_t height;
-    NoticeType type;
-    Text::Alignment alignment;
+    Texture top_;
+    Texture center_;
+    Texture centerbox_;
+    Texture box_;
+    Texture box2_;
+    Texture bottom_;
+    Texture bottombox_;
+    Text question_;
+    int16_t height_;
+    NoticeType type_;
+    Text::Alignment alignment_;
 };
 
 class UIYesNo : public UINotice {
@@ -73,7 +70,7 @@ protected:
 private:
     enum Buttons : int16_t { YES, NO };
 
-    std::function<void(bool yes)> yesnohandler;
+    std::function<void(bool yes)> yesno_handler_;
 };
 
 class UIEnterNumber : public UINotice {
@@ -122,6 +119,6 @@ protected:
 private:
     enum Buttons : int16_t { OK };
 
-    std::function<void(bool ok)> okhandler;
+    std::function<void(bool ok)> okhandler_;
 };
 }  // namespace ms

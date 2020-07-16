@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "FootholdTree.h"
 
 #include <iostream>
@@ -49,7 +46,7 @@ FootholdTree::FootholdTree(nl::node src) {
                 }
 
                 const Foothold &foothold =
-                    footholds
+                    footholds_
                         .emplace(std::piecewise_construct,
                                  std::forward_as_tuple(id),
                                  std::forward_as_tuple(lastf, id, layer))
@@ -74,13 +71,13 @@ FootholdTree::FootholdTree(nl::node src) {
                 int16_t end = foothold.r();
 
                 for (int16_t i = start; i <= end; i++)
-                    footholdsbyx.emplace(i, id);
+                    footholds_by_x_.emplace(i, id);
             }
         }
     }
 
-    walls = { leftw + 25, rightw - 25 };
-    borders = { topb - 300, botb + 100 };
+    walls_ = { leftw + 25, rightw - 25 };
+    borders_ = { topb - 300, botb + 100 };
 }
 
 FootholdTree::FootholdTree() {}
@@ -122,10 +119,10 @@ void FootholdTree::limit_movement(PhysicsObject &phobj) const {
 
             limit_movement(phobj);
         } else {
-            if (next_y < borders.first())
-                phobj.limity(borders.first());
-            else if (next_y > borders.second())
-                phobj.limity(borders.second());
+            if (next_y < borders_.first())
+                phobj.limity(borders_.first());
+            else if (next_y > borders_.second())
+                phobj.limity(borders_.second());
         }
     }
 }
@@ -133,7 +130,7 @@ void FootholdTree::limit_movement(PhysicsObject &phobj) const {
 void FootholdTree::update_fh(PhysicsObject &phobj) const {
     if (phobj.type == PhysicsObject::Type::FIXATED && phobj.fhid > 0)
         return;
-        
+
     const Foothold &curfh = get_fh(phobj.fhid);
     bool checkslope = false;
 
@@ -152,7 +149,7 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
             checkslope = true;
     } else {
         phobj.fhid = get_fhid_below(x, y);
-        if (phobj.fhid == 0) // fix for stuttering slope walk
+        if (phobj.fhid == 0)  // fix for stuttering slope walk
             return;
     }
 
@@ -203,10 +200,10 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
 }
 
 const Foothold &FootholdTree::get_fh(uint16_t fhid) const {
-    auto iter = footholds.find(fhid);
+    auto iter = footholds_.find(fhid);
 
-    if (iter == footholds.end())
-        return nullfh;
+    if (iter == footholds_.end())
+        return null_fh_;
 
     return iter->second;
 }
@@ -227,7 +224,7 @@ double FootholdTree::get_wall(uint16_t curid, bool left, double fy) const {
         if (prev_prev.is_blocking(vertical))
             return prev.l();
 
-        return walls.first();
+        return walls_.first();
     } else {
         const Foothold &next = get_fh(cur.next());
 
@@ -239,7 +236,7 @@ double FootholdTree::get_wall(uint16_t curid, bool left, double fy) const {
         if (next_next.is_blocking(vertical))
             return next.r();
 
-        return walls.second();
+        return walls_.second();
     }
 }
 
@@ -258,7 +255,7 @@ double FootholdTree::get_edge(uint16_t curid, bool left) const {
         if (!prev_previd)
             return prev.l();
 
-        return walls.first();
+        return walls_.first();
     } else {
         uint16_t nextid = fh.next();
 
@@ -271,19 +268,19 @@ double FootholdTree::get_edge(uint16_t curid, bool left) const {
         if (!next_nextid)
             return next.r();
 
-        return walls.second();
+        return walls_.second();
     }
 }
 
 uint16_t FootholdTree::get_fhid_below(double fx, double fy) const {
     uint16_t ret = 0;
-    double comp = borders.second();
+    double comp = borders_.second();
 
     int16_t x = static_cast<int16_t>(fx);
-    auto range = footholdsbyx.equal_range(x);
+    auto range = footholds_by_x_.equal_range(x);
 
     for (auto iter = range.first; iter != range.second; ++iter) {
-        const Foothold &fh = footholds.at(iter->second);
+        const Foothold &fh = footholds_.at(iter->second);
         double ycomp = fh.ground_below(fx);
 
         if (comp >= ycomp && ycomp >= fy) {
@@ -301,15 +298,15 @@ int16_t FootholdTree::get_y_below(Point<int16_t> position) const {
 
         return static_cast<int16_t>(fh.ground_below(position.x()));
     } else {
-        return borders.second();
+        return borders_.second();
     }
 }
 
 Range<int16_t> FootholdTree::get_walls() const {
-    return walls;
+    return walls_;
 }
 
 Range<int16_t> FootholdTree::get_borders() const {
-    return borders;
+    return borders_;
 }
 }  // namespace ms

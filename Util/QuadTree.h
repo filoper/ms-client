@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <functional>
@@ -29,42 +26,42 @@ public:
     enum Direction { LEFT, RIGHT, UP, DOWN };
 
     QuadTree(std::function<Direction(const V &, const V &)> c) {
-        root = 0;
-        comparator = c;
+        root_ = 0;
+        comparator_ = c;
     }
 
     QuadTree() : QuadTree(nullptr) {}
 
     void clear() {
-        nodes.clear();
+        nodes_.clear();
 
-        root = 0;
+        root_ = 0;
     }
 
     void add(K key, V value) {
         K parent = 0;
 
-        if (root) {
-            K current = root;
+        if (root_) {
+            K current = root_;
 
             while (current) {
                 parent = current;
-                current = nodes[parent].addornext(key, value, comparator);
+                current = nodes_[parent].addornext(key, value, comparator_);
             }
         } else {
-            root = key;
+            root_ = key;
         }
 
-        nodes.emplace(std::piecewise_construct,
-                      std::forward_as_tuple(key),
-                      std::forward_as_tuple(value, parent, 0, 0, 0, 0));
+        nodes_.emplace(std::piecewise_construct,
+                       std::forward_as_tuple(key),
+                       std::forward_as_tuple(value, parent, 0, 0, 0, 0));
     }
 
     void erase(K key) {
-        if (!nodes.count(key))
+        if (!nodes_.count(key))
             return;
 
-        Node &toerase = nodes[key];
+        Node &toerase = nodes_[key];
 
         std::vector<K> leaves;
 
@@ -77,12 +74,12 @@ public:
 
         K parent = toerase.parent;
 
-        if (root == key)
-            root = 0;
-        else if (nodes.count(parent))
-            nodes[parent].erase(key);
+        if (root_ == key)
+            root_ = 0;
+        else if (nodes_.count(parent))
+            nodes_[parent].erase(key);
 
-        nodes.erase(key);
+        nodes_.erase(key);
 
         for (auto &leaf : leaves)
             readd(parent, leaf);
@@ -90,18 +87,18 @@ public:
 
     K findnode(const V &value,
                std::function<bool(const V &, const V &)> predicate) {
-        if (root) {
-            K key = findfrom(root, value, predicate);
+        if (root_) {
+            K key = findfrom(root_, value, predicate);
 
-            return predicate(value, nodes[key].value) ? key : 0;
+            return predicate(value, nodes_[key].value) ? key : 0;
         } else {
             return 0;
         }
     }
 
-    V &operator[](K key) { return nodes[key].value; }
+    V &operator[](K key) { return nodes_[key].value; }
 
-    const V &operator[](K key) const { return nodes.at(key).value; }
+    const V &operator[](K key) const { return nodes_.at(key).value; }
 
 private:
     K findfrom(K start,
@@ -110,71 +107,71 @@ private:
         if (!start)
             return 0;
 
-        bool fulfilled = predicate(value, nodes[start].value);
-        Direction dir = comparator(value, nodes[start].value);
+        bool fulfilled = predicate(value, nodes_[start].value);
+        Direction dir = comparator_(value, nodes_[start].value);
 
         if (dir == RIGHT) {
-            K right = findfrom(nodes[start].right, value, predicate);
+            K right = findfrom(nodes_[start].right, value, predicate);
 
-            if (right && predicate(value, nodes[right].value))
+            if (right && predicate(value, nodes_[right].value))
                 return right;
             else
                 return start;
         } else if (dir == DOWN) {
-            K bottom = findfrom(nodes[start].bottom, value, predicate);
+            K bottom = findfrom(nodes_[start].bottom, value, predicate);
 
-            if (bottom && predicate(value, nodes[bottom].value)) {
+            if (bottom && predicate(value, nodes_[bottom].value)) {
                 return bottom;
             } else if (fulfilled) {
                 return start;
             } else {
-                K right = findfrom(nodes[start].right, value, predicate);
+                K right = findfrom(nodes_[start].right, value, predicate);
 
-                if (right && predicate(value, nodes[right].value))
+                if (right && predicate(value, nodes_[right].value))
                     return right;
                 else
                     return start;
             }
         } else if (dir == UP) {
-            K top = findfrom(nodes[start].top, value, predicate);
+            K top = findfrom(nodes_[start].top, value, predicate);
 
-            if (top && predicate(value, nodes[top].value)) {
+            if (top && predicate(value, nodes_[top].value)) {
                 return top;
             } else if (fulfilled) {
                 return start;
             } else {
-                K right = findfrom(nodes[start].right, value, predicate);
+                K right = findfrom(nodes_[start].right, value, predicate);
 
-                if (right && predicate(value, nodes[right].value))
+                if (right && predicate(value, nodes_[right].value))
                     return right;
                 else
                     return start;
             }
         } else {
-            K left = findfrom(nodes[start].left, value, predicate);
+            K left = findfrom(nodes_[start].left, value, predicate);
 
-            if (left && predicate(value, nodes[left].value))
+            if (left && predicate(value, nodes_[left].value))
                 return left;
             else if (fulfilled)
                 return start;
 
-            K bottom = findfrom(nodes[start].bottom, value, predicate);
+            K bottom = findfrom(nodes_[start].bottom, value, predicate);
 
-            if (bottom && predicate(value, nodes[bottom].value))
+            if (bottom && predicate(value, nodes_[bottom].value))
                 return bottom;
             else if (fulfilled)
                 return start;
 
-            K top = findfrom(nodes[start].top, value, predicate);
+            K top = findfrom(nodes_[start].top, value, predicate);
 
-            if (top && predicate(value, nodes[top].value))
+            if (top && predicate(value, nodes_[top].value))
                 return top;
             else if (fulfilled)
                 return start;
 
-            K right = findfrom(nodes[start].right, value, predicate);
+            K right = findfrom(nodes_[start].right, value, predicate);
 
-            if (right && predicate(value, nodes[right].value))
+            if (right && predicate(value, nodes_[right].value))
                 return right;
             else
                 return start;
@@ -188,17 +185,18 @@ private:
 
             while (current) {
                 parent = current;
-                current =
-                    nodes[parent].addornext(key, nodes[key].value, comparator);
+                current = nodes_[parent].addornext(key,
+                                                   nodes_[key].value,
+                                                   comparator_);
             }
 
-            nodes[key].parent = parent;
-        } else if (start == root) {
-            root = key;
+            nodes_[key].parent = parent;
+        } else if (start == root_) {
+            root_ = key;
 
-            nodes[key].parent = 0;
-        } else if (root) {
-            readd(root, key);
+            nodes_[key].parent = 0;
+        } else if (root_) {
+            readd(root_, key);
         }
     }
 
@@ -231,10 +229,11 @@ private:
                 bottom = 0;
         }
 
-        K addornext(K key,
-                    V val,
-                    std::function<Direction(const V &, const V &)> comparator) {
-            Direction dir = comparator(val, value);
+        K addornext(
+            K key,
+            V val,
+            std::function<Direction(const V &, const V &)> comparator_) {
+            Direction dir = comparator_(val, value);
             K dirkey = leaf(dir);
 
             if (!dirkey) {
@@ -266,8 +265,8 @@ private:
         }
     };
 
-    std::function<Direction(const V &, const V &)> comparator;
-    std::unordered_map<K, Node> nodes;
-    K root;
+    std::function<Direction(const V &, const V &)> comparator_;
+    std::unordered_map<K, Node> nodes_;
+    K root_;
 };
 }  // namespace ms

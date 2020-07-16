@@ -38,6 +38,7 @@ jobs:
 
     - name: Install Alure
       run: |
+        sudo apt-get update
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9
         mkdir thirdparty
         cd thirdparty

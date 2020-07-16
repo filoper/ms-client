@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "OutPacket.h"
 
 #include <chrono>
@@ -25,28 +22,29 @@
 #include "Session.h"
 
 namespace ms {
-OutPacket::OutPacket(int16_t opc) : opcode(opc) {
-    write_short(opcode);
+OutPacket::OutPacket(int16_t opc) : opcode_(opc) {
+    write_short(opcode_);
 }
 
 void OutPacket::dispatch() {
-    Session::get().write(bytes.data(), bytes.size());
+    Session::get().write(bytes_.data(), bytes_.size());
 
     if (Configuration::get().get_show_packets()) {
-        if (opcode == Opcode::PONG)
+        if (opcode_ == Opcode::PONG)
             std::cout << "Sent Packet: PONG" << std::endl;
         else
-            std::cout << "Sent Packet: " << std::to_string(opcode) << std::endl;
+            std::cout << "Sent Packet: " << std::to_string(opcode_)
+                      << std::endl;
     }
 }
 
 void OutPacket::skip(size_t count) {
     for (size_t i = 0; i < count; i++)
-        bytes.push_back(0);
+        bytes_.push_back(0);
 }
 
 void OutPacket::write_byte(int8_t ch) {
-    bytes.push_back(ch);
+    bytes_.push_back(ch);
 }
 
 void OutPacket::write_short(int16_t sh) {

@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Character/CharStats.h"
@@ -80,7 +77,7 @@ private:
         Icon::IconType get_type() override;
 
     private:
-        int32_t skill_id;
+        int32_t skill_id_;
     };
 
     class SkillDisplayMeta {
@@ -96,11 +93,11 @@ private:
         StatefulIcon *get_icon() const;
 
     private:
-        int32_t id;
-        int32_t level;
-        std::unique_ptr<StatefulIcon> icon;
-        Text name_text;
-        Text level_text;
+        int32_t id_;
+        int32_t level_;
+        std::unique_ptr<StatefulIcon> icon_;
+        Text name_text_;
+        Text level_text_;
     };
 
     void change_job(uint16_t id);
@@ -165,56 +162,56 @@ private:
         BT_SPUP11
     };
 
-    static constexpr int16_t ROWS = 12;
-    static constexpr int16_t ROW_HEIGHT = 40;
-    static constexpr int16_t ROW_WIDTH = 143;
-    static constexpr Point<int16_t> SKILL_OFFSET = Point<int16_t>(11, 93);
-    static constexpr Point<int16_t> SKILL_META_OFFSET = Point<int16_t>(2, 2);
-    static constexpr Point<int16_t> LINE_OFFSET = Point<int16_t>(0, 37);
+    static constexpr int16_t ROWS_ = 12;
+    static constexpr int16_t ROW_HEIGHT_ = 40;
+    static constexpr int16_t ROW_WIDTH_ = 143;
+    static constexpr Point<int16_t> SKILL_OFFSET_ = Point<int16_t>(11, 93);
+    static constexpr Point<int16_t> SKILL_META_OFFSET_ = Point<int16_t>(2, 2);
+    static constexpr Point<int16_t> LINE_OFFSET_ = Point<int16_t>(0, 37);
 
-    const CharStats &stats;
-    const SkillBook &skillbook;
+    const CharStats &stats_;
+    const SkillBook &skillbook_;
 
-    Slider slider;
-    Texture skille;
-    Texture skilld;
-    Texture skillb;
-    Texture line;
-    Texture bookicon;
-    Text booktext;
-    Text splabel;
+    Slider slider_;
+    Texture skille_;
+    Texture skilld_;
+    Texture skillb_;
+    Texture line_;
+    Texture book_icon_;
+    Text book_text_;
+    Text sp_label_;
 
-    Job job;
-    int16_t sp;
-    int16_t beginner_sp;
+    Job job_;
+    int16_t sp_;
+    int16_t beginner_sp_;
 
-    uint16_t tab;
-    uint16_t skillcount;
-    uint16_t offset;
+    uint16_t tab_;
+    uint16_t skill_count_;
+    uint16_t offset_;
 
-    std::vector<SkillDisplayMeta> skills;
-    bool grabbing;
+    std::vector<SkillDisplayMeta> skills_;
+    bool grabbing_;
 
-    Point<int16_t> bg_dimensions;
+    Point<int16_t> bg_dimensions_;
 
-    bool macro_enabled;
-    Texture macro_backgrnd;
-    Texture macro_backgrnd2;
-    Texture macro_backgrnd3;
+    bool macro_enabled_;
+    Texture macro_backgrnd_;
+    Texture macro_backgrnd2_;
+    Texture macro_backgrnd3_;
 
-    bool sp_enabled;
-    Texture sp_backgrnd;
-    Texture sp_backgrnd2;
-    Texture sp_backgrnd3;
-    Charset sp_before;
-    Charset sp_after;
-    std::string sp_before_text;
-    std::string sp_after_text;
-    Text sp_used;
-    Text sp_remaining;
-    Text sp_name;
-    Texture sp_skill;
-    int32_t sp_id;
-    int32_t sp_masterlevel;
+    bool sp_enabled_;
+    Texture sp_backgrnd_;
+    Texture sp_backgrnd2_;
+    Texture sp_backgrnd3_;
+    Charset sp_before_;
+    Charset sp_after_;
+    std::string sp_before_text_;
+    std::string sp_after_text_;
+    Text sp_used_;
+    Text sp_remaining_;
+    Text sp_name_;
+    Texture sp_skill_;
+    int32_t sp_id_;
+    int32_t sp_master_level_;
 };
 }  // namespace ms

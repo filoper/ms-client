@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../Net/Login.h"
@@ -126,34 +123,34 @@ private:
 
     float get_multiplier() const;
 
-    std::string name;
-    std::vector<int64_t> petids;
-    Job job;
-    int64_t exp;
-    int32_t mapid;
-    uint8_t portal;
-    std::pair<int32_t, int8_t> rank;
-    std::pair<int32_t, int8_t> jobrank;
-    EnumMap<MapleStat::Id, uint16_t> basestats;
-    EnumMap<EquipStat::Id, int32_t> totalstats;
-    EnumMap<EquipStat::Id, int32_t> buffdeltas;
-    EnumMap<EquipStat::Id, float> percentages;
-    int32_t maxdamage;
-    int32_t mindamage;
-    uint16_t honor;
-    int8_t attackspeed;
-    int16_t projectilerange;
-    Weapon::Type weapontype;
-    float mastery;
-    float critical;
-    float mincrit;
-    float maxcrit;
-    float damagepercent;
-    float bossdmg;
-    float ignoredef;
-    float stance;
-    float resiststatus;
-    float reducedamage;
-    bool female;
+    std::string name_;
+    std::vector<int64_t> pet_ids_;
+    Job job_;
+    int64_t exp_;
+    int32_t map_id_;
+    uint8_t portal_;
+    std::pair<int32_t, int8_t> rank_;
+    std::pair<int32_t, int8_t> job_rank_;
+    EnumMap<MapleStat::Id, uint16_t> base_stats_;
+    EnumMap<EquipStat::Id, int32_t> total_stats_;
+    EnumMap<EquipStat::Id, int32_t> buff_deltas_;
+    EnumMap<EquipStat::Id, float> percentages_;
+    int32_t max_damage_;
+    int32_t min_damage_;
+    uint16_t honor_;
+    int8_t attack_speed_;
+    int16_t projectile_range_;
+    Weapon::Type weapon_type_;
+    float mastery_;
+    float critical_;
+    float min_crit_;
+    float max_crit_;
+    float damage_percent_;
+    float boss_dmg_;
+    float ignore_def_;
+    float stance_;
+    float resist_status_;
+    float reduce_damage_;
+    bool female_;
 };
 }  // namespace ms

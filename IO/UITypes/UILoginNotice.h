@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../UIElement.h"
@@ -41,8 +38,8 @@ private:
 
     enum Buttons { OK };
 
-    std::function<void()> okhandler;
-    bool login;
+    std::function<void()> okhandler_;
+    bool login_;
 };
 
 class UIKeySelect : public UIElement {
@@ -63,8 +60,8 @@ protected:
 private:
     enum Buttons { CLOSE, TYPEA, TYPEB };
 
-    std::function<void(bool)> okhandler;
-    bool login;
+    std::function<void(bool)> okhandler_;
+    bool login_;
 };
 
 class UIClassConfirm : public UIElement {
@@ -119,7 +116,7 @@ private:
         ARK,
     };
 
-    std::function<void()> okhandler;
+    std::function<void()> okhandler_;
 };
 
 class UIQuitConfirm : public UIElement {
@@ -290,9 +287,9 @@ protected:
 private:
     enum Buttons : uint16_t { YES, NO };
 
-    bool saveid;
-    bool multiple;
-    std::function<void()> okhandler;
-    std::function<void()> cancelhandler;
+    bool saveid_;
+    bool multiple_;
+    std::function<void()> okhandler_;
+    std::function<void()> cancel_handler_;
 };
 }  // namespace ms

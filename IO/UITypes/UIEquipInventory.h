@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../UIDragElement.h"
@@ -72,7 +69,7 @@ private:
         Icon::IconType get_type() override;
 
     private:
-        int16_t source;
+        int16_t source_;
     };
 
     enum Buttons : uint16_t {
@@ -90,23 +87,23 @@ private:
         BT_SHOP
     };
 
-    const Inventory &inventory;
+    const Inventory &inventory_;
 
-    EnumMap<EquipSlot::Id, Point<int16_t>> iconpositions;
-    EnumMap<EquipSlot::Id, std::unique_ptr<Icon>> icons;
+    EnumMap<EquipSlot::Id, Point<int16_t>> icon_positions_;
+    EnumMap<EquipSlot::Id, std::unique_ptr<Icon>> icons_;
 
-    uint16_t tab;
-    std::string tab_source[Buttons::BT_TABE];
-    Texture tabbar;
-    Texture background[Buttons::BT_TABE];
-    Texture disabled;
-    Texture disabled2;
-    std::vector<Texture> Slots[Buttons::BT_TABE];
+    uint16_t tab_;
+    std::string tab_source_[Buttons::BT_TABE];
+    Texture tab_bar_;
+    Texture background_[Buttons::BT_TABE];
+    Texture disabled_;
+    Texture disabled2_;
+    std::vector<Texture> slots_[Buttons::BT_TABE];
 
-    Point<int16_t> totem_dimensions;
-    Point<int16_t> totem_adj;
+    Point<int16_t> totem_dimensions_;
+    Point<int16_t> totem_adj_;
 
-    bool hasPendantSlot;
-    bool hasPocketSlot;
+    bool has_pendant_slot_;
+    bool has_pocket_slot_;
 };
 }  // namespace ms

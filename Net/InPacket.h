@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <cstdint>
@@ -98,8 +95,8 @@ public:
 
     inline void print() {
         std::cout << "Recv: ";
-        for (int i=0; i < top; i++) {
-            std::cout << (unsigned short)bytes[i] << " ";
+        for (int i = 0; i < top_; i++) {
+            std::cout << (unsigned short)bytes_[i] << " ";
         }
         std::cout << std::endl;
     }
@@ -112,7 +109,7 @@ private:
         T all = 0;
 
         for (size_t i = 0; i < count; i++) {
-            T val = static_cast<uint8_t>(bytes[pos]);
+            T val = static_cast<uint8_t>(bytes_[pos_]);
             all += val << (8 * i);
 
             skip(1);
@@ -121,54 +118,18 @@ private:
         return static_cast<T>(all);
     }
 
-    // template<typename T>
-    // T read() {
-    //     if (top <= pos) {
-    //         return 0;
-    //     } if (sizeof(T) > (top - pos)) {
-    //         return 0;
-    //     }
-
-    //     T val = *(T *)(bytes + pos);
-    //     pos += sizeof(T);
-
-    //     return val;
-    // }
-
     template<typename T>
     // Read without advancing the buffer position
     T inspect() {
-        size_t before = pos;
+        size_t before = pos_;
         T value = read<T>();
-        pos = before;
+        pos_ = before;
 
         return value;
     }
 
-    const int8_t *bytes;
-    size_t top;
-    size_t pos;
+    const int8_t *bytes_;
+    size_t top_;
+    size_t pos_;
 };
-
-// template<>
-// inline bool InPacket::read<bool>() {
-//     return read<unsigned char>() != 0;
-// }
-
-// template<>
-// inline std::string InPacket::read<std::string>() {
-//     auto str_len = read<unsigned short>();
-
-//     if (top <= pos) {
-//         return "";
-//     } if (str_len > (top - pos)) {
-//         return "";
-//     }
-
-//     std::string str(reinterpret_cast<const char *>(bytes) + pos,
-//                     str_len);
-//     pos += str_len;
-
-//     return str;
-// }
 }  // namespace ms

@@ -1,65 +1,63 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ScrollingNotice.h"
 
 namespace ms {
 ScrollingNotice::ScrollingNotice() {
-    width = 800;
-    background = ColorBox(width, 23, Color::Name::BLACK, 0.535f);
-    notice = Text(Text::Font::A12M, Text::Alignment::LEFT, Color::Name::YELLOW);
+    width_ = 800;
+    background_ = ColorBox(width_, 23, Color::Name::BLACK, 0.535f);
+    notice_ =
+        Text(Text::Font::A12M, Text::Alignment::LEFT, Color::Name::YELLOW);
 
-    xpos.set(0.0);
-    active = false;
+    xpos_.set(0.0);
+    active_ = false;
 }
 
 void ScrollingNotice::setnotice(std::string n) {
-    notice.change_text(n);
-    xpos.set(static_cast<double>(width));
-    active = n.size() > 0;
+    notice_.change_text(n);
+    xpos_.set(static_cast<double>(width_));
+    active_ = n.size() > 0;
 }
 
 void ScrollingNotice::draw(float alpha) const {
-    if (active) {
-        int16_t interx = static_cast<int16_t>(std::round(xpos.get(alpha)));
+    if (active_) {
+        int16_t interx = static_cast<int16_t>(std::round(xpos_.get(alpha)));
         auto position = Point<int16_t>(interx, -1);
 
-        background.draw(Point<int16_t>(0, 0));
-        notice.draw(position);
+        background_.draw(Point<int16_t>(0, 0));
+        notice_.draw(position);
     }
 }
 
 void ScrollingNotice::update() {
-    if (active) {
+    if (active_) {
         int16_t new_width = Constants::Constants::get().get_viewwidth();
 
-        if (new_width != width) {
-            width = new_width;
-            background.setwidth(width);
-            xpos.set(static_cast<double>(width));
+        if (new_width != width_) {
+            width_ = new_width;
+            background_.setwidth(width_);
+            xpos_.set(static_cast<double>(width_));
         }
 
-        xpos -= 0.5;
+        xpos_ -= 0.5;
 
-        auto xmin = static_cast<double>(-notice.width());
+        auto xmin = static_cast<double>(-notice_.width());
 
-        if (xpos.last() < xmin)
-            xpos.set(static_cast<double>(width));
+        if (xpos_.last() < xmin)
+            xpos_.set(static_cast<double>(width_));
     }
 }
 }  // namespace ms

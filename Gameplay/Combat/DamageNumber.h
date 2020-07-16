@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../IO/Components/Charset.h"
@@ -50,15 +47,15 @@ private:
 
     static constexpr uint16_t FADE_TIME = 500;
 
-    Type type;
-    bool miss;
-    bool multiple;
-    int8_t firstnum;
-    std::string restnum;
-    int16_t shift;
-    MovingObject moveobj;
-    Linear<float> opacity;
+    Type type_;
+    bool miss_;
+    bool multiple_;
+    int8_t first_num_;
+    std::string rest_num_;
+    int16_t shift_;
+    MovingObject move_obj_;
+    Linear<float> opacity_;
 
-    static BoolPair<Charset> charsets[NUM_TYPES];
+    static BoolPair<Charset> charsets_[NUM_TYPES];
 };
 }  // namespace ms

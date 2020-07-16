@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Character/Look/CharLook.h"
@@ -90,44 +87,44 @@ private:
         GENDER_BOTTOM
     };
 
-    std::vector<Sprite> sprites_lookboard;
-    std::vector<Sprite> sprites_gender_select;
-    std::vector<Sprite> sprites_keytype;
-    Texture sky;
-    Texture cloud;
-    float cloudfx;
-    Texture nameboard;
-    Textfield namechar;
-    CharLook newchar;
-    Randomizer randomizer;
+    std::vector<Sprite> sprites_lookboard_;
+    std::vector<Sprite> sprites_gender_select_;
+    std::vector<Sprite> sprites_keytype_;
+    Texture sky_;
+    Texture cloud_;
+    float cloudfx_;
+    Texture nameboard_;
+    Textfield namechar_;
+    CharLook newchar_;
+    Randomizer randomizer_;
 
-    BoolPair<std::vector<uint8_t>> skins;
-    BoolPair<std::vector<uint8_t>> haircolors;
-    BoolPair<std::vector<int32_t>> faces;
-    BoolPair<std::vector<int32_t>> hairs;
-    BoolPair<std::vector<int32_t>> tops;
-    BoolPair<std::vector<int32_t>> bots;
-    BoolPair<std::vector<int32_t>> shoes;
-    BoolPair<std::vector<int32_t>> weapons;
+    BoolPair<std::vector<uint8_t>> skins_;
+    BoolPair<std::vector<uint8_t>> haircolors_;
+    BoolPair<std::vector<int32_t>> faces_;
+    BoolPair<std::vector<int32_t>> hairs_;
+    BoolPair<std::vector<int32_t>> tops_;
+    BoolPair<std::vector<int32_t>> bots_;
+    BoolPair<std::vector<int32_t>> shoes_;
+    BoolPair<std::vector<int32_t>> weapons_;
 
-    bool gender;
-    bool charSet;
-    bool named;
-    bool female;
-    size_t skin;
-    size_t haircolor;
-    size_t face;
-    size_t hair;
-    size_t top;
-    size_t bot;
-    size_t shoe;
-    size_t weapon;
-    Text facename;
-    Text hairname;
-    Text bodyname;
-    Text topname;
-    Text shoename;
-    Text wepname;
-    Text version;
+    bool gender_;
+    bool charset_;
+    bool named_;
+    bool female_;
+    size_t skin_;
+    size_t haircolor_;
+    size_t face_;
+    size_t hair_;
+    size_t top_;
+    size_t bot_;
+    size_t shoe_;
+    size_t weapon_;
+    Text facename_;
+    Text hairname_;
+    Text bodyname_;
+    Text topname_;
+    Text shoename_;
+    Text wepname_;
+    Text version_;
 };
 }  // namespace ms

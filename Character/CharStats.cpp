@@ -1,37 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "CharStats.h"
 
 #include "StatCaps.h"
 
 namespace ms {
 CharStats::CharStats(const StatsEntry &s) :
-    name(s.name),
-    petids(s.petids),
-    exp(s.exp),
-    mapid(s.mapid),
-    portal(s.portal),
-    rank(s.rank),
-    jobrank(s.jobrank),
-    basestats(s.stats),
-    female(s.female) {
-    job = basestats[MapleStat::Id::JOB];
+    name_(s.name),
+    pet_ids_(s.petids),
+    exp_(s.exp),
+    map_id_(s.mapid),
+    portal_(s.portal),
+    rank_(s.rank),
+    job_rank_(s.jobrank),
+    base_stats_(s.stats),
+    female_(s.female) {
+    job_ = base_stats_[MapleStat::Id::JOB];
 
     init_totalstats();
 }
@@ -39,42 +36,42 @@ CharStats::CharStats(const StatsEntry &s) :
 CharStats::CharStats() {}
 
 void CharStats::init_totalstats() {
-    totalstats.clear();
-    buffdeltas.clear();
-    percentages.clear();
+    total_stats_.clear();
+    buff_deltas_.clear();
+    percentages_.clear();
 
-    totalstats[EquipStat::Id::HP] = get_stat(MapleStat::Id::MAXHP);
-    totalstats[EquipStat::Id::MP] = get_stat(MapleStat::Id::MAXMP);
-    totalstats[EquipStat::Id::STR] = get_stat(MapleStat::Id::STR);
-    totalstats[EquipStat::Id::DEX] = get_stat(MapleStat::Id::DEX);
-    totalstats[EquipStat::Id::INT] = get_stat(MapleStat::Id::INT);
-    totalstats[EquipStat::Id::LUK] = get_stat(MapleStat::Id::LUK);
-    totalstats[EquipStat::Id::SPEED] = 100;
-    totalstats[EquipStat::Id::JUMP] = 100;
+    total_stats_[EquipStat::Id::HP] = get_stat(MapleStat::Id::MAXHP);
+    total_stats_[EquipStat::Id::MP] = get_stat(MapleStat::Id::MAXMP);
+    total_stats_[EquipStat::Id::STR] = get_stat(MapleStat::Id::STR);
+    total_stats_[EquipStat::Id::DEX] = get_stat(MapleStat::Id::DEX);
+    total_stats_[EquipStat::Id::INT] = get_stat(MapleStat::Id::INT);
+    total_stats_[EquipStat::Id::LUK] = get_stat(MapleStat::Id::LUK);
+    total_stats_[EquipStat::Id::SPEED] = 100;
+    total_stats_[EquipStat::Id::JUMP] = 100;
 
-    maxdamage = 0;
-    mindamage = 0;
-    honor = 0;
-    attackspeed = 0;
-    projectilerange = 400;
-    mastery = 0.0f;
-    critical = 0.05f;
-    mincrit = 0.5f;
-    maxcrit = 0.75f;
-    damagepercent = 0.0f;
-    bossdmg = 0.0f;
-    ignoredef = 0.0f;
-    stance = 0.0f;
-    resiststatus = 0.0f;
-    reducedamage = 0.0f;
+    max_damage_ = 0;
+    min_damage_ = 0;
+    honor_ = 0;
+    attack_speed_ = 0;
+    projectile_range_ = 400;
+    mastery_ = 0.0f;
+    critical_ = 0.05f;
+    min_crit_ = 0.5f;
+    max_crit_ = 0.75f;
+    damage_percent_ = 0.0f;
+    boss_dmg_ = 0.0f;
+    ignore_def_ = 0.0f;
+    stance_ = 0.0f;
+    resist_status_ = 0.0f;
+    reduce_damage_ = 0.0f;
 }
 
 void CharStats::close_totalstats() {
-    totalstats[EquipStat::Id::ACC] += calculateaccuracy();
+    total_stats_[EquipStat::Id::ACC] += calculateaccuracy();
 
-    for (auto iter : percentages) {
+    for (auto iter : percentages_) {
         EquipStat::Id stat = iter.first;
-        int32_t total = totalstats[stat];
+        int32_t total = total_stats_[stat];
         total += static_cast<int32_t>(total * iter.second);
         set_total(stat, total);
     }
@@ -82,10 +79,10 @@ void CharStats::close_totalstats() {
     int32_t primary = get_primary_stat();
     int32_t secondary = get_secondary_stat();
     int32_t attack = get_total(EquipStat::Id::WATK);
-    float multiplier = damagepercent + static_cast<float>(attack) / 100;
-    maxdamage = static_cast<int32_t>((primary + secondary) * multiplier);
-    mindamage = static_cast<int32_t>(((primary * 0.9f * mastery) + secondary)
-                                     * multiplier);
+    float multiplier = damage_percent_ + static_cast<float>(attack) / 100;
+    max_damage_ = static_cast<int32_t>((primary + secondary) * multiplier);
+    min_damage_ = static_cast<int32_t>(((primary * 0.9f * mastery_) + secondary)
+                                       * multiplier);
 }
 
 int32_t CharStats::calculateaccuracy() const {
@@ -96,19 +93,19 @@ int32_t CharStats::calculateaccuracy() const {
 }
 
 int32_t CharStats::get_primary_stat() const {
-    EquipStat::Id primary = job.get_primary(weapontype);
+    EquipStat::Id primary = job_.get_primary(weapon_type_);
 
     return static_cast<int32_t>(get_multiplier() * get_total(primary));
 }
 
 int32_t CharStats::get_secondary_stat() const {
-    EquipStat::Id secondary = job.get_secondary(weapontype);
+    EquipStat::Id secondary = job_.get_secondary(weapon_type_);
 
     return get_total(secondary);
 }
 
 float CharStats::get_multiplier() const {
-    switch (weapontype) {
+    switch (weapon_type_) {
         case Weapon::Type::SWORD_1H: return 4.0f;
         case Weapon::Type::AXE_1H:
         case Weapon::Type::MACE_1H:
@@ -130,7 +127,7 @@ float CharStats::get_multiplier() const {
 }
 
 void CharStats::set_stat(MapleStat::Id stat, uint16_t value) {
-    basestats[stat] = value;
+    base_stats_[stat] = value;
 }
 
 void CharStats::set_total(EquipStat::Id stat, int32_t value) {
@@ -143,13 +140,13 @@ void CharStats::set_total(EquipStat::Id stat, int32_t value) {
             value = cap_value;
     }
 
-    totalstats[stat] = value;
+    total_stats_[stat] = value;
 }
 
 void CharStats::add_buff(EquipStat::Id stat, int32_t value) {
     int32_t current = get_total(stat);
     set_total(stat, current + value);
-    buffdeltas[stat] += value;
+    buff_deltas_[stat] += value;
 }
 
 void CharStats::add_value(EquipStat::Id stat, int32_t value) {
@@ -158,36 +155,36 @@ void CharStats::add_value(EquipStat::Id stat, int32_t value) {
 }
 
 void CharStats::add_percent(EquipStat::Id stat, float percent) {
-    percentages[stat] += percent;
+    percentages_[stat] += percent;
 }
 
 void CharStats::set_weapontype(Weapon::Type w) {
-    weapontype = w;
+    weapon_type_ = w;
 }
 
 void CharStats::set_exp(int64_t e) {
-    exp = e;
+    exp_ = e;
 }
 
 void CharStats::set_portal(uint8_t p) {
-    portal = p;
+    portal_ = p;
 }
 
 void CharStats::set_mastery(float m) {
-    mastery = 0.5f + m;
+    mastery_ = 0.5f + m;
 }
 
 void CharStats::set_damagepercent(float d) {
-    damagepercent = d;
+    damage_percent_ = d;
 }
 
 void CharStats::set_reducedamage(float r) {
-    reducedamage = r;
+    reduce_damage_ = r;
 }
 
 void CharStats::change_job(uint16_t id) {
-    basestats[MapleStat::Id::JOB] = id;
-    job.change_job(id);
+    base_stats_[MapleStat::Id::JOB] = id;
+    job_.change_job(id);
 }
 
 int32_t CharStats::calculate_damage(int32_t mobatk) const {
@@ -199,7 +196,7 @@ int32_t CharStats::calculate_damage(int32_t mobatk) const {
 
     int32_t reduceatk = mobatk / 2 + mobatk / weapon_def;
 
-    return reduceatk - static_cast<int32_t>(reduceatk * reducedamage);
+    return reduceatk - static_cast<int32_t>(reduceatk * reduce_damage_);
 }
 
 bool CharStats::is_damage_buffed() const {
@@ -208,114 +205,114 @@ bool CharStats::is_damage_buffed() const {
 }
 
 uint16_t CharStats::get_stat(MapleStat::Id stat) const {
-    return basestats[stat];
+    return base_stats_[stat];
 }
 
 int32_t CharStats::get_total(EquipStat::Id stat) const {
-    return totalstats[stat];
+    return total_stats_[stat];
 }
 
 int32_t CharStats::get_buffdelta(EquipStat::Id stat) const {
-    return buffdeltas[stat];
+    return buff_deltas_[stat];
 }
 
 Rectangle<int16_t> CharStats::get_range() const {
-    return Rectangle<int16_t>(-projectilerange, -5, -50, 50);
+    return Rectangle<int16_t>(-projectile_range_, -5, -50, 50);
 }
 
 void CharStats::set_mapid(int32_t id) {
-    mapid = id;
+    map_id_ = id;
 }
 
 int32_t CharStats::get_mapid() const {
-    return mapid;
+    return map_id_;
 }
 
 uint8_t CharStats::get_portal() const {
-    return portal;
+    return portal_;
 }
 
 int64_t CharStats::get_exp() const {
-    return exp;
+    return exp_;
 }
 
 const std::string &CharStats::get_name() const {
-    return name;
+    return name_;
 }
 
 const std::string &CharStats::get_jobname() const {
-    return job.get_name();
+    return job_.get_name();
 }
 
 Weapon::Type CharStats::get_weapontype() const {
-    return weapontype;
+    return weapon_type_;
 }
 
 float CharStats::get_mastery() const {
-    return mastery;
+    return mastery_;
 }
 
 float CharStats::get_critical() const {
-    return critical;
+    return critical_;
 }
 
 float CharStats::get_mincrit() const {
-    return mincrit;
+    return min_crit_;
 }
 
 float CharStats::get_maxcrit() const {
-    return maxcrit;
+    return max_crit_;
 }
 
 float CharStats::get_reducedamage() const {
-    return reducedamage;
+    return reduce_damage_;
 }
 
 float CharStats::get_bossdmg() const {
-    return bossdmg;
+    return boss_dmg_;
 }
 
 float CharStats::get_ignoredef() const {
-    return ignoredef;
+    return ignore_def_;
 }
 
 void CharStats::set_stance(float s) {
-    stance = s;
+    stance_ = s;
 }
 
 float CharStats::get_stance() const {
-    return stance;
+    return stance_;
 }
 
 float CharStats::get_resistance() const {
-    return resiststatus;
+    return resist_status_;
 }
 
 int32_t CharStats::get_maxdamage() const {
-    return maxdamage;
+    return max_damage_;
 }
 
 int32_t CharStats::get_mindamage() const {
-    return mindamage;
+    return min_damage_;
 }
 
 uint16_t CharStats::get_honor() const {
-    return honor;
+    return honor_;
 }
 
 void CharStats::set_attackspeed(int8_t as) {
-    attackspeed = as;
+    attack_speed_ = as;
 }
 
 int8_t CharStats::get_attackspeed() const {
-    return attackspeed;
+    return attack_speed_;
 }
 
 const Job &CharStats::get_job() const {
-    return job;
+    return job_;
 }
 
 bool CharStats::get_female() const {
-    return female;
+    return female_;
 }
 }  // namespace ms

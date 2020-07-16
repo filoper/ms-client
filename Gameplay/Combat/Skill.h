@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <memory>
@@ -57,14 +54,14 @@ public:
                          uint16_t bullets) const override;
 
 private:
-    std::unique_ptr<SkillAction> action;
-    std::unique_ptr<SkillBullet> bullet;
-    std::unique_ptr<SkillSound> sound;
-    std::unique_ptr<SkillUseEffect> useeffect;
-    std::unique_ptr<SkillHitEffect> hiteffect;
+    std::unique_ptr<SkillAction> action_;
+    std::unique_ptr<SkillBullet> bullet_;
+    std::unique_ptr<SkillSound> sound_;
+    std::unique_ptr<SkillUseEffect> use_effect_;
+    std::unique_ptr<SkillHitEffect> hit_effect_;
 
-    int32_t skillid;
-    bool overregular;
-    bool projectile;
+    int32_t skill_id_;
+    bool over_regular_;
+    bool projectile_;
 };
 }  // namespace ms

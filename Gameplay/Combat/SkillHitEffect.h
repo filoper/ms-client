@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Template/BoolPair.h"
@@ -33,19 +30,19 @@ protected:
     class Effect {
     public:
         Effect(nl::node src) {
-            animation = src;
-            pos = src["pos"];
-            z = src["z"];
+            animation_ = src;
+            pos_ = src["pos"];
+            z_ = src["z"];
         }
 
         void apply(Mob &target, bool flip) const {
-            target.show_effect(animation, pos, z, flip);
+            target.show_effect(animation_, pos_, z_, flip);
         }
 
     private:
-        Animation animation;
-        int8_t pos;
-        int8_t z;
+        Animation animation_;
+        int8_t pos_;
+        int8_t z_;
     };
 };
 
@@ -63,7 +60,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    Effect effect;
+    Effect effect_;
 };
 
 // The animation changes depending on the weapon used
@@ -74,7 +71,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    BoolPair<Effect> effects;
+    BoolPair<Effect> effects_;
 };
 
 // The animation changes with the character level
@@ -85,7 +82,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    std::map<uint16_t, Effect> effects;
+    std::map<uint16_t, Effect> effects_;
 };
 
 // The animation changes with the character level and weapon used
@@ -96,7 +93,7 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    std::map<uint16_t, BoolPair<Effect>> effects;
+    std::map<uint16_t, BoolPair<Effect>> effects_;
 };
 
 // The animation changes with the skill level
@@ -107,6 +104,6 @@ public:
     void apply(const AttackUser &user, Mob &target) const override;
 
 private:
-    std::map<int32_t, Effect> effects;
+    std::map<int32_t, Effect> effects_;
 };
 }  // namespace ms

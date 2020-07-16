@@ -1,21 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////////
-//	This file is part of the continued Journey MMORPG client // 	Copyright (C)
-//2015-2019  Daniel Allendorf, Ryan Payton						//
-//																				//
+//	This file is part of the continued Journey MMORPG client
+//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//
 //	This program is free software: you can redistribute it and/or modify
-//// 	it under the terms of the GNU Affero General Public License as published by
-//// 	the Free Software Foundation, either version 3 of the License, or // 	(at
-//your option) any later version.											//
-//																				//
-//	This program is distributed in the hope that it will be useful, // 	but
-//WITHOUT ANY WARRANTY; without even the implied warranty of				//
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the // 	GNU Affero
-//General Public License for more details.							//
-//																				//
+//	it under the terms of the GNU Affero General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU Affero General Public License for more details.
+//
 //	You should have received a copy of the GNU Affero General Public License
-//// 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-////
-//////////////////////////////////////////////////////////////////////////////////
+//	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../../Character/Char.h"
@@ -76,52 +73,52 @@ private:
     };
 
     /// Main Window
-    Text name;
-    Text job;
-    Text level;
-    Text fame;
-    Text guild;
-    Text alliance;
+    Text name_;
+    Text job_;
+    Text level_;
+    Text fame_;
+    Text guild_;
+    Text alliance_;
 
-    Char *target_character;
+    Char *target_character_;
 
     /// Sub Windows
-    Point<int16_t> bottom_window_adj;
-    Point<int16_t> right_window_adj;
+    Point<int16_t> bottom_window_adj_;
+    Point<int16_t> right_window_adj_;
 
     /// Farm
-    Text farm_name;
-    Sprite loading;
-    bool is_loading;
-    uint16_t timestep;
-    Charset farm_level;
-    Point<int16_t> farm_dim;
-    Point<int16_t> farm_adj;
-    std::string farm_level_text;
+    Text farm_name_;
+    Sprite loading_;
+    bool is_loading_;
+    uint16_t timestep_;
+    Charset farm_level_;
+    Point<int16_t> farm_dim_;
+    Point<int16_t> farm_adj_;
+    std::string farm_level_text_;
 
     /// Personality
-    bool personality_enabled;
-    std::vector<Sprite> personality_sprites;
-    BoolPair<std::vector<Sprite>> personality_sprites_enabled;
-    Point<int16_t> personality_dimensions;
+    bool personality_enabled_;
+    std::vector<Sprite> personality_sprites_;
+    BoolPair<std::vector<Sprite>> personality_sprites_enabled_;
+    Point<int16_t> personality_dimensions_;
 
     /// Collect
-    bool collect_enabled;
-    std::vector<Sprite> collect_sprites;
-    Point<int16_t> collect_dimensions;
-    Point<int16_t> collect_adj;
-    Sprite default_medal;
-    Text medal_text;
-    Text medal_total;
+    bool collect_enabled_;
+    std::vector<Sprite> collect_sprites_;
+    Point<int16_t> collect_dimensions_;
+    Point<int16_t> collect_adj_;
+    Sprite default_medal_;
+    Text medal_text_;
+    Text medal_total_;
 
     /// Damage
-    bool damage_enabled;
-    std::vector<Sprite> damage_sprites;
-    Point<int16_t> damage_dimensions;
+    bool damage_enabled_;
+    std::vector<Sprite> damage_sprites_;
+    Point<int16_t> damage_dimensions_;
 
     /// Item
-    bool item_enabled;
-    std::vector<Sprite> item_sprites;
-    Point<int16_t> item_dimensions;
+    bool item_enabled_;
+    std::vector<Sprite> item_sprites_;
+    Point<int16_t> item_dimensions_;
 };
 }  // namespace ms

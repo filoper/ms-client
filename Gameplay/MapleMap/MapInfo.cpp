@@ -118,9 +118,9 @@ bool Ladder::inrange(Point<int16_t> position, bool upwards) const {
 }
 
 bool Ladder::felloff(int16_t y, bool downwards) const {
-    int16_t dy = downwards ? y + 5 : y - 5;
+    int16_t dy = downwards ? y + 1 : y - 1;
 
-    return dy > y2_ || y + 5 < y1_;
+    return dy > y2_ || y + 1 < y1_;
 }
 
 int16_t Ladder::get_x() const {

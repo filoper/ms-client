@@ -390,7 +390,6 @@ void Player::set_ladder(Optional<const Ladder> ldr) {
         phobj_.vspeed = 0.0;
         phobj_.fhlayer = 7;
         set_state(ldr->is_ladder() ? Char::State::LADDER : Char::State::ROPE);
-        set_direction(false);
     }
 }
 

@@ -71,8 +71,8 @@ World LoginParser::parse_world(InPacket &recv) {
         recv.skip(2);
     }
 
-    recv.skip(2);
-    recv.skip(10);  // balloon size 1 and msg "test"
+    recv.skip(2);  // balloon size
+    // recv.skip(10);  // balloon size 1 and msg "test"
 
     return { name, message, chloads, channelcount, flag, wid };
 }

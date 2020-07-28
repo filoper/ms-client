@@ -23,11 +23,12 @@
 #include "../KeyAction.h"
 
 namespace ms {
-UIChannel::UIChannel() : UIDragElement<PosCHANNEL>() {
-    uint8_t selected_world = 1;  // TODO: Need to get current world user is on
-    current_channel_ = 9;        // TODO: Need to get current channel user is on
-    selected_channel_ = current_channel_;
-    channel_count_ = 20;  // TODO: Need to get total number of channels on world
+UIChannel::UIChannel(uint8_t wid, uint8_t ch, uint8_t ch_count) :
+    UIDragElement<PosCHANNEL>(),
+    current_channel_(ch),
+    selected_channel_(ch),
+    channel_count_(ch_count) {
+    uint8_t selected_world = wid;
 
     nl::node Channel = nl::nx::ui["UIWindow2.img"]["Channel"];
 
@@ -74,6 +75,7 @@ UIChannel::UIChannel() : UIDragElement<PosCHANNEL>() {
         x++;
     }
 
+    old_state_ = { current_channel_, current_channel_x_, current_channel_y_ };
     dimension_ = bg.get_dimensions();
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 }
@@ -245,10 +247,10 @@ Button::State UIChannel::button_pressed(uint16_t buttonid) {
 void UIChannel::cancel() {
     deactivate();
 
-    current_channel_ = 9;  // TODO: Need to get current channel user is on
-    selected_channel_ = current_channel_;
-    selected_channel_x_ = current_channel_x_;
-    selected_channel_y_ = current_channel_y_;
+    current_channel_ = old_state_.current_channel_;
+    selected_channel_ = old_state_.current_channel_;
+    selected_channel_x_ = old_state_.current_channel_x_;
+    selected_channel_y_ = old_state_.current_channel_y_;
 }
 
 void UIChannel::change_channel() {

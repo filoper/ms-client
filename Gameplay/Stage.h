@@ -46,7 +46,7 @@ public:
     void clear();
 
     // Construct the player from a character entry.
-    void loadplayer(const CharEntry &entry);
+    void loadplayer(const CharEntry &entry, uint8_t wid, uint8_t channel_id);
 
     // Call 'draw()' of all objects on stage
     void draw(float alpha) const;

@@ -38,9 +38,10 @@
 #include "UITypes/UIWorldMap.h"
 
 namespace ms {
-UIStateGame::UIStateGame() :
+UIStateGame::UIStateGame(uint8_t channel_count) :
     stats_(Stage::get().get_player().get_stats()),
-    dragged_(nullptr) {
+    dragged_(nullptr),
+    channel_count_(channel_count) {
     focused_ = UIElement::Type::NONE;
     tooltip_parent_ = Tooltip::Parent::NONE;
 
@@ -48,7 +49,7 @@ UIStateGame::UIStateGame() :
     const Inventory &inventory = Stage::get().get_player().get_inventory();
 
     emplace<UIStatusMessenger>();
-    emplace<UIStatusBar>(stats_);
+    emplace<UIStatusBar>(stats_, channel_count_);
     emplace<UIChatBar>();
     emplace<UIMiniMap>(stats_);
     emplace<UIBuffList>();
@@ -86,7 +87,7 @@ void UIStateGame::update() {
         UI::get().remove(UIElement::Type::STATUSBAR);
 
         const CharStats &stats = Stage::get().get_player().get_stats();
-        emplace<UIStatusBar>(stats);
+        emplace<UIStatusBar>(stats, channel_count_);
     }
 
     for (auto &type : element_order_) {
@@ -269,7 +270,10 @@ void UIStateGame::send_key(KeyType::Id type,
                             break;
                         case KeyAction::Id::EVENT: emplace<UIEvent>(); break;
                         case KeyAction::Id::CHANGECHANNEL:
-                            emplace<UIChannel>();
+                            emplace<UIChannel>(
+                                Stage::get().get_player().get_world_id(),
+                                Stage::get().get_player().get_channel_id(),
+                                channel_count_);
                             break;
                         default:
                             std::cout << "Action (" << action

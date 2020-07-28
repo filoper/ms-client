@@ -46,8 +46,10 @@ void Stage::load(int32_t mapid, int8_t portalid) {
     state_ = State::ACTIVE;
 }
 
-void Stage::loadplayer(const CharEntry &entry) {
-    player_ = entry;
+void Stage::loadplayer(const CharEntry &entry,
+                       uint8_t wid,
+                       uint8_t channel_id) {
+    player_ = Player(entry, wid, channel_id);
     playable_ = player_;
 
     start_ = ContinuousTimer::get().start();

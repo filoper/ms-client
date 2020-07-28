@@ -36,9 +36,12 @@
 #include "UISkillBook.h"
 #include "UIStatsInfo.h"
 #include "UIUserList.h"
+#include "UIWorldSelect.h"
 
 namespace ms {
-UIStatusBar::UIStatusBar(const CharStats &st) : stats_(st) {
+UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
+    stats_(st),
+    channel_count_(channel_count) {
     quickslot_active_ = false;
     quickslot_adj_ = Point<int16_t>(QUICKSLOT_MAX_, 0);
     VWIDTH_ = Constants::Constants::get().get_viewwidth();
@@ -614,7 +617,10 @@ Button::State UIStatusBar::button_pressed(uint16_t id) {
         case Buttons::BT_MENU_HELP:
         case Buttons::BT_MENU_CLAIM: remove_menus(); break;
         case Buttons::BT_SETTING_CHANNEL:
-            UI::get().emplace<UIChannel>();
+            UI::get().emplace<UIChannel>(
+                Stage::get().get_player().get_world_id(),
+                Stage::get().get_player().get_channel_id(),
+                channel_count_);
 
             remove_menus();
             break;

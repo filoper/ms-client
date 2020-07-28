@@ -47,9 +47,11 @@ const PlayerState *get_state(Char::State state) {
     }
 }
 
-Player::Player(const CharEntry &entry) :
+Player::Player(const CharEntry &entry, uint8_t wid, uint8_t channel_id) :
     Char(entry.id, entry.look, entry.stats.name),
-    stats_(entry.stats) {
+    stats_(entry.stats),
+    wid_(wid),
+    channel_id_(channel_id) {
     attacking_ = false;
     underwater_ = false;
 
@@ -367,6 +369,14 @@ uint16_t Player::get_level() const {
 
 int32_t Player::get_skilllevel(int32_t skillid) const {
     return skill_book_.get_level(skillid);
+}
+
+uint8_t Player::get_world_id() const {
+    return wid_;
+}
+
+uint8_t Player::get_channel_id() const {
+    return channel_id_;
 }
 
 void Player::change_job(uint16_t jobid) {

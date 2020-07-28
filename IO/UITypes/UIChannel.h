@@ -25,7 +25,7 @@ public:
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 
-    UIChannel();
+    UIChannel(uint8_t wid, uint8_t ch, uint8_t ch_count);
 
     void draw(float inter) const override;
 
@@ -48,6 +48,14 @@ private:
     void update_selected_channel_position();
 
     enum Buttons : uint16_t { CANCEL, CHANGE, CH };
+
+    struct OldState {
+        uint8_t current_channel_;
+        int16_t current_channel_x_;
+        int16_t current_channel_y_;
+    };
+
+    OldState old_state_;
 
     uint8_t current_channel_;
     uint8_t selected_channel_;

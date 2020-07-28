@@ -115,7 +115,7 @@ public:
     bool get_female() const;
 
 private:
-    int32_t calculateaccuracy() const;
+    int32_t calculate_accuracy() const;
 
     int32_t get_primary_stat() const;
 

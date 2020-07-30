@@ -38,6 +38,16 @@ public:
     ChangeMapPacket() : OutPacket(OutPacket::Opcode::CHANGEMAP) {}
 };
 
+// Opcode: CHANGE_CHANNEL(39)
+class ChangeChannelPacket : public OutPacket {
+public:
+    // Finished updating player stats
+    ChangeChannelPacket(uint8_t ch) :
+        OutPacket(OutPacket::Opcode::CHANGE_CHANNEL) {
+        write_byte(ch);
+    }
+};
+
 // Opcode: ENTER_CASHSHOP(40)
 class EnterCashShopPacket : public OutPacket {
 public:

@@ -156,6 +156,8 @@ public:
     // Char::ROPE.
     void set_ladder(Optional<const Ladder> ladder);
 
+    void set_channel_id(uint8_t ch);
+
     // Obtain a reference to the player's stats.
     CharStats &get_stats();
 

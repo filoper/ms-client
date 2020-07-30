@@ -316,4 +316,19 @@ void Stage::transfer_player() {
         AdminEnterMapPacket(AdminEnterMapPacket::Operation::ALERT_ADMINS)
             .dispatch();
 }
+
+void Stage::clear_channel_objects() {
+    chars_.clear();
+    mobs_.clear();
+    drops_.clear();
+    reactors_.clear();
+}
+
+void Stage::change_channel(uint8_t ch) {
+    UI::get().disable();
+    GraphicsGL::get().lock();
+    ChangeChannelPacket(ch).dispatch();
+    player_.set_channel_id(ch);
+    state_ = State::TRANSITION;
+}
 }  // namespace ms

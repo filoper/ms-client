@@ -45,6 +45,9 @@ public:
     // Remove all map objects and graphics.
     void clear();
 
+    // Remove all channel dependent map objects
+    void clear_channel_objects();
+
     // Construct the player from a character entry.
     void loadplayer(const CharEntry &entry, uint8_t wid, uint8_t channel_id);
 
@@ -105,6 +108,8 @@ public:
 
     // Notify the server that the player has moved maps
     void transfer_player();
+
+    void change_channel(uint8_t ch);
 
 private:
     void load_map(int32_t mapid);

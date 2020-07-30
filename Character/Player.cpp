@@ -183,6 +183,10 @@ void Player::set_direction(bool flipped) {
         Char::set_direction(flipped);
 }
 
+void Player::set_channel_id(uint8_t ch) {
+    channel_id_ = ch;
+}
+
 void Player::set_state(State st) {
     if (!attacking_) {
         Char::set_state(st);

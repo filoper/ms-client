@@ -21,16 +21,38 @@
 #include "../../IO/UITypes/UICashShop.h"
 #include "../../IO/UITypes/UISkillBook.h"
 #include "../../IO/UITypes/UIStatsInfo.h"
+#include "../../IO/Window.h"
 #include "Helpers/LoginParser.h"
 
 namespace ms {
+void transition(int32_t mapid, uint8_t portalid) {
+    float fadestep = 0.025f;
+
+    Window::get().fadeout(fadestep, [mapid, portalid]() {
+        GraphicsGL::get().clear();
+        Stage::get().load(mapid, portalid);
+        UI::get().enable();
+        GraphicsGL::get().unlock();
+    });
+
+    GraphicsGL::get().lock();
+    Stage::get().clear_channel_objects();
+}
+
 void ChangeChannelHandler::handle(InPacket &recv) const {
     LoginParser::parse_login(recv);
 
     auto cashshop = UI::get().get_element<UICashShop>();
 
-    if (cashshop)
+    if (cashshop) {
         cashshop->exit_cashshop();
+    } else {
+        Player &player = Stage::get().get_player();
+        int32_t mapid = player.get_stats().get_mapid();
+        uint8_t portalid = player.get_stats().get_portal();
+
+        transition(mapid, portalid);
+    }
 }
 
 void ChangeStatsHandler::handle(InPacket &recv) const {
@@ -128,11 +150,11 @@ void BuffHandler::handle(InPacket &recv) const {
             return;
     }
 
-    for (auto &iter : Buffstat::first_codes)
+    for (const auto &iter : Buffstat::first_codes)
         if (firstmask & iter.second)
             handle_buff(recv, iter.first);
 
-    for (auto &iter : Buffstat::second_codes)
+    for (const auto &iter : Buffstat::second_codes)
         if (secondmask & iter.second)
             handle_buff(recv, iter.first);
 

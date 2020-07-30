@@ -41,10 +41,10 @@ public:
 // Opcode: CHANGE_CHANNEL(39)
 class ChangeChannelPacket : public OutPacket {
 public:
-    // Finished updating player stats
     ChangeChannelPacket(uint8_t ch) :
         OutPacket(OutPacket::Opcode::CHANGE_CHANNEL) {
         write_byte(ch);
+        write_int(0);
     }
 };
 

@@ -792,8 +792,8 @@ void UICharSelect::update_buttons() {
 
     bool character_found = false;
 
-    for (uint8_t i = PAGESIZE_ - 1; i >= 0; i--) {
-        uint8_t index = i + selected_page * PAGESIZE_;
+    for (int i = PAGESIZE_ - 1; i >= 0; i--) {
+        int index = i + selected_page * PAGESIZE_;
 
         if (index < characters_count_) {
             character_found = true;

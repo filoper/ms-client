@@ -180,14 +180,14 @@ void SpawnMobHandler::handle(InPacket &recv) const {
     recv.read_byte();  // 5 if controller == null
     int32_t id = recv.read_int();
 
-    recv.skip(22);
+    recv.skip(16);
 
     Point<int16_t> position = recv.read_point();
     int8_t stance = recv.read_byte();
 
-    recv.skip(2);
+    recv.skip(2);  // origin fh
 
-    uint16_t fh = recv.read_short();
+    uint16_t fh = recv.read_ushort();
     int8_t effect = recv.read_byte();
 
     if (effect > 0) {
@@ -200,7 +200,7 @@ void SpawnMobHandler::handle(InPacket &recv) const {
 
     int8_t team = recv.read_byte();
 
-    recv.skip(4);
+    recv.skip(4);  // item effect
 
     Stage::get().get_mobs().spawn(
         { oid, id, 0, stance, fh, effect == -2, team, position });
@@ -225,14 +225,14 @@ void SpawnMobControllerHandler::handle(InPacket &recv) const {
 
             int32_t id = recv.read_int();
 
-            recv.skip(22);
+            recv.skip(16);
 
             Point<int16_t> position = recv.read_point();
             int8_t stance = recv.read_byte();
 
-            recv.skip(2);
+            recv.skip(2);  // origin fh
 
-            uint16_t fh = recv.read_short();
+            uint16_t fh = recv.read_ushort();
             int8_t effect = recv.read_byte();
 
             if (effect > 0) {

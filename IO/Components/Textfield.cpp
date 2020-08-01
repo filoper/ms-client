@@ -20,8 +20,15 @@
 #include "../UI.h"
 
 namespace ms {
-Textfield::Textfield() {
+Textfield::Textfield() :
+    show_marker_(true),
+    elapsed_(0),
+    bounds_(),
+    limit_() {
     text_ = "";
+    marker_pos_ = 0;
+    crypt_ = 0;
+    state_ = State::NORMAL;
 }
 
 Textfield::Textfield(Text::Font font,
@@ -29,6 +36,8 @@ Textfield::Textfield(Text::Font font,
                      Color::Name color,
                      Rectangle<int16_t> bounds,
                      size_t limit) :
+    show_marker_(true),
+    elapsed_(0),
     bounds_(bounds),
     limit_(limit) {
     text_label_ = Text(font, alignment, color, "", 0, false);

@@ -21,7 +21,7 @@
 
 namespace ms {
 void CheckSpwResultHandler::handle(InPacket &recv) const {
-    int reason = recv.read_byte();
+    auto reason = recv.read_byte();
 
     if (reason == 0)
         UI::get().emplace<UILoginNotice>(UILoginNotice::Message::INCORRECT_PIC);
@@ -33,7 +33,7 @@ void CheckSpwResultHandler::handle(InPacket &recv) const {
 }
 
 void FieldEffectHandler::handle(InPacket &recv) const {
-    int rand = recv.read_byte();
+    auto rand = recv.read_byte();
 
     // Effect
     if (rand == 3) {

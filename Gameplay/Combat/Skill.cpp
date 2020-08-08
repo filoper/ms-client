@@ -39,21 +39,21 @@ Skill::Skill(int32_t id) : skill_id_(id) {
 
     sound_ = std::make_unique<SingleSkillSound>(strid);
 
-    bool byleveleffect = src["CharLevel"]["10"]["effect"].size() > 0;
-    bool multieffect = src["effect0"].size() > 0;
+    bool by_level_effect = src["CharLevel"]["10"]["effect"].size() > 0;
+    bool multi_effect = src["effect0"].size() > 0;
 
-    if (byleveleffect) {
+    if (by_level_effect) {
         use_effect_ = std::make_unique<ByLevelUseEffect>(src);
-    } else if (multieffect) {
+    } else if (multi_effect) {
         use_effect_ = std::make_unique<MultiUseEffect>(src);
     } else {
-        bool isanimation =
+        bool is_animation =
             src["effect"]["0"].data_type() == nl::node::type::bitmap;
-        bool haseffect1 = src["effect"]["1"].size() > 0;
+        bool has_effect1 = src["effect"]["1"].size() > 0;
 
-        if (isanimation) {
+        if (is_animation) {
             use_effect_ = std::make_unique<SingleUseEffect>(src);
-        } else if (haseffect1) {
+        } else if (has_effect1) {
             use_effect_ = std::make_unique<TwoHandedUseEffect>(src);
         } else {
             switch (skill_id_) {
@@ -66,38 +66,38 @@ Skill::Skill(int32_t id) : skill_id_(id) {
         }
     }
 
-    bool bylevelhit = src["CharLevel"]["10"]["hit"].size() > 0;
-    bool byskilllevelhit = src["level"]["1"]["hit"].size() > 0;
-    bool hashit0 = src["hit"]["0"].size() > 0;
-    bool hashit1 = src["hit"]["1"].size() > 0;
+    bool by_level_hit = src["CharLevel"]["10"]["hit"].size() > 0;
+    bool by_skill_level_hit = src["level"]["1"]["hit"].size() > 0;
+    bool has_hit0 = src["hit"]["0"].size() > 0;
+    bool has_hit1 = src["hit"]["1"].size() > 0;
 
-    if (bylevelhit) {
-        if (hashit0 && hashit1)
+    if (by_level_hit) {
+        if (has_hit0 && has_hit1)
             hit_effect_ = std::make_unique<ByLevelTwoHandedHitEffect>(src);
         else
             hit_effect_ = std::make_unique<ByLevelHitEffect>(src);
-    } else if (byskilllevelhit) {
+    } else if (by_skill_level_hit) {
         hit_effect_ = std::make_unique<BySkillLevelHitEffect>(src);
-    } else if (hashit0 && hashit1) {
+    } else if (has_hit0 && has_hit1) {
         hit_effect_ = std::make_unique<TwoHandedHitEffect>(src);
-    } else if (hashit0) {
+    } else if (has_hit0) {
         hit_effect_ = std::make_unique<SingleHitEffect>(src);
     } else {
         hit_effect_ = std::make_unique<NoHitEffect>();
     }
 
-    bool hasaction0 = src["action"]["0"].data_type() == nl::node::type::string;
-    bool hasaction1 = src["action"]["1"].data_type() == nl::node::type::string;
+    bool has_action0 = src["action"]["0"].data_type() == nl::node::type::string;
+    bool has_action1 = src["action"]["1"].data_type() == nl::node::type::string;
 
-    if (hasaction0 && hasaction1) {
+    if (has_action0 && has_action1) {
         action_ = std::make_unique<TwoHandedAction>(src);
-    } else if (hasaction0) {
+    } else if (has_action0) {
         action_ = std::make_unique<SingleAction>(src);
     } else if (data.is_attack()) {
-        bool bylevel =
+        bool by_level =
             src["level"]["1"]["action"].data_type() == nl::node::type::string;
 
-        if (bylevel) {
+        if (by_level) {
             action_ = std::make_unique<ByLevelAction>(src, skill_id_);
         } else {
             action_ = std::make_unique<RegularAction>();
@@ -107,12 +107,12 @@ Skill::Skill(int32_t id) : skill_id_(id) {
         action_ = std::make_unique<NoAction>();
     }
 
-    bool hasball = src["ball"].size() > 0;
-    bool bylevelball = src["level"]["1"]["ball"].size() > 0;
+    bool has_ball = src["ball"].size() > 0;
+    bool by_level_ball = src["level"]["1"]["ball"].size() > 0;
 
-    if (bylevelball) {
+    if (by_level_ball) {
         bullet_ = std::make_unique<BySkillLevelBullet>(src, skill_id_);
-    } else if (hasball) {
+    } else if (has_ball) {
         bullet_ = std::make_unique<SingleBullet>(src);
     } else {
         bullet_ = std::make_unique<RegularBullet>();

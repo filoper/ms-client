@@ -25,7 +25,7 @@ namespace ms {
 // A single frame within an animation.
 class Frame {
 public:
-    Frame(nl::node src);
+    Frame(const nl::node &src);
 
     Frame();
 
@@ -50,12 +50,12 @@ public:
     float scalestep(uint16_t timestep) const;
 
 private:
-    Texture texture;
-    uint16_t delay;
-    std::pair<uint8_t, uint8_t> opacities;
-    std::pair<int16_t, int16_t> scales;
-    Rectangle<int16_t> bounds;
-    Point<int16_t> head;
+    Texture texture_;
+    uint16_t delay_;
+    std::pair<uint8_t, uint8_t> opacities_;
+    std::pair<int16_t, int16_t> scales_;
+    Rectangle<int16_t> bounds_;
+    Point<int16_t> head_;
 };
 
 // Class which consists of multiple textures to make an Animation.

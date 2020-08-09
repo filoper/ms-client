@@ -25,7 +25,7 @@ public:
     MovementPacket(OutPacket::Opcode opc) : OutPacket(opc) {}
 
 protected:
-    void writemovement(const Movement &movement) {
+    void write_movement(const Movement &movement) {
         write_byte(movement.command);
         write_short(movement.xpos);
         write_short(movement.ypos);

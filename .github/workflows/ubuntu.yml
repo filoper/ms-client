@@ -34,8 +34,8 @@ jobs:
 
           - os: ubuntu-latest
             compiler: clang
-            cc: clang-10
-            cxx: clang++-10
+            cc: clang
+            cxx: clang++
             version: "10"
 
     steps:

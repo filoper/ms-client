@@ -63,7 +63,7 @@ public:
         MovementPacket(OutPacket::Opcode::MOVE_PLAYER) {
         skip(9);
         write_byte(1);
-        writemovement(movement);
+        write_movement(movement);
     }
 };
 
@@ -165,30 +165,28 @@ public:
     // Updates a mob's position with the server
     MoveMobPacket(int32_t oid,
                   int16_t type,
-                  int8_t skillb,
-                  int8_t skill0,
-                  int8_t skill1,
-                  int8_t skill2,
-                  int8_t skill3,
-                  int8_t skill4,
+                  int8_t nibbles,
+                  int8_t action,
+                  int8_t skill,
+                  int8_t skill_level,
+                  int16_t option,
                   Point<int16_t> startpos,
                   const Movement &movement) :
         MovementPacket(OutPacket::Opcode::MOVE_MONSTER) {
         write_int(oid);
-        write_short(type);
-        write_byte(skillb);
-        write_byte(skill0);
-        write_byte(skill1);
-        write_byte(skill2);
-        write_byte(skill3);
-        write_byte(skill4);
+        write_short(type);  // moveid?
+        write_byte(nibbles);
+        write_byte(action);
+        write_byte(skill);
+        write_byte(skill_level);
+        write_short(option);
 
         skip(13);
 
         write_point(startpos);
 
         write_byte(1);
-        writemovement(movement);
+        write_movement(movement);
     }
 };
 

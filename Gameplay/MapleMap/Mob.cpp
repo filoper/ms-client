@@ -280,6 +280,10 @@ void Mob::update_movement() {
                   0,
                   0,
                   0,
+                  get_position(),
+                  Movement(phobj_, value_of(stance_, flip_)))
+        .dispatch();
+}
                   0,
                   get_position(),
                   Movement(phobj_, value_of(stance_, flip_)))

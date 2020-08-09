@@ -63,8 +63,8 @@ void AttackHandler::handle(InPacket &recv) const {
         for (uint8_t j = 0; j < length; j++) {
             int32_t damage = recv.read_int();
             bool critical = false;  // TODO: ?
-            auto singledamage = std::make_pair(damage, critical);
-            attack.damagelines[oid].push_back(singledamage);
+            auto single_damage = std::make_pair(damage, critical);
+            attack.damage_lines[oid].push_back(single_damage);
         }
     }
 

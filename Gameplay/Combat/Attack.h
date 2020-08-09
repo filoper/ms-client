@@ -52,6 +52,7 @@ struct Attack {
     bool toleft = false;
 };
 
+// an attack coming from a mob
 struct MobAttack {
     Attack::Type type = Attack::Type::CLOSE;
     int32_t watk = 0;
@@ -65,9 +66,9 @@ struct MobAttack {
     MobAttack(int32_t watk, Point<int16_t> origin, int32_t mobid, int32_t oid) :
         type(Attack::Type::CLOSE),
         watk(watk),
-        origin(origin),
         mobid(mobid),
         oid(oid),
+        origin(origin),
         valid(true) {}
 
     MobAttack() : valid(false) {}
@@ -75,6 +76,7 @@ struct MobAttack {
     explicit operator bool() const { return valid; }
 };
 
+// result of a mob's attack
 struct MobAttackResult {
     int32_t damage;
     int32_t mobid;
@@ -85,11 +87,12 @@ struct MobAttackResult {
                     int32_t damage,
                     uint8_t direction) :
         damage(damage),
-        direction(direction),
         mobid(attack.mobid),
-        oid(attack.oid) {}
+        oid(attack.oid),
+        direction(direction) {}
 };
 
+// result of a player's attack
 struct AttackResult {
     AttackResult(const Attack &attack) {
         type = attack.type;
@@ -116,15 +119,16 @@ struct AttackResult {
     uint8_t speed = 0;
     bool toleft = false;
     std::unordered_map<int32_t, std::vector<std::pair<int32_t, bool>>>
-        damagelines;
+        damage_lines;
     int32_t first_oid;
     int32_t last_oid;
 };
 
+// an attack coming from a user
 struct AttackUser {
-    int32_t skilllevel;
+    int32_t skill_level;
     uint16_t level;
-    bool secondweapon;
+    bool second_weapon;
     bool flip;
 };
 }  // namespace ms

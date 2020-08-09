@@ -49,7 +49,7 @@ void MapMobs::update(const Physics &physics) {
 }
 
 void MapMobs::spawn(MobSpawn &&spawn) {
-    spawns_.emplace(std::move(spawn));
+    spawns_.emplace(spawn);
 }
 
 void MapMobs::remove(int32_t oid, int8_t animation) {
@@ -86,7 +86,7 @@ void MapMobs::send_attack(AttackResult &result,
                           uint8_t mobcount) {
     for (auto &target : targets) {
         if (Optional<Mob> mob = mobs_.get(target)) {
-            result.damagelines[target] = mob->calculate_damage(attack);
+            result.damage_lines[target] = mob->calculate_damage(attack);
             result.mobcount++;
 
             if (result.mobcount == 1)

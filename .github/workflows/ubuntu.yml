@@ -34,8 +34,8 @@ jobs:
 
           - os: ubuntu-latest
             compiler: clang
-            cc: clang
-            cxx: clang++
+            cc: clang-10
+            cxx: clang++-10
             version: "10"
 
     steps:
@@ -55,7 +55,7 @@ jobs:
       if: matrix.config.compiler == 'clang'
       run: |
         sudo apt-get update
-        sudo apt-get install clang
+        sudo apt-get install clang-10
         
     - name: Install Openal-soft
       run: |

@@ -31,9 +31,10 @@ void OutPacket::dispatch() {
 
     if (Configuration::get().get_show_packets()) {
         if (opcode_ == Opcode::PONG)
-            std::cout << "Sent Packet: PONG" << std::endl;
+            std::cout << std::endl << "Sent Packet: PONG" << std::endl;
         else
-            std::cout << "Sent Packet: " << std::to_string(opcode_)
+            std::cout << std::endl
+                      << "Sent Packet: " << std::to_string(opcode_)
                       << std::endl;
     }
 }

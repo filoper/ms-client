@@ -31,7 +31,8 @@ size_t InPacket::length() const {
 
 void InPacket::skip(size_t count) {
     if (count > length())
-        throw PacketError("Stack underflow at " + std::to_string(pos_));
+        throw PacketError("Read at index " + std::to_string(pos_) + " "
+                          + "when packet size = " + std::to_string(top_));
 
     pos_ += count;
 }
@@ -77,23 +78,11 @@ Point<int16_t> InPacket::read_point() {
 }
 
 std::string InPacket::read_string() {
-    uint16_t length = read<uint16_t>();
-
-    return read_padded_string(length);
-    // return read<std::string>();
+    return read<std::string>();
 }
 
 std::string InPacket::read_padded_string(uint16_t count) {
-    std::string ret;
-
-    for (int16_t i = 0; i < count; i++) {
-        char letter = read_byte();
-
-        if (letter != '\0')
-            ret.push_back(letter);
-    }
-
-    return ret;
+    return read(count);
 }
 
 void InPacket::skip_bool() {

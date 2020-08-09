@@ -211,7 +211,6 @@ PacketSwitch::PacketSwitch() {
 void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
     // Wrap the bytes with a parser
     InPacket recv = { bytes, length };
-    recv.print();
 
     // Read the opcode to determine handler responsible
     uint16_t opcode = recv.read_short();
@@ -229,7 +228,9 @@ void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
             // Handler is good, packet is passed on
 
             try {
+                std::cout << '[' << opcode << "] ";
                 handler->handle(recv);
+                std::cout << std::endl;
             } catch (const PacketError &err) {
                 // Notice about an error
                 warn(err.what(), opcode);

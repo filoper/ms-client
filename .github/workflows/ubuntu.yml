@@ -18,7 +18,25 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    
+    name: ${{ matrix.config.os }}-${{ matrix.config.compiler }}-${{ matrix.config.version }}
+    runs-on: ${{ matrix.config.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: ubuntu-latest
+            compiler: gcc
+            cc: gcc-9
+            cxx: g++-9
+            version: "9.3.0"
+
+          - os: ubuntu-latest
+            compiler: clang
+            cc: clang-10
+            cxx: clang++-10
+            version: "10"
 
     steps:
     - uses: actions/checkout@v2
@@ -34,17 +52,17 @@ jobs:
       uses: seanmiddleditch/gha-setup-ninja@v1
         
     - name: Install Openal-soft
-      run: sudo apt-get install libopenal-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install libopenal-dev
 
     - name: Install Alure
       run: |
-        sudo apt-get update
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9
         mkdir thirdparty
         cd thirdparty
         git clone https://github.com/kcat/alure
         cd alure
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
         cmake --build build --config $BUILD_TYPE
         cmake --install build --config $BUILD_TYPE
 
@@ -53,7 +71,7 @@ jobs:
         cd thirdparty
         git clone https://github.com/Dav1dde/glad.git
         cd glad
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DCMAKE_BUILD_TYPE=$BUILD_TYPE
         cmake --build build --config $BUILD_TYPE
         cmake --install build --config $BUILD_TYPE
 
@@ -71,7 +89,7 @@ jobs:
         sed -i '$d' CMakeLists.txt
         echo "include_directories(/usr/lz4/1.9.2/include)" >> CMakeLists.txt
         echo "target_link_libraries(NoLifeNx /usr/lz4/1.9.2/lib/liblz4.a)" >> CMakeLists.txt
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DCMAKE_BUILD_TYPE=$BUILD_TYPE
         cmake --build build --config $BUILD_TYPE
         cmake --install build --config $BUILD_TYPE
 
@@ -80,8 +98,6 @@ jobs:
 
     - name: Install Asio
       run: |
-        ls /usr/lib
-        ls /usr/lib/x86_64-linux-gnu
         cd thirdparty
         git clone https://github.com/chriskohlhoff/asio.git
 
@@ -95,14 +111,12 @@ jobs:
         cd thirdparty
         git clone https://github.com/google/googletest.git --branch release-1.10.0
         cd googletest
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
+        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
         cmake --build build --config $BUILD_TYPE
         cmake --build build --target install --config $BUILD_TYPE
 
     - name: Configure
-      run: |
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9
-        cmake -Bbuild -GNinja -DCMAKE_PREFIX_PATH=$INSTALL_LOCATION -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DENABLE_CODE_COVERAGE=1 -DBOOST_ROOT=$BOOST_ROOT_1_72_0
+      run: cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_PREFIX_PATH=$INSTALL_LOCATION -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DENABLE_CODE_COVERAGE=1 -DBOOST_ROOT=$BOOST_ROOT_1_72_0
     
     - name: Build
       run: cmake --build build --config $BUILD_TYPE

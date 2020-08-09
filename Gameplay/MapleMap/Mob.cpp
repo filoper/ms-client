@@ -284,11 +284,6 @@ void Mob::update_movement() {
                   Movement(phobj_, value_of(stance_, flip_)))
         .dispatch();
 }
-                  0,
-                  get_position(),
-                  Movement(phobj_, value_of(stance_, flip_)))
-        .dispatch();
-}
 
 void Mob::draw(double viewx, double viewy, float alpha) const {
     Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);

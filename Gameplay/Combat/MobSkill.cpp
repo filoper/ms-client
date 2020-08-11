@@ -18,6 +18,7 @@
 #include <nlnx/nx.hpp>
 
 #include "../../Util/Misc.h"
+#include "../MapleMap/Mob.h"
 
 namespace ms {
 MobSkill::MobSkill(int32_t id, int32_t level) : skill_id_(id), level_(level) {

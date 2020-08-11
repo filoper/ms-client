@@ -29,8 +29,7 @@
 #include "MapObject.h"
 
 namespace ms {
-class MobSkill;
-struct MobBuff;
+
 class Mob : public MapObject {
 public:
     static const size_t NUM_STANCES = 6;

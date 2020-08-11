@@ -18,7 +18,6 @@
 #include <memory>
 
 #include "../../Graphics/Animation.h"
-#include "../MapleMap/Mob.h"
 #include "MobSkillHitEffect.h"
 #include "MobSkillUseEffect.h"
 

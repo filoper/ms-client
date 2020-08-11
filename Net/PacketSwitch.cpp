@@ -104,6 +104,7 @@ enum Opcode : uint16_t {
     KILL_MOB = 237,
     SPAWN_MOB_C = 238,
     MOB_MOVED = 239,
+    MOB_MOVE_RESPONSE = 240,
     SHOW_MOB_HP = 250,
     SPAWN_NPC = 257,
     SPAWN_NPC_C = 259,
@@ -156,6 +157,7 @@ PacketSwitch::PacketSwitch() {
     emplace<SPAWN_MOB, SpawnMobHandler>();
     emplace<SPAWN_MOB_C, SpawnMobControllerHandler>();
     emplace<MOB_MOVED, MobMovedHandler>();
+    emplace<MOB_MOVE_RESPONSE, MobMoveResponseHandler>();
     emplace<SHOW_MOB_HP, ShowMobHpHandler>();
     emplace<KILL_MOB, KillMobHandler>();
     emplace<DROP_LOOT, DropLootHandler>();
@@ -211,7 +213,6 @@ PacketSwitch::PacketSwitch() {
 void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
     // Wrap the bytes with a parser
     InPacket recv = { bytes, length };
-    recv.print();
 
     // Read the opcode to determine handler responsible
     uint16_t opcode = recv.read_short();
@@ -229,7 +230,9 @@ void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
             // Handler is good, packet is passed on
 
             try {
+                std::cout << '[' << opcode << "] ";
                 handler->handle(recv);
+                std::cout << std::endl;
             } catch (const PacketError &err) {
                 // Notice about an error
                 warn(err.what(), opcode);

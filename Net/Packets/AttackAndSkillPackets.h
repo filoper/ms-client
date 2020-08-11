@@ -53,13 +53,13 @@ public:
             skip(4);
         }
 
-        for (auto &damagetomob : attack.damagelines) {
-            write_int(damagetomob.first);
+        for (const auto &damage_to_mob : attack.damage_lines) {
+            write_int(damage_to_mob.first);
 
             skip(14);
 
-            for (auto &singledamage : damagetomob.second) {
-                write_int(singledamage.first);
+            for (const auto &single_damage : damage_to_mob.second) {
+                write_int(single_damage.first);
                 // TODO: Add critical here
             }
 

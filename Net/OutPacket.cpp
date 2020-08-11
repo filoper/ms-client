@@ -31,9 +31,10 @@ void OutPacket::dispatch() {
 
     if (Configuration::get().get_show_packets()) {
         if (opcode_ == Opcode::PONG)
-            std::cout << "Sent Packet: PONG" << std::endl;
+            std::cout << std::endl << "Sent Packet: PONG" << std::endl;
         else
-            std::cout << "Sent Packet: " << std::to_string(opcode_)
+            std::cout << std::endl
+                      << "Sent Packet: " << std::to_string(opcode_)
                       << std::endl;
     }
 }
@@ -48,7 +49,7 @@ void OutPacket::write_byte(int8_t ch) {
 }
 
 void OutPacket::write_short(int16_t sh) {
-    for (size_t i = 0; i < sizeof(short); i++) {
+    for (size_t i = 0; i < sizeof(int16_t); i++) {
         write_byte(static_cast<int8_t>(sh));
         sh >>= 8;
     }
@@ -62,7 +63,7 @@ void OutPacket::write_int(int32_t in) {
 }
 
 void OutPacket::write_long(int64_t lg) {
-    for (size_t i = 0; i < sizeof(long); i++) {
+    for (size_t i = 0; i < sizeof(int64_t); i++) {
         write_byte(static_cast<int8_t>(lg));
         lg >>= 8;
     }

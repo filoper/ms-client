@@ -26,7 +26,9 @@
 #include "Timer.h"
 
 namespace ms {
-Stage::Stage() : combat_(player_, chars_, mobs_, reactors_) {
+Stage::Stage() :
+    combat_(player_, chars_, mobs_, reactors_),
+    mob_combat_(player_, chars_, mobs_) {
     state_ = State::INACTIVE;
 }
 
@@ -46,8 +48,10 @@ void Stage::load(int32_t mapid, int8_t portalid) {
     state_ = State::ACTIVE;
 }
 
-void Stage::loadplayer(const CharEntry &entry) {
-    player_ = entry;
+void Stage::loadplayer(const CharEntry &entry,
+                       uint8_t wid,
+                       uint8_t channel_id) {
+    player_ = Player(entry, wid, channel_id);
     playable_ = player_;
 
     start_ = ContinuousTimer::get().start();
@@ -118,6 +122,7 @@ void Stage::draw(float alpha) const {
     }
 
     combat_.draw(viewx, viewy, alpha);
+    mob_combat_.draw(viewx, viewy, alpha);
     portals_.draw(viewpos, alpha);
     backgrounds_.drawforegrounds(viewx, viewy, alpha);
     effect_.draw();
@@ -128,6 +133,7 @@ void Stage::update() {
         return;
 
     combat_.update();
+    mob_combat_.update();
     backgrounds_.update();
     effect_.update();
     tiles_objs_.update();
@@ -280,6 +286,10 @@ Combat &Stage::get_combat() {
     return combat_;
 }
 
+MobCombat &Stage::get_mob_combat() {
+    return mob_combat_;
+}
+
 Optional<Char> Stage::get_character(int32_t cid) {
     if (is_player(cid))
         return player_;
@@ -313,5 +323,20 @@ void Stage::transfer_player() {
     if (Configuration::get().get_admin())
         AdminEnterMapPacket(AdminEnterMapPacket::Operation::ALERT_ADMINS)
             .dispatch();
+}
+
+void Stage::clear_channel_objects() {
+    chars_.clear();
+    mobs_.clear();
+    drops_.clear();
+    reactors_.clear();
+}
+
+void Stage::change_channel(uint8_t ch) {
+    UI::get().disable();
+    GraphicsGL::get().lock();
+    ChangeChannelPacket(ch).dispatch();
+    player_.set_channel_id(ch);
+    state_ = State::TRANSITION;
 }
 }  // namespace ms

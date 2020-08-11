@@ -1,10 +1,4 @@
 cmake_minimum_required(VERSION 3.14)
-if (APPLE)
-  if (NOT CMAKE_CXX_COMPILER STREQUAL "/usr/local/bin/g++-9")
-    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -framework OpenGL -mlinker-version=505")
-    set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
-  endif()
-endif()
 
 project(msclient)
 
@@ -18,9 +12,21 @@ set(CMAKE_CXX_STANDARD 20)
 
 if (APPLE)
   if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
+    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -framework OpenGL -mlinker-version=505")
+    set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
   elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -framework OpenGL -mlinker-version=505")
+    set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
   elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS "-framework OpenGL -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/x86_64-apple-darwin18 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/backward -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include-fixed -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks")
+  else()
+    message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+  endif()
+
+elseif (UNIX AND NOT APPLE)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing")
+  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   else()
     message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
   endif()
@@ -92,6 +98,10 @@ add_executable(msclient
     Data/WeaponData.cpp
     Gameplay/Combat/Bullet.cpp
     Gameplay/Combat/Combat.cpp
+    Gameplay/Combat/MobCombat.cpp
+    Gameplay/Combat/MobSkill.cpp
+    Gameplay/Combat/MobSkillHitEffect.cpp
+    Gameplay/Combat/MobSkillUseEffect.cpp
     Gameplay/Combat/DamageNumber.cpp
     Gameplay/Combat/RegularAttack.cpp
     Gameplay/Combat/Skill.cpp
@@ -233,7 +243,11 @@ add_executable(msclient
     Configuration.cpp
     MapleStory.cpp
     Audio/membuf.cpp 
-)
+ "Gameplay/Combat/MobCombat.cpp" "Gameplay/Combat/MobCombat.h" "Gameplay/Combat/MobSkill.cpp" "Gameplay/Combat/MobSkill.h" "Gameplay/Combat/MobSkillHitEffect.cpp" "Gameplay/Combat/MobSkillHitEffect.h" "Gameplay/Combat/MobSkillUseEffect.cpp" "Gameplay/Combat/MobSkillUseEffect.h")
+
+IF (WIN32)
+    target_sources(msclient PUBLIC MapleStory.rc)
+ENDIF()
 
 set_project_warnings(${PROJECT_NAME})
 

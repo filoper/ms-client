@@ -95,8 +95,14 @@ public:
 
     inline void print() {
         std::cout << "Recv: ";
-        for (int i = 0; i < top_; i++) {
-            std::cout << (unsigned short)bytes_[i] << " ";
+        if (top_ > 1 && pos_ == 0) {
+            auto op = inspect_short();
+            std::cout << '[' << op << "] ";
+
+            for (size_t i = sizeof(int16_t); i < top_; i++) {
+                uint16_t byte_view = static_cast<uint8_t>(bytes_[i]);
+                std::cout << byte_view << " ";
+            }
         }
         std::cout << std::endl;
     }
@@ -115,7 +121,36 @@ private:
             skip(1);
         }
 
+        if (pos_ > 2) {
+            if constexpr (sizeof(T) == sizeof(int8_t)) {
+                auto byte_view = static_cast<uint8_t>(all);
+                std::cout << static_cast<uint16_t>(byte_view) << " ";
+            } else {
+                std::cout << all << " ";
+            }
+        }
+
         return static_cast<T>(all);
+    }
+
+    std::string read(uint16_t count) {
+        std::string str;
+        str.reserve(count);
+
+        for (uint16_t i = 0; i < count; i++) {
+            if (char chr = bytes_[pos_]; chr != '\0') {
+                str.push_back(chr);
+            }
+
+            skip(1);
+        }
+
+        std::cout << str << " ";
+        if (pos_ == top_) {
+            std::cout << std::endl;
+        }
+
+        return str;
     }
 
     template<typename T>
@@ -132,4 +167,12 @@ private:
     size_t top_;
     size_t pos_;
 };
+
+template<>
+// Read a string and advance the buffer position
+inline std::string InPacket::read() {
+    auto len = read<uint16_t>();
+
+    return read(len);
+}
 }  // namespace ms

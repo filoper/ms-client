@@ -278,7 +278,7 @@ void Combat::extract_effects(const Char &user,
                         user.get_position(),
                         result.toleft };
 
-        for (auto &line : result.damagelines) {
+        for (auto &line : result.damage_lines) {
             int32_t oid = line.first;
 
             if (mobs_.contains(oid)) {
@@ -303,7 +303,7 @@ void Combat::extract_effects(const Char &user,
             }
         }
 
-        if (result.damagelines.empty()) {
+        if (result.damage_lines.empty()) {
             int16_t xshift = result.toleft ? -400 : 400;
             Point<int16_t> target =
                 user.get_position() + Point<int16_t>(xshift, -26);
@@ -317,7 +317,7 @@ void Combat::extract_effects(const Char &user,
             }
         }
     } else {
-        for (auto &line : result.damagelines) {
+        for (auto &line : result.damage_lines) {
             int32_t oid = line.first;
 
             if (mobs_.contains(oid)) {

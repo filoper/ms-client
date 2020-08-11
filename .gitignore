@@ -2,6 +2,7 @@
 /.vscode
 /x64
 .DS_store
+out/
 
 CMakeCache.*
 CMakeFiles/*

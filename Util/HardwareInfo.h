@@ -116,7 +116,7 @@ public:
         free(hwid);
         free(macs);
          */
-        Configuration::get().set_hwid("001C429F65C6", "2469FF7");
+        Configuration::get().set_hwid("9A9A9A9A9A9A", "9A9A9A9A");
         Configuration::get().set_macs("11-22-33-44-55-66");
     }
 };

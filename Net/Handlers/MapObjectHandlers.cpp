@@ -180,14 +180,14 @@ void SpawnMobHandler::handle(InPacket &recv) const {
     recv.read_byte();  // 5 if controller == null
     int32_t id = recv.read_int();
 
-    recv.skip(22);
+    recv.skip(16);
 
     Point<int16_t> position = recv.read_point();
     int8_t stance = recv.read_byte();
 
-    recv.skip(2);
+    recv.skip(2);  // origin fh
 
-    uint16_t fh = recv.read_short();
+    uint16_t fh = recv.read_ushort();
     int8_t effect = recv.read_byte();
 
     if (effect > 0) {
@@ -200,7 +200,7 @@ void SpawnMobHandler::handle(InPacket &recv) const {
 
     int8_t team = recv.read_byte();
 
-    recv.skip(4);
+    recv.skip(4);  // item effect
 
     Stage::get().get_mobs().spawn(
         { oid, id, 0, stance, fh, effect == -2, team, position });
@@ -225,14 +225,14 @@ void SpawnMobControllerHandler::handle(InPacket &recv) const {
 
             int32_t id = recv.read_int();
 
-            recv.skip(22);
+            recv.skip(16);
 
             Point<int16_t> position = recv.read_point();
             int8_t stance = recv.read_byte();
 
-            recv.skip(2);
+            recv.skip(2);  // origin fh
 
-            uint16_t fh = recv.read_short();
+            uint16_t fh = recv.read_ushort();
             int8_t effect = recv.read_byte();
 
             if (effect > 0) {
@@ -259,18 +259,34 @@ void SpawnMobControllerHandler::handle(InPacket &recv) const {
 void MobMovedHandler::handle(InPacket &recv) const {
     int32_t oid = recv.read_int();
 
-    recv.read_byte();
-    recv.read_byte();  // useskill
-    recv.read_byte();  // skill
-    recv.read_byte();  // skill 1
-    recv.read_byte();  // skill 2
-    recv.read_byte();  // skill 3
-    recv.read_byte();  // skill 4
+    recv.read_byte();  // ?
+
+    bool use_skills = recv.read_bool();      // useskill
+    int8_t action = recv.read_byte();        // action
+    uint8_t skillid = recv.read_byte();      // skill id
+    uint8_t skill_level = recv.read_byte();  // skill level
+    int8_t option = recv.read_short();       // option
 
     Point<int16_t> position = recv.read_point();
     std::vector<Movement> movements = MovementParser::parse_movements(recv);
 
     Stage::get().get_mobs().send_movement(oid, position, std::move(movements));
+    Stage::get().get_mob_combat().use_move(oid, 0, skillid, skill_level);
+}
+
+void MobMoveResponseHandler::handle(InPacket &recv) const {
+    int32_t oid = recv.read_int();
+    int16_t moveid = recv.read_short();
+    bool use_skills = recv.read_bool();
+    uint16_t curr_mp = recv.read_ushort();
+    uint8_t skillid = recv.read_byte();
+    uint8_t skill_level = recv.read_byte();
+
+    Stage::get().get_mob_combat().use_move(oid, moveid, skillid, skill_level);
+
+    std::cerr << std::endl
+              << "Opcode [240] Error: Handler exists but is not implemented."
+              << std::endl;
 }
 
 void ShowMobHpHandler::handle(InPacket &recv) const {

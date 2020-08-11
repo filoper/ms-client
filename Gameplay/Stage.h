@@ -20,6 +20,7 @@
 #include "../Character/Player.h"
 #include "../IO/KeyType.h"
 #include "Combat/Combat.h"
+#include "Combat/MobCombat.h"
 #include "MapleMap/MapBackgrounds.h"
 #include "MapleMap/MapChars.h"
 #include "MapleMap/MapDrops.h"
@@ -45,8 +46,11 @@ public:
     // Remove all map objects and graphics.
     void clear();
 
+    // Remove all channel dependent map objects
+    void clear_channel_objects();
+
     // Construct the player from a character entry.
-    void loadplayer(const CharEntry &entry);
+    void loadplayer(const CharEntry &entry, uint8_t wid, uint8_t channel_id);
 
     // Call 'draw()' of all objects on stage
     void draw(float alpha) const;
@@ -87,6 +91,9 @@ public:
     // Return a reference to the attack and buff component.
     Combat &get_combat();
 
+    // Return a reference to the mob attack and buff component.
+    MobCombat &get_mob_combat();
+
     // Returns the current map ID.
     int32_t get_mapid();
 
@@ -105,6 +112,8 @@ public:
 
     // Notify the server that the player has moved maps
     void transfer_player();
+
+    void change_channel(uint8_t ch);
 
 private:
     void load_map(int32_t mapid);
@@ -141,6 +150,7 @@ private:
     MapEffect effect_;
 
     Combat combat_;
+    MobCombat mob_combat_;
 
     std::chrono::time_point<std::chrono::steady_clock> start_;
     uint16_t level_before_;

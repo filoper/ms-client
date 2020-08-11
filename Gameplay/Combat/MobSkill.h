@@ -15,25 +15,48 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../Gameplay/Movement.h"
-#include "../OutPacket.h"
+#include <memory>
+
+#include "../../Graphics/Animation.h"
+#include "MobSkillHitEffect.h"
+#include "MobSkillUseEffect.h"
 
 namespace ms {
-// Base class for packets which update object movements with the server.
-class MovementPacket : public OutPacket {
-public:
-    MovementPacket(OutPacket::Opcode opc) : OutPacket(opc) {}
+class Mob;
 
-protected:
-    void write_movement(const Movement &movement) {
-        write_byte(movement.command);
-        write_short(movement.xpos);
-        write_short(movement.ypos);
-        write_short(movement.lastx);
-        write_short(movement.lasty);
-        write_short(movement.fh);
-        write_byte(movement.newstate);
-        write_short(movement.duration);
-    }
+struct MobBuff {
+    int64_t time;
+    Animation anim;
+};
+
+// The skill implementation of special move
+class MobSkill {
+public:
+    MobSkill(int32_t skillid, int32_t level);
+
+    void apply_useeffects(Mob &mob) const;
+
+    void apply_hiteffects(Mob &mob) const;
+
+    bool is_attack() const;
+
+    bool is_skill() const;
+
+    bool is_buff() const;
+
+    int32_t get_id() const;
+
+    uint8_t get_level() const { return level_; }
+
+    MobBuff get_buff() const { return buff_; }
+
+private:
+    std::unique_ptr<MobSkillUseEffect> use_effect_;
+    std::unique_ptr<MobSkillHitEffect> hit_effect_;
+
+    int32_t skill_id_;
+    uint8_t level_;
+
+    MobBuff buff_;
 };
 }  // namespace ms

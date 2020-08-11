@@ -47,9 +47,11 @@ const PlayerState *get_state(Char::State state) {
     }
 }
 
-Player::Player(const CharEntry &entry) :
+Player::Player(const CharEntry &entry, uint8_t wid, uint8_t channel_id) :
     Char(entry.id, entry.look, entry.stats.name),
-    stats_(entry.stats) {
+    stats_(entry.stats),
+    wid_(wid),
+    channel_id_(channel_id) {
     attacking_ = false;
     underwater_ = false;
 
@@ -179,6 +181,10 @@ int8_t Player::get_integer_attackspeed() const {
 void Player::set_direction(bool flipped) {
     if (!attacking_)
         Char::set_direction(flipped);
+}
+
+void Player::set_channel_id(uint8_t ch) {
+    channel_id_ = ch;
 }
 
 void Player::set_state(State st) {
@@ -369,6 +375,14 @@ int32_t Player::get_skilllevel(int32_t skillid) const {
     return skill_book_.get_level(skillid);
 }
 
+uint8_t Player::get_world_id() const {
+    return wid_;
+}
+
+uint8_t Player::get_channel_id() const {
+    return channel_id_;
+}
+
 void Player::change_job(uint16_t jobid) {
     show_effect_id(CharEffect::Id::JOBCHANGE);
     stats_.change_job(jobid);
@@ -390,7 +404,6 @@ void Player::set_ladder(Optional<const Ladder> ldr) {
         phobj_.vspeed = 0.0;
         phobj_.fhlayer = 7;
         set_state(ldr->is_ladder() ? Char::State::LADDER : Char::State::ROPE);
-        set_direction(false);
     }
 }
 

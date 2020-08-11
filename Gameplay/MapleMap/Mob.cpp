@@ -47,6 +47,7 @@ Mob::Mob(int32_t oi,
     fly_speed_ = info["flySpeed"];
     touch_damage_ = info["bodyAttack"].get_bool();
     undead_ = info["undead"].get_bool();
+    is_boss_ = info["boss"].get_bool();
     no_flip_ = info["noFlip"].get_bool();
     not_attack_ = info["notAttack"].get_bool();
     can_jump_ = src["jump"].size() > 0;
@@ -71,6 +72,13 @@ Mob::Mob(int32_t oi,
 
     hit_sound_ = sndsrc["Damage"];
     die_sound_ = sndsrc["Die"];
+
+    for (size_t i = 0; i < info["skill"].size(); i++) {
+        auto skill_id = info["skill"][i]["skill"].get_integer();
+        auto action = info["skill"][i]["action"].get_integer();
+        skill_stands_.insert(
+            { skill_id, src["skill" + std::to_string(action)] });
+    }
 
     speed_ += 100;
     speed_ *= 0.001f;
@@ -140,6 +148,10 @@ int8_t Mob::update(const Physics &physics) {
 
     bool aniend = animations_.at(stance_).update();
 
+    if (aniend && stance_ == Stance::SKILL) {
+        set_stance(Stance::STAND);
+    }
+
     if (aniend && stance_ == Stance::DIE)
         dead_ = true;
 
@@ -169,14 +181,21 @@ int8_t Mob::update(const Physics &physics) {
     effects_.update();
     show_hp_.update();
 
+    // remove later
+    if (!buffs_.empty()) {
+        effects_.add(buffs_.at(0).anim,
+                     DrawArgument(get_head_position(Point<int16_t>()), false));
+    }
+
     if (!dying_) {
         if (!can_fly_) {
             if (phobj_.is_flag_not_set(PhysicsObject::Flag::TURNATEDGES)) {
                 flip_ = !flip_;
                 phobj_.set_flag(PhysicsObject::Flag::TURNATEDGES);
 
-                if (stance_ == Stance::HIT)
+                if (stance_ == Stance::HIT) {
                     set_stance(Stance::STAND);
+                }
             }
         }
 
@@ -213,7 +232,7 @@ int8_t Mob::update(const Physics &physics) {
         if (control_) {
             counter_++;
 
-            bool next;
+            bool next = false;
 
             switch (stance_) {
                 case Stance::HIT: next = counter_ > 200; break;
@@ -280,10 +299,48 @@ void Mob::update_movement() {
                   0,
                   0,
                   0,
-                  0,
                   get_position(),
                   Movement(phobj_, value_of(stance_, flip_)))
         .dispatch();
+}
+
+void Mob::update_movement(int16_t type,
+                          int8_t nibbles,
+                          int8_t action,
+                          int8_t skill,
+                          int8_t skill_level,
+                          int16_t option) {
+    MoveMobPacket(oid_,
+                  type,
+                  nibbles,
+                  action,
+                  skill,
+                  skill_level,
+                  option,
+                  get_position(),
+                  Movement(phobj_, value_of(stance_, flip_)))
+        .dispatch();
+}
+
+void Mob::give_buff(MobBuff buff) {
+    buffs_.push_back(buff);
+}
+
+void Mob::use_skill(const MobSkill &skill) {
+    animations_[Stance::SKILL] = skill_stands_.at(skill.get_id());
+    set_stance(Stance::SKILL);
+
+    if (skill.is_buff() && buffs_.empty()) {
+        buffs_.push_back(skill.get_buff());
+    }
+}
+
+// void Mob::cancel_buff(MobSkill buff) {
+//     buffs_[stat] = {};
+// }
+
+bool Mob::has_buff() const {
+    return !buffs_.empty();
 }
 
 void Mob::draw(double viewx, double viewy, float alpha) const {
@@ -506,7 +563,7 @@ void Mob::apply_damage(int32_t damage, bool toleft) {
 
     if (dying_ && stance_ != Stance::DIE) {
         apply_death();
-    } else if (control_ && is_alive() && damage >= knockback_) {
+    } else if (control_ && is_alive() && damage >= knockback_ && !is_boss_) {
         flip_ = toleft;
         counter_ = 170;
         set_stance(Stance::HIT);
@@ -550,5 +607,14 @@ Point<int16_t> Mob::get_head_position() const {
     Point<int16_t> position = get_position();
 
     return get_head_position(position);
+}
+
+const MobSkill &Mob::get_move(int32_t move_id, uint8_t level) {
+    auto iter = skills_.find(move_id);
+
+    if (iter == skills_.end())
+        iter = skills_.emplace(move_id, MobSkill(move_id, level)).first;
+
+    return iter->second;
 }
 }  // namespace ms

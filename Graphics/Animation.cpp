@@ -21,101 +21,102 @@
 #include "../Util/Misc.h"
 
 namespace ms {
-Frame::Frame(nl::node src) {
-    texture = src;
-    bounds = src;
-    head = src["head"];
-    delay = src["delay"];
+Frame::Frame(const nl::node &src) {
+    texture_ = src;
+    bounds_ = src;
+    head_ = src["head"];
+    delay_ = src["delay"];
 
-    if (delay == 0)
-        delay = 100;
+    if (delay_ == 0)
+        delay_ = 100;
 
     bool hasa0 = src["a0"].data_type() == nl::node::type::integer;
     bool hasa1 = src["a1"].data_type() == nl::node::type::integer;
 
     if (hasa0 && hasa1) {
-        opacities = { src["a0"], src["a1"] };
+        opacities_ = { src["a0"], src["a1"] };
     } else if (hasa0) {
         uint8_t a0 = src["a0"];
-        opacities = { a0, 255 - a0 };
+        opacities_ = { a0, 255 - a0 };
     } else if (hasa1) {
         uint8_t a1 = src["a1"];
-        opacities = { 255 - a1, a1 };
+        opacities_ = { 255 - a1, a1 };
     } else {
-        opacities = { 255, 255 };
+        opacities_ = { 255, 255 };
     }
 
     bool hasz0 = src["z0"].data_type() == nl::node::type::integer;
     bool hasz1 = src["z1"].data_type() == nl::node::type::integer;
 
     if (hasz0 && hasz1)
-        scales = { src["z0"], src["z1"] };
+        scales_ = { src["z0"], src["z1"] };
     else if (hasz0)
-        scales = { src["z0"], 0 };
+        scales_ = { src["z0"], 0 };
     else if (hasz1)
-        scales = { 100, src["z1"] };
+        scales_ = { 100, src["z1"] };
     else
-        scales = { 100, 100 };
+        scales_ = { 100, 100 };
 }
 
 Frame::Frame() {
-    delay = 0;
-    opacities = { 0, 0 };
-    scales = { 0, 0 };
+    delay_ = 0;
+    opacities_ = { 0, 0 };
+    scales_ = { 0, 0 };
 }
 
 void Frame::draw(const DrawArgument &args) const {
-    texture.draw(args);
+    texture_.draw(args);
 }
 
 uint8_t Frame::start_opacity() const {
-    return opacities.first;
+    return opacities_.first;
 }
 
 uint16_t Frame::start_scale() const {
-    return scales.first;
+    return scales_.first;
 }
 
 uint16_t Frame::get_delay() const {
-    return delay;
+    return delay_;
 }
 
 Point<int16_t> Frame::get_origin() const {
-    return texture.get_origin();
+    return texture_.get_origin();
 }
 
 Point<int16_t> Frame::get_dimensions() const {
-    return texture.get_dimensions();
+    return texture_.get_dimensions();
 }
 
 Point<int16_t> Frame::get_head() const {
-    return head;
+    return head_;
 }
 
 Rectangle<int16_t> Frame::get_bounds() const {
-    return bounds;
+    return bounds_;
 }
 
 float Frame::opcstep(uint16_t timestep) const {
-    return timestep * static_cast<float>(opacities.second - opacities.first)
-           / delay;
+    return timestep * static_cast<float>(opacities_.second - opacities_.first)
+           / delay_;
 }
 
 float Frame::scalestep(uint16_t timestep) const {
-    return timestep * static_cast<float>(scales.second - scales.first) / delay;
+    return timestep * static_cast<float>(scales_.second - scales_.first)
+           / delay_;
 }
 
 Animation::Animation(nl::node src) {
     bool istexture = src.data_type() == nl::node::type::bitmap;
 
     if (istexture) {
-        frames_.push_back(src);
+        frames_.emplace_back(src);
     } else {
         std::set<int16_t> frameids;
 
-        for (auto sub : src) {
+        for (const auto &sub : src) {
             if (sub.data_type() == nl::node::type::bitmap) {
-                int16_t fid =
+                auto fid =
                     string_conversion::or_default<int16_t>(sub.name(), -1);
 
                 if (fid >= 0)
@@ -123,13 +124,13 @@ Animation::Animation(nl::node src) {
             }
         }
 
-        for (auto &fid : frameids) {
+        for (const auto &fid : frameids) {
             auto sub = src[std::to_string(fid)];
-            frames_.push_back(sub);
+            frames_.emplace_back(sub);
         }
 
         if (frames_.empty())
-            frames_.push_back(Frame());
+            frames_.emplace_back();
     }
 
     animated_ = frames_.size() > 1;
@@ -142,7 +143,7 @@ Animation::Animation() {
     animated_ = false;
     zigzag_ = false;
 
-    frames_.push_back(Frame());
+    frames_.emplace_back();
 
     reset();
 }
@@ -153,6 +154,12 @@ void Animation::reset() {
     xyscale_.set(frames_[0].start_scale());
     delay_ = frames_[0].get_delay();
     frame_step_ = 1;
+}
+
+void Animation::stop() {
+    auto lastframe = static_cast<int16_t>(frames_.size() - 1);
+    frame_.set(lastframe);
+    frame_step_ = -1;
 }
 
 void Animation::draw(const DrawArgument &args, float alpha) const {

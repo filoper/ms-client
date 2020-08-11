@@ -87,7 +87,9 @@ void SetFieldHandler::set_field(InPacket &recv) const {
     // selection. hp, mp, maxhp, maxmp, mapid...
     charselect->update_character(cid, LoginParser::parse_stats(recv));
 
-    Stage::get().loadplayer(playerentry);
+    Stage::get().loadplayer(playerentry,
+                            Configuration::get().get_worldid(),
+                            Configuration::get().get_channelid());
 
     Player &player = Stage::get().get_player();
 

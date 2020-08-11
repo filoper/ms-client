@@ -574,6 +574,16 @@ Button::State UIWorldSelect::button_pressed(uint16_t id) {
     }
 }
 
+uint8_t UIWorldSelect::get_channel_count(uint8_t wid) const {
+    for (const auto &world : worlds_) {
+        if (world.wid == wid) {
+            return world.channelcount;
+        }
+    }
+
+    return 0;
+}
+
 void UIWorldSelect::enter_world() {
     Configuration::get().set_worldid(worldid_);
     Configuration::get().set_channelid(channelid_);

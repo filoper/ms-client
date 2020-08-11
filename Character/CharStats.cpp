@@ -67,7 +67,7 @@ void CharStats::init_totalstats() {
 }
 
 void CharStats::close_totalstats() {
-    total_stats_[EquipStat::Id::ACC] += calculateaccuracy();
+    total_stats_[EquipStat::Id::ACC] += calculate_accuracy();
 
     for (auto iter : percentages_) {
         EquipStat::Id stat = iter.first;
@@ -85,7 +85,7 @@ void CharStats::close_totalstats() {
                                        * multiplier);
 }
 
-int32_t CharStats::calculateaccuracy() const {
+int32_t CharStats::calculate_accuracy() const {
     int32_t totaldex = get_total(EquipStat::Id::DEX);
     int32_t totalluk = get_total(EquipStat::Id::LUK);
 

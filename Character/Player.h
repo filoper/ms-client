@@ -32,7 +32,7 @@ namespace ms {
 class Player : public Playable, public Char {
 public:
     // Construct a player object from the given character entry.
-    Player(const CharEntry &entry);
+    Player(const CharEntry &entry, uint8_t wid, uint8_t channel_id);
 
     Player();
 
@@ -135,6 +135,10 @@ public:
     // Returns the flying force.
     float get_flyforce() const;
 
+    uint8_t get_world_id() const;
+
+    uint8_t get_channel_id() const;
+
     // Return whether the player is underwater
     bool is_underwater() const;
 
@@ -151,6 +155,8 @@ public:
     // Change players x-pos to the ladder x and change stance to Char::LADDER or
     // Char::ROPE.
     void set_ladder(Optional<const Ladder> ladder);
+
+    void set_channel_id(uint8_t ch);
 
     // Obtain a reference to the player's stats.
     CharStats &get_stats();
@@ -199,5 +205,8 @@ private:
     Optional<const Ladder> ladder_;
 
     bool underwater_;
+
+    uint8_t wid_;
+    uint8_t channel_id_;
 };
 }  // namespace ms

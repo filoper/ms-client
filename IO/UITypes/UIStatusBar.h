@@ -30,7 +30,7 @@ public:
 
     enum MenuType { MENU, SETTING, COMMUNITY, CHARACTER, EVENT };
 
-    UIStatusBar(const CharStats &stats);
+    UIStatusBar(const CharStats &stats, uint8_t channel_count);
 
     void draw(float alpha) const override;
 
@@ -149,6 +149,8 @@ private:
     bool quickslot_active_;
     int16_t VWIDTH_;
     int16_t VHEIGHT_;
+
+    uint8_t channel_count_;
 
     bool menu_active_;
     bool setting_active_;

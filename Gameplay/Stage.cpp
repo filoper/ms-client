@@ -26,7 +26,9 @@
 #include "Timer.h"
 
 namespace ms {
-Stage::Stage() : combat_(player_, chars_, mobs_, reactors_) {
+Stage::Stage() :
+    combat_(player_, chars_, mobs_, reactors_),
+    mob_combat_(player_, chars_, mobs_) {
     state_ = State::INACTIVE;
 }
 
@@ -120,6 +122,7 @@ void Stage::draw(float alpha) const {
     }
 
     combat_.draw(viewx, viewy, alpha);
+    mob_combat_.draw(viewx, viewy, alpha);
     portals_.draw(viewpos, alpha);
     backgrounds_.drawforegrounds(viewx, viewy, alpha);
     effect_.draw();
@@ -130,6 +133,7 @@ void Stage::update() {
         return;
 
     combat_.update();
+    mob_combat_.update();
     backgrounds_.update();
     effect_.update();
     tiles_objs_.update();
@@ -280,6 +284,10 @@ Player &Stage::get_player() {
 
 Combat &Stage::get_combat() {
     return combat_;
+}
+
+MobCombat &Stage::get_mob_combat() {
+    return mob_combat_;
 }
 
 Optional<Char> Stage::get_character(int32_t cid) {

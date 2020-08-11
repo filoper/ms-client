@@ -122,7 +122,7 @@ private:
         }
 
         if (pos_ > 2) {
-            if (sizeof(T) == sizeof(int8_t)) {
+            if constexpr (sizeof(T) == sizeof(int8_t)) {
                 auto byte_view = static_cast<uint8_t>(all);
                 std::cout << static_cast<uint16_t>(byte_view) << " ";
             } else {

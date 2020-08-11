@@ -98,6 +98,10 @@ add_executable(msclient
     Data/WeaponData.cpp
     Gameplay/Combat/Bullet.cpp
     Gameplay/Combat/Combat.cpp
+    Gameplay/Combat/MobCombat.cpp
+    Gameplay/Combat/MobSkill.cpp
+    Gameplay/Combat/MobSkillHitEffect.cpp
+    Gameplay/Combat/MobSkillUseEffect.cpp
     Gameplay/Combat/DamageNumber.cpp
     Gameplay/Combat/RegularAttack.cpp
     Gameplay/Combat/Skill.cpp
@@ -239,7 +243,11 @@ add_executable(msclient
     Configuration.cpp
     MapleStory.cpp
     Audio/membuf.cpp 
-)
+ "Gameplay/Combat/MobCombat.cpp" "Gameplay/Combat/MobCombat.h" "Gameplay/Combat/MobSkill.cpp" "Gameplay/Combat/MobSkill.h" "Gameplay/Combat/MobSkillHitEffect.cpp" "Gameplay/Combat/MobSkillHitEffect.h" "Gameplay/Combat/MobSkillUseEffect.cpp" "Gameplay/Combat/MobSkillUseEffect.h")
+
+IF (WIN32)
+    target_sources(msclient PUBLIC MapleStory.rc)
+ENDIF()
 
 set_project_warnings(${PROJECT_NAME})
 

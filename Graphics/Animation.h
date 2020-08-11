@@ -71,6 +71,8 @@ public:
 
     void reset();
 
+    void stop();
+
     void draw(const DrawArgument &arguments, float alpha) const;
 
     uint16_t get_delay(int16_t frame) const;

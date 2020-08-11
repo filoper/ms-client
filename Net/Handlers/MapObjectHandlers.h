@@ -78,6 +78,12 @@ class MobMovedHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 
+// Response to a mob move packet
+// Opcode: MOB_MOVE_RESPONSE(240)
+class MobMoveResponseHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
 // Updates a mob's hp with the client
 // Opcode: SHOW_MOB_HP(250)
 class ShowMobHpHandler : public PacketHandler {

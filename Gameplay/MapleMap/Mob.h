@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <vector>
+
 #include "../../Audio/Audio.h"
 #include "../../Graphics/EffectLayer.h"
 #include "../../Graphics/Geometry.h"
@@ -22,24 +24,34 @@
 #include "../../Util/TimedBool.h"
 #include "../Combat/Attack.h"
 #include "../Combat/Bullet.h"
+#include "../Combat/MobSkill.h"
 #include "../Movement.h"
 #include "MapObject.h"
 
 namespace ms {
+class MobSkill;
+struct MobBuff;
 class Mob : public MapObject {
 public:
     static const size_t NUM_STANCES = 6;
 
-    enum Stance : uint8_t { MOVE = 2, STAND = 4, JUMP = 6, HIT = 8, DIE = 10 };
+    enum Stance : uint8_t {
+        MOVE = 2,
+        STAND = 4,
+        JUMP = 6,
+        HIT = 8,
+        DIE = 10,
+        SKILL = 12
+    };
 
     static std::string nameof(Stance stance) {
-        static const std::string stancenames[NUM_STANCES] = { "move", "stand",
-                                                              "jump", "hit1",
-                                                              "die1", "fly" };
+        static const std::string stance_names[NUM_STANCES] = { "move", "stand",
+                                                               "jump", "hit1",
+                                                               "die1", "fly" };
 
         size_t index = (stance - 1) / 2;
 
-        return stancenames[index];
+        return stance_names[index];
     }
 
     static uint8_t value_of(Stance stance, bool flip) {
@@ -103,6 +115,23 @@ public:
     // Return the head position.
     Point<int16_t> get_head_position() const;
 
+    const MobSkill &get_move(int32_t move_id, uint8_t level);
+
+    void update_movement(int16_t type,
+                         int8_t nibbles,
+                         int8_t action,
+                         int8_t skill,
+                         int8_t skill_level,
+                         int16_t option);
+
+    void give_buff(MobBuff buff);
+
+    void use_skill(const MobSkill &skill);
+
+    // void cancel_buff(Buffstat::Id stat);
+
+    bool has_buff() const;
+
 private:
     enum FlyDirection { STRAIGHT, UPWARDS, DOWNWARDS, NUM_DIRECTIONS };
 
@@ -144,6 +173,10 @@ private:
     Point<int16_t> get_head_position(Point<int16_t> position) const;
 
     std::map<Stance, Animation> animations_;
+    std::unordered_map<int32_t, MobSkill> skills_;
+    std::unordered_map<int32_t, Animation> skill_stands_;
+    std::unordered_map<int32_t, Animation> attack_stands_;
+    std::vector<MobBuff> buffs_;
     std::string name_;
     Sound hit_sound_;
     Sound die_sound_;
@@ -164,6 +197,7 @@ private:
     bool can_move_;
     bool can_jump_;
     bool can_fly_;
+    bool is_boss_;
 
     EffectLayer effects_;
     Text name_label_;

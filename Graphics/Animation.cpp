@@ -156,6 +156,12 @@ void Animation::reset() {
     frame_step_ = 1;
 }
 
+void Animation::stop() {
+    auto lastframe = static_cast<int16_t>(frames_.size() - 1);
+    frame_.set(lastframe);
+    frame_step_ = -1;
+}
+
 void Animation::draw(const DrawArgument &args, float alpha) const {
     int16_t interframe = frame_.get(alpha);
     float interopc = opacity_.get(alpha) / 255;

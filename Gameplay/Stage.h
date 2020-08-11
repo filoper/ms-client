@@ -20,6 +20,7 @@
 #include "../Character/Player.h"
 #include "../IO/KeyType.h"
 #include "Combat/Combat.h"
+#include "Combat/MobCombat.h"
 #include "MapleMap/MapBackgrounds.h"
 #include "MapleMap/MapChars.h"
 #include "MapleMap/MapDrops.h"
@@ -90,6 +91,9 @@ public:
     // Return a reference to the attack and buff component.
     Combat &get_combat();
 
+    // Return a reference to the mob attack and buff component.
+    MobCombat &get_mob_combat();
+
     // Returns the current map ID.
     int32_t get_mapid();
 
@@ -146,6 +150,7 @@ private:
     MapEffect effect_;
 
     Combat combat_;
+    MobCombat mob_combat_;
 
     std::chrono::time_point<std::chrono::steady_clock> start_;
     uint16_t level_before_;

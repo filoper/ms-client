@@ -172,6 +172,10 @@ sudo apt-get install libglfw3-dev
 ```
 
 ```bash
+sudo apt-get install libfreetype-dev
+```
+
+```bash
 git clone https://github.com/chriskohlhoff/asio.git
 ```
 

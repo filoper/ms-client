@@ -16,6 +16,7 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 
 namespace ms {
 namespace ExpTable {

@@ -533,7 +533,7 @@ void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
             std::cout << "Received Packet: PING" << std::endl;
         } else {
             std::cout << "Received Packet: " << std::to_string(opcode) << ' ';
-            if (op_name_map.contains(opcode)) {
+            if (op_name_map.find(opcode) != op_name_map.end()) {
                 std::cout << '[' << op_name_map.at(opcode) << ']';
             }
             std::cout << std::endl;

@@ -36,7 +36,7 @@ void OutPacket::dispatch() {
             std::cout << std::endl
                       << "Sent Packet: " << std::to_string(opcode_);
 
-            if (send_op_name_map.contains(opcode_)) {
+            if (send_op_name_map.find(opcode_) != send_op_name_map.end()) {
                 std::cout << " [" << send_op_name_map.at(opcode_) << ']';
             }
 

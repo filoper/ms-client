@@ -30,12 +30,18 @@ void OutPacket::dispatch() {
     Session::get().write(bytes_.data(), bytes_.size());
 
     if (Configuration::get().get_show_packets()) {
-        if (opcode_ == Opcode::PONG)
+        if (opcode_ == Opcode::PONG) {
             std::cout << std::endl << "Sent Packet: PONG" << std::endl;
-        else
+        } else {
             std::cout << std::endl
-                      << "Sent Packet: " << std::to_string(opcode_)
-                      << std::endl;
+                      << "Sent Packet: " << std::to_string(opcode_);
+
+            if (send_op_name_map.find(opcode_) != send_op_name_map.end()) {
+                std::cout << " [" << send_op_name_map.at(opcode_) << ']';
+            }
+
+            std::cout << std::endl;
+        }
     }
 }
 

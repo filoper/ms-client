@@ -240,7 +240,7 @@ private:
     friend struct Setting;
 
     const char *FILENAME = "Settings";
-    const char *TITLE = "MapleStory";
+    const char *TITLE = "msclient";
     const char *VERSION = "212.1";
     const char *JOINLINK = "https://www.nexon.com/account/en/create";
     const char *WEBSITE = "http://maplestory.nexon.net/";

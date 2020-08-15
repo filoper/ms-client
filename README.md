@@ -62,7 +62,7 @@ Download https://www.un4seen.com/download.php?bass24
 ```bash
 mkdir NoLifeNx
 cd NoLifeNx
-git clone https://github.com/lain3d/NoLifeNx nlnx
+git clone https://github.com/filoper/NoLifeNx.git nlnx
 cd nlnx
 cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
@@ -120,7 +120,7 @@ brew install lz4
 ```bash
 mkdir NoLifeNx
 cd NoLifeNx
-git clone https://github.com/lain3d/NoLifeNx nlnx
+git clone https://github.com/filoper/NoLifeNx.git nlnx
 cd nlnx
 cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
 ```
@@ -156,7 +156,7 @@ sudo apt-get install liblz4-dev
 ```bash
 mkdir NoLifeNx
 cd NoLifeNx
-git clone https://github.com/lain3d/NoLifeNx nlnx
+git clone https://github.com/filoper/NoLifeNx.git nlnx
 cd nlnx
 cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release

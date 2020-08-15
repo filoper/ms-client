@@ -87,14 +87,8 @@ jobs:
         cd thirdparty
         mkdir NoLifeNx
         cd NoLifeNx
-        git clone https://github.com/lain3d/NoLifeNx nlnx
+        git clone https://github.com/filoper/NoLifeNx.git nlnx
         cd nlnx
-        $content = Get-Content -Path 'CMakeLists.txt'
-        $content = $content.replace('/../../lz4/lib)', '/../../lz4/include)')
-        $content = $content.replace('/../../lz4/lib/liblz4.a)', '/../../lz4/dll/liblz4.lib)')
-        $content | Set-Content -Path 'CMakeLists.txt'
-        $content_check = Get-Content -Path 'CMakeLists.txt'
-        echo $content_check
         cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX="$env:INSTALL_LOCATION" -DCMAKE_BUILD_TYPE="$env:BUILD_TYPE"
         cmake --build build --config "$env:BUILD_TYPE"
        # cmake --install build --config "$env:BUILD_TYPE"

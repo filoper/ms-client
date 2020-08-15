@@ -89,12 +89,8 @@ jobs:
         cd thirdparty
         mkdir NoLifeNx
         cd NoLifeNx
-        git clone https://github.com/lain3d/NoLifeNx nlnx
+        git clone https://github.com/filoper/NoLifeNx.git nlnx
         cd nlnx
-        sed -i '$d' CMakeLists.txt
-        sed -i '$d' CMakeLists.txt
-        echo "include_directories(/usr/lz4/1.9.2/include)" >> CMakeLists.txt
-        echo "target_link_libraries(NoLifeNx /usr/lz4/1.9.2/lib/liblz4.a)" >> CMakeLists.txt
         cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DCMAKE_BUILD_TYPE=$BUILD_TYPE
         cmake --build build --config $BUILD_TYPE
         cmake --install build --config $BUILD_TYPE

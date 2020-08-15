@@ -43,7 +43,16 @@ See install instructions below for your platform.
 Start Visual Studio 2019 x64 developer terminal.
 
 ```bash
-Download https://github.com/lz4/lz4/releases/download/v1.9.2/lz4_win64_v1_9_2.zip
+Download and compile lz4 static library https://github.com/lz4/lz4/archive/v1.9.2.zip
+Navigate to `visual/VS2017/liblz4` open the project and retarget it to VS2019 before compiling.
+
+Copy the content of `lz4-1.9.2/lib` to `thirdparty/lz4/include`.
+Copy the compiled library to `thirdparty/lz4/dll`.
+
+In msclient CMakeLists.txt change
+TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a) 
+to
+TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/lz4.lib)
 ```
 
 ```bash
@@ -55,12 +64,6 @@ mkdir NoLifeNx
 cd NoLifeNx
 git clone https://github.com/lain3d/NoLifeNx nlnx
 cd nlnx
-$content = Get-Content -Path 'CMakeLists.txt'
-$content = $content.replace('/../../lz4/lib)', '/../../lz4/include)')
-$content = $content.replace('/../../lz4/lib/liblz4.a)', '/../../lz4/dll/liblz4.lib)')
-$content | Set-Content -Path 'CMakeLists.txt'
-$content_check = Get-Content -Path 'CMakeLists.txt'
-echo $content_check
 cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
@@ -119,10 +122,6 @@ mkdir NoLifeNx
 cd NoLifeNx
 git clone https://github.com/lain3d/NoLifeNx nlnx
 cd nlnx
-sed -i '' '$d' CMakeLists.txt
-sed -i '' '$d' CMakeLists.txt
-echo "include_directories(/usr/local/Cellar/lz4/1.9.2/include)" >> CMakeLists.txt
-echo "target_link_libraries(NoLifeNx /usr/local/Cellar/lz4/1.9.2/lib/liblz4.a)" >> CMakeLists.txt
 cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
 ```
 
@@ -159,10 +158,6 @@ mkdir NoLifeNx
 cd NoLifeNx
 git clone https://github.com/lain3d/NoLifeNx nlnx
 cd nlnx
-sed -i '$d' CMakeLists.txt
-sed -i '$d' CMakeLists.txt
-echo "include_directories(/usr/lz4/1.9.2/include)" >> CMakeLists.txt
-echo "target_link_libraries(NoLifeNx /usr/lz4/1.9.2/lib/liblz4.a)" >> CMakeLists.txt
 cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```

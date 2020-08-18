@@ -18,6 +18,7 @@
 #include "../../Gameplay/Stage.h"
 #include "../../IO/UI.h"
 #include "../../IO/UITypes/UILoginNotice.h"
+#include "IO/UITypes/UIGaugeBoss.h"
 
 namespace ms {
 void CheckSpwResultHandler::handle(InPacket &recv) const {
@@ -38,13 +39,33 @@ void FieldEffectHandler::handle(InPacket &recv) const {
     // Effect
     if (rand == 3) {
         std::string path = recv.read_string();
-
         Stage::get().add_effect(path);
+    } else if (rand == 5) {
+        int32_t mob_id = recv.read_int();
+        int32_t curr_hp = recv.read_int();
+        int32_t max_hp = recv.read_int();
+        uint8_t tag_color = recv.read_ubyte();
+        uint8_t tag_bg_color = recv.read_ubyte();
 
-        return;
+        float percent = float(curr_hp) / max_hp;
+
+        if (curr_hp == -1) {
+            UI::get().remove(UIElement::Type::GAUGE_BOSS);
+        } else {
+            if (Optional<UIGaugeBoss> elem =
+                    UI::get().get_element<UIGaugeBoss>()) {
+                elem->update(percent);
+            } else {
+                UI::get().emplace<UIGaugeBoss>(800,
+                                               tag_color,
+                                               tag_bg_color,
+                                               mob_id,
+                                               percent);
+            }
+        }
+    } else {
+        std::cout << "[FieldEffectHandler]: Unknown value: [" << rand << "]"
+                  << std::endl;
     }
-
-    std::cout << "[FieldEffectHandler]: Unknown value: [" << rand << "]"
-              << std::endl;
 }
 }  // namespace ms

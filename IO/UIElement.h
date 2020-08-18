@@ -65,6 +65,7 @@ public:
         QUIT,
         CHARINFO,
         CASHSHOP,
+        GAUGE_BOSS,
         NUM_TYPES
     };
 

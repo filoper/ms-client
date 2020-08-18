@@ -105,7 +105,7 @@ void Stage::draw(float alpha) const {
         return;
 
     Point<int16_t> viewpos = camera_.position(alpha);
-    Point<double> viewrpos = camera_.realposition(alpha);
+    Point<double> viewrpos = camera_.real_position(alpha);
     double viewx = viewrpos.x();
     double viewy = viewrpos.y();
 

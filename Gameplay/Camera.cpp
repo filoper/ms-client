@@ -20,7 +20,7 @@
 namespace ms {
 Camera::Camera() {
     x_.set(0.0);
-    y_.set(0.0);
+    y_.set(0.0 + Y_OFFSET);
 
     VWIDTH = Constants::Constants::get().get_viewwidth();
     VHEIGHT = Constants::Constants::get().get_viewheight();
@@ -42,7 +42,7 @@ void Camera::update(Point<int16_t> position) {
         next_x += hdelta * (12.0 / VWIDTH);
 
     double next_y = y_.get();
-    double vdelta = VHEIGHT / 2 - position.y() - next_y;
+    double vdelta = VHEIGHT / 2 - position.y() + Y_OFFSET - next_y;
 
     if (std::abs(vdelta) >= 5.0)
         next_y += vdelta * (12.0 / VHEIGHT);
@@ -71,7 +71,7 @@ void Camera::set_position(Point<int16_t> position) {
     }
 
     x_.set(VWIDTH / 2 - position.x());
-    y_.set(VHEIGHT / 2 - position.y());
+    y_.set(VHEIGHT / 2 - position.y() + Y_OFFSET);
 }
 
 void Camera::set_view(Range<int16_t> mapwalls, Range<int16_t> mapborders) {
@@ -93,7 +93,7 @@ Point<int16_t> Camera::position(float alpha) const {
     return { interx, intery };
 }
 
-Point<double> Camera::realposition(float alpha) const {
+Point<double> Camera::real_position(float alpha) const {
     return { x_.get(alpha), y_.get(alpha) };
 }
 }  // namespace ms

@@ -64,7 +64,7 @@ private:
 // An effect which displays multiple animations over the mob's position
 class MobMultiUseEffect : public MobSkillUseEffect {
 public:
-    MobMultiUseEffect(nl::node src);
+    MobMultiUseEffect(nl::node src, bool area_warning = false);
 
     void apply(Mob &mob) const override;
 

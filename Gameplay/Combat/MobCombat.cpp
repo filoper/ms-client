@@ -34,12 +34,17 @@ void MobCombat::draw(double viewx, double viewy, float alpha) const {}
 void MobCombat::update() {}
 
 void MobCombat::use_move(int oid, int move_id, int skill_id, uint8_t level) {
-    if (skill_id == 0)
-        return;
+    int at = (move_id - 24);
+    int action_id = at % 2 == 0 ? at / 2 : (at + 1) / 2;
 
     if (Optional<Mob> mob = mobs_.get_mobs()->get(oid)) {
-        const auto &move = mob->get_move(skill_id, level);
-        apply_move(move, *mob);
+        if (0 < action_id && action_id < 7) {
+            const auto &move = mob->get_move(action_id);
+            apply_move(move, *mob);
+        } else if (skill_id != 0) {
+            const auto &move = mob->get_move(skill_id, level);
+            apply_move(move, *mob);
+        }
     }
 }
 
@@ -50,7 +55,14 @@ void MobCombat::apply_move(const MobSkill &move, Mob &mob) {
     }
     mob.use_skill(move);
     move.apply_useeffects(mob);
-    //move.apply_hiteffects(mob);
+    // move.apply_hiteffects(mob);
+}
+
+void MobCombat::apply_move(const MobSpecialAttack &move, Mob &mob) {
+    mob.update_movement(1, 1, 2 * (move.get_id() + 24), 0, 0, 0);
+    mob.use_attack(move);
+    move.apply_useeffects(mob);
+    // move.apply_hiteffects(mob);
 }
 
 std::vector<int32_t> MobCombat::find_closest(MapObjects *objs,

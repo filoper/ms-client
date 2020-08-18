@@ -416,6 +416,8 @@ enum Opcode : uint16_t {
     SPAWN_MOB_C = 238,
     MOB_MOVED = 239,
     MOB_MOVE_RESPONSE = 240,
+    APPLY_MONSTER_STATUS = 242,
+    CANCEL_MONSTER_STATUS = 243,
     SHOW_MOB_HP = 250,
     SPAWN_NPC = 257,
     SPAWN_NPC_C = 259,
@@ -469,6 +471,8 @@ PacketSwitch::PacketSwitch() {
     emplace<SPAWN_MOB_C, SpawnMobControllerHandler>();
     emplace<MOB_MOVED, MobMovedHandler>();
     emplace<MOB_MOVE_RESPONSE, MobMoveResponseHandler>();
+    emplace<APPLY_MONSTER_STATUS, ApplyMobStatusHandler>();
+    emplace<CANCEL_MONSTER_STATUS, CancelMobStatusHandler>();
     emplace<SHOW_MOB_HP, ShowMobHpHandler>();
     emplace<KILL_MOB, KillMobHandler>();
     emplace<DROP_LOOT, DropLootHandler>();

@@ -84,6 +84,18 @@ class MobMoveResponseHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 
+// Apply mob status
+// Opcode: APPLY_MONSTER_STATUS(242)
+class ApplyMobStatusHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
+// Cancel mob status
+// Opcode: CANCEL_MONSTER_STATUS(243)
+class CancelMobStatusHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
 // Updates a mob's hp with the client
 // Opcode: SHOW_MOB_HP(250)
 class ShowMobHpHandler : public PacketHandler {

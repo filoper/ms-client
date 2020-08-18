@@ -56,7 +56,7 @@ void MapMobs::remove(int32_t oid, int8_t animation) {
     if (Optional<Mob> mob = mobs_.get(oid))
         mob->kill(animation);
 
-    if (animation == 1) {
+    if (animation == 0) {
         mobs_.remove(oid);
     }
 }

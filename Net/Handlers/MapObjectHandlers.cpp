@@ -271,7 +271,7 @@ void MobMovedHandler::handle(InPacket &recv) const {
     std::vector<Movement> movements = MovementParser::parse_movements(recv);
 
     Stage::get().get_mobs().send_movement(oid, position, std::move(movements));
-    Stage::get().get_mob_combat().use_move(oid, 0, skillid, skill_level);
+    Stage::get().get_mob_combat().use_move(oid, action, skillid, skill_level);
 }
 
 void MobMoveResponseHandler::handle(InPacket &recv) const {
@@ -286,6 +286,40 @@ void MobMoveResponseHandler::handle(InPacket &recv) const {
 
     std::cerr << std::endl
               << "Opcode [240] Error: Handler exists but is not implemented."
+              << std::endl;
+}
+
+void ApplyMobStatusHandler::handle(InPacket &recv) const {
+    int32_t oid = recv.read_int();
+
+    recv.read_long();
+
+    int32_t first_mask = recv.read_int();
+    int32_t second_mask = recv.read_int();
+
+    // and some more ...
+
+    std::cerr << std::endl
+              << "Opcode [242] Error: Handler exists but is not implemented."
+              << std::endl;
+}
+
+void CancelMobStatusHandler::handle(InPacket &recv) const {
+    int32_t oid = recv.read_int();
+
+    recv.read_long();
+
+    int32_t first_mask = recv.read_int();
+    int32_t second_mask = recv.read_int();
+
+    recv.read_int();
+
+    if (Optional<Mob> mob = Stage::get().get_mobs().get_mobs()->get(oid)) {
+        mob->cancel_buff(12345); // TODO
+    }
+
+    std::cerr << std::endl
+              << "Opcode [243] Error: Handler exists but is not implemented."
               << std::endl;
 }
 

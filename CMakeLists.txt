@@ -243,7 +243,7 @@ add_executable(msclient
     Configuration.cpp
     MapleStory.cpp
     Audio/membuf.cpp 
- "Gameplay/Combat/MobCombat.cpp" "Gameplay/Combat/MobCombat.h" "Gameplay/Combat/MobSkill.cpp" "Gameplay/Combat/MobSkill.h" "Gameplay/Combat/MobSkillHitEffect.cpp" "Gameplay/Combat/MobSkillHitEffect.h" "Gameplay/Combat/MobSkillUseEffect.cpp" "Gameplay/Combat/MobSkillUseEffect.h")
+ "Gameplay/Combat/MobCombat.cpp" "Gameplay/Combat/MobCombat.h" "Gameplay/Combat/MobSkill.cpp" "Gameplay/Combat/MobSkill.h" "Gameplay/Combat/MobSkillHitEffect.cpp" "Gameplay/Combat/MobSkillHitEffect.h" "Gameplay/Combat/MobSkillUseEffect.cpp" "Gameplay/Combat/MobSkillUseEffect.h" "Gameplay/Combat/MobSpecialAttack.cpp" "IO/UITypes/UIGaugeBoss.cpp")
 
 IF (WIN32)
     target_sources(msclient PUBLIC MapleStory.rc)
@@ -300,8 +300,8 @@ ELSEIF (WIN32)
     ELSE()
         #TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.dll)
         TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/libglad.a)
-    	  TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/libglfw3.a)
-    	  TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a)
+    	TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/libglfw3.a)
+    	TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a)
         TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib)
         TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a)
     ENDIF()

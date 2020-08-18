@@ -29,7 +29,11 @@ void MobSingleUseEffect::apply(Mob &mob) const {
     effect_.apply(func);
 }
 
-MobMultiUseEffect::MobMultiUseEffect(nl::node src) {
+MobMultiUseEffect::MobMultiUseEffect(nl::node src, bool area_warning) {
+    if (area_warning) {
+        effects_.push_back(src["areaWarning"]);
+    }
+
     int8_t no = -1;
     nl::node sub = src["effect"];
     effects_.push_back(sub);

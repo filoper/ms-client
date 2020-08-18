@@ -67,6 +67,8 @@ private:
 
     void apply_move(const MobSkill &move, Mob &mob);
 
+    void apply_move(const MobSpecialAttack &move, Mob &mob);
+
     std::vector<int32_t> find_closest(MapObjects *objs,
                                       Rectangle<int16_t> range,
                                       Point<int16_t> origin,

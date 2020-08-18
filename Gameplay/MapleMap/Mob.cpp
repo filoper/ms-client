@@ -80,6 +80,13 @@ Mob::Mob(int32_t oi,
             { skill_id, src["skill" + std::to_string(action)] });
     }
 
+    for (size_t i = 1; src["attack" + std::to_string(i)].size() > 0; i++) {
+        attack_stands_.insert({ i, src["attack" + std::to_string(i)] });
+    }
+
+    // init or risk crash
+    animations_[Stance::SKILL] = animations_[Stance::STAND];
+
     speed_ += 100;
     speed_ *= 0.001f;
 
@@ -335,9 +342,14 @@ void Mob::use_skill(const MobSkill &skill) {
     }
 }
 
-// void Mob::cancel_buff(MobSkill buff) {
-//     buffs_[stat] = {};
-// }
+void Mob::use_attack(const MobSpecialAttack &attack) {
+    animations_[Stance::SKILL] = attack_stands_.at(attack.get_id());
+    set_stance(Stance::SKILL);
+}
+
+void Mob::cancel_buff(int32_t buff) {
+    buffs_.clear();
+}
 
 bool Mob::has_buff() const {
     return !buffs_.empty();
@@ -614,6 +626,15 @@ const MobSkill &Mob::get_move(int32_t move_id, uint8_t level) {
 
     if (iter == skills_.end())
         iter = skills_.emplace(move_id, MobSkill(move_id, level)).first;
+
+    return iter->second;
+}
+
+const MobSpecialAttack &Mob::get_move(int32_t move_id) {
+    auto iter = attacks_.find(move_id);
+
+    if (iter == attacks_.end())
+        iter = attacks_.emplace(move_id, MobSpecialAttack(id_, move_id)).first;
 
     return iter->second;
 }

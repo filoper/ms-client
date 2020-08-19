@@ -39,8 +39,15 @@ Skill::Skill(int32_t id) : skill_id_(id) {
 
     sound_ = std::make_unique<SingleSkillSound>(strid);
 
+    bool has_affected_effect = src["affected"].size() > 0;
     bool by_level_effect = src["CharLevel"]["10"]["effect"].size() > 0;
     bool multi_effect = src["effect0"].size() > 0;
+
+    if (has_affected_effect) {
+        affected_effects_ = std::make_unique<SingleAffectedEffect>(src);
+    } else {
+        affected_effects_ = std::make_unique<NoAffectedEffect>();
+    }
 
     if (by_level_effect) {
         use_effect_ = std::make_unique<ByLevelUseEffect>(src);
@@ -186,6 +193,10 @@ void Skill::apply_hiteffects(const AttackUser &user, Mob &target) const {
     hit_effect_->apply(user, target);
 
     sound_->play_hit();
+}
+
+void Skill::apply_affected_effects(Char &user) const {
+    affected_effects_->apply(user);
 }
 
 Animation Skill::get_bullet(const Char &user, int32_t bulletid) const {

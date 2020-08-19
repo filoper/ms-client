@@ -169,10 +169,42 @@ void ShowForeignEffectHandler::handle(InPacket &recv) const {
         recv.read_byte();  // 'direction'
         // 9 more bytes after this
 
-        Stage::get().get_combat().show_buff(cid, skillid, effect);
+        if (effect == 1) {
+            Stage::get().get_combat().show_buff(cid, skillid, effect);
+        } else {
+            Stage::get().get_combat().show_affected_by_buff(cid,
+                                                            skillid,
+                                                            effect);
+        }
     } else {
         // TODO: Blank
     }
+}
+
+void GiveForeignBuffHandler::handle(InPacket &recv) const {
+    int32_t cid = recv.read_int();
+    int64_t first_mask = recv.read_long();
+    int64_t second_mask = recv.read_long();
+
+    // list
+    // a short here if poison
+    int16_t skill_id = recv.read_short();
+    int16_t skill_level = recv.read_short();
+
+    recv.read_short();
+    recv.read_short();
+
+    // Stage::get().get_combat().show_buff(cid, skill_id, skill_level);
+
+    std::cerr << std::endl
+              << "Opcode [199] Error: Handler exists but is not implemented."
+              << std::endl;
+}
+
+void CancelForeignBuffHandler::handle(InPacket &recv) const {
+    std::cerr << std::endl
+              << "Opcode [200] Error: Handler exists but is not implemented."
+              << std::endl;
 }
 
 void SpawnMobHandler::handle(InPacket &recv) const {
@@ -315,7 +347,7 @@ void CancelMobStatusHandler::handle(InPacket &recv) const {
     recv.read_int();
 
     if (Optional<Mob> mob = Stage::get().get_mobs().get_mobs()->get(oid)) {
-        mob->cancel_buff(12345); // TODO
+        mob->cancel_buff(12345);  // TODO
     }
 
     std::cerr << std::endl

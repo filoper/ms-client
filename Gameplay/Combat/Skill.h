@@ -18,6 +18,7 @@
 #include <memory>
 
 #include "SkillAction.h"
+#include "SkillAffectedEffect.h"
 #include "SkillBullet.h"
 #include "SkillHitEffect.h"
 #include "SkillSound.h"
@@ -37,6 +38,8 @@ public:
     void apply_stats(const Char &user, Attack &attack) const override;
 
     void apply_hiteffects(const AttackUser &user, Mob &target) const override;
+
+    void apply_affected_effects(Char &user) const override;
 
     Animation get_bullet(const Char &user, int32_t bulletid) const override;
 
@@ -59,6 +62,7 @@ private:
     std::unique_ptr<SkillSound> sound_;
     std::unique_ptr<SkillUseEffect> use_effect_;
     std::unique_ptr<SkillHitEffect> hit_effect_;
+    std::unique_ptr<SkillAffectedEffect> affected_effects_;
 
     int32_t skill_id_;
     bool over_regular_;

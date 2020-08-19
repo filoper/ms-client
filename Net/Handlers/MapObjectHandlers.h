@@ -54,6 +54,18 @@ class ShowForeignEffectHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 
+// Give character a foreign buff
+// Opcode: GIVE_FOREIGN_BUFF(199)
+class GiveForeignBuffHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
+// Cancel a foreign buff on a character
+// Opcode: CANCEL_FOREIGN_BUFF(200)
+class CancelForeignBuffHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
 // Spawn a mob on the stage
 // Opcode: SPAWN_MOB(236)
 class SpawnMobHandler : public PacketHandler {

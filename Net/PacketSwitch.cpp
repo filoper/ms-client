@@ -405,6 +405,8 @@ enum Opcode : uint16_t {
 
     UPDATE_CHARLOOK = 197,
     SHOW_FOREIGN_EFFECT = 198,
+    GIVE_FOREIGN_BUFF = 199,
+    CANCEL_FOREIGN_BUFF = 200,
     SHOW_ITEM_GAIN_INCHAT = 206,  // TODO: Rename this (Terribly named)
 
     /// Player
@@ -463,6 +465,8 @@ PacketSwitch::PacketSwitch() {
     emplace<CHAR_MOVED, CharMovedHandler>();
     emplace<UPDATE_CHARLOOK, UpdateCharLookHandler>();
     emplace<SHOW_FOREIGN_EFFECT, ShowForeignEffectHandler>();
+    emplace<GIVE_FOREIGN_BUFF, GiveForeignBuffHandler>();
+    emplace<CANCEL_FOREIGN_BUFF, CancelForeignBuffHandler>();
     emplace<REMOVE_CHAR, RemoveCharHandler>();
     emplace<SPAWN_PET, SpawnPetHandler>();
     emplace<SPAWN_NPC, SpawnNpcHandler>();

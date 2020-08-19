@@ -376,6 +376,20 @@ void Combat::show_player_buff(int32_t skillid) {
     get_move(skillid).apply_useeffects(player_);
 }
 
+void Combat::show_affected_by_buff(int32_t cid, int32_t skillid, int8_t level) {
+    if (Optional<OtherChar> ouser = chars_.get_char(cid)) {
+        OtherChar &user = *ouser;
+        user.update_skill(skillid, level);
+
+        const SpecialMove &move = get_move(skillid);
+        move.apply_affected_effects(user);
+    }
+}
+
+void Combat::show_player_affected_by_buff(int32_t skillid) {
+    get_move(skillid).apply_affected_effects(player_);
+}
+
 const SpecialMove &Combat::get_move(int32_t move_id) {
     if (move_id == 0)
         return regular_attack_;

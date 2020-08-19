@@ -243,7 +243,7 @@ add_executable(msclient
     Configuration.cpp
     MapleStory.cpp
     Audio/membuf.cpp 
- "Gameplay/Combat/MobCombat.cpp" "Gameplay/Combat/MobCombat.h" "Gameplay/Combat/MobSkill.cpp" "Gameplay/Combat/MobSkill.h" "Gameplay/Combat/MobSkillHitEffect.cpp" "Gameplay/Combat/MobSkillHitEffect.h" "Gameplay/Combat/MobSkillUseEffect.cpp" "Gameplay/Combat/MobSkillUseEffect.h" "Gameplay/Combat/MobSpecialAttack.cpp" "IO/UITypes/UIGaugeBoss.cpp")
+ "Gameplay/Combat/MobCombat.cpp" "Gameplay/Combat/MobCombat.h" "Gameplay/Combat/MobSkill.cpp" "Gameplay/Combat/MobSkill.h" "Gameplay/Combat/MobSkillHitEffect.cpp" "Gameplay/Combat/MobSkillHitEffect.h" "Gameplay/Combat/MobSkillUseEffect.cpp" "Gameplay/Combat/MobSkillUseEffect.h" "Gameplay/Combat/MobSpecialAttack.cpp" "IO/UITypes/UIGaugeBoss.cpp" "Gameplay/Combat/SkillAffectedEffect.cpp")
 
 IF (WIN32)
     target_sources(msclient PUBLIC MapleStory.rc)

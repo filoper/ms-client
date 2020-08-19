@@ -264,7 +264,7 @@ void ShowItemGainInChatHandler::handle(InPacket &recv) const {
         int32_t skillid = recv.read_int();
 
         // More bytes, but we don't need them.
-        Stage::get().get_combat().show_player_buff(skillid);
+        Stage::get().get_combat().show_player_affected_by_buff(skillid);
     }
 }
 }  // namespace ms

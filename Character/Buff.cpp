@@ -17,6 +17,10 @@
 
 namespace ms {
 namespace Buffstat {
+bool is_disease(Id buff_id) {
+    return diseases.find(buff_id) != diseases.end();
+}
+
 const std::unordered_map<Id, uint64_t> first_codes = {
     { Id::DASH2, 0x8000000000000L },
     { Id::DASH, 0x10000000000000L },
@@ -35,12 +39,14 @@ const std::unordered_map<Id, uint64_t> first_codes = {
 
 const std::unordered_map<Id, uint64_t> second_codes = {
     { Id::NONE, 0x0 },
+    { Id::SLOW, 0x1 },
     { Id::MORPH, 0x2 },
     { Id::RECOVERY, 0x4 },
     { Id::MAPLE_WARRIOR, 0x8 },
     { Id::STANCE, 0x10 },
     { Id::SHARP_EYES, 0x20 },
     { Id::MANA_REFLECTION, 0x40 },
+    { Id::SEDUCE, 0x80 },
     { Id::SHADOW_CLAW, 0x100 },
     { Id::INFINITY_, 0x200 },
     { Id::HOLY_SHIELD, 0x400 },
@@ -50,6 +56,7 @@ const std::unordered_map<Id, uint64_t> second_codes = {
     { Id::ECHO_OF_HERO, 0x8000 },
     { Id::GHOST_MORPH, 0x20000 },
     { Id::AURA, 0x40000 },
+    { Id::ZOMBIFY, 0x4000 },
     { Id::CONFUSE, 0x80000 },
     { Id::BERSERK_FURY, 0x8000000 },
     { Id::DIVINE_BODY, 0x10000000 },
@@ -88,6 +95,21 @@ const std::unordered_map<Id, uint64_t> second_codes = {
     { Id::PICKPOCKET, 0x800000000000000L },
     { Id::PUPPET, 0x800000000000000L },
     { Id::MESOGUARD, 0x1000000000000000L },
+    { Id::WEAKEN, 0x4000000000000000L },
+    { Id::CURSE, 0x8000000000000000L }
+};
+
+const std::unordered_map<Id, uint64_t> diseases = {
+    { Id::SLOW, 0x1 },
+    { Id::SEDUCE, 0x80 },
+    //{ Id::FISHABLE, 0x100 },
+    { Id::CURSE, 0x8000000000000000L },
+    { Id::ZOMBIFY, 0x4000 },
+    { Id::CONFUSE, 0x80000 },
+    { Id::STUN, 0x2000000000000L },
+    { Id::POISON, 0x4000000000000L },
+    { Id::SEAL, 0x8000000000000L },
+    { Id::DARKNESS, 0x10000000000000L },
     { Id::WEAKEN, 0x4000000000000000L }
 };
 }  // namespace Buffstat

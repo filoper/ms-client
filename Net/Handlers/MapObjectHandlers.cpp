@@ -346,7 +346,7 @@ void MobMoveResponseHandler::handle(InPacket &recv) const {
     uint8_t skill_level = recv.read_byte();
 
     if (skillid == 0) {
-        Stage::get().get_mob_combat().use_some_attack(oid);
+        //Stage::get().get_mob_combat().use_some_attack(oid);
     } else {
         Stage::get().get_mob_combat().use_move(oid,
                                                moveid,

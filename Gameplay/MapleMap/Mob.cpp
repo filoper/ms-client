@@ -347,6 +347,15 @@ void Mob::use_attack(const MobSpecialAttack &attack) {
     set_stance(Stance::SKILL);
 }
 
+void Mob::use_some_attack() {
+    if (stance_ == Stance::SKILL || attack_stands_.empty())
+        return;
+
+    animations_[Stance::SKILL] =
+        attack_stands_.at((std::rand() % attack_stands_.size()) + 1);
+    set_stance(Stance::SKILL);
+}
+
 void Mob::cancel_buff(int32_t buff) {
     buffs_.clear();
 }

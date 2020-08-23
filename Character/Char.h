@@ -25,6 +25,7 @@
 #include "Look/CharLook.h"
 #include "Look/PetLook.h"
 #include "math.h"
+#include "Graphics/RecurringEffect.h"
 
 namespace ms {
 // Base for characters, e.g. the player and other clients on the same map.
@@ -100,6 +101,12 @@ public:
 
     // Display an animation as an effect on top of the character.
     void show_effect_id(CharEffect::Id toshow);
+
+    // Display a recurring animation as an effect on top of the character.
+    void add_recurring_effect(int16_t effect_id, Animation animation, int8_t z);
+
+    // Remove a recurring animation.
+    void remove_recurring_effect();
 
     // Display the iron body skill animation.
     void show_iron_body();
@@ -181,6 +188,7 @@ private:
     Text name_label_;
     ChatBalloon chat_balloon_;
     EffectLayer effects_;
+    RecurringEffect recurring_effects_;
     Afterimage after_image_;
     TimedBool invincible_;
     TimedBool iron_body_;

@@ -65,6 +65,12 @@ void MobCombat::apply_move(const MobSpecialAttack &move, Mob &mob) {
     // move.apply_hiteffects(mob);
 }
 
+void MobCombat::use_some_attack(int oid) {
+    if (Optional<Mob> mob = mobs_.get_mobs()->get(oid)) {
+        mob->use_some_attack();
+    }
+}
+
 std::vector<int32_t> MobCombat::find_closest(MapObjects *objs,
                                              Rectangle<int16_t> range,
                                              Point<int16_t> origin,

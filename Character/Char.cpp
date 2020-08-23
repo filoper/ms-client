@@ -34,6 +34,7 @@ void Char::draw(double viewx, double viewy, float alpha) const {
     Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
 
     effects_.drawbelow(absp, alpha);
+    recurring_effects_.drawbelow(absp, alpha);
 
     Color color;
 
@@ -69,6 +70,7 @@ void Char::draw(double viewx, double viewy, float alpha) const {
     chat_balloon_.draw(absp - Point<int16_t>(0, 85));
 
     effects_.drawabove(absp, alpha);
+    recurring_effects_.drawabove(absp, alpha);
 
     for (auto &number : damage_numbers_)
         number.draw(viewx, viewy, alpha);
@@ -86,6 +88,7 @@ bool Char::update(const Physics &physics, float speed) {
         [](DamageNumber &number) { return number.update(); });
 
     effects_.update();
+    recurring_effects_.update();
     chat_balloon_.update();
     invincible_.update();
     iron_body_.update();
@@ -162,6 +165,16 @@ void Char::show_attack_effect(Animation toshow, int8_t z) {
 
 void Char::show_effect_id(CharEffect::Id toshow) {
     effects_.add(char_effects_[toshow]);
+}
+
+void Char::add_recurring_effect(int16_t effect_id,
+                                Animation animation,
+                                int8_t z) {
+    recurring_effects_.add(animation, DrawArgument(0, -60));
+}
+
+void Char::remove_recurring_effect() {
+    recurring_effects_ = RecurringEffect();
 }
 
 void Char::show_iron_body() {

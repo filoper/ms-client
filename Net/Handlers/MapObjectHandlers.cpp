@@ -181,27 +181,58 @@ void ShowForeignEffectHandler::handle(InPacket &recv) const {
     }
 }
 
-void GiveForeignBuffHandler::handle(InPacket &recv) const {
+void ForeignBuffHandler::handle(InPacket &recv) const {
     int32_t cid = recv.read_int();
-    int64_t first_mask = recv.read_long();
-    int64_t second_mask = recv.read_long();
+    uint64_t firstmask = recv.read_long();
+    uint64_t secondmask = recv.read_long();
 
-    // list
-    // a short here if poison
-    int16_t skill_id = recv.read_short();
-    int16_t skill_level = recv.read_short();
+    switch (secondmask) {
+        case Buffstat::BATTLESHIP:
+            handle_buff(recv, cid, Buffstat::BATTLESHIP);
+            return;
+    }
 
-    recv.read_short();
-    recv.read_short();
+    for (const auto &[buff_id, mask] : Buffstat::first_codes)
+        if (firstmask & mask)
+            handle_buff(recv, cid, buff_id);
 
-    // Stage::get().get_combat().show_buff(cid, skill_id, skill_level);
+    for (const auto &[buff_id, mask] : Buffstat::second_codes)
+        if (secondmask & mask)
+            handle_buff(recv, cid, buff_id);
+}
+
+void GiveForeignBuffHandler::handle_buff(InPacket &recv,
+                                         int32_t cid,
+                                         Buffstat::Id stat) const {
+    if (Buffstat::is_disease(stat)) {
+        if (stat == Buffstat::POISON) {
+            int16_t value = recv.read_short();  // TODO
+        }
+
+        int16_t skill_id = recv.read_short();
+        int16_t skill_level = recv.read_short();
+
+        /* if (Optional<Char> chr = Stage::get().get_character(cid)) {
+
+         }*/
+
+        Stage::get().get_combat().give_foreign_buff(cid, skill_id, skill_level);
+    } else {
+        int16_t value = recv.read_short();  // TODO
+    }
 
     std::cerr << std::endl
               << "Opcode [199] Error: Handler exists but is not implemented."
               << std::endl;
 }
 
-void CancelForeignBuffHandler::handle(InPacket &recv) const {
+void CancelForeignBuffHandler::handle_buff(InPacket &recv,
+                                           int32_t cid,
+                                           Buffstat::Id stat) const {
+    if (Optional<Char> chr = Stage::get().get_character(cid)) {
+        chr->remove_recurring_effect();
+    }
+
     std::cerr << std::endl
               << "Opcode [200] Error: Handler exists but is not implemented."
               << std::endl;
@@ -314,7 +345,14 @@ void MobMoveResponseHandler::handle(InPacket &recv) const {
     uint8_t skillid = recv.read_byte();
     uint8_t skill_level = recv.read_byte();
 
-    Stage::get().get_mob_combat().use_move(oid, moveid, skillid, skill_level);
+    if (skillid == 0) {
+        Stage::get().get_mob_combat().use_some_attack(oid);
+    } else {
+        Stage::get().get_mob_combat().use_move(oid,
+                                               moveid,
+                                               skillid,
+                                               skill_level);
+    }
 
     std::cerr << std::endl
               << "Opcode [240] Error: Handler exists but is not implemented."

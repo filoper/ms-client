@@ -47,6 +47,8 @@ public:
     // Show a buff effect.
     void show_player_buff(int32_t skillid);
 
+    void use_some_attack(int oid);
+
 private:
     struct DamageEffect {
         AttackUser user;

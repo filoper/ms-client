@@ -150,26 +150,39 @@ void BuffHandler::handle(InPacket &recv) const {
             return;
     }
 
-    for (const auto &iter : Buffstat::first_codes)
-        if (firstmask & iter.second)
-            handle_buff(recv, iter.first);
+    for (const auto &[buff_id, mask] : Buffstat::first_codes)
+        if (firstmask & mask)
+            handle_buff(recv, buff_id);
 
-    for (const auto &iter : Buffstat::second_codes)
-        if (secondmask & iter.second)
-            handle_buff(recv, iter.first);
+    for (const auto &[buff_id, mask] : Buffstat::second_codes)
+        if (secondmask & mask)
+            handle_buff(recv, buff_id);
 
     Stage::get().get_player().recalc_stats(false);
 }
 
 void ApplyBuffHandler::handle_buff(InPacket &recv, Buffstat::Id bs) const {
-    int16_t value = recv.read_short();
-    int32_t skillid = recv.read_int();
-    int32_t duration = recv.read_int();
+    if (Buffstat::is_disease(bs)) {
+        int16_t value = recv.read_short();
+        int16_t skillid = recv.read_short();
+        int16_t skill_level = recv.read_short();
+        int32_t duration = recv.read_int();
 
-    Stage::get().get_player().give_buff({ bs, value, skillid, duration });
+        if (!Stage::get().get_player().has_buff(bs)) {
+            Stage::get().get_combat().show_player_disease(skillid, skill_level);
+        }
 
-    if (auto bufflist = UI::get().get_element<UIBuffList>())
-        bufflist->add_buff(skillid, duration);
+        Stage::get().get_player().give_buff({ bs, value, skillid, duration });
+    } else {
+        int16_t value = recv.read_short();
+        int32_t skillid = recv.read_int();
+        int32_t duration = recv.read_int();
+
+        Stage::get().get_player().give_buff({ bs, value, skillid, duration });
+
+        if (auto bufflist = UI::get().get_element<UIBuffList>())
+            bufflist->add_buff(skillid, duration);
+    }
 }
 
 void CancelBuffHandler::handle_buff(InPacket &, Buffstat::Id bs) const {

@@ -390,6 +390,26 @@ void Combat::show_player_affected_by_buff(int32_t skillid) {
     get_move(skillid).apply_affected_effects(player_);
 }
 
+void Combat::give_foreign_buff(int32_t cid, int32_t skillid, int8_t level) {
+    if (Optional<OtherChar> ouser = chars_.get_char(cid)) {
+        OtherChar &user = *ouser;
+        user.update_skill(skillid, level);
+
+        const SpecialMove &move = get_move(skillid);
+        user.add_recurring_effect(
+            1,
+            nl::nx::skill["MobSkill.img"][skillid]["level"][level]["affected"],
+            1);
+    }
+}
+
+void Combat::show_player_disease(int32_t skillid, int8_t level) {
+    player_.add_recurring_effect(
+        1,
+        nl::nx::skill["MobSkill.img"][skillid]["level"][level]["affected"],
+        1);
+}
+
 const SpecialMove &Combat::get_move(int32_t move_id) {
     if (move_id == 0)
         return regular_attack_;

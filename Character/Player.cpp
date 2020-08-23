@@ -328,6 +328,7 @@ void Player::give_buff(Buff buff) {
 
 void Player::cancel_buff(Buffstat::Id stat) {
     buffs_[stat] = {};
+    remove_recurring_effect();
 }
 
 bool Player::has_buff(Buffstat::Id stat) const {

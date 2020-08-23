@@ -35,6 +35,8 @@ public:
 
     bool update();
 
+    void reset() { animation_.reset(); }
+
     int16_t width() const;
     int16_t height() const;
     Point<int16_t> get_origin() const;

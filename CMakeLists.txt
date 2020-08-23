@@ -110,6 +110,12 @@ add_executable(msclient
     Gameplay/Combat/SkillHitEffect.cpp
     Gameplay/Combat/SkillSound.cpp
     Gameplay/Combat/SkillUseEffect.cpp
+    Gameplay/Combat/MobCombat.cpp 
+    Gameplay/Combat/MobSkill.cpp
+    Gameplay/Combat/MobSkillHitEffect.cpp
+    Gameplay/Combat/MobSkillUseEffect.cpp
+    Gameplay/Combat/MobSpecialAttack.cpp
+    Gameplay/Combat/SkillAffectedEffect.cpp
     Gameplay/MapleMap/Drop.cpp
     Gameplay/MapleMap/ItemDrop.cpp
     Gameplay/MapleMap/MapBackgrounds.cpp
@@ -145,6 +151,7 @@ add_executable(msclient
     Graphics/Sprite.cpp
     Graphics/Text.cpp
     Graphics/Texture.cpp
+    Graphics/RecurringEffect.cpp
     IO/Components/AreaButton.cpp
     IO/Components/Button.cpp
     IO/Components/Charset.cpp
@@ -205,6 +212,7 @@ add_executable(msclient
     IO/UITypes/UIUserList.cpp
     IO/UITypes/UIWorldMap.cpp
     IO/UITypes/UIWorldSelect.cpp
+    IO/UITypes/UIGaugeBoss.cpp
     IO/Cursor.cpp
     IO/Keyboard.cpp
     IO/Messages.cpp
@@ -243,7 +251,7 @@ add_executable(msclient
     Configuration.cpp
     MapleStory.cpp
     Audio/membuf.cpp 
- "Gameplay/Combat/MobCombat.cpp" "Gameplay/Combat/MobCombat.h" "Gameplay/Combat/MobSkill.cpp" "Gameplay/Combat/MobSkill.h" "Gameplay/Combat/MobSkillHitEffect.cpp" "Gameplay/Combat/MobSkillHitEffect.h" "Gameplay/Combat/MobSkillUseEffect.cpp" "Gameplay/Combat/MobSkillUseEffect.h" "Gameplay/Combat/MobSpecialAttack.cpp" "IO/UITypes/UIGaugeBoss.cpp" "Gameplay/Combat/SkillAffectedEffect.cpp")
+)
 
 IF (WIN32)
     target_sources(msclient PUBLIC MapleStory.rc)

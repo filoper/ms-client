@@ -132,6 +132,8 @@ public:
 
     void use_attack(const MobSpecialAttack &attack);
 
+    void use_some_attack();
+
     void cancel_buff(int32_t stat);
 
     bool has_buff() const;

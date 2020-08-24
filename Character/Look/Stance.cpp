@@ -38,9 +38,11 @@ Stance::Id Stance::by_id(uint8_t id) {
 }
 
 Stance::Id Stance::by_string(const std::string &name) {
-    for (auto iter : names)
-        if (iter.second == name)
-            return iter.first;
+    for (const auto &[stance_id, stance_name] : names) {
+        if (stance_name == name) {
+            return stance_id;
+        }
+    }
 
     std::cout << "Unknown Stance::Id name: [" << name << "]" << std::endl;
 

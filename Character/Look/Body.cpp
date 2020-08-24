@@ -27,18 +27,15 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
     nl::node bodynode = nl::nx::character["000020" + strid + ".img"];
     nl::node headnode = nl::nx::character["000120" + strid + ".img"];
 
-    for (auto iter : Stance::names) {
-        Stance::Id stance = iter.first;
-        const std::string &stancename = iter.second;
-
-        nl::node stancenode = bodynode[stancename];
+    for (const auto &[stance, stance_name] : Stance::names) {
+        nl::node stancenode = bodynode[stance_name];
 
         if (!stancenode)
             continue;
 
         for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
-            for (nl::node partnode : framenode) {
+            for (const auto &partnode : framenode) {
                 std::string part = partnode.name();
 
                 if (part != "delay" && part != "face") {
@@ -67,7 +64,7 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
                 }
             }
 
-            if (nl::node headsfnode = headnode[stancename][frame]["head"]) {
+            if (nl::node headsfnode = headnode[stance_name][frame]["head"]) {
                 Point<int16_t> shift =
                     drawinfo.get_head_position(stance, frame);
 

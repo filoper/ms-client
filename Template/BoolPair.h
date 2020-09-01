@@ -26,14 +26,15 @@ public:
         first_(std::forward<Args>(argsf)...),
         second_(std::forward<Args>(argss)...) {}
     BoolPair(T f, T s) : first_(f), second_(s) {}
-    BoolPair() {}
+    BoolPair() = default;
 
     template<typename... Args>
     void set(bool b, Args &&... args) {
-        if (b)
+        if (b) {
             first_ = T(std::forward<Args>(args)...);
-        else
+        } else {
             second_ = T(std::forward<Args>(args)...);
+        }
     }
 
     T &operator[](bool b) { return b ? first_ : second_; }

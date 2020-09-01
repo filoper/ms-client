@@ -303,7 +303,6 @@ ELSEIF (UNIX AND NOT APPLE)
       ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.so
       libopenal.so
       /usr/lib/x86_64-linux-gnu/libglfw.so
-      /usr/local/Cellar/glfw/3.3.2/lib/libglfw.dylib
       /usr/lib/x86_64-linux-gnu/liblz4.a
       dl
       pthread

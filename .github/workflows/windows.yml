@@ -5,12 +5,12 @@ on:
     paths-ignore:
     - 'docs/**'
     - '**.md'
-    branches: [master, dev, experiment]
+    branches: [master, dev, experiment, refactor]
   pull_request:
     paths-ignore:
     - 'docs/**'
     - '**.md'
-    branches: [master, dev, experiment]
+    branches: [master, dev, experiment, refactor]
     
 env:
   BUILD_TYPE: Release

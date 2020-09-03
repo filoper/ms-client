@@ -27,21 +27,26 @@
 
 namespace ms {
 Error init() {
-    if (Error error = Session::get().init())
+    if (Error error = Session::get().init()) {
         return error;
+    }
     std::cout << "Session init success." << std::endl;
-    if (Error error = NxFiles::init())
+    if (Error error = NxFiles::init()) {
         return error;
+    }
     std::cout << "NxFiles init success." << std::endl;
-    if (Error error = Window::get().init())
+    if (Error error = Window::get().init()) {
         return error;
+    }
     std::cout << "Window init success." << std::endl;
     // TODO: (rich) fix
-    if (Error error = Music::init())
+    if (Error error = Music::init()) {
         return error;
+    }
     std::cout << "Music init success." << std::endl;
-    if (Error error = Sound::init())
+    if (Error error = Sound::init()) {
         return error;
+    }
     std::cout << "Sound init success." << std::endl;
 
     Char::init();
@@ -69,12 +74,12 @@ void draw(float alpha) {
     Window::get().end();
 }
 
-bool running() {
+bool is_running() {
     return Session::get().is_connected() && UI::get().not_quitted()
            && Window::get().not_closed();
 }
 
-void loop() {
+void game_loop() {
     Timer::get().start();
 
     int64_t timestep = Constants::TIMESTEP * 1000;
@@ -85,13 +90,14 @@ void loop() {
 
     bool show_fps = Configuration::get().get_show_fps();
 
-    while (running()) {
+    while (is_running()) {
         int64_t elapsed = Timer::get().stop();
 
         // Update game with constant timestep as many times as possible.
         for (accumulator += elapsed; accumulator >= timestep;
-             accumulator -= timestep)
+             accumulator -= timestep) {
             update();
+        }
 
         // Draw the game. Interpolate to account for remaining time.
         float alpha = static_cast<float>(accumulator) / timestep;
@@ -124,19 +130,22 @@ void start() {
 
         std::cout << "Error: " << message << std::endl;
 
-        if (args && args[0])
+        if (args && args[0]) {
             std::cout << "Message: " << args << std::endl;
+        }
 
-        if (can_retry)
+        if (can_retry) {
             std::cout << "Enter 'retry' to try again." << std::endl;
+        }
 
         std::string command;
         std::cin >> command;
 
-        if (can_retry && command == "retry")
+        if (can_retry && command == "retry") {
             start();
+        }
     } else {
-        loop();
+        game_loop();
     }
 }
 }  // namespace ms

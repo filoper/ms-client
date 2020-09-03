@@ -26,15 +26,16 @@ template<typename T>
 // The 'get' factory method is static.
 class Cache {
 public:
-    virtual ~Cache() {}
+    virtual ~Cache() = default;
 
     // Return a ref to the game object with the specified id.
     // If the object is not in cache, it is created.
     static const T &get(std::int32_t id) {
         auto iter = cache_.find(id);
 
-        if (iter == cache_.end())
+        if (iter == cache_.end()) {
             iter = cache_.emplace(id, T { id }).first;
+        }
 
         return iter->second;
     }

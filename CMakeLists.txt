@@ -262,66 +262,85 @@ set_project_warnings(${PROJECT_NAME})
 # Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)
 add_clang_format_target()
 
-TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/include)
-TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/stb)
-TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/asio/asio/include)
-TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx)
+TARGET_INCLUDE_DIRECTORIES(msclient 
+  PUBLIC
+    ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx
+    ${PROJECT_SOURCE_DIR}/thirdparty/asio/asio/include
+    ${PROJECT_SOURCE_DIR}/thirdparty/stb
+    ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/include
+)
 
 IF (UNIX)
     INCLUDE(FindFreetype)
-    INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIRS})
-    TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/alure/include)
-    TARGET_LINK_LIBRARIES(msclient ${FREETYPE_LIBRARIES})
-    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/libglad.a)
-    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a)
+    TARGET_INCLUDE_DIRECTORIES(msclient 
+      PUBLIC
+        ${FREETYPE_INCLUDE_DIRS}
+        ${PROJECT_SOURCE_DIR}/thirdparty/alure/include
+    )
+
+    TARGET_LINK_LIBRARIES(msclient 
+      ${FREETYPE_LIBRARIES}
+      ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/libglad.a
+      ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a
+    )
 ENDIF()
 
 IF (APPLE)
-    TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC /usr/local/Cellar/openal-soft/1.20.1/include)
-    TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC /usr/local/Cellar/glfw/3.3.2/include)
-    TARGET_LINK_LIBRARIES(msclient /usr/local/Cellar/lz4/1.9.2/lib/liblz4.a)
-    TARGET_LINK_LIBRARIES(msclient /usr/local/Cellar/openal-soft/1.20.1/lib/libopenal.dylib)
-    TARGET_LINK_LIBRARIES(msclient /usr/local/Cellar/glfw/3.3.2/lib/libglfw.dylib)
-    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.dylib)
+    TARGET_INCLUDE_DIRECTORIES(msclient 
+      PUBLIC
+        /usr/local/Cellar/openal-soft/1.20.1/include
+        /usr/local/Cellar/glfw/3.3.2/include
+    )
+
+    TARGET_LINK_LIBRARIES(msclient 
+      ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.dylib
+      /usr/local/Cellar/lz4/1.9.2/lib/liblz4.a
+      /usr/local/Cellar/openal-soft/1.20.1/lib/libopenal.dylib
+      /usr/local/Cellar/glfw/3.3.2/lib/libglfw.dylib
+    )
 ELSEIF (UNIX AND NOT APPLE)
-    TARGET_LINK_LIBRARIES(msclient libopenal.so)
-    TARGET_LINK_LIBRARIES(msclient /usr/lib/x86_64-linux-gnu/libglfw.so)
-    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.so)
-    TARGET_LINK_LIBRARIES(msclient /usr/lib/x86_64-linux-gnu/liblz4.a)
-    TARGET_LINK_LIBRARIES(msclient dl)
-    TARGET_LINK_LIBRARIES(msclient pthread)
+    TARGET_LINK_LIBRARIES(msclient 
+      ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.so
+      libopenal.so
+      /usr/lib/x86_64-linux-gnu/libglfw.so
+      /usr/lib/x86_64-linux-gnu/liblz4.a
+      dl
+      pthread
+    )
 ELSEIF (WIN32)
-    #TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/openal-soft/include)
-    TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c)
-    TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/glfw/include)
-    TARGET_INCLUDE_DIRECTORIES(msclient PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/include)
-    TARGET_LINK_LIBRARIES(msclient wsock32 ws2_32)
-    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c/x64/bass.lib)
+    TARGET_INCLUDE_DIRECTORIES(msclient 
+      PUBLIC
+        ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c
+        ${PROJECT_SOURCE_DIR}/thirdparty/glfw/include
+        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/include
+    )
+
+    TARGET_LINK_LIBRARIES(msclient 
+      ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c/x64/bass.lib
+      wsock32
+      ws2_32
+    )
 
     IF (MSVC)
-        #TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/alure2.lib)
-        TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/glad.lib)
-  	    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/glfw3.lib)
-        TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/NoLifeNx.lib)
-  	    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib)
-  	    TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a)
+        TARGET_LINK_LIBRARIES(msclient 
+          ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/glad.lib
+          ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/glfw3.lib
+          ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/NoLifeNx.lib
+          ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib
+          ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a
+        )
     ELSE()
-        #TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.dll)
-        TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/libglad.a)
-    	TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/libglfw3.a)
-    	TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a)
-        TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib)
-        TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a)
+        TARGET_LINK_LIBRARIES(msclient 
+          ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/libglad.a
+          ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/libglfw3.a
+          ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a
+          ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib
+          ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a
+        )
     ENDIF()
 ELSE()
     message(FATAL_ERROR "Error: Unknown platform.")
 ENDIF()
-
-#find_package(X11 REQUIRED)
-INCLUDE(FindX11)
-INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
-TARGET_LINK_LIBRARIES(msclient ${X11_LIBRARIES})
-#TARGET_LINK_LIBRARIES(msclient GL)
 
 include(GNUInstallDirs)
 install(
@@ -344,7 +363,6 @@ install(
 
 install(
   FILES
-    Icon.ico
     Icon.png
   DESTINATION
     ${CMAKE_INSTALL_BINDIR}

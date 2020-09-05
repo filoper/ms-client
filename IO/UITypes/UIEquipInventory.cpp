@@ -311,11 +311,11 @@ void UIEquipInventory::modify(int16_t pos, int8_t mode, int16_t arg) {
 }
 
 void UIEquipInventory::show_equip(EquipSlot::Id slot) {
-    UI::get().show_equip(Tooltip::Parent::EQUIPINVENTORY, slot);
+    UI::get().show_equip(Tooltip::Parent::EQUIP_INVENTORY, slot);
 }
 
 void UIEquipInventory::clear_tooltip() {
-    UI::get().clear_tooltip(Tooltip::Parent::EQUIPINVENTORY);
+    UI::get().clear_tooltip(Tooltip::Parent::EQUIP_INVENTORY);
 }
 
 EquipSlot::Id UIEquipInventory::slot_by_position(

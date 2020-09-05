@@ -34,23 +34,29 @@ void UIElement::draw(float alpha) const {
 }
 
 void UIElement::draw_sprites(float alpha) const {
-    for (const Sprite &sprite : sprites_)
+    for (const Sprite &sprite : sprites_) {
         sprite.draw(position_, alpha);
+    }
 }
 
 void UIElement::draw_buttons(float) const {
-    for (auto &iter : buttons_)
-        if (const Button *button = iter.second.get())
+    for (const auto &iter : buttons_) {
+        if (const Button *button = iter.second.get()) {
             button->draw(position_);
+        }
+    }
 }
 
 void UIElement::update() {
-    for (auto &sprite : sprites_)
+    for (auto &sprite : sprites_) {
         sprite.update();
+    }
 
-    for (auto &iter : buttons_)
-        if (Button *button = iter.second.get())
+    for (auto &iter : buttons_) {
+        if (Button *button = iter.second.get()) {
             button->update();
+        }
+    }
 }
 
 void UIElement::makeactive() {
@@ -66,10 +72,11 @@ bool UIElement::is_active() const {
 }
 
 void UIElement::toggle_active() {
-    if (active_)
+    if (active_) {
         deactivate();
-    else
+    } else {
         makeactive();
+    }
 }
 
 bool UIElement::is_in_range(Point<int16_t> cursorpos) const {
@@ -80,10 +87,11 @@ bool UIElement::is_in_range(Point<int16_t> cursorpos) const {
 
 void UIElement::remove_cursor() {
     for (auto &btit : buttons_) {
-        auto button = btit.second.get();
+        auto *button = btit.second.get();
 
-        if (button->get_state() == Button::State::MOUSEOVER)
+        if (button->get_state() == Button::State::MOUSEOVER) {
             button->set_state(Button::State::NORMAL);
+        }
     }
 }
 

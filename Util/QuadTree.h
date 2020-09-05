@@ -58,8 +58,9 @@ public:
     }
 
     void erase(K key) {
-        if (!nodes_.count(key))
+        if (!nodes_.count(key)) {
             return;
+        }
 
         Node &toerase = nodes_[key];
 
@@ -68,21 +69,24 @@ public:
         for (size_t i = LEFT; i <= DOWN; i++) {
             K leafkey = toerase[i];
 
-            if (leafkey)
+            if (leafkey) {
                 leaves.push_back(leafkey);
+            }
         }
 
         K parent = toerase.parent;
 
-        if (root_ == key)
+        if (root_ == key) {
             root_ = 0;
-        else if (nodes_.count(parent))
+        } else if (nodes_.count(parent)) {
             nodes_[parent].erase(key);
+        }
 
         nodes_.erase(key);
 
-        for (auto &leaf : leaves)
+        for (auto &leaf : leaves) {
             readd(parent, leaf);
+        }
     }
 
     K findnode(const V &value,
@@ -91,9 +95,8 @@ public:
             K key = findfrom(root_, value, predicate);
 
             return predicate(value, nodes_[key].value) ? key : 0;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     V &operator[](K key) { return nodes_[key].value; }
@@ -104,8 +107,9 @@ private:
     K findfrom(K start,
                const V &value,
                std::function<bool(const V &, const V &)> predicate) {
-        if (!start)
+        if (!start) {
             return 0;
+        }
 
         bool fulfilled = predicate(value, nodes_[start].value);
         Direction dir = comparator_(value, nodes_[start].value);
@@ -113,68 +117,79 @@ private:
         if (dir == RIGHT) {
             K right = findfrom(nodes_[start].right, value, predicate);
 
-            if (right && predicate(value, nodes_[right].value))
+            if (right && predicate(value, nodes_[right].value)) {
                 return right;
-            else
-                return start;
-        } else if (dir == DOWN) {
+            }
+            return start;
+        }
+        if (dir == DOWN) {
             K bottom = findfrom(nodes_[start].bottom, value, predicate);
 
             if (bottom && predicate(value, nodes_[bottom].value)) {
                 return bottom;
-            } else if (fulfilled) {
-                return start;
-            } else {
-                K right = findfrom(nodes_[start].right, value, predicate);
-
-                if (right && predicate(value, nodes_[right].value))
-                    return right;
-                else
-                    return start;
             }
+            if (fulfilled) {
+                return start;
+            }
+            K right = findfrom(nodes_[start].right, value, predicate);
+
+            if (right && predicate(value, nodes_[right].value)) {
+                return right;
+            }
+
+            return start;
+
         } else if (dir == UP) {
             K top = findfrom(nodes_[start].top, value, predicate);
 
             if (top && predicate(value, nodes_[top].value)) {
                 return top;
-            } else if (fulfilled) {
-                return start;
-            } else {
-                K right = findfrom(nodes_[start].right, value, predicate);
-
-                if (right && predicate(value, nodes_[right].value))
-                    return right;
-                else
-                    return start;
             }
+            if (fulfilled) {
+                return start;
+            }
+            K right = findfrom(nodes_[start].right, value, predicate);
+
+            if (right && predicate(value, nodes_[right].value)) {
+                return right;
+            }
+
+            return start;
+
         } else {
             K left = findfrom(nodes_[start].left, value, predicate);
 
-            if (left && predicate(value, nodes_[left].value))
+            if (left && predicate(value, nodes_[left].value)) {
                 return left;
-            else if (fulfilled)
+            }
+            if (fulfilled) {
                 return start;
+            }
 
             K bottom = findfrom(nodes_[start].bottom, value, predicate);
 
-            if (bottom && predicate(value, nodes_[bottom].value))
+            if (bottom && predicate(value, nodes_[bottom].value)) {
                 return bottom;
-            else if (fulfilled)
+            }
+            if (fulfilled) {
                 return start;
+            }
 
             K top = findfrom(nodes_[start].top, value, predicate);
 
-            if (top && predicate(value, nodes_[top].value))
+            if (top && predicate(value, nodes_[top].value)) {
                 return top;
-            else if (fulfilled)
+            }
+            if (fulfilled) {
                 return start;
+            }
 
             K right = findfrom(nodes_[start].right, value, predicate);
 
-            if (right && predicate(value, nodes_[right].value))
+            if (right && predicate(value, nodes_[right].value)) {
                 return right;
-            else
-                return start;
+            }
+            return start;
         }
     }
 
@@ -219,14 +234,15 @@ private:
         Node() : Node(V(), 0, 0, 0, 0, 0) {}
 
         void erase(K key) {
-            if (left == key)
+            if (left == key) {
                 left = 0;
-            else if (right == key)
+            } else if (right == key) {
                 right = 0;
-            else if (top == key)
+            } else if (top == key) {
                 top = 0;
-            else if (bottom == key)
+            } else if (bottom == key) {
                 bottom = 0;
+            }
         }
 
         K addornext(

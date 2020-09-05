@@ -19,10 +19,11 @@ namespace ms {
 MapleButton::MapleButton(nl::node src, Point<int16_t> pos) {
     nl::node normal = src["normal"];
 
-    if (normal.size() > 1)
+    if (normal.size() > 1) {
         animations_[Button::State::NORMAL] = normal;
-    else
+    } else {
         textures_[Button::State::NORMAL] = normal["0"];
+    }
 
     textures_[Button::State::PRESSED] = src["pressed"]["0"];
     textures_[Button::State::MOUSEOVER] = src["mouseOver"]["0"];
@@ -46,8 +47,9 @@ void MapleButton::draw(Point<int16_t> parentpos) const {
 }
 
 void MapleButton::update() {
-    if (active_)
+    if (active_) {
         animations_[state_].update(6);
+    }
 }
 
 Rectangle<int16_t> MapleButton::bounds(Point<int16_t> parentpos) const {

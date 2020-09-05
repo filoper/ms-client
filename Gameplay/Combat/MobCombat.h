@@ -25,9 +25,7 @@
 namespace ms {
 class MobCombat {
 public:
-    MobCombat(Player &player,
-              MapChars &chars,
-              MapMobs &mobs);
+    MobCombat(Player &player, MapChars &chars, MapMobs &mobs);
 
     // Draw bullets, damage numbers etc.
     void draw(double viewx, double viewy, float alpha) const;

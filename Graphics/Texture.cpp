@@ -31,8 +31,9 @@ Texture::Texture(nl::node src) {
 
         auto foundChild = foundSource || foundOutlink;
 
-        if (foundChild)
+        if (foundChild) {
             src = foundSource ? foundSource : foundOutlink;
+        }
 
         if (!foundChild && !_inlink.empty()) {
             auto parent_node = src.root();
@@ -58,13 +59,12 @@ Texture::Texture(nl::node src) {
 
 Texture::Texture() {}
 
-Texture::~Texture() {}
-
 void Texture::draw(const DrawArgument &args) const {
     size_t id = bitmap_.id();
 
-    if (id == 0)
+    if (id == 0) {
         return;
+    }
 
     GraphicsGL::get().draw(bitmap_,
                            args.get_rectangle(origin_, dimensions_),
@@ -96,7 +96,7 @@ Point<int16_t> Texture::get_dimensions() const {
     return dimensions_;
 }
 
-nl::node Texture::find_child(nl::node source, std::string link) {
+nl::node Texture::find_child(const nl::node &source, const std::string &link) {
     if (!link.empty()) {
         nl::node parent_node = source.root();
 

@@ -27,8 +27,9 @@ Frame::Frame(const nl::node &src) {
     head_ = src["head"];
     delay_ = src["delay"];
 
-    if (delay_ == 0)
+    if (delay_ == 0) {
         delay_ = 100;
+    }
 
     bool hasa0 = src["a0"].data_type() == nl::node::type::integer;
     bool hasa1 = src["a1"].data_type() == nl::node::type::integer;
@@ -48,14 +49,15 @@ Frame::Frame(const nl::node &src) {
     bool hasz0 = src["z0"].data_type() == nl::node::type::integer;
     bool hasz1 = src["z1"].data_type() == nl::node::type::integer;
 
-    if (hasz0 && hasz1)
+    if (hasz0 && hasz1) {
         scales_ = { src["z0"], src["z1"] };
-    else if (hasz0)
+    } else if (hasz0) {
         scales_ = { src["z0"], 0 };
-    else if (hasz1)
+    } else if (hasz1) {
         scales_ = { 100, src["z1"] };
-    else
+    } else {
         scales_ = { 100, 100 };
+    }
 }
 
 Frame::Frame() {
@@ -119,8 +121,9 @@ Animation::Animation(nl::node src) {
                 auto fid =
                     string_conversion::or_default<int16_t>(sub.name(), -1);
 
-                if (fid >= 0)
+                if (fid >= 0) {
                     frameids.insert(fid);
+                }
             }
         }
 
@@ -129,8 +132,9 @@ Animation::Animation(nl::node src) {
             frames_.emplace_back(sub);
         }
 
-        if (frames_.empty())
+        if (frames_.empty()) {
             frames_.emplace_back();
+        }
     }
 
     animated_ = frames_.size() > 1;
@@ -170,11 +174,12 @@ void Animation::draw(const DrawArgument &args, float alpha) const {
     bool modifyopc = interopc != 1.0f;
     bool modifyscale = interscale != 1.0f;
 
-    if (modifyopc || modifyscale)
+    if (modifyopc || modifyscale) {
         frames_[interframe].draw(
             args + DrawArgument(interscale, interscale, interopc));
-    else
+    } else {
         frames_[interframe].draw(args);
+    }
 }
 
 bool Animation::update() {
@@ -186,20 +191,22 @@ bool Animation::update(uint16_t timestep) {
 
     opacity_ += framedata.opcstep(timestep);
 
-    if (opacity_.last() < 0.0f)
+    if (opacity_.last() < 0.0f) {
         opacity_.set(0.0f);
-    else if (opacity_.last() > 255.0f)
+    } else if (opacity_.last() > 255.0f) {
         opacity_.set(255.0f);
+    }
 
     xyscale_ += framedata.scalestep(timestep);
 
-    if (xyscale_.last() < 0.0f)
+    if (xyscale_.last() < 0.0f) {
         opacity_.set(0.0f);
+    }
 
     if (timestep >= delay_) {
         int16_t lastframe = static_cast<int16_t>(frames_.size() - 1);
-        int16_t nextframe;
-        bool ended;
+        int16_t nextframe = 0;
+        bool ended = false;
 
         if (zigzag_ && lastframe > 0) {
             if (frame_step_ == 1 && frame_ == lastframe) {
@@ -208,8 +215,6 @@ bool Animation::update(uint16_t timestep) {
             } else if (frame_step_ == -1 && frame_ == 0) {
                 frame_step_ = -frame_step_;
                 ended = true;
-            } else {
-                ended = false;
             }
 
             nextframe = frame_ + frame_step_;
@@ -229,20 +234,20 @@ bool Animation::update(uint16_t timestep) {
 
         delay_ = frames_[nextframe].get_delay();
 
-        if (delay_ >= delta)
+        if (delay_ >= delta) {
             delay_ -= delta;
+        }
 
         opacity_.set(frames_[nextframe].start_opacity());
         xyscale_.set(frames_[nextframe].start_scale());
 
         return ended;
-    } else {
-        frame_.normalize();
-
-        delay_ -= timestep;
-
-        return false;
     }
+
+    frame_.normalize();
+    delay_ -= timestep;
+
+    return false;
 }
 
 uint16_t Animation::get_delay(int16_t frame_id) const {
@@ -253,8 +258,9 @@ uint16_t Animation::getdelayuntil(int16_t frame_id) const {
     uint16_t total = 0;
 
     for (int16_t i = 0; i < frame_id; i++) {
-        if (i >= frames_.size())
+        if (i >= frames_.size()) {
             break;
+        }
 
         total += frames_[frame_id].get_delay();
     }

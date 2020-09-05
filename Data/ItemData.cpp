@@ -91,12 +91,15 @@ std::string ItemData::get_eqcategory(int32_t id) const {
 
     int32_t index = get_item_prefix(id) - 100;
 
-    if (index < categorynames.size())
+    if (index < categorynames.size()) {
         return categorynames[index];
-    else if (index >= 30 && index <= 70)
+    }
+
+    if (index >= 30 && index <= 70) {
         return "Weapon";
-    else
-        return "";
+    }
+
+    return "";
 }
 
 int32_t ItemData::get_prefix(int32_t id) const {
@@ -111,8 +114,9 @@ int8_t ItemData::get_item_gender(int32_t id) const {
     const int32_t item_prefix = get_item_prefix(id);
 
     if ((get_prefix(id) != 1 && item_prefix != 254) || item_prefix == 119
-        || item_prefix == 168)
+        || item_prefix == 168) {
         return 2;
+    }
 
     const int32_t gender_digit = id / 1000 % 10;
 

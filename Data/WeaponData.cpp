@@ -82,10 +82,11 @@ std::string WeaponData::getspeedstring() const {
 }
 
 uint8_t WeaponData::get_attackdelay() const {
-    if (type_ == Weapon::NONE)
+    if (type_ == Weapon::NONE) {
         return 0;
-    else
-        return 50 - 25 / attack_speed_;
+    }
+
+    return 50 - 25 / attack_speed_;
 }
 
 Weapon::Type WeaponData::get_type() const {

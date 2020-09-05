@@ -42,10 +42,11 @@ void TwoSpriteButton::draw(Point<int16_t> parentpos) const {
         bool selected = state_ == Button::State::MOUSEOVER
                         || state_ == Button::State::PRESSED;
 
-        if (selected)
+        if (selected) {
             textures_[selected].draw(spos_ + parentpos);
-        else
+        } else {
             textures_[selected].draw(npos_ + parentpos);
+        }
     }
 }
 

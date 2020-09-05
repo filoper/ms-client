@@ -478,10 +478,9 @@ struct Setting {
 
         if (entry) {
             return *entry;
-        } else {
-            static T defaultentry;
-            return defaultentry;
         }
+        static T defaultentry;
+        return defaultentry;
     }
 };
 }  // namespace ms

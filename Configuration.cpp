@@ -88,8 +88,9 @@ void Configuration::load() {
     for (auto &setting : settings) {
         auto rsiter = rawsettings.find(setting.second->name);
 
-        if (rsiter != rawsettings.end())
+        if (rsiter != rawsettings.end()) {
             setting.second->value = rsiter->second;
+        }
     }
 }
 
@@ -99,8 +100,9 @@ void Configuration::save() const {
 
     if (config.is_open()) {
         // Save settings line by line.
-        for (auto &setting : settings)
+        for (const auto &setting : settings) {
             config << setting.second->to_string() << std::endl;
+        }
     }
 }
 

@@ -81,8 +81,9 @@ private:
 
             delay = src["delay"];
 
-            if (delay == 0)
+            if (delay == 0) {
                 delay = 2500;
+            }
         }
     };
 

@@ -25,8 +25,9 @@ CharLook::CharLook(const LookEntry &entry) {
     set_hair(entry.hairid);
     set_face(entry.faceid);
 
-    for (auto &equip : entry.equips)
+    for (const auto &equip : entry.equips) {
         add_equip(equip.second);
+    }
 }
 
 CharLook::CharLook() {
@@ -372,13 +373,15 @@ void CharLook::draw(const DrawArgument &args,
 }
 
 void CharLook::draw(const DrawArgument &args, float alpha) const {
-    if (!body_ || !hair_ || !face_)
+    if (!body_ || !hair_ || !face_) {
         return;
+    }
 
     Point<int16_t> acmove;
 
-    if (action_)
+    if (action_) {
         acmove = action_->get_move();
+    }
 
     DrawArgument relargs = { acmove, flip_ };
 
@@ -390,8 +393,9 @@ void CharLook::draw(const DrawArgument &args, float alpha) const {
     switch (interstance) {
         case Stance::Id::STAND1:
         case Stance::Id::STAND2:
-            if (alerted_)
+            if (alerted_) {
                 interstance = Stance::Id::ALERT;
+            }
 
             break;
     }
@@ -435,8 +439,9 @@ bool CharLook::update(uint16_t timestep) {
             float threshold = static_cast<float>(delta) / timestep;
             st_frame_.next(nextframe, threshold);
 
-            if (st_frame_ == 0)
+            if (st_frame_ == 0) {
                 aniend = true;
+            }
         } else {
             stance_.normalize();
             st_frame_.normalize();
@@ -483,10 +488,11 @@ bool CharLook::update(uint16_t timestep) {
         exp_frame_.next(nextexpframe, fcthreshold);
 
         if (exp_frame_ == 0) {
-            if (expression_ == Expression::Id::DEFAULT)
+            if (expression_ == Expression::Id::DEFAULT) {
                 expression_.next(Expression::Id::BLINK, fcthreshold);
-            else
+            } else {
                 expression_.next(Expression::Id::DEFAULT, fcthreshold);
+            }
         }
     } else {
         expression_.normalize();
@@ -529,8 +535,9 @@ void CharLook::set_hair(int32_t hair_id) {
 void CharLook::set_face(int32_t face_id) {
     auto iter = face_types_.find(face_id);
 
-    if (iter == face_types_.end())
+    if (iter == face_types_.end()) {
         iter = face_types_.emplace(face_id, face_id).first;
+    }
 
     face_ = &iter->second;
 }
@@ -548,15 +555,17 @@ void CharLook::add_equip(int32_t itemid) {
 void CharLook::remove_equip(EquipSlot::Id slot) {
     equips_.remove_equip(slot);
 
-    if (slot == EquipSlot::Id::WEAPON)
+    if (slot == EquipSlot::Id::WEAPON) {
         updatetwohanded();
+    }
 }
 
 void CharLook::attack(bool degenerate) {
     int32_t weapon_id = equips_.get_weapon();
 
-    if (weapon_id <= 0)
+    if (weapon_id <= 0) {
         return;
+    }
 
     const WeaponData &weapon = WeaponData::get(weapon_id);
 
@@ -575,8 +584,9 @@ void CharLook::attack(bool degenerate) {
 }
 
 void CharLook::attack(Stance::Id newstance) {
-    if (action_ || newstance == Stance::Id::NONE)
+    if (action_ || newstance == Stance::Id::NONE) {
         return;
+    }
 
     switch (newstance) {
         case Stance::Id::SHOT: set_action("handgun"); break;
@@ -585,8 +595,9 @@ void CharLook::attack(Stance::Id newstance) {
 }
 
 void CharLook::set_stance(Stance::Id newstance) {
-    if (action_ || newstance == Stance::Id::NONE)
+    if (action_ || newstance == Stance::Id::NONE) {
         return;
+    }
 
     Stance::Id adjstance = equips_.adjust_stance(newstance);
 
@@ -598,8 +609,9 @@ void CharLook::set_stance(Stance::Id newstance) {
 }
 
 Stance::Id CharLook::getattackstance(uint8_t attack, bool degenerate) const {
-    if (stance_ == Stance::Id::PRONE)
+    if (stance_ == Stance::Id::PRONE) {
         return Stance::Id::PRONESTAB;
+    }
 
     enum Attack {
         NONE = 0,
@@ -646,14 +658,16 @@ Stance::Id CharLook::getattackstance(uint8_t attack, bool degenerate) const {
                              { Stance::Id::NONE },
                              { Stance::Id::SHOT } } };
 
-    if (attack <= Attack::NONE || attack >= Attack::NUM_ATTACKS)
+    if (attack <= Attack::NONE || attack >= Attack::NUM_ATTACKS) {
         return Stance::Id::STAND1;
+    }
 
     const auto &stances =
         degenerate ? degen_stances[attack] : attack_stances[attack];
 
-    if (stances.empty())
+    if (stances.empty()) {
         return Stance::Id::STAND1;
+    }
 
     size_t index = randomizer_.next_int(stances.size());
 
@@ -678,8 +692,9 @@ void CharLook::set_expression(Expression::Id newexpression) {
 }
 
 void CharLook::set_action(const std::string &acstr) {
-    if (acstr == actionstr_ || acstr == "")
+    if (acstr == actionstr_ || acstr == "") {
         return;
+    }
 
     if (Stance::Id ac_stance = Stance::by_string(acstr)) {
         set_stance(ac_stance);
@@ -722,14 +737,14 @@ bool CharLook::is_twohanded(Stance::Id st) const {
 uint16_t CharLook::get_attackdelay(size_t no, uint8_t first_frame) const {
     if (action_) {
         return draw_info_.get_attackdelay(actionstr_, no);
-    } else {
-        uint16_t delay = 0;
-
-        for (uint8_t frame = 0; frame < first_frame; frame++)
-            delay += get_delay(stance_.get(), frame);
-
-        return delay;
     }
+    uint16_t delay = 0;
+
+    for (uint8_t frame = 0; frame < first_frame; frame++) {
+        delay += get_delay(stance_.get(), frame);
+    }
+
+    return delay;
 }
 
 uint8_t CharLook::get_frame() const {

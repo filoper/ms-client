@@ -20,15 +20,17 @@
 namespace ms {
 namespace string_format {
 void split_number(std::string &input) {
-    for (size_t i = input.size(); i > 3; i -= 3)
+    for (size_t i = input.size(); i > 3; i -= 3) {
         input.insert(i - 3, 1, ',');
+    }
 }
 
 std::string extend_id(int32_t id, size_t length) {
     std::string strid = std::to_string(id);
 
-    if (strid.size() < length)
+    if (strid.size() < length) {
         strid.insert(0, length - strid.size(), '0');
+    }
 
     return strid;
 }
@@ -62,46 +64,57 @@ MapInfo get_map_info_by_id(int32_t mapid) {
 }
 
 std::string get_map_category(int32_t mapid) {
-    if (mapid < 100000000)
+    if (mapid < 100000000) {
         return "maple";
+    }
 
-    if (mapid < 200000000)
+    if (mapid < 200000000) {
         return "victoria";
+    }
 
-    if (mapid < 300000000)
+    if (mapid < 300000000) {
         return "ossyria";
+    }
 
-    if (mapid < 540000000)
+    if (mapid < 540000000) {
         return "elin";
+    }
 
-    if (mapid < 600000000)
+    if (mapid < 600000000) {
         return "singapore";
+    }
 
-    if (mapid < 670000000)
+    if (mapid < 670000000) {
         return "MasteriaGL";
+    }
 
     if (mapid < 682000000) {
         int32_t prefix3 = (mapid / 1000000) * 1000000;
         int32_t prefix4 = (mapid / 100000) * 100000;
 
         if (prefix3 == 674000000 || prefix4 == 680100000
-            || prefix4 == 889100000)
+            || prefix4 == 889100000) {
             return "etc";
+        }
 
-        if (prefix3 == 677000000)
+        if (prefix3 == 677000000) {
             return "Episode1GL";
+        }
 
         return "weddingGL";
     }
 
-    if (mapid < 683000000)
+    if (mapid < 683000000) {
         return "HalloweenGL";
+    }
 
-    if (mapid < 800000000)
+    if (mapid < 800000000) {
         return "event";
+    }
 
-    if (mapid < 900000000)
+    if (mapid < 900000000) {
         return "jp";
+    }
 
     return "etc";
 }
@@ -112,7 +125,7 @@ get_life_on_map(int32_t mapid) {
 
     nl::node portal = get_map_node_name(mapid);
 
-    for (nl::node life : portal["life"]) {
+    for (const nl::node &life : portal["life"]) {
         int64_t life_id = life["id"];
         std::string life_type = life["type"];
 
@@ -124,13 +137,16 @@ get_life_on_map(int32_t mapid) {
             nl::node life_level =
                 nl::nx::mob[life_id_str + ".img"]["info"]["level"];
 
-            if (life_name && life_level)
+            if (life_name && life_level) {
                 map_life[life_id] = { life_type,
                                       life_name + "(Lv. " + life_level + ")" };
+            }
         } else if (life_type == "n") {
             // NPC
-            if (nl::node life_name = nl::nx::string["Npc.img"][life_id]["name"])
+            if (nl::node life_name =
+                    nl::nx::string["Npc.img"][life_id]["name"]) {
                 map_life[life_id] = { life_type, life_name };
+            }
         }
     }
 

@@ -566,15 +566,15 @@ void UIItemInventory::remove_cursor() {
 
 void UIItemInventory::show_item(int16_t slot) {
     if (tab_ == InventoryType::Id::EQUIP) {
-        UI::get().show_equip(Tooltip::Parent::ITEMINVENTORY, slot);
+        UI::get().show_equip(Tooltip::Parent::ITEM_INVENTORY, slot);
     } else {
         int32_t item_id = inventory_.get_item_id(tab_, slot);
-        UI::get().show_item(Tooltip::Parent::ITEMINVENTORY, item_id);
+        UI::get().show_item(Tooltip::Parent::ITEM_INVENTORY, item_id);
     }
 }
 
 void UIItemInventory::clear_tooltip() {
-    UI::get().clear_tooltip(Tooltip::Parent::ITEMINVENTORY);
+    UI::get().clear_tooltip(Tooltip::Parent::ITEM_INVENTORY);
 }
 
 bool UIItemInventory::is_visible(int16_t slot) const {

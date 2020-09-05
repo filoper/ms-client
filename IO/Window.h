@@ -34,7 +34,6 @@
 #define GetCurrentDir _getcwd
 #else
 #include <unistd.h>
-//#include <GL/gl.h>
 #define GetCurrentDir getcwd
 #endif
 
@@ -49,7 +48,7 @@ public:
 
     Error init();
 
-    Error initwindow();
+    Error init_window();
 
     bool not_closed() const;
 
@@ -63,14 +62,14 @@ public:
 
     void check_events();
 
-    void setclipboard(const std::string &text) const;
+    void set_clipboard(const std::string &text) const;
 
-    std::string getclipboard() const;
+    std::string get_clipboard() const;
 
     void toggle_fullscreen();
 
 private:
-    void updateopc();
+    void update_opc();
 
     GLFWwindow *glwnd_;
     GLFWwindow *context_;
@@ -81,6 +80,6 @@ private:
     int16_t width_;
     int16_t height_;
 
-    std::string GetCurrentWorkingDir(void);
+    std::string get_current_working_dir();
 };
 }  // namespace ms

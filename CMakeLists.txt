@@ -7,8 +7,7 @@ include(cmake/StandardSettings.cmake)
 include(cmake/Utils.cmake)
 include(cmake/Doxygen.cmake)
 include(cmake/CompilerWarnings.cmake)
-
-set(CMAKE_CXX_STANDARD 20)
+include(cmake/StaticAnalyzers.cmake)
 
 if (APPLE)
   if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
@@ -249,13 +248,17 @@ add_executable(msclient
     Util/Misc.cpp
     Util/NxFiles.cpp
     Configuration.cpp
-    MapleStory.cpp
+    MSClient.cpp
+    Game.cpp
     Audio/membuf.cpp 
 )
 
 IF (WIN32)
-    target_sources(msclient PUBLIC MapleStory.rc)
+    target_sources(msclient PUBLIC MSClient.rc)
 ENDIF()
+
+set_property(TARGET msclient PROPERTY CXX_STANDARD 20)
+set_property(TARGET msclient PROPERTY CXX_STANDARD_REQUIRED ON)
 
 set_project_warnings(${PROJECT_NAME})
 

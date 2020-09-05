@@ -17,12 +17,12 @@
 
 #include <cstdint>
 #include <functional>
+#include <map>
 #include <nlnx/nx.hpp>
 #include <vector>
-#include <map>
 
-#include "../../Template/BoolPair.h"
 #include "../../Graphics/Animation.h"
+#include "../../Template/BoolPair.h"
 
 namespace ms {
 class Mob;

@@ -111,7 +111,7 @@ private:
 #include <unordered_map>
 
 #include "../Error.h"
-#include "../MapleStory.h"
+#include "../MSClient.h"
 #include "../Template/EnumMap.h"
 #include "membuf.h"
 

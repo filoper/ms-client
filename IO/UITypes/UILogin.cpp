@@ -16,6 +16,7 @@
 #include "UILogin.h"
 
 #include "../../Audio/Audio.h"
+#include "../../Configuration.h"
 #include "../../Net/Packets/LoginPackets.h"
 #include "../Components/MapleButton.h"
 #include "../UI.h"
@@ -29,8 +30,14 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
+auto fn_login_start = []() { LoginStartPacket().dispatch(); };
+
+auto fn_login = []<typename... T>(T && ... args) {
+    LoginPacket(std::forward<T>(args)...).dispatch();
+};
+
 UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
-    LoginStartPacket().dispatch();
+    fn_login_start();
 
     Music("BgmUI.img/Title").play();
 
@@ -130,10 +137,10 @@ UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
 
         auto loginwait = UI::get().get_element<UILoginWait>();
 
-        if (loginwait && loginwait->is_active())
-            LoginPacket(Configuration::get().get_auto_acc(),
-                        Configuration::get().get_auto_pass())
-                .dispatch();
+        if (loginwait && loginwait->is_active()) {
+            fn_login(Configuration::get().get_auto_acc(),
+                     Configuration::get().get_auto_pass());
+        }
     }
 }
 
@@ -144,11 +151,14 @@ void UILogin::draw(float alpha) const {
     account_.draw(position_);
     password_.draw(position_);
 
-    if (account_.get_state() == Textfield::State::NORMAL && account_.empty())
+    if (account_.get_state() == Textfield::State::NORMAL && account_.empty()) {
         accountbg_.draw(DrawArgument(position_ + Point<int16_t>(291, 279)));
+    }
 
-    if (password_.get_state() == Textfield::State::NORMAL && password_.empty())
+    if (password_.get_state() == Textfield::State::NORMAL
+        && password_.empty()) {
         passwordbg_.draw(DrawArgument(position_ + Point<int16_t>(291, 305)));
+    }
 
     checkbox_[saveid_].draw(DrawArgument(position_ + Point<int16_t>(291, 335)));
 }
@@ -171,10 +181,11 @@ void UILogin::login() {
         account_.set_state(Textfield::State::NORMAL);
         password_.set_state(Textfield::State::NORMAL);
 
-        if (!password_text.empty())
+        if (!password_text.empty()) {
             password_.set_state(Textfield::State::FOCUSED);
-        else
+        } else {
             account_.set_state(Textfield::State::FOCUSED);
+        }
     };
 
     if (account_text.empty()) {
@@ -193,8 +204,9 @@ void UILogin::login() {
 
     auto loginwait = UI::get().get_element<UILoginWait>();
 
-    if (loginwait && loginwait->is_active())
-        LoginPacket(account_text, password_text).dispatch();
+    if (loginwait && loginwait->is_active()) {
+        fn_login(account_text, password_text);
+    }
 }
 
 void UILogin::open_url(uint16_t id) {
@@ -236,11 +248,13 @@ Button::State UILogin::button_pressed(uint16_t id) {
 }
 
 Cursor::State UILogin::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    if (Cursor::State new_state = account_.send_cursor(cursorpos, clicked))
+    if (Cursor::State new_state = account_.send_cursor(cursorpos, clicked)) {
         return new_state;
+    }
 
-    if (Cursor::State new_state = password_.send_cursor(cursorpos, clicked))
+    if (Cursor::State new_state = password_.send_cursor(cursorpos, clicked)) {
         return new_state;
+    }
 
     return UIElement::send_cursor(clicked, cursorpos);
 }

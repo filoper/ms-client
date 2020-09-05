@@ -17,15 +17,20 @@
 
 namespace ms {
 void EffectLayer::drawbelow(Point<int16_t> position, float alpha) const {
-    for (auto iter = effects_.begin(); iter != effects_.upper_bound(-1); ++iter)
-        for (auto &effect : iter->second)
+    for (auto iter = effects_.begin(); iter != effects_.upper_bound(-1);
+         ++iter) {
+        for (const auto &effect : iter->second) {
             effect.draw(position, alpha);
+        }
+    }
 }
 
 void EffectLayer::drawabove(Point<int16_t> position, float alpha) const {
-    for (auto iter = effects_.upper_bound(-1); iter != effects_.end(); ++iter)
-        for (auto &effect : iter->second)
+    for (auto iter = effects_.upper_bound(-1); iter != effects_.end(); ++iter) {
+        for (const auto &effect : iter->second) {
             effect.draw(position, alpha);
+        }
+    }
 }
 
 void EffectLayer::update() {

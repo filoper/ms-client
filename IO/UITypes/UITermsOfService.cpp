@@ -16,6 +16,7 @@
 #include "UITermsOfService.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../Components/MapleButton.h"
 #include "../Net/Packets/LoginPackets.h"
@@ -23,8 +24,10 @@
 #include "UILoginWait.h"
 
 namespace ms {
+auto fn_tos = []() { TOSPacket().dispatch(); };
+
 UITermsOfService::UITermsOfService(std::function<void()> oh) :
-    okhandler_(oh),
+    okhandler_(std::move(oh)),
     offset_(0),
     unit_rows_(1) {
     nl::node Login = nl::nx::ui["Login.img"];
@@ -1587,8 +1590,9 @@ Cursor::State UITermsOfService::send_cursor(bool clicked,
     if (slider_.isenabled()) {
         Cursor::State state = slider_.send_cursor(cursoroffset, clicked);
 
-        if (state != Cursor::State::IDLE)
+        if (state != Cursor::State::IDLE) {
             return state;
+        }
     }
 
     return UIElement::send_cursor(clicked, cursorpos);
@@ -1603,7 +1607,7 @@ Button::State UITermsOfService::button_pressed(uint16_t buttonid) {
         case Buttons::OK:
             UI::get().emplace<UILoginWait>();
 
-            TOSPacket().dispatch();
+            fn_tos();
             break;
         case Buttons::CANCEL:
             deactivate();
@@ -1616,9 +1620,10 @@ Button::State UITermsOfService::button_pressed(uint16_t buttonid) {
 }
 
 void UITermsOfService::update_accept(uint16_t offset) {
-    if (offset == max_rows_ - unit_rows_)
+    if (offset == max_rows_ - unit_rows_) {
         buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
-    else
+    } else {
         buttons_[Buttons::OK]->set_state(Button::State::DISABLED);
+    }
 }
 }  // namespace ms

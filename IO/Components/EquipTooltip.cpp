@@ -112,9 +112,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
     InventoryType::Id invtype;
 
     switch (parent) {
-        case Tooltip::Parent::ITEMINVENTORY:
+        case Tooltip::Parent::ITEM_INVENTORY:
         case Tooltip::Parent::SHOP: invtype = InventoryType::Id::EQUIP; break;
-        case Tooltip::Parent::EQUIPINVENTORY:
+        case Tooltip::Parent::EQUIP_INVENTORY:
             invtype = InventoryType::Id::EQUIPPED;
             break;
         default: invtype = InventoryType::Id::NONE;

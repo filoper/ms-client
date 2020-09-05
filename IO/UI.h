@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include "../Template/Optional.h"
 #include "Components/ScrollingNotice.h"
 #include "Components/Textfield.h"
 #include "UIState.h"
@@ -117,7 +118,7 @@ private:
 
     bool enabled_;
     bool quitted_;
-    bool caps_lock_enabled_ = false;
+    bool caps_lock_enabled_;
 };
 
 template<class T, typename... Args>

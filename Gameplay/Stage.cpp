@@ -232,7 +232,7 @@ void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
                 }
             }
 
-            playable_->send_action(KeyAction::actionbyid(action), down);
+            playable_->send_action(KeyAction::get_action_by_id(action), down);
             break;
         case KeyType::Id::SKILL: combat_.use_move(action); break;
         case KeyType::Id::ITEM: player_.use_item(action); break;

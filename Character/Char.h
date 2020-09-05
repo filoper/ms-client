@@ -20,12 +20,12 @@
 #include "../Graphics/EffectLayer.h"
 #include "../IO/Components/ChatBalloon.h"
 #include "CharEffect.h"
+#include "Graphics/RecurringEffect.h"
 #include "Inventory/Weapon.h"
 #include "Look/Afterimage.h"
 #include "Look/CharLook.h"
 #include "Look/PetLook.h"
 #include "math.h"
-#include "Graphics/RecurringEffect.h"
 
 namespace ms {
 // Base for characters, e.g. the player and other clients on the same map.

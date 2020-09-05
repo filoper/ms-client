@@ -18,8 +18,7 @@
 #include "../../InPacket.h"
 #include "../../Login.h"
 
-namespace ms {
-namespace LoginParser {
+namespace ms::LoginParser {
 Account parse_account(InPacket &recv);
 World parse_world(InPacket &recv);
 RecommendedWorld parse_recommended_world(InPacket &recv);
@@ -27,5 +26,4 @@ CharEntry parse_charentry(InPacket &recv);
 StatsEntry parse_stats(InPacket &recv);
 LookEntry parse_look(InPacket &recv);
 void parse_login(InPacket &recv);
-}  // namespace LoginParser
-}  // namespace ms
+}  // namespace ms::LoginParser

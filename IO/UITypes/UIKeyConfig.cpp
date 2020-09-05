@@ -943,7 +943,7 @@ void UIKeyConfig::draw(float inter) const {
             int32_t skill_id = mapping.action;
             ficon = skill_icons_.at(skill_id).get();
         } else if (is_action_mapping(mapping)) {
-            KeyAction::Id action = KeyAction::actionbyid(mapping.action);
+            KeyAction::Id action = KeyAction::get_action_by_id(mapping.action);
 
             if (action) {
                 for (auto const &it : action_icons_) {
@@ -1117,7 +1117,8 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
 
                 show_skill(skill_id);
             } else if (is_action_mapping(mapping)) {
-                KeyAction::Id action = KeyAction::actionbyid(mapping.action);
+                KeyAction::Id action =
+                    KeyAction::get_action_by_id(mapping.action);
                 ficon = action_icons_[action].get();
             } else {
                 std::cout << "Invalid icon type for key mapping: ("
@@ -1223,7 +1224,7 @@ void UIKeyConfig::stage_mapping(Point<int16_t> cursorposition,
     unstage_mapping(prior_staged);
 
     if (is_action_mapping(mapping)) {
-        KeyAction::Id action = KeyAction::actionbyid(mapping.action);
+        KeyAction::Id action = KeyAction::get_action_by_id(mapping.action);
         auto iter =
             std::find(bound_actions_.begin(), bound_actions_.end(), action);
 
@@ -1299,7 +1300,7 @@ void UIKeyConfig::stage_mapping(Point<int16_t> cursorposition,
 
 void UIKeyConfig::unstage_mapping(Keyboard::Mapping mapping) {
     if (is_action_mapping(mapping)) {
-        KeyAction::Id action = KeyAction::actionbyid(mapping.action);
+        KeyAction::Id action = KeyAction::get_action_by_id(mapping.action);
         auto iter =
             std::find(bound_actions_.begin(), bound_actions_.end(), action);
 
@@ -1401,7 +1402,7 @@ void UIKeyConfig::bind_staged_action_keys() {
         Keyboard::Mapping mapping = get_staged_mapping(fkey.first);
 
         if (mapping.type != KeyType::Id::NONE) {
-            KeyAction::Id action = KeyAction::actionbyid(mapping.action);
+            KeyAction::Id action = KeyAction::get_action_by_id(mapping.action);
 
             if (action)
                 bound_actions_.emplace_back(action);

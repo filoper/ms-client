@@ -15,6 +15,10 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+#include <string>
+#include <string_view>
+
 namespace ms {
 // Error codes to be checked after initialization.
 class Error {
@@ -40,26 +44,30 @@ public:
         LENGTH
     };
 
-    constexpr Error(Code c) : Error(c, "") {}
-    constexpr Error(Code c, const char *args) : code(c), args(args) {}
+    Error(Code c) : Error(c, "This error has no accompanying details.") {}
+    Error(Code c, const char *args) : error_code_(c), msg_details_(args) {}
 
-    constexpr operator bool() const { return code != Code::NONE; }
+    constexpr operator bool() const { return error_code_ != Code::NONE; }
 
     constexpr bool can_retry() const {
-        return code == Code::CONNECTION || code == Code::MISSING_FILE
-               || code == Code::WRONG_UI_FILE || code == Code::MISSING_ICON
-               || code == Code::FONT_PATH;
+        return error_code_ == Code::CONNECTION
+               || error_code_ == Code::MISSING_FILE
+               || error_code_ == Code::WRONG_UI_FILE
+               || error_code_ == Code::MISSING_ICON
+               || error_code_ == Code::FONT_PATH;
     }
 
-    constexpr const char *get_message() const { return messages[code]; }
+    constexpr std::string_view get_message() const {
+        return msgs_[error_code_];
+    }
 
-    constexpr const char *get_args() const { return args; }
+    constexpr std::string_view get_details() const { return msg_details_; }
 
 private:
-    Code code;
-    const char *args;
+    const Code error_code_;
+    const std::string msg_details_;
 
-    static constexpr const char *messages[Code::LENGTH] = {
+    static constexpr std::array<std::string_view, Code::LENGTH> msgs_ = {
         "",
         "Cannot connect to server.",
         "Could not initialize NLNX.",

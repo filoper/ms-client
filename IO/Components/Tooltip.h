@@ -27,8 +27,8 @@ public:
     // Possible parent UIs for Tooltips.
     enum Parent {
         NONE,
-        EQUIPINVENTORY,
-        ITEMINVENTORY,
+        EQUIP_INVENTORY,
+        ITEM_INVENTORY,
         SKILLBOOK,
         SHOP,
         EVENT,
@@ -38,7 +38,7 @@ public:
         MINIMAP
     };
 
-    virtual ~Tooltip() {}
+    virtual ~Tooltip() = default;
 
     virtual void draw(Point<int16_t> cursorpos) const = 0;
 };

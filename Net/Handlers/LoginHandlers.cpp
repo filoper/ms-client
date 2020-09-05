@@ -89,8 +89,9 @@ void LoginResultHandler::handle(InPacket &recv) const {
             } else {
                 // Save the "Login ID" if the box for it on the login screen is
                 // checked
-                if (Setting<SaveLogin>::get().load())
+                if (Setting<SaveLogin>::get().load()) {
                     Setting<DefaultAccount>::get().save(account.name);
+                }
 
                 // AfterLoginPacket("1111").dispatch();
 
@@ -115,8 +116,9 @@ void ServerStatusHandler::handle(InPacket &recv) const {
 void ServerlistHandler::handle(InPacket &recv) const {
     auto worldselect = UI::get().get_element<UIWorldSelect>();
 
-    if (!worldselect)
+    if (!worldselect) {
         worldselect = UI::get().emplace<UIWorldSelect>();
+    }
 
     // Parse all worlds
     while (recv.available()) {
@@ -141,14 +143,15 @@ void CharlistHandler::handle(InPacket &recv) const {
     auto loginwait = UI::get().get_element<UILoginWait>();
 
     if (loginwait && loginwait->is_active()) {
-        uint8_t channel_id = recv.read_byte();
+        uint8_t channel_id = recv.read_ubyte();
 
         // Parse all characters
         std::vector<CharEntry> characters;
         int8_t charcount = recv.read_byte();
 
-        for (uint8_t i = 0; i < charcount; ++i)
+        for (uint8_t i = 0; i < charcount; ++i) {
             characters.emplace_back(LoginParser::parse_charentry(recv));
+        }
 
         int8_t pic = recv.read_byte();
         int32_t slots = recv.read_int();
@@ -158,8 +161,9 @@ void CharlistHandler::handle(InPacket &recv) const {
         UI::get().remove(UIElement::Type::LOGINWAIT);
 
         // Remove the world selection screen
-        if (auto worldselect = UI::get().get_element<UIWorldSelect>())
+        if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
             worldselect->remove_selected();
+        }
 
         // Add the character selection screen
         UI::get().emplace<UICharSelect>(characters, charcount, slots, pic);
@@ -181,8 +185,9 @@ void CharnameResponseHandler::handle(InPacket &recv) const {
     bool used = recv.read_bool();
 
     // Notify the character creation screen
-    if (auto raceselect = UI::get().get_element<UIRaceSelect>())
+    if (auto raceselect = UI::get().get_element<UIRaceSelect>()) {
         raceselect->send_naming_result(used);
+    }
 }
 
 void AddNewCharEntryHandler::handle(InPacket &recv) const {
@@ -192,18 +197,19 @@ void AddNewCharEntryHandler::handle(InPacket &recv) const {
     CharEntry character = LoginParser::parse_charentry(recv);
 
     // Read the updated character selection
-    if (auto charselect = UI::get().get_element<UICharSelect>())
+    if (auto charselect = UI::get().get_element<UICharSelect>()) {
         charselect->add_character(std::move(character));
+    }
 }
 
 void DeleteCharResponseHandler::handle(InPacket &recv) const {
     // Read the character id and if deletion was successful (PIC was correct)
     int32_t cid = recv.read_int();
-    uint8_t state = recv.read_byte();
+    uint8_t state = recv.read_ubyte();
 
     // Extract information from the state byte
     if (state) {
-        UILoginNotice::Message message;
+        UILoginNotice::Message message = UILoginNotice::Message::UNKNOWN_ERROR;
 
         switch (state) {
             case 10:
@@ -215,20 +221,22 @@ void DeleteCharResponseHandler::handle(InPacket &recv) const {
 
         UI::get().emplace<UILoginNotice>(message);
     } else {
-        if (auto charselect = UI::get().get_element<UICharSelect>())
+        if (auto charselect = UI::get().get_element<UICharSelect>()) {
             charselect->remove_character(cid);
+        }
     }
 }
 
 void RecommendedWorldsHandler::handle(InPacket &recv) const {
     if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
-        int16_t count = recv.read_byte();
+        int16_t count = recv.read_ubyte();
 
-        for (size_t i = 0; i < count; i++) {
+        for (int32_t i = 0; i < count; i++) {
             RecommendedWorld world = LoginParser::parse_recommended_world(recv);
 
-            if (world.wid != -1 && !world.message.empty())
+            if (world.wid != -1 && !world.message.empty()) {
                 worldselect->add_recommended_world(world);
+            }
         }
     }
 }

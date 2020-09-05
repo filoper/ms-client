@@ -22,9 +22,11 @@
 namespace ms {
 namespace NxFiles {
 Error init() {
-    for (auto filename : filenames)
-        if (std::ifstream { filename }.good() == false)
+    for (const auto *filename : filenames) {
+        if (std::ifstream { filename }.good() == false) {
             return Error(Error::Code::MISSING_FILE, filename);
+        }
+    }
 
     try {
         nl::nx::load_all();
@@ -38,8 +40,9 @@ Error init() {
         "Login.img/WorldSelect/BtChannel/layer:bg";
 
     if (nl::nx::ui.resolve(POSTCHAOS_BITMAP).data_type()
-        != nl::node::type::bitmap)
+        != nl::node::type::bitmap) {
         return Error::Code::WRONG_UI_FILE;
+    }
 
     return Error::Code::NONE;
 }

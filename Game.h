@@ -1,5 +1,5 @@
 //	This file is part of the continued Journey MMORPG client
-//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//	Copyright (C) 2015-2020  Daniel Allendorf, Ryan Payton
 //
 //	This program is free software: you can redistribute it and/or modify
 //	it under the terms of the GNU Affero General Public License as published by
@@ -13,22 +13,26 @@
 //
 //	You should have received a copy of the GNU Affero General Public License
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#include "Weapon.h"
+#pragma once
 
-#include <iostream>
+#include "Error.h"
 
 namespace ms {
-Weapon::Type Weapon::by_value(int32_t value) {
-    if (value < 130 || (value > 133 && value < 137) || value == 139
-        || (value > 149 && value < 170) || value > 170) {
-        if (value != 100) {
-            std::cout << "Unknown Weapon::Type value: [" << value << "]"
-                      << std::endl;
-        }
+class Game {
+public:
+    Game();
 
-        return Weapon::NONE;
-    }
+    bool is_running();
 
-    return static_cast<Type>(value);
-}
+    void start();
+
+private:
+    Error init();
+
+    void game_loop();
+
+    void update();
+
+    void draw(float alpha);
+};
 }  // namespace ms

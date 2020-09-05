@@ -21,8 +21,9 @@ namespace ms {
 Stance::Id Stance::by_state(int8_t state) {
     int8_t index = (state / 2) - 1;
 
-    if (index < 0 || index > 10)
+    if (index < 0 || index > 10) {
         return WALK1;
+    }
 
     constexpr Id statevalues[10] = { WALK1, STAND1, JUMP, ALERT, PRONE,
                                      FLY,   LADDER, ROPE, DEAD,  SIT };
@@ -31,8 +32,9 @@ Stance::Id Stance::by_state(int8_t state) {
 }
 
 Stance::Id Stance::by_id(uint8_t id) {
-    if (id <= NONE || id >= LENGTH)
+    if (id <= NONE || id >= LENGTH) {
         return NONE;
+    }
 
     return static_cast<Stance::Id>(id);
 }

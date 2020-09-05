@@ -80,7 +80,7 @@ UISkillBook::SkillDisplayMeta::SkillDisplayMeta(int32_t i, int32_t l) :
 }
 
 void UISkillBook::SkillDisplayMeta::draw(const DrawArgument &args) const {
-    icon_->draw(args.getpos());
+    icon_->draw(args.get_pos());
     name_text_.draw(args + Point<int16_t>(38, -5));
     level_text_.draw(args + Point<int16_t>(38, 13));
 }

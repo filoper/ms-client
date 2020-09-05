@@ -17,16 +17,18 @@
 
 namespace ms {
 Charset::Charset(nl::node src, Alignment alignment) : alignment_(alignment) {
-    for (auto sub : src) {
+    for (const auto &sub : src) {
         std::string name = sub.name();
 
-        if (sub.data_type() != nl::node::type::bitmap || name.empty())
+        if (sub.data_type() != nl::node::type::bitmap || name.empty()) {
             continue;
+        }
 
         char c = *name.begin();
 
-        if (c == '\\')
+        if (c == '\\') {
             c = '/';
+        }
 
         chars_.emplace(c, sub);
     }
@@ -37,8 +39,9 @@ Charset::Charset() : alignment_(Charset::Alignment::LEFT) {}
 void Charset::draw(int8_t c, const DrawArgument &args) const {
     auto iter = chars_.find(c);
 
-    if (iter != chars_.end())
+    if (iter != chars_.end()) {
         iter->second.draw(args);
+    }
 }
 
 int16_t Charset::getw(int8_t c) const {

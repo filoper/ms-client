@@ -29,8 +29,9 @@ TextTooltip::TextTooltip() {
 }
 
 void TextTooltip::draw(Point<int16_t> pos) const {
-    if (text_label_.empty())
+    if (text_label_.empty()) {
         return;
+    }
 
     int16_t fillwidth = text_label_.width();
     int16_t fillheight = text_label_.height();
@@ -43,11 +44,13 @@ void TextTooltip::draw(Point<int16_t> pos) const {
     int16_t adj_x = cur_width - max_width;
     int16_t adj_y = cur_height - max_height;
 
-    if (adj_x > 0)
+    if (adj_x > 0) {
         pos.shift_x(adj_x * -1);
+    }
 
-    if (adj_y > 0)
+    if (adj_y > 0) {
         pos.shift_y(adj_y * -1);
+    }
 
     frame_.draw(pos + Point<int16_t>(fillwidth / 2 + 2, fillheight - 7),
                 fillwidth - 14,
@@ -63,13 +66,15 @@ void TextTooltip::draw(Point<int16_t> pos) const {
 }
 
 bool TextTooltip::set_text(std::string t) {
-    if (text_ == t)
+    if (text_ == t) {
         return false;
+    }
 
     text_ = t;
 
-    if (text_.empty())
+    if (text_.empty()) {
         return false;
+    }
 
     text_label_ = Text(Text::Font::A12M,
                        Text::Alignment::LEFT,

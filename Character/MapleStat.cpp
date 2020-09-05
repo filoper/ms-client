@@ -20,8 +20,9 @@
 namespace ms {
 namespace MapleStat {
 Id by_id(size_t id) {
-    if (id >= LENGTH)
+    if (id >= LENGTH) {
         std::cout << "Unknown MapleStat::Id id: [" << id << "]" << std::endl;
+    }
 
     return static_cast<Id>(id);
 }

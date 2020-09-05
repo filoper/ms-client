@@ -16,7 +16,6 @@
 #pragma once
 
 #include <memory>
-#include <span>
 #include <string_view>
 
 #include "PacketHandler.h"
@@ -29,7 +28,7 @@ public:
     PacketSwitch();
 
     // Forward a packet to the correct handler
-    void forward(std::span<int8_t> bytes) const;
+    void forward(int8_t *bytes, size_t length) const;
 
 private:
     // Print a warning

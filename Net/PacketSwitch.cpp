@@ -527,9 +527,9 @@ PacketSwitch::PacketSwitch() {
     emplace<FIELD_EFFECT, FieldEffectHandler>();
 }
 
-void PacketSwitch::forward(std::span<int8_t> bytes) const {
+void PacketSwitch::forward(int8_t *bytes, size_t length) const {
     // Wrap the bytes with a parser
-    InPacket recv = { bytes.data(), bytes.size() };
+    InPacket recv = { bytes, length };
 
     // Read the opcode to determine handler responsible
     uint16_t opcode = recv.read_ushort();

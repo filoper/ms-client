@@ -86,7 +86,7 @@ void Session::process(const int8_t *bytes, size_t available) {
         cryptography_.decrypt(buffer_, length_);
 
         try {
-            packet_switch_.forward({ buffer_, length_ });
+            packet_switch_.forward(buffer_, length_);
         } catch (const PacketError &err) {
             std::cout << err.what() << std::endl;
         }

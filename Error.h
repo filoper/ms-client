@@ -47,9 +47,9 @@ public:
     Error(Code c) : Error(c, "This error has no accompanying details.") {}
     Error(Code c, const char *args) : error_code_(c), msg_details_(args) {}
 
-    constexpr operator bool() const { return error_code_ != Code::NONE; }
+    operator bool() const { return error_code_ != Code::NONE; }
 
-    constexpr bool can_retry() const {
+    bool can_retry() const {
         return error_code_ == Code::CONNECTION
                || error_code_ == Code::MISSING_FILE
                || error_code_ == Code::WRONG_UI_FILE
@@ -57,11 +57,11 @@ public:
                || error_code_ == Code::FONT_PATH;
     }
 
-    constexpr std::string_view get_message() const {
+    std::string_view get_message() const {
         return msgs_[error_code_];
     }
 
-    constexpr std::string_view get_details() const { return msg_details_; }
+    std::string_view get_details() const { return msg_details_; }
 
 private:
     const Code error_code_;

@@ -28,9 +28,9 @@ jobs:
         config:
           - os: ubuntu-latest
             compiler: gcc
-            cc: gcc-9
-            cxx: g++-9
-            version: "9.3.0"
+            cc: gcc-10
+            cxx: g++-10
+            version: "10"
 
           - os: ubuntu-latest
             compiler: clang

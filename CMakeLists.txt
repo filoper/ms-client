@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 3.14)
 
+if (UNIX AND NOT APPLE)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "-stdlib=libc++")
+    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libc++")
+  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "-stdlib=libstdc++")
+    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libstdc++")
+  else()
+    message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+  endif()
+endif()
+
 project(msclient)
 
 # Set project options

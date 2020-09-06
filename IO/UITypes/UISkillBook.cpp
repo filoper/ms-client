@@ -26,6 +26,10 @@
 #include "../UI.h"
 
 namespace ms {
+auto fn_spend_sp = []<typename... T>(T && ... args) {
+    SpendSpPacket(std::forward<T>(args)...).dispatch();
+};
+
 UISkillBook::SkillIcon::SkillIcon(int32_t id) : skill_id_(id) {}
 
 void UISkillBook::SkillIcon::drop_on_bindings(Point<int16_t> cursorposition,
@@ -33,10 +37,11 @@ void UISkillBook::SkillIcon::drop_on_bindings(Point<int16_t> cursorposition,
     auto keyconfig = UI::get().get_element<UIKeyConfig>();
     Keyboard::Mapping mapping = Keyboard::Mapping(KeyType::SKILL, skill_id_);
 
-    if (remove)
+    if (remove) {
         keyconfig->unstage_mapping(mapping);
-    else
+    } else {
         keyconfig->stage_mapping(cursorposition, mapping);
+    }
 }
 
 Icon::IconType UISkillBook::SkillIcon::get_type() {
@@ -80,7 +85,7 @@ UISkillBook::SkillDisplayMeta::SkillDisplayMeta(int32_t i, int32_t l) :
 }
 
 void UISkillBook::SkillDisplayMeta::draw(const DrawArgument &args) const {
-    icon_->draw(args.getpos());
+    icon_->draw(args.get_pos());
     name_text_.draw(args + Point<int16_t>(38, -5));
     level_text_.draw(args + Point<int16_t>(38, 13));
 }
@@ -200,16 +205,18 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
         uint16_t x_adj = 0;
         uint16_t spupid = i - Buttons::BT_SPUP0;
 
-        if (spupid % 2)
+        if (spupid % 2) {
             x_adj = ROW_WIDTH_;
+        }
 
         Point<int16_t> spup_position =
             SKILL_OFFSET_ + Point<int16_t>(124 + x_adj, 20 + y_adj);
         buttons_[i] =
             std::make_unique<MapleButton>(main["BtSpUp"], spup_position);
 
-        if (spupid % 2)
+        if (spupid % 2) {
             y_adj += ROW_HEIGHT_;
+        }
     }
 
     book_text_ = Text(Text::Font::A11M,
@@ -230,8 +237,9 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
                          bool above = offset_ + shift >= 0;
                          bool below = offset_ + 4 + shift <= skill_count_;
 
-                         if (above && below)
+                         if (above && below) {
                              change_offset(offset_ + shift);
+                         }
                      });
 
     change_job(stats_.get_stat(MapleStat::Id::JOB));
@@ -258,8 +266,9 @@ void UISkillBook::draw(float alpha) const {
     for (size_t i = 0; i < ROWS_; i++) {
         Point<int16_t> pos = skill_position_l;
 
-        if (i % 2)
+        if (i % 2) {
             pos = skill_position_r;
+        }
 
         if (i < skills_.size()) {
             if (check_required(skills_[i].get_id())) {
@@ -274,8 +283,9 @@ void UISkillBook::draw(float alpha) const {
             skillb_.draw(pos);
         }
 
-        if (i < ROWS_ - 2)
+        if (i < ROWS_ - 2) {
             line_.draw(pos + LINE_OFFSET_);
+        }
 
         if (i % 2) {
             skill_position_l.shift_y(ROW_HEIGHT_);
@@ -349,8 +359,9 @@ Button::State UISkillBook::button_pressed(uint16_t id) {
             buttons_[Buttons::BT_SPUP]->set_state(Button::State::NORMAL);
             buttons_[Buttons::BT_SPMAX]->set_state(Button::State::NORMAL);
 
-            if (sp_after - 1 == sp_before)
+            if (sp_after - 1 == sp_before) {
                 return Button::State::DISABLED;
+            }
 
             return Button::State::NORMAL;
         } break;
@@ -437,8 +448,9 @@ void UISkillBook::doubleclick(Point<int16_t> cursorpos) {
         int32_t skill_id = skill->get_id();
         int32_t skill_level = skillbook_.get_level(skill_id);
 
-        if (skill_level > 0)
+        if (skill_level > 0) {
             Stage::get().get_combat().use_move(skill_id);
+        }
     }
 }
 
@@ -451,8 +463,9 @@ void UISkillBook::remove_cursor() {
 Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged_)
+    if (dragged_) {
         return dstate;
+    }
 
     Point<int16_t> cursor_relative = cursorpos - position_;
 
@@ -474,8 +487,9 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
         for (size_t i = 0; i < skills_.size(); i++) {
             Point<int16_t> skill_position = skill_position_l;
 
-            if (i % 2)
+            if (i % 2) {
                 skill_position = skill_position_r;
+            }
 
             constexpr Rectangle<int16_t> bounds =
                 Rectangle<int16_t>(0, 32, 0, 32);
@@ -496,16 +510,15 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                         UI::get().drag_icon(skills_[i].get_icon());
 
                         return Cursor::State::GRABBING;
-                    } else {
-                        return Cursor::State::IDLE;
                     }
-                } else {
-                    skills_[i].get_icon()->set_state(
-                        StatefulIcon::State::MOUSEOVER);
-                    show_skill(skills_[i].get_id());
-
                     return Cursor::State::IDLE;
+
                 }
+                skills_[i].get_icon()->set_state(
+                    StatefulIcon::State::MOUSEOVER);
+                show_skill(skills_[i].get_id());
+
+                return Cursor::State::IDLE;
             }
 
             if (i % 2) {
@@ -528,10 +541,11 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
 void UISkillBook::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
         if (escape) {
-            if (sp_enabled_)
+            if (sp_enabled_) {
                 set_skillpoint(false);
-            else
+            } else {
                 close();
+            }
         } else if (keycode == KeyAction::Id::TAB) {
             clear_tooltip();
 
@@ -539,10 +553,11 @@ void UISkillBook::send_key(int32_t keycode, bool pressed, bool escape) {
             uint16_t id = tab_ + 1;
             uint16_t new_tab = tab_ + Buttons::BT_TAB0;
 
-            if (new_tab < Buttons::BT_TAB4 && id <= level)
+            if (new_tab < Buttons::BT_TAB4 && id <= level) {
                 new_tab++;
-            else
+            } else {
                 new_tab = Buttons::BT_TAB0;
+            }
 
             change_tab(new_tab - Buttons::BT_TAB0);
         }
@@ -569,8 +584,9 @@ void UISkillBook::change_job(uint16_t id) {
 
     Job::Level level = job_.get_level();
 
-    for (uint16_t i = 0; i <= Job::Level::FOURTH; i++)
+    for (uint16_t i = 0; i <= Job::Level::FOURTH; i++) {
         buttons_[Buttons::BT_TAB0 + i]->set_active(i <= level);
+    }
 
     change_tab(level - Job::Level::BEGINNER);
 }
@@ -582,18 +598,20 @@ void UISkillBook::change_sp() {
     if (joblevel == Job::Level::BEGINNER) {
         int16_t remaining_beginner_sp = 0;
 
-        if (level >= 7)
+        if (level >= 7) {
             remaining_beginner_sp = 6;
-        else
+        } else {
             remaining_beginner_sp = level - 1;
+        }
 
         for (size_t i = 0; i < skills_.size(); i++) {
             int32_t skillid = skills_[i].get_id();
 
             if (skillid == SkillId::Id::THREE_SNAILS
                 || skillid == SkillId::Id::HEAL
-                || skillid == SkillId::Id::FEATHER)
+                || skillid == SkillId::Id::FEATHER) {
                 remaining_beginner_sp -= skills_[i].get_level();
+            }
         }
 
         beginner_sp_ = remaining_beginner_sp;
@@ -629,8 +647,9 @@ void UISkillBook::change_tab(uint16_t new_tab) {
 
         bool invisible = SkillData::get(skill_id).is_invisible();
 
-        if (invisible && masterlevel == 0)
+        if (invisible && masterlevel == 0) {
             continue;
+        }
 
         skills_.emplace_back(skill_id, level);
         skill_count_++;
@@ -678,20 +697,24 @@ void UISkillBook::clear_tooltip() {
 bool UISkillBook::can_raise(int32_t skill_id) const {
     Job::Level joblevel = joblevel_by_tab(tab_);
 
-    if (joblevel == Job::Level::BEGINNER && beginner_sp_ <= 0)
+    if (joblevel == Job::Level::BEGINNER && beginner_sp_ <= 0) {
         return false;
+    }
 
-    if (tab_ + Buttons::BT_TAB0 != Buttons::BT_TAB0 && sp_ <= 0)
+    if (tab_ + Buttons::BT_TAB0 != Buttons::BT_TAB0 && sp_ <= 0) {
         return false;
+    }
 
     int32_t level = skillbook_.get_level(skill_id);
     int32_t masterlevel = skillbook_.get_masterlevel(skill_id);
 
-    if (masterlevel == 0)
+    if (masterlevel == 0) {
         masterlevel = SkillData::get(skill_id).get_masterlevel();
+    }
 
-    if (level >= masterlevel)
+    if (level >= masterlevel) {
         return false;
+    }
 
     switch (skill_id) {
         case SkillId::Id::ANGEL_BLESSING: return false;
@@ -700,8 +723,9 @@ bool UISkillBook::can_raise(int32_t skill_id) const {
 }
 
 void UISkillBook::send_spup(uint16_t row) {
-    if (row >= skills_.size())
+    if (row >= skills_.size()) {
         return;
+    }
 
     int32_t id = skills_[row].get_id();
 
@@ -736,12 +760,13 @@ void UISkillBook::send_spup(uint16_t row) {
         buttons_[Buttons::BT_SPUP]->set_state(Button::State::NORMAL);
     }
 
-    if (!sp_enabled_)
+    if (!sp_enabled_) {
         set_skillpoint(true);
+    }
 }
 
 void UISkillBook::spend_sp(int32_t skill_id) {
-    SpendSpPacket(skill_id).dispatch();
+    fn_spend_sp(skill_id);
 
     UI::get().disable();
 }
@@ -760,32 +785,37 @@ const UISkillBook::SkillDisplayMeta *UISkillBook::skill_by_position(
     Point<int16_t> cursorpos) const {
     int16_t x = cursorpos.x();
 
-    if (x < SKILL_OFFSET_.x() || x > SKILL_OFFSET_.x() + 2 * ROW_WIDTH_)
+    if (x < SKILL_OFFSET_.x() || x > SKILL_OFFSET_.x() + 2 * ROW_WIDTH_) {
         return nullptr;
+    }
 
     int16_t y = cursorpos.y();
 
-    if (y < SKILL_OFFSET_.y())
+    if (y < SKILL_OFFSET_.y()) {
         return nullptr;
+    }
 
     uint16_t row = (y - SKILL_OFFSET_.y()) / ROW_HEIGHT_;
 
-    if (row < 0 || row >= ROWS_)
+    if (row < 0 || row >= ROWS_) {
         return nullptr;
+    }
 
     uint16_t offset_row = offset_ + row;
 
-    if (offset_row >= ROWS_)
+    if (offset_row >= ROWS_) {
         return nullptr;
+    }
 
     uint16_t col = (x - SKILL_OFFSET_.x()) / ROW_WIDTH_;
 
     uint16_t skill_idx = 2 * offset_row + col;
 
-    if (skill_idx >= skills_.size())
+    if (skill_idx >= skills_.size()) {
         return nullptr;
+    }
 
-    auto iter = skills_.data() + skill_idx;
+    const auto *iter = skills_.data() + skill_idx;
 
     return iter;
 }
@@ -799,15 +829,17 @@ bool UISkillBook::check_required(int32_t id) const {
     std::unordered_map<int32_t, int32_t> required =
         skillbook_.collect_required(id);
 
-    if (required.size() <= 0)
+    if (required.empty()) {
         required = SkillData::get(id).get_reqskills();
+    }
 
     for (auto reqskill : required) {
         int32_t reqskill_level = skillbook_.get_level(reqskill.first);
         int32_t req_level = reqskill.second;
 
-        if (reqskill_level < req_level)
+        if (reqskill_level < req_level) {
             return false;
+        }
     }
 
     return true;
@@ -816,26 +848,29 @@ bool UISkillBook::check_required(int32_t id) const {
 void UISkillBook::set_macro(bool enabled) {
     macro_enabled_ = enabled;
 
-    if (macro_enabled_)
+    if (macro_enabled_) {
         dimension_ = bg_dimensions_
                      + Point<int16_t>(macro_backgrnd_.get_dimensions().x(), 0);
-    else if (!sp_enabled_)
+    } else if (!sp_enabled_) {
         dimension_ = bg_dimensions_;
+    }
 
     buttons_[Buttons::BT_MACRO_OK]->set_active(macro_enabled_);
 
-    if (macro_enabled_ && sp_enabled_)
+    if (macro_enabled_ && sp_enabled_) {
         set_skillpoint(false);
+    }
 }
 
 void UISkillBook::set_skillpoint(bool enabled) {
     sp_enabled_ = enabled;
 
-    if (sp_enabled_)
+    if (sp_enabled_) {
         dimension_ = bg_dimensions_
                      + Point<int16_t>(sp_backgrnd_.get_dimensions().x(), 0);
-    else if (!macro_enabled_)
+    } else if (!macro_enabled_) {
         dimension_ = bg_dimensions_;
+    }
 
     buttons_[Buttons::BT_CANCLE]->set_active(sp_enabled_);
     buttons_[Buttons::BT_OKAY]->set_active(sp_enabled_);
@@ -843,8 +878,9 @@ void UISkillBook::set_skillpoint(bool enabled) {
     buttons_[Buttons::BT_SPMAX]->set_active(sp_enabled_);
     buttons_[Buttons::BT_SPUP]->set_active(sp_enabled_);
 
-    if (sp_enabled_ && macro_enabled_)
+    if (sp_enabled_ && macro_enabled_) {
         set_macro(false);
+    }
 }
 
 bool UISkillBook::is_skillpoint_enabled() {

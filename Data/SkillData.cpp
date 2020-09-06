@@ -36,13 +36,14 @@ SkillData::SkillData(int32_t id) {
     desc_ = std::string(strsrc["desc"]);
 
     for (int32_t level = 1; nl::node sub = strsrc["h" + std::to_string(level)];
-         level++)
+         level++) {
         levels_.emplace(level, sub);
+    }
 
     /// Load stats
     nl::node levelsrc = src["level"];
 
-    for (auto sub : levelsrc) {
+    for (const auto &sub : levelsrc) {
         float damage = (float)sub["damage"] / 100;
         int32_t matk = sub["mad"];
         int32_t fixdamage = sub["fixdamage"];
@@ -82,10 +83,11 @@ SkillData::SkillData(int32_t id) {
 
     element_ = std::string(src["elemAttr"]);
 
-    if (jobid == "900" || jobid == "910")
+    if (jobid == "900" || jobid == "910") {
         req_weapon_ = Weapon::Type::NONE;
-    else
+    } else {
         req_weapon_ = Weapon::by_value(100 + (int32_t)src["weapon"]);
+    }
 
     master_level_ = static_cast<int32_t>(stats_.size());
     passive_ = (id % 10000) / 1000 == 0;
@@ -95,7 +97,7 @@ SkillData::SkillData(int32_t id) {
     /// Load required skills
     nl::node reqsrc = src["req"];
 
-    for (auto sub : reqsrc) {
+    for (const auto &sub : reqsrc) {
         int32_t skillid =
             string_conversion::or_default<int32_t>(sub.name(), -1);
         int32_t reqlv = sub.get_integer();
@@ -158,8 +160,9 @@ int32_t SkillData::flags_of(int32_t id) const {
 
     auto iter = skill_flags.find(id);
 
-    if (iter == skill_flags.end())
+    if (iter == skill_flags.end()) {
         return NONE;
+    }
 
     return iter->second;
 }
@@ -225,9 +228,8 @@ const std::string &SkillData::get_level_desc(int32_t level) const {
         static const std::string null_level = "Missing level description.";
 
         return null_level;
-    } else {
-        return iter->second;
     }
+    return iter->second;
 }
 
 const Texture &SkillData::get_icon(Icon icon) const {

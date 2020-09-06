@@ -42,8 +42,9 @@ public:
         for (; !queue_.empty(); queue_.pop()) {
             const Timed &top = queue_.top();
 
-            if (top.when > time_)
+            if (top.when > time_) {
                 break;
+            }
 
             action_(top.value);
         }

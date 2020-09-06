@@ -26,6 +26,25 @@
 #include "Timer.h"
 
 namespace ms {
+auto fn_take_damage = []<typename... T>(T && ... args) {
+    TakeDamagePacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_change_map = []<typename... T>(T && ... args) {
+    ChangeMapPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_pickup_item = []<typename... T>(T && ... args) {
+    PickupItemPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_player_map_transfer = []<typename... T>(T && ... args) {
+    PlayerMapTransferPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_admin_enter_map = []<typename... T>(T && ... args) {
+    AdminEnterMapPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_change_channel = []<typename... T>(T && ... args) {
+    ChangeChannelPacket(std::forward<T>(args)...).dispatch();
+};
+
 Stage::Stage() :
     combat_(player_, chars_, mobs_, reactors_),
     mob_combat_(player_, chars_, mobs_) {
@@ -101,11 +120,12 @@ void Stage::respawn(int8_t portalid) {
 }
 
 void Stage::draw(float alpha) const {
-    if (state_ != State::ACTIVE)
+    if (state_ != State::ACTIVE) {
         return;
+    }
 
     Point<int16_t> viewpos = camera_.position(alpha);
-    Point<double> viewrpos = camera_.realposition(alpha);
+    Point<double> viewrpos = camera_.real_position(alpha);
     double viewx = viewrpos.x();
     double viewy = viewrpos.y();
 
@@ -129,8 +149,9 @@ void Stage::draw(float alpha) const {
 }
 
 void Stage::update() {
-    if (state_ != State::ACTIVE)
+    if (state_ != State::ACTIVE) {
         return;
+    }
 
     combat_.update();
     mob_combat_.update();
@@ -148,25 +169,28 @@ void Stage::update() {
     portals_.update(player_.get_position());
     camera_.update(player_.get_position());
 
-    if (player_.is_invincible())
+    if (player_.is_invincible()) {
         return;
+    }
 
     if (int32_t oid_id = mobs_.find_colliding(player_.get_phobj())) {
         if (MobAttack attack = mobs_.create_attack(oid_id)) {
             MobAttackResult result = player_.damage(attack);
-            TakeDamagePacket(result, TakeDamagePacket::From::TOUCH).dispatch();
+            fn_take_damage(result, TakeDamagePacket::From::TOUCH);
         }
     }
 }
 
 void Stage::show_character_effect(int32_t cid, CharEffect::Id effect) {
-    if (auto character = get_character(cid))
+    if (auto character = get_character(cid)) {
         character->show_effect_id(effect);
+    }
 }
 
 void Stage::check_portals() {
-    if (player_.is_attacking())
+    if (player_.is_attacking()) {
         return;
+    }
 
     Point<int16_t> playerpos = player_.get_position();
     Portal::WarpInfo warpinfo = portals_.find_warp_at(playerpos);
@@ -178,7 +202,7 @@ void Stage::check_portals() {
 
         player_.respawn(startpos, map_info_.is_underwater());
     } else if (warpinfo.valid) {
-        ChangeMapPacket(false, -1, warpinfo.name, false).dispatch();
+        fn_change_map(false, -1, warpinfo.name, false);
 
         CharStats &stats = Stage::get().get_player().get_stats();
 
@@ -189,16 +213,18 @@ void Stage::check_portals() {
 }
 
 void Stage::check_seats() {
-    if (player_.is_sitting() || player_.is_attacking())
+    if (player_.is_sitting() || player_.is_attacking()) {
         return;
+    }
 
     Optional<const Seat> seat = map_info_.findseat(player_.get_position());
     player_.set_seat(seat);
 }
 
 void Stage::check_ladders(bool up) {
-    if (player_.is_climbing() || player_.is_attacking())
+    if (player_.is_climbing() || player_.is_attacking()) {
         return;
+    }
 
     Optional<const Ladder> ladder =
         map_info_.findladder(player_.get_position(), up);
@@ -209,13 +235,15 @@ void Stage::check_drops() {
     Point<int16_t> playerpos = player_.get_position();
     MapDrops::Loot loot = drops_.find_loot_at(playerpos);
 
-    if (loot.first)
-        PickupItemPacket(loot.first, loot.second).dispatch();
+    if (loot.first) {
+        fn_pickup_item(loot.first, loot.second);
+    }
 }
 
 void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
-    if (state_ != State::ACTIVE || !playable_)
+    if (state_ != State::ACTIVE || !playable_) {
         return;
+    }
 
     switch (type) {
         case KeyType::Id::ACTION:
@@ -232,7 +260,7 @@ void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
                 }
             }
 
-            playable_->send_action(KeyAction::actionbyid(action), down);
+            playable_->send_action(KeyAction::get_action_by_id(action), down);
             break;
         case KeyType::Id::SKILL: combat_.use_move(action); break;
         case KeyType::Id::ITEM: player_.use_item(action); break;
@@ -244,11 +272,13 @@ Cursor::State Stage::send_cursor(bool pressed, Point<int16_t> position) {
     auto statusbar = UI::get().get_element<UIStatusBar>();
 
     if (statusbar && statusbar->is_menu_active()) {
-        if (pressed)
+        if (pressed) {
             statusbar->remove_menus();
+        }
 
-        if (statusbar->is_in_range(position))
+        if (statusbar->is_in_range(position)) {
             return statusbar->send_cursor(pressed, position);
+        }
     }
 
     return npcs_.send_cursor(pressed, position, camera_.position());
@@ -291,10 +321,10 @@ MobCombat &Stage::get_mob_combat() {
 }
 
 Optional<Char> Stage::get_character(int32_t cid) {
-    if (is_player(cid))
+    if (is_player(cid)) {
         return player_;
-    else
-        return chars_.get_char(cid);
+    }
+    return chars_.get_char(cid);
 }
 
 int Stage::get_mapid() {
@@ -318,11 +348,11 @@ int64_t Stage::get_upexp() {
 }
 
 void Stage::transfer_player() {
-    PlayerMapTransferPacket().dispatch();
+    fn_player_map_transfer();
 
-    if (Configuration::get().get_admin())
-        AdminEnterMapPacket(AdminEnterMapPacket::Operation::ALERT_ADMINS)
-            .dispatch();
+    if (Configuration::get().get_admin()) {
+        fn_admin_enter_map(AdminEnterMapPacket::Operation::ALERT_ADMINS);
+    }
 }
 
 void Stage::clear_channel_objects() {
@@ -335,7 +365,7 @@ void Stage::clear_channel_objects() {
 void Stage::change_channel(uint8_t ch) {
     UI::get().disable();
     GraphicsGL::get().lock();
-    ChangeChannelPacket(ch).dispatch();
+    fn_change_channel(ch);
     player_.set_channel_id(ch);
     state_ = State::TRANSITION;
 }

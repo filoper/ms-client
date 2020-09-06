@@ -19,6 +19,10 @@
 #include "Npc.h"
 
 namespace ms {
+auto fn_talk_to_npc = []<typename... T>(T && ... args) {
+    TalkToNPCPacket(std::forward<T>(args)...).dispatch();
+};
+
 void MapNpcs::draw(Layer::Id layer,
                    double viewx,
                    double viewy,
@@ -33,10 +37,11 @@ void MapNpcs::update(const Physics &physics) {
         int32_t oid = spawn.get_oid();
         Optional<MapObject> npc = npcs_.get(oid);
 
-        if (npc)
+        if (npc) {
             npc->makeactive();
-        else
+        } else {
             npcs_.add(spawn.instantiate(physics));
+        }
     }
 
     npcs_.update(physics);
@@ -47,8 +52,9 @@ void MapNpcs::spawn(NpcSpawn &&spawn) {
 }
 
 void MapNpcs::remove(int32_t oid) {
-    if (auto npc = npcs_.get(oid))
+    if (auto npc = npcs_.get(oid)) {
         npc->deactivate();
+    }
 }
 
 void MapNpcs::clear() {
@@ -68,12 +74,11 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
         if (npc && npc->is_active() && npc->inrange(position, viewpos)) {
             if (pressed) {
                 // TODO: Try finding dialog first
-                TalkToNPCPacket(npc->get_oid()).dispatch();
-
+                fn_talk_to_npc(npc->get_oid());
+                
                 return Cursor::State::IDLE;
-            } else {
-                return Cursor::State::CANCLICK;
             }
+            return Cursor::State::CANCLICK;
         }
     }
 

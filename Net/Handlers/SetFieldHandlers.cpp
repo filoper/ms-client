@@ -26,6 +26,10 @@
 #include "Timer.h"
 
 namespace ms {
+auto fn_player_update = []<typename... T>(T && ... args) {
+    PlayerUpdatePacket(std::forward<T>(args)...).dispatch();
+};
+
 void SetFieldHandler::transition(int32_t mapid, uint8_t portalid) const {
     float fadestep = 0.025f;
 
@@ -54,10 +58,11 @@ void SetFieldHandler::handle(InPacket &recv) const {
     int8_t mode1 = recv.read_byte();
     int8_t mode2 = recv.read_byte();
 
-    if (mode1 == 0 && mode2 == 0)
+    if (mode1 == 0 && mode2 == 0) {
         change_map(recv, channel);
-    else
+    } else {
         set_field(recv);
+    }
 }
 
 void SetFieldHandler::change_map(InPacket &recv, int32_t) const {
@@ -75,13 +80,15 @@ void SetFieldHandler::set_field(InPacket &recv) const {
     int32_t cid = recv.read_int();
     auto charselect = UI::get().get_element<UICharSelect>();
 
-    if (!charselect)
+    if (!charselect) {
         return;
+    }
 
     const CharEntry &playerentry = charselect->get_character(cid);
 
-    if (playerentry.id != cid)
+    if (playerentry.id != cid) {
         return;
+    }
 
     // update with stats that was loaded on server side after character
     // selection. hp, mp, maxhp, maxmp, mapid...
@@ -95,8 +102,9 @@ void SetFieldHandler::set_field(InPacket &recv) const {
 
     recv.read_byte();  // 'buddycap'
 
-    if (recv.read_bool())
+    if (recv.read_bool()) {
         recv.read_string();  // 'linkedname'
+    }
 
     CharacterParser::parse_inventory(recv, player.get_inventory());
     CharacterParser::parse_skillbook(recv, player.get_skills());
@@ -113,7 +121,7 @@ void SetFieldHandler::set_field(InPacket &recv) const {
 
     player.recalc_stats(true);
 
-    PlayerUpdatePacket().dispatch();
+    fn_player_update();
 
     uint8_t portalid = player.get_stats().get_portal();
     int32_t mapid = player.get_stats().get_mapid();

@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UI.h"
 
+#include <utility>
+
 #include "../Gameplay/Stage.h"
 #include "UIStateCashShop.h"
 #include "UIStateGame.h"
@@ -33,10 +35,11 @@
 #include "Window.h"
 
 namespace ms {
-UI::UI() {
-    state_ = std::make_unique<UIStateNull>();
-    enabled_ = true;
-}
+UI::UI() :
+    state_(std::make_unique<UIStateNull>()),
+    enabled_(true),
+    quitted_(false),
+    caps_lock_enabled_(false) {}
 
 void UI::init() {
     cursor_.init();
@@ -45,17 +48,13 @@ void UI::init() {
 
 void UI::draw(float alpha) const {
     state_->draw(alpha, cursor_.get_position());
-
     scrolling_notice_.draw(alpha);
-
     cursor_.draw(alpha);
 }
 
 void UI::update() {
     state_->update();
-
     scrolling_notice_.update();
-
     cursor_.update();
 }
 
@@ -163,12 +162,13 @@ void UI::send_key(int32_t keycode, bool pressed) {
         return;
     }
 
-    if (is_key_down_[keyboard_.capslockcode()])
+    if (is_key_down_[keyboard_.capslock_code()]) {
         caps_lock_enabled_ = !caps_lock_enabled_;
+    }
 
     if (focused_text_field_) {
-        bool ctrl = is_key_down_[keyboard_.leftctrlcode()]
-                    || is_key_down_[keyboard_.rightctrlcode()];
+        bool ctrl = is_key_down_[keyboard_.left_ctrl_code()]
+                    || is_key_down_[keyboard_.right_ctrl_code()];
 
         if (ctrl) {
             if (!pressed) {
@@ -176,18 +176,18 @@ void UI::send_key(int32_t keycode, bool pressed) {
 
                 switch (action) {
                     case KeyAction::Id::COPY:
-                        Window::get().setclipboard(
+                        Window::get().set_clipboard(
                             focused_text_field_->get_text());
                         break;
                     case KeyAction::Id::PASTE:
                         focused_text_field_->add_string(
-                            Window::get().getclipboard());
+                            Window::get().get_clipboard());
                         break;
                 }
             }
         } else {
-            bool shift = is_key_down_[keyboard_.leftshiftcode()]
-                         || is_key_down_[keyboard_.rightshiftcode()]
+            bool shift = is_key_down_[keyboard_.left_shift_code()]
+                         || is_key_down_[keyboard_.right_shift_code()]
                          || caps_lock_enabled_;
             Keyboard::Mapping mapping =
                 keyboard_.get_text_mapping(keycode, shift);
@@ -265,9 +265,10 @@ void UI::send_key(int32_t keycode, bool pressed) {
                                                     // shouldn't send else
                                                     // where)
                 types.emplace_back(
-                    UIElement::Type::
-                        LOGINNOTICE_CONFIRM);  // No tab (No arrows, but
-                                               // shouldn't send else where)
+                    UIElement::Type::LOGINNOTICE_CONFIRM);  // No tab (No
+                                                            // arrows, but
+                                                            // shouldn't send
+                                                            // else where)
                 types.emplace_back(
                     UIElement::Type::LOGINWAIT);  // No tab (No arrows, but
                                                   // shouldn't send else where)
@@ -305,8 +306,8 @@ void UI::send_key(int32_t keycode, bool pressed) {
                 types.emplace_back(UIElement::Type::USERLIST);
             }
 
-            if (types.size() > 0) {
-                auto element = state_->get_front(types);
+            if (!types.empty()) {
+                auto *element = state_->get_front(types);
 
                 if (element && element != nullptr) {
                     element->send_key(mapping.action, pressed, escape);
@@ -320,21 +321,23 @@ void UI::send_key(int32_t keycode, bool pressed) {
             auto chatbar = UI::get().get_element<UIChatBar>();
 
             if (escape) {
-                if (chatbar && chatbar->is_chatopen())
+                if (chatbar && chatbar->is_chatopen()) {
                     chatbar->send_key(mapping.action, pressed, escape);
-                else
+                } else {
                     state_->send_key(mapping.type,
                                      mapping.action,
                                      pressed,
                                      escape);
+                }
             } else if (enter) {
-                if (chatbar)
+                if (chatbar) {
                     chatbar->send_key(mapping.action, pressed, escape);
-                else
+                } else {
                     state_->send_key(mapping.type,
                                      mapping.action,
                                      pressed,
                                      escape);
+                }
             } else {
                 state_->send_key(mapping.type, mapping.action, pressed, escape);
             }
@@ -345,19 +348,21 @@ void UI::send_key(int32_t keycode, bool pressed) {
 }
 
 void UI::set_scrollnotice(const std::string &notice) {
-    scrolling_notice_.setnotice(notice);
+    scrolling_notice_.set_notice(notice);
 }
 
 void UI::focus_textfield(Textfield *tofocus) {
-    if (focused_text_field_)
+    if (focused_text_field_) {
         focused_text_field_->set_state(Textfield::State::NORMAL);
+    }
 
     focused_text_field_ = tofocus;
 }
 
 void UI::remove_textfield() {
-    if (focused_text_field_)
+    if (focused_text_field_) {
         focused_text_field_->set_state(Textfield::State::NORMAL);
+    }
 
     focused_text_field_ = {};
 }
@@ -391,7 +396,7 @@ void UI::show_skill(Tooltip::Parent parent,
 }
 
 void UI::show_text(Tooltip::Parent parent, std::string text) {
-    state_->show_text(parent, text);
+    state_->show_text(parent, std::move(text));
 }
 
 void UI::show_map(Tooltip::Parent parent,
@@ -399,7 +404,11 @@ void UI::show_map(Tooltip::Parent parent,
                   std::string description,
                   int32_t mapid,
                   bool bolded) {
-    state_->show_map(parent, name, description, mapid, bolded);
+    state_->show_map(parent,
+                     std::move(name),
+                     std::move(description),
+                     mapid,
+                     bolded);
 }
 
 Keyboard &UI::get_keyboard() {
@@ -408,7 +417,6 @@ Keyboard &UI::get_keyboard() {
 
 void UI::remove(UIElement::Type type) {
     focused_text_field_ = {};
-
     state_->remove(type);
 }
 }  // namespace ms

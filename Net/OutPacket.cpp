@@ -46,8 +46,9 @@ void OutPacket::dispatch() {
 }
 
 void OutPacket::skip(size_t count) {
-    for (size_t i = 0; i < count; i++)
+    for (size_t i = 0; i < count; i++) {
         bytes_.push_back(0);
+    }
 }
 
 void OutPacket::write_byte(int8_t ch) {
@@ -79,7 +80,7 @@ void OutPacket::write_time() {
     auto duration = std::chrono::steady_clock::now().time_since_epoch();
     auto since_epoch =
         std::chrono::duration_cast<std::chrono::milliseconds>(duration);
-    int32_t timestamp = static_cast<int32_t>(since_epoch.count());
+    auto timestamp = static_cast<int32_t>(since_epoch.count());
 
     write_int(timestamp);
 }
@@ -90,12 +91,13 @@ void OutPacket::write_point(Point<int16_t> position) {
 }
 
 void OutPacket::write_string(const std::string &str) {
-    int16_t length = static_cast<int16_t>(str.length());
+    auto length = static_cast<int16_t>(str.length());
 
     write_short(length);
 
-    for (int16_t i = 0; i < length; i++)
+    for (int16_t i = 0; i < length; i++) {
         write_byte(str[i]);
+    }
 }
 
 void OutPacket::write_random() {
@@ -106,15 +108,15 @@ void OutPacket::write_random() {
 }
 
 void OutPacket::write_hardware_info() {
-    std::string macs = Configuration::get().get_macs().c_str();
-    std::string hwid = Configuration::get().get_hwid().c_str();
+    std::string macs = Configuration::get().get_macs();
+    std::string hwid = Configuration::get().get_hwid();
 
     write_string(macs);
     write_string(hwid);
 }
 
 int32_t OutPacket::hex_to_dec(std::string hexVal) {
-    int32_t len = strlen(hexVal.c_str());
+    auto len = static_cast<int32_t>(strlen(hexVal.c_str()));
     int32_t base = 1;
     int32_t dec_val = 0;
 

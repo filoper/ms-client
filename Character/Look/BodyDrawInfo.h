@@ -33,8 +33,9 @@ public:
 
         int16_t sgndelay = src["delay"];
 
-        if (sgndelay == 0)
+        if (sgndelay == 0) {
             sgndelay = 100;
+        }
 
         if (sgndelay > 0) {
             delay_ = sgndelay;

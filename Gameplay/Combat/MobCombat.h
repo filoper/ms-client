@@ -25,9 +25,7 @@
 namespace ms {
 class MobCombat {
 public:
-    MobCombat(Player &player,
-              MapChars &chars,
-              MapMobs &mobs);
+    MobCombat(Player &player, MapChars &chars, MapMobs &mobs);
 
     // Draw bullets, damage numbers etc.
     void draw(double viewx, double viewy, float alpha) const;
@@ -46,6 +44,8 @@ public:
 
     // Show a buff effect.
     void show_player_buff(int32_t skillid);
+
+    void use_some_attack(int oid);
 
 private:
     struct DamageEffect {
@@ -66,6 +66,8 @@ private:
     void apply_attack(const AttackResult &attack);
 
     void apply_move(const MobSkill &move, Mob &mob);
+
+    void apply_move(const MobSpecialAttack &move, Mob &mob);
 
     std::vector<int32_t> find_closest(MapObjects *objs,
                                       Rectangle<int16_t> range,

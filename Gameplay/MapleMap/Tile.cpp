@@ -24,8 +24,9 @@ Tile::Tile(nl::node src, const std::string &ts) {
     pos_ = Point<int16_t>(src["x"], src["y"]);
     z_ = dsrc["z"];
 
-    if (z_ == 0)
+    if (z_ == 0) {
         z_ = dsrc["zM"];
+    }
 }
 
 void Tile::draw(Point<int16_t> viewpos) const {

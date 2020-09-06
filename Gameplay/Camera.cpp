@@ -20,7 +20,7 @@
 namespace ms {
 Camera::Camera() {
     x_.set(0.0);
-    y_.set(0.0);
+    y_.set(0.0 + Y_OFFSET);
 
     VWIDTH = Constants::Constants::get().get_viewwidth();
     VHEIGHT = Constants::Constants::get().get_viewheight();
@@ -38,24 +38,28 @@ void Camera::update(Point<int16_t> position) {
     double next_x = x_.get();
     double hdelta = VWIDTH / 2 - position.x() - next_x;
 
-    if (std::abs(hdelta) >= 5.0)
+    if (std::abs(hdelta) >= 5.0) {
         next_x += hdelta * (12.0 / VWIDTH);
+    }
 
     double next_y = y_.get();
-    double vdelta = VHEIGHT / 2 - position.y() - next_y;
+    double vdelta = VHEIGHT / 2 - position.y() + Y_OFFSET - next_y;
 
-    if (std::abs(vdelta) >= 5.0)
+    if (std::abs(vdelta) >= 5.0) {
         next_y += vdelta * (12.0 / VHEIGHT);
+    }
 
-    if (next_x > hbounds_.first() || hbounds_.length() < VWIDTH)
+    if (next_x > hbounds_.first() || hbounds_.length() < VWIDTH) {
         next_x = hbounds_.first();
-    else if (next_x < hbounds_.second() + VWIDTH)
+    } else if (next_x < hbounds_.second() + VWIDTH) {
         next_x = hbounds_.second() + VWIDTH;
+    }
 
-    if (next_y > vbounds_.first() || vbounds_.length() < VHEIGHT)
+    if (next_y > vbounds_.first() || vbounds_.length() < VHEIGHT) {
         next_y = vbounds_.first();
-    else if (next_y < vbounds_.second() + VHEIGHT)
+    } else if (next_y < vbounds_.second() + VHEIGHT) {
         next_y = vbounds_.second() + VHEIGHT;
+    }
 
     x_ = next_x;
     y_ = next_y;
@@ -71,7 +75,7 @@ void Camera::set_position(Point<int16_t> position) {
     }
 
     x_.set(VWIDTH / 2 - position.x());
-    y_.set(VHEIGHT / 2 - position.y());
+    y_.set(VHEIGHT / 2 - position.y() + Y_OFFSET);
 }
 
 void Camera::set_view(Range<int16_t> mapwalls, Range<int16_t> mapborders) {
@@ -93,7 +97,7 @@ Point<int16_t> Camera::position(float alpha) const {
     return { interx, intery };
 }
 
-Point<double> Camera::realposition(float alpha) const {
+Point<double> Camera::real_position(float alpha) const {
     return { x_.get(alpha), y_.get(alpha) };
 }
 }  // namespace ms

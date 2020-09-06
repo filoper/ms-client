@@ -22,8 +22,9 @@ namespace ms {
 Expression::Id Expression::byaction(size_t action) {
     action -= 98;
 
-    if (action < Expression::Id::LENGTH)
+    if (action < Expression::Id::LENGTH) {
         return static_cast<Id>(action);
+    }
 
     std::cout << "Unknown Expression::Id action: [" << action << "]"
               << std::endl;
@@ -53,8 +54,9 @@ Face::Face(int32_t faceid) {
             nl::node expnode = facenode[expname];
 
             for (uint8_t frame = 0; nl::node framenode = expnode[frame];
-                 ++frame)
+                 ++frame) {
                 expressions_[exp].emplace(frame, framenode);
+            }
         }
     }
 
@@ -68,8 +70,9 @@ void Face::draw(Expression::Id expression,
                 const DrawArgument &args) const {
     auto frameit = expressions_[expression].find(frame);
 
-    if (frameit != expressions_[expression].end())
+    if (frameit != expressions_[expression].end()) {
         frameit->second.texture.draw(args);
+    }
 }
 
 uint8_t Face::nextframe(Expression::Id exp, uint8_t frame) const {

@@ -37,8 +37,9 @@ void Inventory::recalc_stats(Weapon::Type type) {
         if (equip_iter != equips_.end()) {
             const Equip &equip = equip_iter->second;
 
-            for (auto stat_iter : total_stats_)
+            for (auto stat_iter : total_stats_) {
                 stat_iter.second += equip.get_stat(stat_iter.first);
+            }
         }
     }
 
@@ -65,9 +66,10 @@ void Inventory::recalc_stats(Weapon::Type type) {
         }
     }
 
-    if (int32_t bulletid = get_bulletid())
+    if (int32_t bulletid = get_bulletid()) {
         total_stats_[EquipStat::Id::WATK] +=
             BulletData::get(bulletid).get_watk();
+    }
 }
 
 void Inventory::set_meso(int64_t m) {
@@ -143,8 +145,9 @@ void Inventory::add_equip(InventoryType::Id invtype,
 void Inventory::remove(InventoryType::Id type, int16_t slot) {
     auto iter = inventories_[type].find(slot);
 
-    if (iter == inventories_[type].end())
+    if (iter == inventories_[type].end()) {
         return;
+    }
 
     int32_t unique_id = iter->second.unique_id;
     inventories_[type].erase(iter);
@@ -169,11 +172,13 @@ void Inventory::swap(InventoryType::Id firsttype,
         std::move(inventories_[secondtype][secondslot]);
     inventories_[secondtype][secondslot] = std::move(first);
 
-    if (!inventories_[firsttype][firstslot].item_id)
+    if (!inventories_[firsttype][firstslot].item_id) {
         remove(firsttype, firstslot);
+    }
 
-    if (!inventories_[secondtype][secondslot].item_id)
+    if (!inventories_[secondtype][secondslot].item_id) {
         remove(secondtype, secondslot);
+    }
 }
 
 int32_t Inventory::add_slot(InventoryType::Id type,
@@ -192,8 +197,9 @@ void Inventory::change_count(InventoryType::Id type,
                              int16_t count) {
     auto iter = inventories_[type].find(slot);
 
-    if (iter != inventories_[type].end())
+    if (iter != inventories_[type].end()) {
         iter->second.count = count;
+    }
 }
 
 void Inventory::modify(InventoryType::Id type,
@@ -269,33 +275,37 @@ int32_t Inventory::get_bulletid() const {
 EquipSlot::Id Inventory::find_equipslot(int32_t itemid) const {
     const EquipData &cloth = EquipData::get(itemid);
 
-    if (!cloth.is_valid())
+    if (!cloth.is_valid()) {
         return EquipSlot::Id::NONE;
+    }
 
     EquipSlot::Id eqslot = cloth.get_eqslot();
 
     if (eqslot == EquipSlot::Id::RING1) {
-        if (!has_equipped(EquipSlot::Id::RING2))
+        if (!has_equipped(EquipSlot::Id::RING2)) {
             return EquipSlot::Id::RING2;
+        }
 
-        if (!has_equipped(EquipSlot::Id::RING3))
+        if (!has_equipped(EquipSlot::Id::RING3)) {
             return EquipSlot::Id::RING3;
+        }
 
-        if (!has_equipped(EquipSlot::Id::RING4))
+        if (!has_equipped(EquipSlot::Id::RING4)) {
             return EquipSlot::Id::RING4;
+        }
 
         return EquipSlot::Id::RING1;
-    } else {
-        return eqslot;
     }
+    return eqslot;
 }
 
 int16_t Inventory::find_free_slot(InventoryType::Id type) const {
     int16_t counter = 1;
 
-    for (auto &iter : inventories_[type]) {
-        if (iter.first != counter)
+    for (const auto &iter : inventories_[type]) {
+        if (iter.first != counter) {
             return counter;
+        }
 
         counter++;
     }
@@ -304,9 +314,11 @@ int16_t Inventory::find_free_slot(InventoryType::Id type) const {
 }
 
 int16_t Inventory::find_item(InventoryType::Id type, int32_t itemid) const {
-    for (auto &iter : inventories_[type])
-        if (iter.second.item_id == itemid)
+    for (const auto &iter : inventories_[type]) {
+        if (iter.second.item_id == itemid) {
             return iter.first;
+        }
+    }
 
     return 0;
 }
@@ -314,10 +326,11 @@ int16_t Inventory::find_item(InventoryType::Id type, int32_t itemid) const {
 int16_t Inventory::get_item_count(InventoryType::Id type, int16_t slot) const {
     auto iter = inventories_[type].find(slot);
 
-    if (iter != inventories_[type].end())
+    if (iter != inventories_[type].end()) {
         return iter->second.count;
-    else
-        return 0;
+    }
+
+    return 0;
 }
 
 int16_t Inventory::get_total_item_count(int32_t itemid) const {
@@ -325,9 +338,11 @@ int16_t Inventory::get_total_item_count(int32_t itemid) const {
 
     int16_t total_count = 0;
 
-    for (auto &iter : inventories_[type])
-        if (iter.second.item_id == itemid)
+    for (const auto &iter : inventories_[type]) {
+        if (iter.second.item_id == itemid) {
             total_count += iter.second.count;
+        }
+    }
 
     return total_count;
 }
@@ -335,34 +350,40 @@ int16_t Inventory::get_total_item_count(int32_t itemid) const {
 int32_t Inventory::get_item_id(InventoryType::Id type, int16_t slot) const {
     auto iter = inventories_[type].find(slot);
 
-    if (iter != inventories_[type].end())
+    if (iter != inventories_[type].end()) {
         return iter->second.item_id;
-    else
-        return 0;
+    }
+
+    return 0;
 }
 
 Optional<const Equip> Inventory::get_equip(InventoryType::Id type,
                                            int16_t slot) const {
-    if (type != InventoryType::Id::EQUIPPED && type != InventoryType::Id::EQUIP)
+    if (type != InventoryType::Id::EQUIPPED
+        && type != InventoryType::Id::EQUIP) {
         return {};
+    }
 
     auto slot_iter = inventories_[type].find(slot);
 
-    if (slot_iter == inventories_[type].end())
+    if (slot_iter == inventories_[type].end()) {
         return {};
+    }
 
     auto equip_iter = equips_.find(slot_iter->second.unique_id);
 
-    if (equip_iter == equips_.end())
+    if (equip_iter == equips_.end()) {
         return {};
+    }
 
     return equip_iter->second;
 }
 
 Inventory::Movement Inventory::movementbyvalue(int8_t value) {
     if (value >= Inventory::Movement::MOVE_INTERNAL
-        && value <= Inventory::Movement::MOVE_EQUIP)
+        && value <= Inventory::Movement::MOVE_EQUIP) {
         return static_cast<Movement>(value);
+    }
 
     std::cout << "Unknown Inventory::Movement value: [" << value << "]"
               << std::endl;

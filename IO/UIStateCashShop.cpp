@@ -28,8 +28,9 @@ void UIStateCashShop::draw(float inter, Point<int16_t> cursor) const {
     for (auto iter : elements_) {
         UIElement *element = iter.second.get();
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->draw(inter);
+        }
     }
 }
 
@@ -37,8 +38,9 @@ void UIStateCashShop::update() {
     for (auto iter : elements_) {
         UIElement *element = iter.second.get();
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->update();
+        }
     }
 }
 
@@ -47,25 +49,23 @@ Cursor::State UIStateCashShop::send_cursor(Cursor::State cursorstate,
     bool clicked = cursorstate == Cursor::State::CLICKING
                    || cursorstate == Cursor::State::VSCROLLIDLE;
 
-    if (auto focusedelement = get(focused_)) {
+    if (auto *focusedelement = get(focused_)) {
         if (focusedelement->is_active()) {
             remove_cursor(focusedelement->get_type());
 
             return focusedelement->send_cursor(clicked, cursorpos);
-        } else {
-            focused_ = UIElement::NONE;
-
-            return cursorstate;
         }
-    } else {
-        if (auto front = get_front()) {
-            remove_cursor(front->get_type());
+        focused_ = UIElement::NONE;
 
-            return front->send_cursor(clicked, cursorpos);
-        } else {
-            return Cursor::State::IDLE;
-        }
+        return cursorstate;
+
     }
+    if (auto *front = get_front()) {
+        remove_cursor(front->get_type());
+
+        return front->send_cursor(clicked, cursorpos);
+    }
+    return Cursor::State::IDLE;
 }
 
 UIState::Iterator UIStateCashShop::pre_add(UIElement::Type type,
@@ -73,15 +73,17 @@ UIState::Iterator UIStateCashShop::pre_add(UIElement::Type type,
                                            bool is_focused) {
     remove(type);
 
-    if (is_focused)
+    if (is_focused) {
         focused_ = type;
+    }
 
     return elements_.find(type);
 }
 
 void UIStateCashShop::remove(UIElement::Type type) {
-    if (focused_ == type)
+    if (focused_ == type) {
         focused_ = UIElement::Type::NONE;
+    }
 
     if (auto &element = elements_[type]) {
         element->deactivate();
@@ -99,8 +101,9 @@ UIElement *UIStateCashShop::get_front() {
     for (auto iter : elements_) {
         auto &element = iter.second;
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             front = element.get();
+        }
     }
 
     return front;
@@ -110,8 +113,9 @@ void UIStateCashShop::remove_cursor(UIElement::Type type) {
     for (auto iter : elements_) {
         auto &element = iter.second;
 
-        if (element && element->is_active() && element->get_type() != type)
+        if (element && element->is_active() && element->get_type() != type) {
             element->remove_cursor();
+        }
     }
 }
 

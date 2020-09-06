@@ -50,9 +50,10 @@ UIOptionMenu::UIOptionMenu() :
     nl::node tab_disabled = tab["disabled"];
     nl::node tab_enabled = tab["enabled"];
 
-    for (size_t i = Buttons::TAB0; i < Buttons::CANCEL; i++)
+    for (size_t i = Buttons::TAB0; i < Buttons::CANCEL; i++) {
         buttons_[i] =
             std::make_unique<TwoSpriteButton>(tab_disabled[i], tab_enabled[i]);
+    }
 
     std::string sButtonUOL =
         graphic["combo:resolution"]["sButtonUOL"].get_string();
@@ -69,8 +70,9 @@ UIOptionMenu::UIOptionMenu() :
     int16_t max_width = Configuration::get().get_max_width();
     int16_t max_height = Configuration::get().get_max_height();
 
-    if (max_width >= 1920 && max_height >= 1200)
+    if (max_width >= 1920 && max_height >= 1200) {
         resolutions.emplace_back("1920 x 1200 ( 16 : 10 ) - Beta");
+    }
 
     uint16_t default_option = 0;
     int16_t screen_width = Constants::Constants::get().get_viewwidth();
@@ -192,16 +194,18 @@ Cursor::State UIOptionMenu::send_cursor(bool clicked,
                                         Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged_)
+    if (dragged_) {
         return dstate;
+    }
 
     auto &button = buttons_[Buttons::SELECT_RES];
 
     if (button->is_pressed()) {
         if (button->in_combobox(cursorpos)) {
             if (Cursor::State new_state =
-                    button->send_cursor(clicked, cursorpos))
+                    button->send_cursor(clicked, cursorpos)) {
                 return new_state;
+            }
         } else {
             remove_cursor();
         }
@@ -212,10 +216,11 @@ Cursor::State UIOptionMenu::send_cursor(bool clicked,
 
 void UIOptionMenu::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
-        if (escape)
+        if (escape) {
             deactivate();
-        else if (keycode == KeyAction::Id::RETURN)
+        } else if (keycode == KeyAction::Id::RETURN) {
             button_pressed(Buttons::OK);
+        }
     }
 }
 

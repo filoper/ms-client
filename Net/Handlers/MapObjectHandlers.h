@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include "../../Character/Buff.h"
 #include "../PacketHandler.h"
 
 namespace ms {
@@ -54,6 +55,33 @@ class ShowForeignEffectHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 
+// Base class for packets which need to parse buff stats
+class ForeignBuffHandler : public PacketHandler {
+public:
+    void handle(InPacket &recv) const override;
+
+protected:
+    virtual void handle_buff(InPacket &recv,
+                             int32_t cid,
+                             Buffstat::Id stat) const = 0;
+};
+
+// Give character a foreign buff
+// Opcode: GIVE_FOREIGN_BUFF(199)
+class GiveForeignBuffHandler : public ForeignBuffHandler {
+    void handle_buff(InPacket &recv,
+                     int32_t cid,
+                     Buffstat::Id stat) const override;
+};
+
+// Cancel a foreign buff on a character
+// Opcode: CANCEL_FOREIGN_BUFF(200)
+class CancelForeignBuffHandler : public ForeignBuffHandler {
+    void handle_buff(InPacket &recv,
+                     int32_t cid,
+                     Buffstat::Id stat) const override;
+};
+
 // Spawn a mob on the stage
 // Opcode: SPAWN_MOB(236)
 class SpawnMobHandler : public PacketHandler {
@@ -81,6 +109,18 @@ class MobMovedHandler : public PacketHandler {
 // Response to a mob move packet
 // Opcode: MOB_MOVE_RESPONSE(240)
 class MobMoveResponseHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
+// Apply mob status
+// Opcode: APPLY_MONSTER_STATUS(242)
+class ApplyMobStatusHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
+// Cancel mob status
+// Opcode: CANCEL_MONSTER_STATUS(243)
+class CancelMobStatusHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 

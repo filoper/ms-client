@@ -21,7 +21,7 @@
 namespace ms {
 class Geometry {
 public:
-    virtual ~Geometry() {}
+    virtual ~Geometry() = default;
 
 protected:
     void draw(int16_t x,
@@ -38,13 +38,13 @@ public:
 
     ColorBox();
 
-    void setwidth(int16_t width);
+    void set_width(int16_t width);
 
-    void setheight(int16_t height);
+    void set_height(int16_t height);
 
     void set_color(Color::Name color);
 
-    void setopacity(float opacity);
+    void set_opacity(float opacity);
 
     void draw(const DrawArgument &args) const;
 
@@ -61,11 +61,11 @@ public:
 
     ColorLine();
 
-    void setwidth(int16_t width);
+    void set_width(int16_t width);
 
     void set_color(Color::Name color);
 
-    void setopacity(float opacity);
+    void set_opacity(float opacity);
 
     void draw(const DrawArgument &args) const;
 

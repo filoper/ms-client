@@ -1,5 +1,5 @@
 //	This file is part of the continued Journey MMORPG client
-//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//	Copyright (C) 2015-2020  Daniel Allendorf, Ryan Payton
 //
 //	This program is free software: you can redistribute it and/or modify
 //	it under the terms of the GNU Affero General Public License as published by
@@ -13,8 +13,12 @@
 //
 //	You should have received a copy of the GNU Affero General Public License
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#include "Game.h"
+
 #include <iostream>
 
+#include "Character/Char.h"
+#include "Constants.h"
 #include "Gameplay/Combat/DamageNumber.h"
 #include "Gameplay/Stage.h"
 #include "IO/UI.h"
@@ -26,22 +30,32 @@
 #include "Util/ScreenResolution.h"
 
 namespace ms {
-Error init() {
-    if (Error error = Session::get().init())
+Game::Game() {
+    HardwareInfo();
+    ScreenResolution();
+}
+
+Error Game::init() {
+    if (Error error = Session::get().init()) {
         return error;
+    }
     std::cout << "Session init success." << std::endl;
-    if (Error error = NxFiles::init())
+    if (Error error = NxFiles::init()) {
         return error;
+    }
     std::cout << "NxFiles init success." << std::endl;
-    if (Error error = Window::get().init())
+    if (Error error = Window::get().init()) {
         return error;
+    }
     std::cout << "Window init success." << std::endl;
     // TODO: (rich) fix
-    if (Error error = Music::init())
+    if (Error error = Music::init()) {
         return error;
+    }
     std::cout << "Music init success." << std::endl;
-    if (Error error = Sound::init())
+    if (Error error = Sound::init()) {
         return error;
+    }
     std::cout << "Sound init success." << std::endl;
 
     Char::init();
@@ -53,7 +67,7 @@ Error init() {
     return Error::NONE;
 }
 
-void update() {
+void Game::update() {
     Window::get().check_events();
     Window::get().update();
     Stage::get().update();
@@ -62,22 +76,22 @@ void update() {
     Music::update_context();
 }
 
-void draw(float alpha) {
+void Game::draw(float alpha) {
     Window::get().begin();
     Stage::get().draw(alpha);
     UI::get().draw(alpha);
     Window::get().end();
 }
 
-bool running() {
+bool Game::is_running() {
     return Session::get().is_connected() && UI::get().not_quitted()
            && Window::get().not_closed();
 }
 
-void loop() {
+void Game::game_loop() {
     Timer::get().start();
 
-    int64_t timestep = Constants::TIMESTEP * 1000;
+    const int64_t timestep = Constants::TIMESTEP * 1000;
     int64_t accumulator = timestep;
 
     int64_t period = 0;
@@ -85,13 +99,14 @@ void loop() {
 
     bool show_fps = Configuration::get().get_show_fps();
 
-    while (running()) {
+    while (is_running()) {
         int64_t elapsed = Timer::get().stop();
 
         // Update game with constant timestep as many times as possible.
         for (accumulator += elapsed; accumulator >= timestep;
-             accumulator -= timestep)
+             accumulator -= timestep) {
             update();
+        }
 
         // Draw the game. Interpolate to account for remaining time.
         float alpha = static_cast<float>(accumulator) / timestep;
@@ -115,36 +130,28 @@ void loop() {
     Sound::close();
 }
 
-void start() {
+void Game::start() {
     // Initialize and check for errors
     if (Error error = init()) {
-        const char *message = error.get_message();
-        const char *args = error.get_args();
+        auto message = error.get_message();
+        auto details = error.get_details();
         bool can_retry = error.can_retry();
 
         std::cout << "Error: " << message << std::endl;
+        std::cout << "Message: " << details << std::endl;
 
-        if (args && args[0])
-            std::cout << "Message: " << args << std::endl;
-
-        if (can_retry)
+        if (can_retry) {
             std::cout << "Enter 'retry' to try again." << std::endl;
+        }
 
         std::string command;
         std::cin >> command;
 
-        if (can_retry && command == "retry")
+        if (can_retry && command == "retry") {
             start();
+        }
     } else {
-        loop();
+        game_loop();
     }
 }
 }  // namespace ms
-
-int main() {
-    ms::HardwareInfo();
-    ms::ScreenResolution();
-    ms::start();
-
-    return 0;
-}

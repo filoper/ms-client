@@ -18,7 +18,11 @@
 #include "../Packets/CommonPackets.h"
 
 namespace ms {
+auto fn_pong = []<typename... T>(T && ... args) {
+    PongPacket(std::forward<T>(args)...).dispatch();
+};
+
 void PingHandler::handle(InPacket &) const {
-    PongPacket().dispatch();
+    fn_pong();
 }
 }  // namespace ms

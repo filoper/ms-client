@@ -33,15 +33,22 @@ EquipQuality::Id EquipQuality::check_quality(
         delta += stat - defstat;
     }
 
-    if (delta < -5)
+    if (delta < -5) {
         return scrolled ? EquipQuality::Id::ORANGE : EquipQuality::Id::GREY;
-    else if (delta < 7)
+    }
+
+    if (delta < 7) {
         return scrolled ? EquipQuality::Id::ORANGE : EquipQuality::Id::WHITE;
-    else if (delta < 14)
+    }
+
+    if (delta < 14) {
         return EquipQuality::Id::BLUE;
-    else if (delta < 21)
+    }
+
+    if (delta < 21) {
         return EquipQuality::Id::VIOLET;
-    else
-        return EquipQuality::Id::GOLD;
+    }
+
+    return EquipQuality::Id::GOLD;
 }
 }  // namespace ms

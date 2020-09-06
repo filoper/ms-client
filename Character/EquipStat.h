@@ -19,8 +19,7 @@
 
 #include "../Template/Enumeration.h"
 
-namespace ms {
-namespace EquipStat {
+namespace ms::EquipStat {
 enum Id {
     STR,
     DEX,
@@ -46,5 +45,4 @@ int32_t value_of(Id value);
 
 constexpr Enumeration<Id> values;
 extern const char *names[Id::LENGTH];
-}  // namespace EquipStat
-}  // namespace ms
+}  // namespace ms::EquipStat

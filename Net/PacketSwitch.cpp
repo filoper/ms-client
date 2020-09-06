@@ -15,8 +15,6 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "PacketSwitch.h"
 
-#include <string_view>
-
 #include "../Configuration.h"
 #include "Handlers/AttackHandlers.h"
 #include "Handlers/CashShopHandlers.h"
@@ -405,6 +403,8 @@ enum Opcode : uint16_t {
 
     UPDATE_CHARLOOK = 197,
     SHOW_FOREIGN_EFFECT = 198,
+    GIVE_FOREIGN_BUFF = 199,
+    CANCEL_FOREIGN_BUFF = 200,
     SHOW_ITEM_GAIN_INCHAT = 206,  // TODO: Rename this (Terribly named)
 
     /// Player
@@ -416,6 +416,8 @@ enum Opcode : uint16_t {
     SPAWN_MOB_C = 238,
     MOB_MOVED = 239,
     MOB_MOVE_RESPONSE = 240,
+    APPLY_MONSTER_STATUS = 242,
+    CANCEL_MONSTER_STATUS = 243,
     SHOW_MOB_HP = 250,
     SPAWN_NPC = 257,
     SPAWN_NPC_C = 259,
@@ -461,6 +463,8 @@ PacketSwitch::PacketSwitch() {
     emplace<CHAR_MOVED, CharMovedHandler>();
     emplace<UPDATE_CHARLOOK, UpdateCharLookHandler>();
     emplace<SHOW_FOREIGN_EFFECT, ShowForeignEffectHandler>();
+    emplace<GIVE_FOREIGN_BUFF, GiveForeignBuffHandler>();
+    emplace<CANCEL_FOREIGN_BUFF, CancelForeignBuffHandler>();
     emplace<REMOVE_CHAR, RemoveCharHandler>();
     emplace<SPAWN_PET, SpawnPetHandler>();
     emplace<SPAWN_NPC, SpawnNpcHandler>();
@@ -469,6 +473,8 @@ PacketSwitch::PacketSwitch() {
     emplace<SPAWN_MOB_C, SpawnMobControllerHandler>();
     emplace<MOB_MOVED, MobMovedHandler>();
     emplace<MOB_MOVE_RESPONSE, MobMoveResponseHandler>();
+    emplace<APPLY_MONSTER_STATUS, ApplyMobStatusHandler>();
+    emplace<CANCEL_MONSTER_STATUS, CancelMobStatusHandler>();
     emplace<SHOW_MOB_HP, ShowMobHpHandler>();
     emplace<KILL_MOB, KillMobHandler>();
     emplace<DROP_LOOT, DropLootHandler>();
@@ -521,12 +527,12 @@ PacketSwitch::PacketSwitch() {
     emplace<FIELD_EFFECT, FieldEffectHandler>();
 }
 
-void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
+void PacketSwitch::forward(int8_t *bytes, size_t length) const {
     // Wrap the bytes with a parser
     InPacket recv = { bytes, length };
 
     // Read the opcode to determine handler responsible
-    uint16_t opcode = recv.read_short();
+    uint16_t opcode = recv.read_ushort();
 
     if (Configuration::get().get_show_packets()) {
         if (opcode == PING) {
@@ -558,11 +564,11 @@ void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
         }
     } else {
         // Warn about a packet with opcode out of bounds
-        warn(MSG_OUTOFBOUNDS, opcode);
+        warn(MSG_OUT_OF_BOUNDS, opcode);
     }
 }
 
-void PacketSwitch::warn(const std::string &message, size_t opcode) const {
+void PacketSwitch::warn(std::string_view message, size_t opcode) const {
     std::cout << "Opcode [" << opcode << "] Error: " << message << std::endl;
 }
 }  // namespace ms

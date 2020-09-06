@@ -18,7 +18,7 @@ Download and install the following:
 
 * **Ninja v1.9.0+**
 
-* **C++ Compiler** - needs to support at least the **C++17** standard, i.e. *MSVC*,
+* **C++ Compiler** - needs to support at least the **C++20** standard, i.e. *MSVC*,
 *GCC*, *Clang*
 
 * **Homebrew (Mac OS ONLY)** - found at [https://brew.sh/](https://brew.sh/)

@@ -24,7 +24,7 @@ FootholdTree::FootholdTree(nl::node src) {
     int16_t botb = -30000;
     int16_t topb = 30000;
 
-    for (auto basef : src) {
+    for (const auto &basef : src) {
         uint8_t layer;
 
         try {
@@ -34,7 +34,7 @@ FootholdTree::FootholdTree(nl::node src) {
             continue;
         }
 
-        for (auto midf : basef) {
+        for (const auto &midf : basef) {
             for (auto lastf : midf) {
                 uint16_t id;
 
@@ -52,26 +52,32 @@ FootholdTree::FootholdTree(nl::node src) {
                                  std::forward_as_tuple(lastf, id, layer))
                         .first->second;
 
-                if (foothold.l() < leftw)
+                if (foothold.l() < leftw) {
                     leftw = foothold.l();
+                }
 
-                if (foothold.r() > rightw)
+                if (foothold.r() > rightw) {
                     rightw = foothold.r();
+                }
 
-                if (foothold.b() > botb)
+                if (foothold.b() > botb) {
                     botb = foothold.b();
+                }
 
-                if (foothold.t() < topb)
+                if (foothold.t() < topb) {
                     topb = foothold.t();
+                }
 
-                if (foothold.is_wall())
+                if (foothold.is_wall()) {
                     continue;
+                }
 
                 int16_t start = foothold.l();
                 int16_t end = foothold.r();
 
-                for (int16_t i = start; i <= end; i++)
+                for (int16_t i = start; i <= end; i++) {
                     footholds_by_x_.emplace(i, id);
+                }
             }
         }
     }
@@ -119,17 +125,19 @@ void FootholdTree::limit_movement(PhysicsObject &phobj) const {
 
             limit_movement(phobj);
         } else {
-            if (next_y < borders_.first())
+            if (next_y < borders_.first()) {
                 phobj.limity(borders_.first());
-            else if (next_y > borders_.second())
+            } else if (next_y > borders_.second()) {
                 phobj.limity(borders_.second());
+            }
         }
     }
 }
 
 void FootholdTree::update_fh(PhysicsObject &phobj) const {
-    if (phobj.type == PhysicsObject::Type::FIXATED && phobj.fhid > 0)
+    if (phobj.type == PhysicsObject::Type::FIXATED && phobj.fhid > 0) {
         return;
+    }
 
     const Foothold &curfh = get_fh(phobj.fhid);
     bool checkslope = false;
@@ -138,19 +146,24 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
     double y = phobj.crnt_y();
 
     if (phobj.onground) {
-        if (std::floor(x) > curfh.r())
+        if (std::floor(x) > curfh.r()) {
             phobj.fhid = curfh.next();
-        else if (std::ceil(x) < curfh.l())
+        } else if (std::ceil(x) < curfh.l()) {
             phobj.fhid = curfh.prev();
+        }
 
-        if (phobj.fhid == 0)
+        if (phobj.fhid == 0) {
             phobj.fhid = get_fhid_below(x, y);
-        else
+        } else {
             checkslope = true;
+        }
     } else {
         phobj.fhid = get_fhid_below(x, y);
-        if (phobj.fhid == 0)  // fix for stuttering slope walk
+
+        // fix for stuttering slope walk
+        if (phobj.fhid == 0) {
             return;
+        }
     }
 
     const Foothold &nextfh = get_fh(phobj.fhid);
@@ -161,16 +174,18 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
     if (phobj.vspeed == 0.0 && checkslope) {
         double vdelta = abs(phobj.fhslope);
 
-        if (phobj.fhslope < 0.0)
+        if (phobj.fhslope < 0.0) {
             vdelta *= (ground - y);
-        else if (phobj.fhslope > 0.0)
+        } else if (phobj.fhslope > 0.0) {
             vdelta *= (y - ground);
+        }
 
         if (curfh.slope() != 0.0 || nextfh.slope() != 0.0) {
-            if (phobj.hspeed > 0.0 && vdelta <= phobj.hspeed)
+            if (phobj.hspeed > 0.0 && vdelta <= phobj.hspeed) {
                 phobj.y = ground;
-            else if (phobj.hspeed < 0.0 && vdelta >= phobj.hspeed)
+            } else if (phobj.hspeed < 0.0 && vdelta >= phobj.hspeed) {
                 phobj.y = ground;
+            }
         }
     }
 
@@ -190,8 +205,9 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
         phobj.clear_flag(PhysicsObject::Flag::CHECKBELOW);
     }
 
-    if (phobj.fhlayer == 0 || phobj.onground)
+    if (phobj.fhlayer == 0 || phobj.onground) {
         phobj.fhlayer = nextfh.layer();
+    }
 
     if (phobj.fhid == 0) {
         phobj.fhid = curfh.id();
@@ -202,8 +218,9 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
 const Foothold &FootholdTree::get_fh(uint16_t fhid) const {
     auto iter = footholds_.find(fhid);
 
-    if (iter == footholds_.end())
+    if (iter == footholds_.end()) {
         return null_fh_;
+    }
 
     return iter->second;
 }
@@ -216,28 +233,32 @@ double FootholdTree::get_wall(uint16_t curid, bool left, double fy) const {
     if (left) {
         const Foothold &prev = get_fh(cur.prev());
 
-        if (prev.is_blocking(vertical))
+        if (prev.is_blocking(vertical)) {
             return cur.l();
+        }
 
         const Foothold &prev_prev = get_fh(prev.prev());
 
-        if (prev_prev.is_blocking(vertical))
+        if (prev_prev.is_blocking(vertical)) {
             return prev.l();
+        }
 
         return walls_.first();
-    } else {
-        const Foothold &next = get_fh(cur.next());
-
-        if (next.is_blocking(vertical))
-            return cur.r();
-
-        const Foothold &next_next = get_fh(next.next());
-
-        if (next_next.is_blocking(vertical))
-            return next.r();
-
-        return walls_.second();
     }
+
+    const Foothold &next = get_fh(cur.next());
+
+    if (next.is_blocking(vertical)) {
+        return cur.r();
+    }
+
+    const Foothold &next_next = get_fh(next.next());
+
+    if (next_next.is_blocking(vertical)) {
+        return next.r();
+    }
+
+    return walls_.second();
 }
 
 double FootholdTree::get_edge(uint16_t curid, bool left) const {
@@ -246,37 +267,41 @@ double FootholdTree::get_edge(uint16_t curid, bool left) const {
     if (left) {
         uint16_t previd = fh.prev();
 
-        if (!previd)
+        if (!previd) {
             return fh.l();
+        }
 
         const Foothold &prev = get_fh(previd);
         uint16_t prev_previd = prev.prev();
 
-        if (!prev_previd)
+        if (!prev_previd) {
             return prev.l();
+        }
 
         return walls_.first();
-    } else {
-        uint16_t nextid = fh.next();
-
-        if (!nextid)
-            return fh.r();
-
-        const Foothold &next = get_fh(nextid);
-        uint16_t next_nextid = next.next();
-
-        if (!next_nextid)
-            return next.r();
-
-        return walls_.second();
     }
+
+    uint16_t nextid = fh.next();
+
+    if (!nextid) {
+        return fh.r();
+    }
+
+    const Foothold &next = get_fh(nextid);
+    uint16_t next_nextid = next.next();
+
+    if (!next_nextid) {
+        return next.r();
+    }
+
+    return walls_.second();
 }
 
 uint16_t FootholdTree::get_fhid_below(double fx, double fy) const {
     uint16_t ret = 0;
     double comp = borders_.second();
 
-    int16_t x = static_cast<int16_t>(fx);
+    auto x = static_cast<int16_t>(fx);
     auto range = footholds_by_x_.equal_range(x);
 
     for (auto iter = range.first; iter != range.second; ++iter) {
@@ -297,9 +322,9 @@ int16_t FootholdTree::get_y_below(Point<int16_t> position) const {
         const Foothold &fh = get_fh(fhid);
 
         return static_cast<int16_t>(fh.ground_below(position.x()));
-    } else {
-        return borders_.second();
     }
+
+    return borders_.second();
 }
 
 Range<int16_t> FootholdTree::get_walls() const {

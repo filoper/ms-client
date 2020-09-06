@@ -29,8 +29,9 @@ void Button::set_position(Point<int16_t> pos) {
 }
 
 void Button::set_state(State s) {
-    if (s == Button::State::IDENTITY)
+    if (s == Button::State::IDENTITY) {
         return;
+    }
 
     state_ = s;
 }

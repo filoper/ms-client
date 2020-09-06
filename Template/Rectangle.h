@@ -22,10 +22,11 @@ namespace ms {
 template<class T>
 class Rectangle {
 public:
-    Rectangle(nl::node sourceLeftTop, nl::node sourceRightBottom) :
+    Rectangle(const nl::node &sourceLeftTop,
+              const nl::node &sourceRightBottom) :
         left_top_(sourceLeftTop),
         right_bottom_(sourceRightBottom) {}
-    Rectangle(nl::node source) :
+    Rectangle(const nl::node &source) :
         left_top_(source["lt"]),
         right_bottom_(source["rb"]) {}
 
@@ -35,7 +36,7 @@ public:
     constexpr Rectangle(T left, T right, T top, T bottom) :
         left_top_(left, top),
         right_bottom_(right, bottom) {}
-    constexpr Rectangle() {}
+    constexpr Rectangle() = default;
 
     constexpr T width() const { return std::abs(left() - right()); }
 

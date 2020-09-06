@@ -37,8 +37,9 @@ MapTooltip::MapTooltip() :
 }
 
 void MapTooltip::draw(Point<int16_t> pos) const {
-    if (name_label_.empty())
+    if (name_label_.empty()) {
         return;
+    }
 
     int16_t max_width = Constants::Constants::get().get_viewwidth();
     int16_t max_height = Constants::Constants::get().get_viewheight();
@@ -55,20 +56,23 @@ void MapTooltip::draw(Point<int16_t> pos) const {
             int16_t adj_x = cur_width - max_width;
             int16_t adj_y = cur_height - max_height;
 
-            if (adj_x > 0)
+            if (adj_x > 0) {
                 pos.shift_x(adj_x * -1);
+            }
 
-            if (adj_y > 0)
+            if (adj_y > 0) {
                 pos.shift_y(adj_y * -1);
+            }
 
             frame_.draw(pos + Point<int16_t>(new_width / 2 + 2, new_height - 7),
                         new_width - 14,
                         new_height - 18);
 
-            if (new_height > 18)
+            if (new_height > 18) {
                 name_simple_.draw(pos);
-            else
+            } else {
                 name_simple_.draw(pos + Point<int16_t>(1, -3));
+            }
         } else {
             int16_t name_width = name_label_.width();
             int16_t name_height = name_label_.height();
@@ -85,11 +89,13 @@ void MapTooltip::draw(Point<int16_t> pos) const {
             int16_t adj_x = cur_width - max_width;
             int16_t adj_y = cur_height - max_height;
 
-            if (adj_x > 0)
+            if (adj_x > 0) {
                 pos.shift_x(adj_x * -1);
+            }
 
-            if (adj_y > 0)
+            if (adj_y > 0) {
                 pos.shift_y(adj_y * -1);
+            }
 
             int16_t half_width = new_width / 2;
 
@@ -113,11 +119,13 @@ void MapTooltip::draw(Point<int16_t> pos) const {
         int16_t adj_x = cur_width - max_width;
         int16_t adj_y = cur_height - max_height;
 
-        if (adj_x > 0)
+        if (adj_x > 0) {
             pos.shift_x(adj_x * -1);
+        }
 
-        if (adj_y > 0)
+        if (adj_y > 0) {
             pos.shift_y(adj_y * -1);
+        }
 
         int16_t half_width = fill_width_ / 2;
 
@@ -148,8 +156,9 @@ void MapTooltip::draw(Point<int16_t> pos) const {
                 if (!mob_labels_[i].empty()) {
                     mob_labels_[i].draw(pos + LIFE_LABEL_ADJ);
 
-                    if (i == 0)
+                    if (i == 0) {
                         mob_.draw(pos + LIFE_ICON_ADJ);
+                    }
 
                     pos.shift_y(mob_labels_[i].height());
                 }
@@ -165,8 +174,9 @@ void MapTooltip::draw(Point<int16_t> pos) const {
                 if (!npc_labels_[i].empty()) {
                     npc_labels_[i].draw(pos + LIFE_LABEL_ADJ);
 
-                    if (i == 0)
+                    if (i == 0) {
                         npc_.draw(pos + LIFE_ICON_ADJ);
+                    }
 
                     pos.shift_y(npc_labels_[i].height());
                 }
@@ -176,16 +186,18 @@ void MapTooltip::draw(Point<int16_t> pos) const {
 }
 
 void MapTooltip::set_name(Tooltip::Parent p, std::string n, bool bolded) {
-    if (name_ == n || parent_ == p)
+    if (name_ == n || parent_ == p) {
         return;
+    }
 
     name_ = n;
     parent_ = p;
 
     if (name_.empty()
         || (parent_ != Tooltip::Parent::WORLDMAP
-            && parent_ != Tooltip::Parent::MINIMAP))
+            && parent_ != Tooltip::Parent::MINIMAP)) {
         return;
+    }
 
     name_label_ = Text(bolded ? Text::Font::A12B : Text::Font::A12M,
                        Text::Alignment::CENTER,
@@ -199,23 +211,27 @@ void MapTooltip::set_name(Tooltip::Parent p, std::string n, bool bolded) {
     int16_t width = name_label_.width();
     int16_t height = name_label_.height();
 
-    if (width > fill_width_)
+    if (width > fill_width_) {
         fill_width_ = width;
+    }
 
     separator_ = ColorLine(fill_width_ - 6, Color::Name::WHITE, 0.40f);
 
-    if (height > fill_height_)
+    if (height > fill_height_) {
         fill_height_ = height;
+    }
 }
 
 void MapTooltip::set_desc(std::string d) {
-    if (description_ == d)
+    if (description_ == d) {
         return;
+    }
 
     description_ = d;
 
-    if (description_.empty())
+    if (description_.empty()) {
         return;
+    }
 
     desc_label_ = Text(Text::Font::A12M,
                        Text::Alignment::LEFT,
@@ -248,7 +264,7 @@ void MapTooltip::set_mapid(int32_t mapid) {
     size_t n = 0;
     auto life = NxHelper::Map::get_life_on_map(mapid);
 
-    for (auto l : life) {
+    for (const auto &l : life) {
         auto life_object = l.second;
 
         if (life_object.first == "m" && m < MAX_LIFE) {
@@ -268,9 +284,11 @@ void MapTooltip::set_mapid(int32_t mapid) {
         }
     }
 
-    if (desc_label_.empty())
-        if (mob_labels_->length() > 0 || npc_labels_->length() > 0)
+    if (desc_label_.empty()) {
+        if (mob_labels_->length() > 0 || npc_labels_->length() > 0) {
             fill_height_ += BOTTOM_PADDING;
+        }
+    }
 }
 
 void MapTooltip::reset() {

@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "../Template/EnumMap.h"
+#include "../Template/Optional.h"
 #include "Components/TextTooltip.h"
 #include "UIState.h"
 
@@ -62,7 +63,11 @@ public:
 
     void show_text(Tooltip::Parent parent, std::string text) override;
 
-    void show_map(Tooltip::Parent, std::string, std::string, int32_t, bool) {}
+    void show_map(Tooltip::Parent,
+                  std::string,
+                  std::string,
+                  int32_t,
+                  bool) override {}
 
     Iterator pre_add(UIElement::Type type, bool toggled, bool focused) override;
 

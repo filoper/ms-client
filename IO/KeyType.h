@@ -17,8 +17,7 @@
 
 #include <cstdint>
 
-namespace ms {
-namespace KeyType {
+namespace ms::KeyType {
 // Keytypes determine how a keycode is interpreted.
 enum Id {
     NONE = 0,
@@ -33,11 +32,11 @@ enum Id {
     LENGTH
 };
 
-inline Id typebyid(uint8_t id) {
-    if (id <= Id::NONE || id >= Id::LENGTH)
+inline Id get_type_by_id(uint8_t id) {
+    if (id <= Id::NONE || id >= Id::LENGTH) {
         return Id::NONE;
+    }
 
     return static_cast<Id>(id);
 }
-}  // namespace KeyType
-}  // namespace ms
+}  // namespace ms::KeyType

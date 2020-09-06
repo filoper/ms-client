@@ -22,12 +22,13 @@
 
 namespace ms {
 MapPortals::MapPortals(nl::node src, int32_t mapid) {
-    for (auto sub : src) {
+    for (const auto &sub : src) {
         int8_t portal_id =
             string_conversion::or_default<int8_t>(sub.name(), -1);
 
-        if (portal_id < 0)
+        if (portal_id < 0) {
             continue;
+        }
 
         Portal::Type type = Portal::typebyid(sub["pt"]);
         std::string name = sub["pn"];
@@ -70,13 +71,15 @@ void MapPortals::update(Point<int16_t> playerpos) {
         }
     }
 
-    if (cooldown_ > 0)
+    if (cooldown_ > 0) {
         cooldown_--;
+    }
 }
 
 void MapPortals::draw(Point<int16_t> viewpos, float inter) const {
-    for (auto &ptit : portals_by_id_)
+    for (const auto &ptit : portals_by_id_) {
         ptit.second.draw(viewpos, inter);
+    }
 }
 
 Point<int16_t> MapPortals::get_portal_by_id(uint8_t portal_id) const {
@@ -86,19 +89,18 @@ Point<int16_t> MapPortals::get_portal_by_id(uint8_t portal_id) const {
         constexpr Point<int16_t> ABOVE(0, 30);
 
         return iter->second.get_position() - ABOVE;
-    } else {
-        return {};
     }
+    return {};
 }
 
 Point<int16_t> MapPortals::get_portal_by_name(
     const std::string &portal_name) const {
     auto iter = portal_ids_by_name_.find(portal_name);
 
-    if (iter != portal_ids_by_name_.end())
+    if (iter != portal_ids_by_name_.end()) {
         return get_portal_by_id(iter->second);
-    else
-        return {};
+    }
+    return {};
 }
 
 Portal::WarpInfo MapPortals::find_warp_at(Point<int16_t> playerpos) {
@@ -108,8 +110,9 @@ Portal::WarpInfo MapPortals::find_warp_at(Point<int16_t> playerpos) {
         for (auto &iter : portals_by_id_) {
             const Portal &portal = iter.second;
 
-            if (portal.bounds().contains(playerpos))
+            if (portal.bounds().contains(playerpos)) {
                 return portal.getwarpinfo();
+            }
         }
     }
 

@@ -61,12 +61,15 @@ void ChangeStatsHandler::handle(InPacket &recv) const {
 
     bool recalculate = false;
 
-    for (auto iter : MapleStat::codes)
-        if (updatemask & iter.second)
+    for (auto iter : MapleStat::codes) {
+        if (updatemask & iter.second) {
             recalculate |= handle_stat(iter.first, recv);
+        }
+    }
 
-    if (recalculate)
+    if (recalculate) {
         Stage::get().get_player().recalc_stats(false);
+    }
 
     UI::get().enable();
 }
@@ -100,17 +103,20 @@ bool ChangeStatsHandler::handle_stat(MapleStat::Id stat, InPacket &recv) const {
 
     bool update_statsinfo = need_statsinfo_update(stat);
 
-    if (update_statsinfo && !recalculate)
-        if (auto statsinfo = UI::get().get_element<UIStatsInfo>())
+    if (update_statsinfo && !recalculate) {
+        if (auto statsinfo = UI::get().get_element<UIStatsInfo>()) {
             statsinfo->update_stat(stat);
+        }
+    }
 
     bool update_skillbook = need_skillbook_update(stat);
 
     if (update_skillbook) {
         int16_t value = player.get_stats().get_stat(stat);
 
-        if (auto skillbook = UI::get().get_element<UISkillBook>())
+        if (auto skillbook = UI::get().get_element<UISkillBook>()) {
             skillbook->update_stat(stat, value);
+        }
     }
 
     return recalculate;
@@ -150,26 +156,44 @@ void BuffHandler::handle(InPacket &recv) const {
             return;
     }
 
-    for (const auto &iter : Buffstat::first_codes)
-        if (firstmask & iter.second)
-            handle_buff(recv, iter.first);
+    for (const auto &[buff_id, mask] : Buffstat::first_codes) {
+        if (firstmask & mask) {
+            handle_buff(recv, buff_id);
+        }
+    }
 
-    for (const auto &iter : Buffstat::second_codes)
-        if (secondmask & iter.second)
-            handle_buff(recv, iter.first);
+    for (const auto &[buff_id, mask] : Buffstat::second_codes) {
+        if (secondmask & mask) {
+            handle_buff(recv, buff_id);
+        }
+    }
 
     Stage::get().get_player().recalc_stats(false);
 }
 
 void ApplyBuffHandler::handle_buff(InPacket &recv, Buffstat::Id bs) const {
-    int16_t value = recv.read_short();
-    int32_t skillid = recv.read_int();
-    int32_t duration = recv.read_int();
+    if (Buffstat::is_disease(bs)) {
+        int16_t value = recv.read_short();
+        int16_t skillid = recv.read_short();
+        int16_t skill_level = recv.read_short();
+        int32_t duration = recv.read_int();
 
-    Stage::get().get_player().give_buff({ bs, value, skillid, duration });
+        if (!Stage::get().get_player().has_buff(bs)) {
+            Stage::get().get_combat().show_player_disease(skillid, skill_level);
+        }
 
-    if (auto bufflist = UI::get().get_element<UIBuffList>())
-        bufflist->add_buff(skillid, duration);
+        Stage::get().get_player().give_buff({ bs, value, skillid, duration });
+    } else {
+        int16_t value = recv.read_short();
+        int32_t skillid = recv.read_int();
+        int32_t duration = recv.read_int();
+
+        Stage::get().get_player().give_buff({ bs, value, skillid, duration });
+
+        if (auto bufflist = UI::get().get_element<UIBuffList>()) {
+            bufflist->add_buff(skillid, duration);
+        }
+    }
 }
 
 void CancelBuffHandler::handle_buff(InPacket &, Buffstat::Id bs) const {
@@ -190,8 +214,9 @@ void UpdateSkillHandler::handle(InPacket &recv) const {
 
     Stage::get().get_player().change_skill(skillid, level, masterlevel, expire);
 
-    if (auto skillbook = UI::get().get_element<UISkillBook>())
+    if (auto skillbook = UI::get().get_element<UISkillBook>()) {
         skillbook->update_skills(skillid);
+    }
 
     UI::get().enable();
 }

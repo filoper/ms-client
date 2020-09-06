@@ -33,22 +33,25 @@ void SkillTooltip::set_skill(int32_t id,
                              int32_t level,
                              int32_t mlevel,
                              int64_t expiration) {
-    if (skill_id_ == id)
+    if (skill_id_ == id) {
         return;
+    }
 
     skill_id_ = id;
 
-    if (skill_id_ == 0)
+    if (skill_id_ == 0) {
         return;
+    }
 
     const SkillData &data = SkillData::get(id);
 
     int32_t masterlevel;
 
-    if (mlevel > 0)
+    if (mlevel > 0) {
         masterlevel = mlevel;
-    else
+    } else {
         masterlevel = data.get_masterlevel();
+    }
 
     std::string descstr = data.get_desc();
 
@@ -72,8 +75,9 @@ void SkillTooltip::set_skill(int32_t id,
 
             size_t linebreak = descstr.find("]\\n", mlstart);
 
-            if (linebreak != mlend)
+            if (linebreak != mlend) {
                 descstr.insert(mlend + 1, "\\n");
+            }
         } else {
             descstr.insert(0, "[" + mltag + ": " + mlstr + "]\\n");
         }
@@ -97,16 +101,19 @@ void SkillTooltip::set_skill(int32_t id,
     bool current = level > 0;
     bool next = level < masterlevel;
 
-    if (current)
+    if (current) {
         levelstr += "[Current Level: " + std::to_string(level) + "]\\n"
                     + data.get_level_desc(level);
+    }
 
-    if (current && next)
+    if (current && next) {
         levelstr += "\\n";
+    }
 
-    if (next)
+    if (next) {
         levelstr += "[Next Level: " + std::to_string(level + 1) + "]\\n"
                     + data.get_level_desc(level + 1);
+    }
 
     icon_ = data.get_icon(SkillData::Icon::NORMAL);
     name_ = Text(Text::Font::A12B,
@@ -139,8 +146,9 @@ void SkillTooltip::set_skill(int32_t id,
 }
 
 void SkillTooltip::draw(Point<int16_t> pos) const {
-    if (skill_id_ == 0)
+    if (skill_id_ == 0) {
         return;
+    }
 
     int16_t max_width = Constants::Constants::get().get_viewwidth();
     int16_t max_height = Constants::Constants::get().get_viewheight();
@@ -150,11 +158,13 @@ void SkillTooltip::draw(Point<int16_t> pos) const {
     int16_t adj_x = cur_width - max_width;
     int16_t adj_y = cur_height - max_height;
 
-    if (adj_x > 0)
+    if (adj_x > 0) {
         pos.shift_x(adj_x * -1);
+    }
 
-    if (adj_y > 0)
+    if (adj_y > 0) {
         pos.shift_y(adj_y * -1);
+    }
 
     frame_.draw(pos + Point<int16_t>(176, height_ + 11), width_, height_ - 1);
     name_.draw(pos + Point<int16_t>(33, 3));

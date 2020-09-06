@@ -28,15 +28,17 @@ Cursor::Cursor() {
 void Cursor::init() {
     nl::node src = nl::nx::ui["Basic.img"]["Cursor"];
 
-    for (auto iter : animations_)
+    for (auto iter : animations_) {
         iter.second = src[iter.first];
+    }
 }
 
 void Cursor::draw(float alpha) const {
     constexpr int64_t HIDE_AFTER = HIDE_TIME / Constants::TIMESTEP;
 
-    if (hide_counter_ < HIDE_AFTER)
+    if (hide_counter_ < HIDE_AFTER) {
         animations_[state_].draw(position_, alpha);
+    }
 }
 
 void Cursor::update() {

@@ -30,7 +30,7 @@ public:
                              std::unique_ptr<UIElement>,
                              UIElement::Type::NUM_TYPES>::iterator;
 
-    virtual ~UIState() {}
+    virtual ~UIState() = default;
 
     virtual void draw(float inter, Point<int16_t> cursor) const = 0;
 
@@ -96,7 +96,7 @@ class UIStateNull : public UIState {
     Cursor::State send_cursor(Cursor::State, Point<int16_t>) override {
         return Cursor::State::IDLE;
     }
-    void send_scroll(double yoffset) override {}
+    void send_scroll(double) override {}
     void send_close() override {}
     void drag_icon(Icon *) override {}
     void clear_tooltip(Tooltip::Parent) override {}

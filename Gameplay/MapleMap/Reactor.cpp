@@ -32,10 +32,13 @@ Reactor::Reactor(int32_t o, int32_t r, int8_t s, Point<int16_t> p) :
     dead_ = false;
     hit_table_ = false;
 
-    for (auto sub : src_[0])
-        if (sub.name() == "event")
-            if (sub["0"]["type"].get_integer() == 0)
+    for (const auto &sub : src_[0]) {
+        if (sub.name() == "event") {
+            if (sub["0"]["type"].get_integer() == 0) {
                 hit_table_ = true;
+            }
+        }
+    }
 }
 
 void Reactor::draw(double viewx, double viewy, float alpha) const {
@@ -53,11 +56,13 @@ void Reactor::draw(double viewx, double viewy, float alpha) const {
 int8_t Reactor::update(const Physics &physics) {
     physics.move_object(phobj_);
 
-    if (!animation_ended_)
+    if (!animation_ended_) {
         animation_ended_ = animations_.at(state_ - 1).update();
+    }
 
-    if (animation_ended_ && dead_)
+    if (animation_ended_ && dead_) {
         deactivate();
+    }
 
     return phobj_.fhlayer;
 }
@@ -84,8 +89,9 @@ bool Reactor::is_hittable() const {
 }
 
 bool Reactor::is_in_range(const Rectangle<int16_t> &range) const {
-    if (!active_)
+    if (!active_) {
         return false;
+    }
 
     Rectangle<int16_t> bounds(
         Point<int16_t>(-30, -normal_.get_dimensions().y()),

@@ -18,31 +18,33 @@
 #include "../Configuration.h"
 
 namespace ms {
-Session::Session() : connected_(false), length_(0), pos_(0) {}
+Session::Session() : length_(0), pos_(0), is_connected_(false) {}
 
 Session::~Session() {
-    if (connected_)
+    if (is_connected_) {
         socket_.close();
+    }
 }
 
 bool Session::init(const char *host, const char *port) {
     // Connect to the server
-    connected_ = socket_.open(host, port);
+    is_connected_ = socket_.open(host, port);
 
-    if (connected_) {
+    if (is_connected_) {
         // Read keys necessary for communicating with the server
         cryptography_ = { socket_.get_buffer() };
     }
 
-    return connected_;
+    return is_connected_;
 }
 
 Error Session::init() {
     std::string HOST = Setting<ServerIP>::get().load();
     std::string PORT = Setting<ServerPort>::get().load();
 
-    if (!init(HOST.c_str(), PORT.c_str()))
+    if (!init(HOST.c_str(), PORT.c_str())) {
         return Error::CONNECTION;
+    }
 
     return Error::NONE;
 }
@@ -51,10 +53,11 @@ void Session::reconnect(const char *address, const char *port) {
     // Close the current connection and open a new one
     bool success = socket_.close();
 
-    if (success)
+    if (success) {
         init(address, port);
-    else
-        connected_ = false;
+    } else {
+        is_connected_ = false;
+    }
 }
 
 void Session::process(const int8_t *bytes, size_t available) {
@@ -71,8 +74,9 @@ void Session::process(const int8_t *bytes, size_t available) {
     // Determine how much we can write. Write data into the buffer.
     size_t towrite = length_ - pos_;
 
-    if (towrite > available)
+    if (towrite > available) {
         towrite = available;
+    }
 
     memcpy(buffer_ + pos_, bytes, towrite);
     pos_ += towrite;
@@ -101,8 +105,9 @@ void Session::process(const int8_t *bytes, size_t available) {
 }
 
 void Session::write(int8_t *packet_bytes, size_t packet_length) {
-    if (!connected_)
+    if (!is_connected_) {
         return;
+    }
 
     int8_t header[HEADER_LENGTH];
     cryptography_.create_header(header, packet_length);
@@ -115,7 +120,7 @@ void Session::write(int8_t *packet_bytes, size_t packet_length) {
 void Session::read() {
     // Check if a packet has arrived. Handle if data is sufficient: 4 bytes
     // (header) + 2 bytes (opcode) = 6 bytes.
-    size_t result = socket_.receive(&connected_);
+    size_t result = socket_.receive(&is_connected_);
 
     if (result >= MIN_PACKET_LENGTH || length_ > 0) {
         // Retrieve buffer from the socket and process it
@@ -132,6 +137,6 @@ void Session::reconnect() {
 }
 
 bool Session::is_connected() const {
-    return connected_;
+    return is_connected_;
 }
 }  // namespace ms

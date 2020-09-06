@@ -89,11 +89,18 @@ enum Id {
     MONSTER_RIDING,
     HOMING_BEACON,
     SPEED_INFUSION,
+    ZOMBIFY,
+    CURSE,
+    SEDUCE,
+    SLOW,
     LENGTH
 };
 
+bool is_disease(Id buff_id);
+
 extern const std::unordered_map<Id, uint64_t> first_codes;
 extern const std::unordered_map<Id, uint64_t> second_codes;
+extern const std::unordered_map<Id, uint64_t> diseases;
 }  // namespace Buffstat
 
 struct Buff {

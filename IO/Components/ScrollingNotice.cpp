@@ -16,25 +16,24 @@
 #include "ScrollingNotice.h"
 
 namespace ms {
-ScrollingNotice::ScrollingNotice() {
-    width_ = 800;
-    background_ = ColorBox(width_, 23, Color::Name::BLACK, 0.535f);
-    notice_ =
-        Text(Text::Font::A12M, Text::Alignment::LEFT, Color::Name::YELLOW);
-
+ScrollingNotice::ScrollingNotice() :
+    active_(false),
+    width_(800),
+    background_(width_, 23, Color::Name::BLACK, 0.535f),
+    notice_(Text::Font::A12M, Text::Alignment::LEFT, Color::Name::YELLOW),
+    xpos_() {
     xpos_.set(0.0);
-    active_ = false;
 }
 
-void ScrollingNotice::setnotice(std::string n) {
+void ScrollingNotice::set_notice(std::string n) {
     notice_.change_text(n);
     xpos_.set(static_cast<double>(width_));
-    active_ = n.size() > 0;
+    active_ = !n.empty();
 }
 
 void ScrollingNotice::draw(float alpha) const {
     if (active_) {
-        int16_t interx = static_cast<int16_t>(std::round(xpos_.get(alpha)));
+        auto interx = static_cast<int16_t>(std::round(xpos_.get(alpha)));
         auto position = Point<int16_t>(interx, -1);
 
         background_.draw(Point<int16_t>(0, 0));
@@ -48,7 +47,7 @@ void ScrollingNotice::update() {
 
         if (new_width != width_) {
             width_ = new_width;
-            background_.setwidth(width_);
+            background_.set_width(width_);
             xpos_.set(static_cast<double>(width_));
         }
 
@@ -56,8 +55,9 @@ void ScrollingNotice::update() {
 
         auto xmin = static_cast<double>(-notice_.width());
 
-        if (xpos_.last() < xmin)
+        if (xpos_.last() < xmin) {
             xpos_.set(static_cast<double>(width_));
+        }
     }
 }
 }  // namespace ms

@@ -48,6 +48,16 @@ public:
     // Show a buff effect.
     void show_player_buff(int32_t skillid);
 
+    // Show affected by buff effect
+    void show_affected_by_buff(int32_t cid, int32_t skillid, int8_t level);
+
+    // Show affected by buff effect
+    void show_player_affected_by_buff(int32_t skillid);
+
+    void give_foreign_buff(int32_t cid, int32_t skillid, int8_t level);
+
+    void show_player_disease(int32_t skillid, int8_t level);
+
 private:
     struct DamageEffect {
         AttackUser user;

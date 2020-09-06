@@ -15,8 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ItemParser.h"
 
-namespace ms {
-namespace ItemParser {
+namespace ms::ItemParser {
 // Parse a normal item from a packet
 void add_item(InPacket &recv,
               InventoryType::Id invtype,
@@ -26,8 +25,9 @@ void add_item(InPacket &recv,
     // Read all item stats
     bool cash = recv.read_bool();
 
-    if (cash)
+    if (cash) {
         recv.skip(8);  // unique id
+    }
 
     int64_t expire = recv.read_long();
     int16_t count = recv.read_short();
@@ -35,8 +35,9 @@ void add_item(InPacket &recv,
     int16_t flag = recv.read_short();
 
     // If the item is a rechargeable projectile, some additional bytes are sent.
-    if ((id / 10000 == 233) || (id / 10000 == 207))
+    if ((id / 10000 == 233) || (id / 10000 == 207)) {
         recv.skip(8);
+    }
 
     inventory.add_item(invtype, slot, id, cash, expire, count, owner, flag);
 }
@@ -50,8 +51,9 @@ void add_pet(InPacket &recv,
     // Read all pet stats
     bool cash = recv.read_bool();
 
-    if (cash)
+    if (cash) {
         recv.skip(8);  // unique id
+    }
 
     int64_t expire = recv.read_long();
     std::string petname = recv.read_padded_string(13);
@@ -82,8 +84,9 @@ void add_equip(InPacket &recv,
     // Read equip information
     bool cash = recv.read_bool();
 
-    if (cash)
+    if (cash) {
         recv.skip(8);  // unique id
+    }
 
     int64_t expire = recv.read_long();
     uint8_t slots = recv.read_byte();
@@ -92,8 +95,9 @@ void add_equip(InPacket &recv,
     // Read equip stats
     EnumMap<EquipStat::Id, uint16_t> stats;
 
-    for (auto iter : stats)
+    for (auto iter : stats) {
         iter.second = recv.read_short();
+    }
 
     // Some more information
     std::string owner = recv.read_string();
@@ -156,5 +160,4 @@ void parse_item(InPacket &recv,
         add_item(recv, invtype, slot, iid, inventory);
     }
 }
-}  // namespace ItemParser
-}  // namespace ms
+}  // namespace ms::ItemParser

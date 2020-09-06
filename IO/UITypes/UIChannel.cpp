@@ -94,15 +94,17 @@ void UIChannel::draw(float inter) const {
                                           position_.y() + current_channel_y_));
     }
 
-    for (auto &sprite : ch_)
+    for (const auto &sprite : ch_) {
         sprite.draw(position_, inter);
+    }
 }
 
 void UIChannel::update() {
     UIElement::update();
 
-    for (auto &sprite : ch_)
+    for (auto &sprite : ch_) {
         sprite.update();
+    }
 }
 
 void UIChannel::send_key(int32_t keycode, bool pressed, bool escape) {
@@ -115,16 +117,18 @@ void UIChannel::send_key(int32_t keycode, bool pressed, bool escape) {
             if (selected_channel_ > 4) {
                 selected_channel_ -= 5;
             } else {
-                for (size_t i = 0; i < 3; i++)
+                for (size_t i = 0; i < 3; i++) {
                     selected_channel_ += 5;
+                }
             }
 
             if (selected_channel_ == current_channel_) {
                 if (selected_channel_ > 4) {
                     selected_channel_ -= 5;
                 } else {
-                    for (size_t i = 0; i < 3; i++)
+                    for (size_t i = 0; i < 3; i++) {
                         selected_channel_ += 5;
+                    }
                 }
             }
 
@@ -133,45 +137,51 @@ void UIChannel::send_key(int32_t keycode, bool pressed, bool escape) {
             if (selected_channel_ < 15) {
                 selected_channel_ += 5;
             } else {
-                for (size_t i = 0; i < 3; i++)
+                for (size_t i = 0; i < 3; i++) {
                     selected_channel_ -= 5;
+                }
             }
 
             if (selected_channel_ == current_channel_) {
                 if (selected_channel_ < 15) {
                     selected_channel_ += 5;
                 } else {
-                    for (size_t i = 0; i < 3; i++)
+                    for (size_t i = 0; i < 3; i++) {
                         selected_channel_ -= 5;
+                    }
                 }
             }
 
             update_selected_channel_position();
         } else if (keycode == KeyAction::Id::LEFT) {
-            if (selected_channel_ != 0)
+            if (selected_channel_ != 0) {
                 selected_channel_--;
-            else
+            } else {
                 selected_channel_ = channel_count_ - 1;
+            }
 
             if (selected_channel_ == current_channel_) {
-                if (selected_channel_ != 0)
+                if (selected_channel_ != 0) {
                     selected_channel_--;
-                else
+                } else {
                     selected_channel_ = channel_count_ - 1;
+                }
             }
 
             update_selected_channel_position();
         } else if (keycode == KeyAction::Id::RIGHT) {
-            if (selected_channel_ != channel_count_ - 1)
+            if (selected_channel_ != channel_count_ - 1) {
                 selected_channel_++;
-            else
+            } else {
                 selected_channel_ = 0;
+            }
 
             if (selected_channel_ == current_channel_) {
-                if (selected_channel_ != channel_count_ - 1)
+                if (selected_channel_ != channel_count_ - 1) {
                     selected_channel_++;
-                else
+                } else {
                     selected_channel_ = 0;
+                }
             }
 
             update_selected_channel_position();
@@ -182,8 +192,9 @@ void UIChannel::send_key(int32_t keycode, bool pressed, bool escape) {
 Cursor::State UIChannel::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged_)
+    if (dragged_) {
         return dstate;
+    }
 
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
@@ -202,17 +213,19 @@ Cursor::State UIChannel::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                 }
             } else if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
-                    if (i < Buttons::CH)
+                    if (i < Buttons::CH) {
                         Sound(Sound::Name::BUTTONCLICK).play();
+                    }
 
                     buttons_[i]->set_state(button_pressed(i));
 
                     ret = Cursor::State::IDLE;
                 } else {
-                    if (i < Buttons::CH)
+                    if (i < Buttons::CH) {
                         ret = Cursor::State::CANCLICK;
-                    else
+                    } else {
                         ret = Cursor::State::IDLE;
+                    }
                 }
             }
         } else if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
@@ -235,8 +248,9 @@ Button::State UIChannel::button_pressed(uint16_t buttonid) {
             default: break;
         }
     } else {
-        if (buttonid - Buttons::CH == current_channel_)
+        if (buttonid - Buttons::CH == current_channel_) {
             return Button::State::NORMAL;
+        }
 
         selected_channel_ = buttonid - Buttons::CH;
         update_selected_channel_position();

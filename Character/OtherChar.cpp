@@ -64,8 +64,9 @@ int8_t OtherChar::update(const Physics &physics) {
 
     bool aniend = Char::update(physics, get_stancespeed());
 
-    if (aniend && attacking_)
+    if (aniend && attacking_) {
         attacking_ = false;
+    }
 
     return get_layer();
 }
@@ -105,8 +106,9 @@ uint16_t OtherChar::get_level() const {
 int32_t OtherChar::get_skilllevel(int32_t skillid) const {
     auto iter = skill_levels_.find(skillid);
 
-    if (iter == skill_levels_.end())
+    if (iter == skill_levels_.end()) {
         return 0;
+    }
 
     return iter->second;
 }

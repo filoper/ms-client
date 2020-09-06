@@ -39,11 +39,13 @@ InChatMessage::InChatMessage(Messages::Type t) {
 }
 
 void InChatMessage::drop() const {
-    if (type == Messages::Type::NONE)
+    if (type == Messages::Type::NONE) {
         return;
+    }
 
-    if (auto chatbar = UI::get().get_element<UIChatBar>())
+    if (auto chatbar = UI::get().get_element<UIChatBar>()) {
         chatbar->display_message(type, UIChatBar::RED);
+    }
 }
 
 ForbidSkillMessage::ForbidSkillMessage(SpecialMove::ForbidReason reason,

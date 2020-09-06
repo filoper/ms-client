@@ -16,6 +16,7 @@
 #include "UILoginNotice.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../Audio/Audio.h"
 #include "../Components/MapleButton.h"
@@ -25,10 +26,10 @@ namespace ms {
 UILoginNotice::UILoginNotice(uint16_t message,
                              std::function<void()> okhandler,
                              std::function<void()> cancelhandler) :
-    okhandler_(okhandler),
-    cancel_handler_(cancelhandler) {
-    multiple_ = false;
-
+    saveid_(false),
+    multiple_(false),
+    okhandler_(std::move(okhandler)),
+    cancel_handler_(std::move(cancelhandler)) {
     nl::node Notice = nl::nx::ui["Login.img"]["Notice"];
     nl::node backgrnd;
 
@@ -64,7 +65,7 @@ UILoginNotice::UILoginNotice(uint16_t message,
 
 UILoginNotice::UILoginNotice(uint16_t message,
                              std::function<void()> okhandler) :
-    UILoginNotice(message, okhandler, []() {}) {}
+    UILoginNotice(message, std::move(okhandler), []() {}) {}
 
 UILoginNotice::UILoginNotice(uint16_t message) :
     UILoginNotice(message, []() {}) {}
@@ -72,10 +73,11 @@ UILoginNotice::UILoginNotice(uint16_t message) :
 void UILoginNotice::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
         if (escape) {
-            if (!multiple_)
+            if (!multiple_) {
                 okhandler_();
-            else
+            } else {
                 cancel_handler_();
+            }
 
             deactivate();
         } else if (keycode == KeyAction::RETURN) {
@@ -90,10 +92,11 @@ UIElement::Type UILoginNotice::get_type() const {
 }
 
 Button::State UILoginNotice::button_pressed(uint16_t buttonid) {
-    if (buttonid == Buttons::YES)
+    if (buttonid == Buttons::YES) {
         okhandler_();
-    else if (buttonid == Buttons::NO)
+    } else if (buttonid == Buttons::NO) {
         cancel_handler_();
+    }
 
     deactivate();
 
@@ -133,8 +136,9 @@ UIElement::Type UIQuitConfirm::get_type() const {
 }
 
 Button::State UIQuitConfirm::button_pressed(uint16_t buttonid) {
-    if (buttonid == BT_OK)
+    if (buttonid == BT_OK) {
         UI::get().quit();
+    }
 
     deactivate();
 
@@ -144,7 +148,7 @@ Button::State UIQuitConfirm::button_pressed(uint16_t buttonid) {
 UIClassConfirm::UIClassConfirm(uint8_t selected_class,
                                bool unavailable,
                                std::function<void()> okhandler) :
-    okhandler_(okhandler) {
+    okhandler_(std::move(okhandler)) {
     nl::node RaceSelect = nl::nx::ui["Login.img"]["RaceSelect_new"];
     nl::node type = unavailable ? RaceSelect["deny"] : RaceSelect["confirm"];
     nl::node backgrnd = type["backgrnd"];
@@ -227,10 +231,11 @@ Cursor::State UIClassConfirm::send_cursor(bool clicked,
 
 void UIClassConfirm::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
-        if (escape)
+        if (escape) {
             deactivate();
-        else if (keycode == KeyAction::Id::RETURN)
+        } else if (keycode == KeyAction::Id::RETURN) {
             button_pressed(Buttons::OK);
+        }
     }
 }
 
@@ -241,14 +246,15 @@ UIElement::Type UIClassConfirm::get_type() const {
 Button::State UIClassConfirm::button_pressed(uint16_t buttonid) {
     deactivate();
 
-    if (buttonid == Buttons::OK)
+    if (buttonid == Buttons::OK) {
         okhandler_();
+    }
 
     return Button::State::NORMAL;
 }
 
 UIKeySelect::UIKeySelect(std::function<void(bool)> oh, bool l) :
-    okhandler_(oh),
+    okhandler_(std::move(oh)),
     login_(l) {
     nl::node KeyType = nl::nx::ui["UIWindow2.img"]["KeyConfig"]["KeyType"];
     nl::node backgrnd = KeyType["backgrnd"];
@@ -262,17 +268,20 @@ UIKeySelect::UIKeySelect(std::function<void(bool)> oh, bool l) :
     buttons_[Buttons::TYPEB] =
         std::make_unique<MapleButton>(KeyType["btTypeB"], Point<int16_t>(1, 1));
 
-    if (login_)
+    if (login_) {
         buttons_[Buttons::CLOSE]->set_active(false);
+    }
 
     position_ = Point<int16_t>(181, 145);
     dimension_ = Texture(backgrnd).get_dimensions();
 }
 
 void UIKeySelect::send_key(int32_t keycode, bool pressed, bool escape) {
-    if (pressed && !login_)
-        if (escape || keycode == KeyAction::Id::RETURN)
+    if (pressed && !login_) {
+        if (escape || keycode == KeyAction::Id::RETURN) {
             deactivate();
+        }
+    }
 }
 
 UIElement::Type UIKeySelect::get_type() const {
@@ -285,12 +294,13 @@ Button::State UIKeySelect::button_pressed(uint16_t buttonid) {
         case Buttons::CLOSE: deactivate(); break;
         case Buttons::TYPEA:
         case Buttons::TYPEB: {
-            bool alternate = (buttonid == Buttons::TYPEA) ? false : true;
+            bool alternate = buttonid != Buttons::TYPEA;
 
-            if (alternate)
+            if (alternate) {
                 buttons_[Buttons::TYPEA]->set_state(Button::State::DISABLED);
-            else
+            } else {
                 buttons_[Buttons::TYPEB]->set_state(Button::State::DISABLED);
+            }
 
             auto onok = [&, alternate]() {
                 okhandler_(alternate);
@@ -306,7 +316,7 @@ Button::State UIKeySelect::button_pressed(uint16_t buttonid) {
 }
 
 UIKeyConfirm::UIKeyConfirm(bool alternate, std::function<void()> oh, bool l) :
-    okhandler_(oh),
+    okhandler_(std::move(oh)),
     login_(l) {
     nl::node alert =
         nl::nx::ui["UIWindow2.img"]["KeyConfig"]["KeyType"]["alert"];

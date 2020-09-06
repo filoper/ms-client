@@ -50,17 +50,18 @@ Account LoginParser::parse_account(InPacket &recv) {
 World LoginParser::parse_world(InPacket &recv) {
     int8_t wid = recv.read_byte();
 
-    if (wid == -1)
+    if (wid == -1) {
         return { {}, {}, {}, 0, 0, wid };
+    }
 
     std::string name = recv.read_string();
-    uint8_t flag = recv.read_byte();
+    uint8_t flag = recv.read_ubyte();
     std::string message = recv.read_string();
 
     recv.skip(5);
 
     std::vector<int32_t> chloads;
-    uint8_t channelcount = recv.read_byte();
+    uint8_t channelcount = recv.read_ubyte();
 
     for (uint8_t i = 0; i < channelcount; ++i) {
         recv.read_string();  // channel name
@@ -80,8 +81,9 @@ World LoginParser::parse_world(InPacket &recv) {
 RecommendedWorld LoginParser::parse_recommended_world(InPacket &recv) {
     int32_t wid = recv.read_int();
 
-    if (wid == -1)
+    if (wid == -1) {
         return { {}, wid };
+    }
 
     std::string message = recv.read_string();
 
@@ -121,8 +123,9 @@ StatsEntry LoginParser::parse_stats(InPacket &recv) {
     recv.read_int();   // face
     recv.read_int();   // hair
 
-    for (size_t i = 0; i < 3; i++)
+    for (uint8_t i = 0; i < 3; i++) {
         statsentry.petids.push_back(recv.read_long());
+    }
 
     statsentry.stats[MapleStat::Id::LEVEL] =
         recv.read_ubyte();  // TODO: Change to recv.read_short(); to increase
@@ -155,31 +158,32 @@ LookEntry LoginParser::parse_look(InPacket &recv) {
     LookEntry look;
 
     look.female = recv.read_bool();
-    look.skin = recv.read_byte();
+    look.skin = recv.read_ubyte();
     look.faceid = recv.read_int();
 
     recv.read_bool();  // megaphone
 
     look.hairid = recv.read_int();
 
-    uint8_t eqslot = recv.read_byte();
+    uint8_t eqslot = recv.read_ubyte();
 
     while (eqslot != 0xFF) {
         look.equips[eqslot] = recv.read_int();
-        eqslot = recv.read_byte();
+        eqslot = recv.read_ubyte();
     }
 
-    uint8_t mskeqslot = recv.read_byte();
+    uint8_t mskeqslot = recv.read_ubyte();
 
     while (mskeqslot != 0xFF) {
         look.maskedequips[mskeqslot] = recv.read_int();
-        mskeqslot = recv.read_byte();
+        mskeqslot = recv.read_ubyte();
     }
 
     look.maskedequips[-111] = recv.read_int();
 
-    for (uint8_t i = 0; i < 3; i++)
+    for (uint8_t i = 0; i < 3; i++) {
         look.petids.push_back(recv.read_int());
+    }
 
     return look;
 }
@@ -191,11 +195,12 @@ void LoginParser::parse_login(InPacket &recv) {
     std::string addrstr;
 
     for (size_t i = 0; i < 4; i++) {
-        uint8_t num = static_cast<uint8_t>(recv.read_byte());
+        auto num = static_cast<uint8_t>(recv.read_byte());
         addrstr.append(std::to_string(num));
 
-        if (i < 3)
+        if (i < 3) {
             addrstr.push_back('.');
+        }
     }
 
     // Read the port address in a string

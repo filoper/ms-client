@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <map>
+
 #include "../Graphics/Sprite.h"
 #include "Components/Button.h"
 #include "Components/Icon.h"
@@ -65,10 +67,11 @@ public:
         QUIT,
         CHARINFO,
         CASHSHOP,
+        GAUGE_BOSS,
         NUM_TYPES
     };
 
-    virtual ~UIElement() {}
+    virtual ~UIElement() = default;
 
     virtual void draw(float inter) const;
 

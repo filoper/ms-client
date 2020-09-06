@@ -44,6 +44,8 @@ public:
     virtual void apply_hiteffects(const AttackUser &user,
                                   Mob &target) const = 0;
 
+    virtual void apply_affected_effects(Char &user) const = 0;
+
     virtual Animation get_bullet(const Char &user, int32_t bulletid) const = 0;
 
     virtual bool is_attack() const = 0;

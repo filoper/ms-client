@@ -27,10 +27,11 @@ Skill::Skill(int32_t id) : skill_id_(id) {
 
     std::string strid;
 
-    if (skill_id_ < 10000000)
+    if (skill_id_ < 10000000) {
         strid = string_format::extend_id(skill_id_, 7);
-    else
+    } else {
         strid = std::to_string(skill_id_);
+    }
 
     nl::node src = nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid];
 
@@ -39,8 +40,15 @@ Skill::Skill(int32_t id) : skill_id_(id) {
 
     sound_ = std::make_unique<SingleSkillSound>(strid);
 
+    bool has_affected_effect = src["affected"].size() > 0;
     bool by_level_effect = src["CharLevel"]["10"]["effect"].size() > 0;
     bool multi_effect = src["effect0"].size() > 0;
+
+    if (has_affected_effect) {
+        affected_effects_ = std::make_unique<SingleAffectedEffect>(src);
+    } else {
+        affected_effects_ = std::make_unique<NoAffectedEffect>();
+    }
 
     if (by_level_effect) {
         use_effect_ = std::make_unique<ByLevelUseEffect>(src);
@@ -72,10 +80,11 @@ Skill::Skill(int32_t id) : skill_id_(id) {
     bool has_hit1 = src["hit"]["1"].size() > 0;
 
     if (by_level_hit) {
-        if (has_hit0 && has_hit1)
+        if (has_hit0 && has_hit1) {
             hit_effect_ = std::make_unique<ByLevelTwoHandedHitEffect>(src);
-        else
+        } else {
             hit_effect_ = std::make_unique<ByLevelHitEffect>(src);
+        }
     } else if (by_skill_level_hit) {
         hit_effect_ = std::make_unique<BySkillLevelHitEffect>(src);
     } else if (has_hit0 && has_hit1) {
@@ -158,8 +167,9 @@ void Skill::apply_stats(const Char &user, Attack &attack) const {
         default: attack.hitcount = stats.attackcount; break;
     }
 
-    if (!stats.range.empty())
+    if (!stats.range.empty()) {
         attack.range = stats.range;
+    }
 
     if (projectile_ && !attack.bullet) {
         switch (skill_id_) {
@@ -177,8 +187,9 @@ void Skill::apply_stats(const Char &user, Attack &attack) const {
     if (over_regular_) {
         attack.stance = user.get_look().get_stance();
 
-        if (attack.type == Attack::CLOSE && !projectile_)
+        if (attack.type == Attack::CLOSE && !projectile_) {
             attack.range = user.get_afterimage().get_range();
+        }
     }
 }
 
@@ -186,6 +197,10 @@ void Skill::apply_hiteffects(const AttackUser &user, Mob &target) const {
     hit_effect_->apply(user, target);
 
     sound_->play_hit();
+}
+
+void Skill::apply_affected_effects(Char &user) const {
+    affected_effects_->apply(user);
 }
 
 Animation Skill::get_bullet(const Char &user, int32_t bulletid) const {
@@ -210,24 +225,29 @@ SpecialMove::ForbidReason Skill::can_use(int32_t level,
                                          uint16_t hp,
                                          uint16_t mp,
                                          uint16_t bullets) const {
-    if (level <= 0 || level > SkillData::get(skill_id_).get_masterlevel())
+    if (level <= 0 || level > SkillData::get(skill_id_).get_masterlevel()) {
         return FBR_OTHER;
+    }
 
-    if (job.can_use(skill_id_) == false)
+    if (job.can_use(skill_id_) == false) {
         return FBR_OTHER;
+    }
 
     const SkillData::Stats stats = SkillData::get(skill_id_).get_stats(level);
 
-    if (hp <= stats.hpcost)
+    if (hp <= stats.hpcost) {
         return FBR_HPCOST;
+    }
 
-    if (mp < stats.mpcost)
+    if (mp < stats.mpcost) {
         return FBR_MPCOST;
+    }
 
     Weapon::Type reqweapon = SkillData::get(skill_id_).get_required_weapon();
 
-    if (weapon != reqweapon && reqweapon != Weapon::NONE)
+    if (weapon != reqweapon && reqweapon != Weapon::NONE) {
         return FBR_WEAPONTYPE;
+    }
 
     switch (weapon) {
         case Weapon::BOW:

@@ -25,6 +25,7 @@
 #include "../Combat/Attack.h"
 #include "../Combat/Bullet.h"
 #include "../Combat/MobSkill.h"
+#include "../Combat/MobSpecialAttack.h"
 #include "../Movement.h"
 #include "MapObject.h"
 
@@ -116,6 +117,8 @@ public:
 
     const MobSkill &get_move(int32_t move_id, uint8_t level);
 
+    const MobSpecialAttack &get_move(int32_t move_id);
+
     void update_movement(int16_t type,
                          int8_t nibbles,
                          int8_t action,
@@ -127,7 +130,11 @@ public:
 
     void use_skill(const MobSkill &skill);
 
-    // void cancel_buff(Buffstat::Id stat);
+    void use_attack(const MobSpecialAttack &attack);
+
+    void use_some_attack();
+
+    void cancel_buff(int32_t stat);
 
     bool has_buff() const;
 
@@ -173,6 +180,7 @@ private:
 
     std::map<Stance, Animation> animations_;
     std::unordered_map<int32_t, MobSkill> skills_;
+    std::unordered_map<int32_t, MobSpecialAttack> attacks_;
     std::unordered_map<int32_t, Animation> skill_stands_;
     std::unordered_map<int32_t, Animation> attack_stands_;
     std::vector<MobBuff> buffs_;

@@ -51,17 +51,19 @@ UIRegion::UIRegion() :
 Cursor::State UIRegion::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     clear_tooltip();
 
-    if (na_rect_.contains(cursorpos))
+    if (na_rect_.contains(cursorpos)) {
         UI::get().show_text(
             Tooltip::Parent::TEXT,
             "Warning: You may experience latency and connection issues when "
             "connecting to the NA server from Europe.");
+    }
 
-    if (eu_rect_.contains(cursorpos))
+    if (eu_rect_.contains(cursorpos)) {
         UI::get().show_text(
             Tooltip::Parent::TEXT,
             "Warning: You may experience latency and connection issues when "
             "connecting to the EU server from North America.");
+    }
 
     return UIElement::send_cursor(clicked, cursorpos);
 }

@@ -18,16 +18,17 @@
 namespace ms {
 Cryptography::Cryptography(const int8_t *handshake) {
 #ifdef USE_CRYPTO
-    for (size_t i = 0; i < HEADER_LENGTH; i++)
+    for (size_t i = 0; i < HEADER_LENGTH; i++) {
         sendiv_[i] = handshake[i + 7];
+    }
 
-    for (size_t i = 0; i < HEADER_LENGTH; i++)
+    for (size_t i = 0; i < HEADER_LENGTH; i++) {
         recviv_[i] = handshake[i + 11];
+    }
 #endif
 }
 
 Cryptography::Cryptography() {}
-Cryptography::~Cryptography() {}
 
 void Cryptography::encrypt(int8_t *bytes, size_t length) {
 #ifdef USE_CRYPTO
@@ -68,15 +69,17 @@ size_t Cryptography::check_length(const int8_t *bytes) const {
 #ifdef USE_CRYPTO
     uint32_t headermask = 0;
 
-    for (size_t i = 0; i < 4; i++)
+    for (size_t i = 0; i < 4; i++) {
         headermask |= static_cast<uint8_t>(bytes[i]) << (8 * i);
+    }
 
     return static_cast<int16_t>((headermask >> 16) ^ (headermask & 0xFFFF));
 #else
     size_t length = 0;
 
-    for (int32_t i = 0; i < HEADERLEN; i++)
+    for (int32_t i = 0; i < HEADERLEN; i++) {
         length += static_cast<uint8_t>(bytes[i]) << (8 * i);
+    }
 
     return length;
 #endif
@@ -85,7 +88,7 @@ size_t Cryptography::check_length(const int8_t *bytes) const {
 void Cryptography::mapleencrypt(int8_t *bytes, size_t length) const {
     for (size_t j = 0; j < 3; j++) {
         int8_t remember = 0;
-        int8_t datalen = static_cast<int8_t>(length & 0xFF);
+        auto datalen = static_cast<int8_t>(length & 0xFF);
 
         for (size_t i = 0; i < length; i++) {
             int8_t cur = (rollleft(bytes[i], 3) + datalen) ^ remember;
@@ -110,7 +113,7 @@ void Cryptography::mapleencrypt(int8_t *bytes, size_t length) const {
 void Cryptography::mapledecrypt(int8_t *bytes, size_t length) const {
     for (size_t i = 0; i < 3; i++) {
         uint8_t remember = 0;
-        uint8_t datalen = static_cast<uint8_t>(length & 0xFF);
+        auto datalen = static_cast<uint8_t>(length & 0xFF);
 
         for (size_t j = length; j--;) {
             uint8_t cur = rollleft(bytes[j], 3) ^ 0x13;
@@ -180,8 +183,9 @@ void Cryptography::updateiv(uint8_t *iv) const {
         }
     }
 
-    for (size_t i = 0; i < 4; i++)
+    for (size_t i = 0; i < 4; i++) {
         iv[i] = mbytes[i];
+    }
 }
 
 int8_t Cryptography::rollleft(int8_t data, size_t count) const {
@@ -203,19 +207,22 @@ void Cryptography::aesofb(int8_t *bytes, size_t length, uint8_t *iv) const {
     while (offset < length) {
         uint8_t miv[16];
 
-        for (size_t i = 0; i < 16; i++)
+        for (size_t i = 0; i < 16; i++) {
             miv[i] = iv[i % 4];
+        }
 
         size_t remaining = length - offset;
 
-        if (remaining > blocklength)
+        if (remaining > blocklength) {
             remaining = blocklength;
+        }
 
         for (size_t x = 0; x < remaining; x++) {
             size_t relpos = x % 16;
 
-            if (relpos == 0)
+            if (relpos == 0) {
                 aesencrypt(miv);
+            }
 
             bytes[x + offset] ^= miv[relpos];
         }
@@ -273,8 +280,9 @@ void Cryptography::addroundkey(uint8_t *bytes, uint8_t round) const {
 
     uint8_t offset = round * 16;
 
-    for (uint8_t i = 0; i < 16; i++)
+    for (uint8_t i = 0; i < 16; i++) {
         bytes[i] ^= maplekey[i + offset];
+    }
 }
 
 void Cryptography::subbytes(uint8_t *bytes) const {
@@ -304,8 +312,9 @@ void Cryptography::subbytes(uint8_t *bytes) const {
         0xB0, 0x54, 0xBB, 0x16
     };
 
-    for (uint8_t i = 0; i < 16; i++)
+    for (uint8_t i = 0; i < 16; i++) {
         bytes[i] = subbox[bytes[i]];
+    }
 }
 
 void Cryptography::shiftrows(uint8_t *bytes) const {

@@ -45,28 +45,31 @@ MultiUseEffect::MultiUseEffect(nl::node src) {
 }
 
 void MultiUseEffect::apply(Char &target) const {
-    for (auto &effect : effects_)
+    for (const auto &effect : effects_) {
         effect.apply(target);
+    }
 }
 
 ByLevelUseEffect::ByLevelUseEffect(nl::node src) {
-    for (auto sub : src["CharLevel"]) {
+    for (const auto &sub : src["CharLevel"]) {
         auto level = string_conversion::or_zero<uint16_t>(sub.name());
         effects_.emplace(level, sub["effect"]);
     }
 }
 
 void ByLevelUseEffect::apply(Char &target) const {
-    if (effects_.empty())
+    if (effects_.empty()) {
         return;
+    }
 
     uint16_t level = target.get_level();
     auto iter = effects_.begin();
     for (; iter != effects_.end() && level > iter->first; ++iter) {
     }
 
-    if (iter != effects_.begin())
+    if (iter != effects_.begin()) {
         iter--;
+    }
 
     iter->second.apply(target);
 }

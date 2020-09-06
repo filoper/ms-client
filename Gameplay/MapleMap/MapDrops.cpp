@@ -73,8 +73,9 @@ void MapDrops::update(const Physics &physics) {
         }
     }
 
-    for (auto &mesoicon : meso_icons_)
+    for (auto &mesoicon : meso_icons_) {
         mesoicon.update();
+    }
 
     drops_.update(physics);
 
@@ -86,8 +87,9 @@ void MapDrops::spawn(DropSpawn &&spawn) {
 }
 
 void MapDrops::remove(int32_t oid, int8_t mode, const PhysicsObject *looter) {
-    if (Optional<Drop> drop = drops_.get(oid))
+    if (Optional<Drop> drop = drops_.get(oid)) {
         drop->expire(mode, looter);
+    }
 }
 
 void MapDrops::clear() {
@@ -95,8 +97,9 @@ void MapDrops::clear() {
 }
 
 MapDrops::Loot MapDrops::find_loot_at(Point<int16_t> playerpos) {
-    if (!loot_enabled_)
+    if (!loot_enabled_) {
         return { 0, {} };
+    }
 
     for (auto &mmo : drops_) {
         Optional<const Drop> drop = mmo.second.get();

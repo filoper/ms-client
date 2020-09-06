@@ -33,8 +33,9 @@ MapleComboBox::MapleComboBox(Type type,
     rwidth_(w) {
     std::string combobox = "ComboBox";
 
-    if (type != Type::DEFAULT)
+    if (type != Type::DEFAULT) {
         combobox += std::to_string(type);
+    }
 
     nl::node src = nl::nx::ui["Basic.img"][combobox];
 
@@ -54,11 +55,12 @@ MapleComboBox::MapleComboBox(Type type,
     textures_[Button::State::DISABLED][1] = src["disabled"][1];
     textures_[Button::State::DISABLED][2] = src["disabled"][2];
 
-    for (auto &option : options_)
+    for (auto &option : options_) {
         option_text_.push_back(Text(Text::Font::A12M,
                                     Text::Alignment::LEFT,
                                     Color::Name::BLACK,
                                     option));
+    }
 
     Text::Font selected_font = Text::Font::A12M;
     Color::Name selected_color = Color::Name::BLACK;
@@ -93,11 +95,12 @@ MapleComboBox::MapleComboBox(Type type,
             position_.y() + textures_[state_][0].get_dimensions().y())
         + parent_pos_;
 
-    for (size_t i = 0; i < option_text_.size(); i++)
+    for (size_t i = 0; i < option_text_.size(); i++) {
         buttons_[i] = std::make_unique<AreaButton>(
             Point<int16_t>(option_pos.x() + 1,
                            option_pos.y() + (i * HEIGHT) + 1),
             Point<int16_t>(width() - 2, HEIGHT - 2));
+    }
 
     current_pos_ = 0;
     current_shown_ = false;
@@ -110,7 +113,7 @@ MapleComboBox::MapleComboBox(Type type,
 
 void MapleComboBox::draw(Point<int16_t>) const {
     if (active_) {
-        Point<int16_t> lpos = Point<int16_t>(position_ + parent_pos_);
+        auto lpos = Point<int16_t>(position_ + parent_pos_);
 
         textures_[state_][0].draw(lpos);
         lpos.shift_x(textures_[state_][0].width());
@@ -138,13 +141,15 @@ void MapleComboBox::draw(Point<int16_t>) const {
             background_.draw(pos + Point<int16_t>(0, 2));
             rect_.draw(pos + Point<int16_t>(1, 3));
 
-            if (current_shown_)
+            if (current_shown_) {
                 current_rect_.draw(
                     DrawArgument(pos.x() + 1, pos.y() + current_pos_ + 3));
+            }
 
-            for (size_t i = 0; i < option_text_.size(); i++)
+            for (size_t i = 0; i < option_text_.size(); i++) {
                 option_text_[i].draw(
                     DrawArgument(pos.x() + 6, pos.y() + (i * HEIGHT) - 4));
+            }
         }
     }
 }

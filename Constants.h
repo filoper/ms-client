@@ -19,8 +19,7 @@
 
 #include "Template/Singleton.h"
 
-namespace ms {
-namespace Constants {
+namespace ms::Constants {
 // Timestep, e.g. the granularity in which the game advances.
 constexpr uint16_t TIMESTEP = 8;
 
@@ -47,5 +46,4 @@ private:
     // Window and screen height.
     int16_t VIEWHEIGHT;
 };
-}  // namespace Constants
-}  // namespace ms
+}  // namespace ms::Constants

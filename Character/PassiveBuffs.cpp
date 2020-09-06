@@ -119,27 +119,31 @@ void PassiveBuffs::apply_buff(CharStats &stats,
                               int32_t skill_level) const {
     auto iter = buffs_.find(skill_id);
 
-    if (iter == buffs_.end())
+    if (iter == buffs_.end()) {
         return;
+    }
 
     bool wrong_job = !stats.get_job().can_use(skill_id);
 
-    if (wrong_job)
+    if (wrong_job) {
         return;
+    }
 
     std::string strid;
 
-    if (skill_id < 10000000)
+    if (skill_id < 10000000) {
         strid = string_format::extend_id(skill_id, 7);
-    else
+    } else {
         strid = std::to_string(skill_id);
+    }
 
     nl::node src = nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid]
                                 ["level"][skill_level];
 
     const PassiveBuff *buff = iter->second.get();
 
-    if (buff && buff->is_applicable(stats, src))
+    if (buff && buff->is_applicable(stats, src)) {
         buff->apply_to(stats, src);
+    }
 }
 }  // namespace ms

@@ -45,9 +45,12 @@ public:
     Point<int16_t> position(float alpha) const;
 
     // Return the interpolated position.
-    Point<double> realposition(float alpha) const;
+    Point<double> real_position(float alpha) const;
 
 private:
+    // offset y to see more above the player
+    const int8_t Y_OFFSET = 80;
+
     // Movement variables.
     Linear<double> x_;
     Linear<double> y_;

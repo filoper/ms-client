@@ -34,18 +34,21 @@ public:
         static_assert(std::is_enum<K>::value,
                       "Template parameter 'K' for EnumMap must be an enum.");
 
-        for (size_t i = 0; i < LENGTH; i++)
+        for (size_t i = 0; i < LENGTH; i++) {
             m_keys_[i] = static_cast<K>(i);
+        }
     }
 
     void clear() {
-        for (size_t i = 0; i < LENGTH; i++)
+        for (size_t i = 0; i < LENGTH; i++) {
             m_values_[i] = V();
+        }
     }
 
     void erase(K key) {
-        if (key >= 0 && key < LENGTH)
+        if (key >= 0 && key < LENGTH) {
             m_values_[key] = V();
+        }
     }
 
     template<typename... Args>
@@ -84,10 +87,11 @@ public:
         K first() const { return static_cast<K>(index_); }
 
         T &second() {
-            if (!this)
+            if (!this) {
                 throw std::out_of_range("iterator out of range");
-            else
-                return *(value_ + index_);
+            }
+
+            return *(value_ + index_);
         }
 
         base_iterator &operator++() {

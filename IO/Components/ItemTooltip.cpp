@@ -38,13 +38,15 @@ ItemTooltip::ItemTooltip() {
 }
 
 bool ItemTooltip::set_item(int32_t iid) {
-    if (item_id_ == iid)
+    if (item_id_ == iid) {
         return false;
+    }
 
     item_id_ = iid;
 
-    if (item_id_ == 0)
+    if (item_id_ == 0) {
         return false;
+    }
 
     const ItemData &idata = ItemData::get(item_id_);
 
@@ -54,14 +56,15 @@ bool ItemTooltip::set_item(int32_t iid) {
 
     std::string quality = "";
 
-    if (unique_ && untradable_)
+    if (unique_ && untradable_) {
         quality = "One-of-a-kind Item, Untradable";
-    else if (unique_ && !untradable_)
+    } else if (unique_ && !untradable_) {
         quality = "One-of-a-kind Item";
-    else if (!unique_ && untradable_)
+    } else if (!unique_ && untradable_) {
         quality = "Untradable";
-    else
+    } else {
         quality = "";
+    }
 
     name_ = Text(Text::Font::A12B,
                  Text::Alignment::LEFT,
@@ -83,15 +86,17 @@ bool ItemTooltip::set_item(int32_t iid) {
     fill_height_ = 83 + name_.height();
     desc_delta_ = desc_.height() - 80;
 
-    if (desc_delta_ > 0)
+    if (desc_delta_ > 0) {
         fill_height_ += desc_delta_;
+    }
 
     return true;
 }
 
 void ItemTooltip::draw(Point<int16_t> pos) const {
-    if (item_id_ == 0)
+    if (item_id_ == 0) {
         return;
+    }
 
     int16_t max_width = Constants::Constants::get().get_viewwidth();
     int16_t max_height = Constants::Constants::get().get_viewheight();
@@ -104,11 +109,13 @@ void ItemTooltip::draw(Point<int16_t> pos) const {
     int16_t adj_d = desc_delta_ > 0 ? desc_delta_ : 0;
     int16_t adj_t = (untradable_ || unique_) ? 19 : 0;
 
-    if (adj_x > 0)
+    if (adj_x > 0) {
         pos.shift_x(adj_x * -1);
+    }
 
-    if (adj_y > 0)
+    if (adj_y > 0) {
         pos.shift_y(adj_y * -1);
+    }
 
     frame_.draw(pos + Point<int16_t>(150, 118 + adj_d + adj_t),
                 fill_width_,
@@ -116,8 +123,9 @@ void ItemTooltip::draw(Point<int16_t> pos) const {
     cover_.draw(pos + Point<int16_t>(4, 4));
     name_.draw(pos + Point<int16_t>(22, 8));
 
-    if (untradable_ || unique_)
+    if (untradable_ || unique_) {
         qual_.draw(pos + Point<int16_t>(148, 27));
+    }
 
     pos.shift(14, 18 + name_.height() + adj_t);
 

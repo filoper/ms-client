@@ -78,28 +78,33 @@ UIMiniMap::UIMiniMap(const CharStats &stats) :
 
 void UIMiniMap::draw(float alpha) const {
     if (type_ == Type::MIN) {
-        for (auto sprite : min_sprites_)
+        for (const auto &sprite : min_sprites_) {
             sprite.draw(position_, alpha);
+        }
 
         combined_text_.draw(position_ + Point<int16_t>(7, -3));
     } else if (type_ == Type::NORMAL) {
-        for (auto sprite : normal_sprites_)
+        for (const auto &sprite : normal_sprites_) {
             sprite.draw(position_, alpha);
+        }
 
         if (has_map_) {
             Animation portal_marker = Animation(marker_["portal"]);
 
-            for (auto sprite : static_marker_info_)
+            for (const auto &sprite : static_marker_info_) {
                 portal_marker.draw(position_ + sprite.second, alpha);
+            }
 
             draw_movable_markers(position_, alpha);
 
-            if (list_npc_enabled_)
+            if (list_npc_enabled_) {
                 draw_npclist(normal_dimensions_, alpha);
+            }
         }
     } else {
-        for (auto sprite : max_sprites_)
+        for (const auto &sprite : max_sprites_) {
             sprite.draw(position_, alpha);
+        }
 
         region_text_.draw(position_ + Point<int16_t>(48, 14));
         town_text_.draw(position_ + Point<int16_t>(48, 28));
@@ -107,16 +112,18 @@ void UIMiniMap::draw(float alpha) const {
         if (has_map_) {
             Animation portal_marker(marker_["portal"]);
 
-            for (auto sprite : static_marker_info_)
+            for (const auto &sprite : static_marker_info_) {
                 portal_marker.draw(
                     position_ + sprite.second + Point<int16_t>(0, MAX_ADJ_),
                     alpha);
+            }
 
             draw_movable_markers(position_ + Point<int16_t>(0, MAX_ADJ_),
                                  alpha);
 
-            if (list_npc_enabled_)
+            if (list_npc_enabled_) {
                 draw_npclist(max_dimensions_, alpha);
+            }
         }
     }
 
@@ -139,10 +146,11 @@ void UIMiniMap::update() {
         } else {
             has_map_ = true;
 
-            if (town && town.get_bool())
+            if (town && town.get_bool()) {
                 type_ = Type::MAX;
-            else
+            } else {
                 type_ = user_type_;
+            }
         }
 
         scale_ = std::pow(2, (int)miniMap["mag"]);
@@ -157,22 +165,28 @@ void UIMiniMap::update() {
     }
 
     if (type_ == Type::MIN) {
-        for (auto sprite : min_sprites_)
+        for (auto sprite : min_sprites_) {
             sprite.update();
+        }
     } else if (type_ == Type::NORMAL) {
-        for (auto sprite : normal_sprites_)
+        for (auto sprite : normal_sprites_) {
             sprite.update();
+        }
     } else {
-        for (auto sprite : max_sprites_)
+        for (auto sprite : max_sprites_) {
             sprite.update();
+        }
     }
 
-    if (list_npc_enabled_)
-        for (Sprite sprite : list_npc_sprites_)
+    if (list_npc_enabled_) {
+        for (Sprite sprite : list_npc_sprites_) {
             sprite.update();
+        }
+    }
 
-    if (selected_ >= 0)
+    if (selected_ >= 0) {
         selected_marker_.update();
+    }
 
     UIElement::update();
 }
@@ -188,15 +202,18 @@ void UIMiniMap::remove_cursor() {
 Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged_)
+    if (dragged_) {
         return dstate;
+    }
 
     Point<int16_t> cursor_relative = cursorpos - position_;
 
-    if (list_npc_slider_.isenabled())
+    if (list_npc_slider_.isenabled()) {
         if (Cursor::State new_state =
-                list_npc_slider_.send_cursor(cursor_relative, clicked))
+                list_npc_slider_.send_cursor(cursor_relative, clicked)) {
             return new_state;
+        }
+    }
 
     if (list_npc_enabled_) {
         Point<int16_t> relative_point =
@@ -217,18 +234,19 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                 list_npc_offset_ + relative_point.y() / LISTNPC_ITEM_HEIGHT_;
             bool in_list = list_index < list_npc_names_.size();
 
-            if (clicked)
+            if (clicked) {
                 select_npclist(in_list ? list_index : -1);
-            else if (in_list)
+            } else if (in_list) {
                 UI::get().show_text(Tooltip::Parent::MINIMAP,
                                     list_npc_full_names_[list_index]);
+            }
 
             return Cursor::State::IDLE;
         }
     }
 
     bool found = false;
-    auto npcs = Stage::get().get_npcs().get_npcs();
+    auto *npcs = Stage::get().get_npcs().get_npcs();
 
     for (auto npc = npcs->begin(); npc != npcs->end(); npc++) {
         Point<int16_t> npc_pos =
@@ -237,13 +255,14 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
         Rectangle<int16_t> marker_spot =
             Rectangle<int16_t>(npc_pos - Point<int16_t>(4, 8), npc_pos);
 
-        if (type_ == Type::MAX)
+        if (type_ == Type::MAX) {
             marker_spot.shift(Point<int16_t>(0, MAX_ADJ_));
+        }
 
         if (marker_spot.contains(cursor_relative)) {
             found = true;
 
-            auto n = static_cast<Npc *>(npc->second.get());
+            auto *n = static_cast<Npc *>(npc->second.get());
             std::string name = n->get_name();
             std::string func = n->get_func();
 
@@ -253,12 +272,13 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     }
 
     if (!found) {
-        for (auto sprite : static_marker_info_) {
+        for (const auto &sprite : static_marker_info_) {
             Rectangle<int16_t> marker_spot =
                 Rectangle<int16_t>(sprite.second, sprite.second + 8);
 
-            if (type_ == Type::MAX)
+            if (type_ == Type::MAX) {
                 marker_spot.shift(Point<int16_t>(0, MAX_ADJ_));
+            }
 
             if (marker_spot.contains(cursor_relative)) {
                 nl::node portal_tm = map_["portal"][sprite.first]["tm"];
@@ -285,16 +305,18 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
 }
 
 void UIMiniMap::send_scroll(double yoffset) {
-    if (list_npc_enabled_ && list_npc_slider_.isenabled())
+    if (list_npc_enabled_ && list_npc_slider_.isenabled()) {
         list_npc_slider_.send_scroll(yoffset);
+    }
 }
 
 void UIMiniMap::send_key(int32_t keycode, bool pressed, bool escape) {
     if (has_map_) {
-        if (type_ < Type::MAX)
+        if (type_ < Type::MAX) {
             type_++;
-        else
+        } else {
             type_ = Type::MIN;
+        }
 
         user_type_ = type_;
 
@@ -353,10 +375,11 @@ void UIMiniMap::toggle_buttons() {
 
         buttons_[Buttons::BT_MIN]->set_state(Button::State::DISABLED);
 
-        if (has_map_)
+        if (has_map_) {
             buttons_[Buttons::BT_MAX]->set_state(Button::State::NORMAL);
-        else
+        } else {
             buttons_[Buttons::BT_MAX]->set_state(Button::State::DISABLED);
+        }
 
         bt_min_x = combined_text_width_ + 11;
 
@@ -428,10 +451,11 @@ void UIMiniMap::toggle_buttons() {
         buttons_[Buttons::BT_NPC]->set_position(
             Point<int16_t>(bt_min_x, BTN_MIN_Y_));
 
-        if (type_ == Type::MAX)
+        if (type_ == Type::MAX) {
             buttons_[Buttons::BT_MAX]->set_state(Button::State::DISABLED);
-        else
+        } else {
             buttons_[Buttons::BT_MAX]->set_state(Button::State::NORMAL);
+        }
 
         set_npclist_active(list_npc_enabled_ && has_npcs);
 
@@ -539,11 +563,12 @@ void UIMiniMap::update_canvas() {
         DrawArgument(Point<int16_t>(7, 10),
                      Point<int16_t>(c_stretch + 114, m_stretch + 27)));
 
-    if (has_map_)
+    if (has_map_) {
         normal_sprites_.emplace_back(
             map_["miniMap"]["canvas"],
             DrawArgument(
                 Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_)));
+    }
 
     normal_sprites_.emplace_back(Normal[MiddleLeft],
                                  DrawArgument(Point<int16_t>(0, ML_MR_Y_),
@@ -577,11 +602,12 @@ void UIMiniMap::update_canvas() {
         DrawArgument(Point<int16_t>(7, 50),
                      Point<int16_t>(c_stretch + 114, m_stretch + 27)));
 
-    if (has_map_)
+    if (has_map_) {
         max_sprites_.emplace_back(
             map_["miniMap"]["canvas"],
             DrawArgument(Point<int16_t>(map_draw_origin_x_,
                                         map_draw_origin_y_ + MAX_ADJ_)));
+    }
 
     max_sprites_.emplace_back(
         Max[MiddleLeft],
@@ -618,11 +644,14 @@ void UIMiniMap::update_canvas() {
 
 void UIMiniMap::draw_movable_markers(Point<int16_t> init_pos,
                                      float alpha) const {
-    if (!has_map_)
+    if (!has_map_) {
         return;
+    }
 
     Animation marker_sprite;
     Point<int16_t> sprite_offset;
+    constexpr Point<int16_t> char_pos_offset = { 60, 150 };
+    constexpr Point<int16_t> npc_pos_offset = { 0, 65 };
 
     /// NPCs
     MapObjects *npcs = Stage::get().get_npcs().get_npcs();
@@ -630,9 +659,9 @@ void UIMiniMap::draw_movable_markers(Point<int16_t> init_pos,
     sprite_offset = marker_sprite.get_dimensions() / Point<int16_t>(2, 0);
 
     for (auto npc = npcs->begin(); npc != npcs->end(); ++npc) {
-        Point<int16_t> npc_pos = npc->second.get()->get_position();
+        Point<int16_t> npc_pos = npc->second->get_position();
         marker_sprite.draw(
-            (npc_pos + center_offset_) / scale_ - sprite_offset
+            (npc_pos + center_offset_ + npc_pos_offset) / scale_ - sprite_offset
                 + Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_)
                 + init_pos,
             alpha);
@@ -644,9 +673,10 @@ void UIMiniMap::draw_movable_markers(Point<int16_t> init_pos,
     sprite_offset = marker_sprite.get_dimensions() / Point<int16_t>(2, 0);
 
     for (auto chr = chars->begin(); chr != chars->end(); ++chr) {
-        Point<int16_t> chr_pos = chr->second.get()->get_position();
+        Point<int16_t> chr_pos = chr->second->get_position();
         marker_sprite.draw(
-            (chr_pos + center_offset_) / scale_ - sprite_offset
+            (chr_pos + char_pos_offset + center_offset_) / scale_
+                - sprite_offset
                 + Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_)
                 + init_pos,
             alpha);
@@ -656,7 +686,7 @@ void UIMiniMap::draw_movable_markers(Point<int16_t> init_pos,
     Point<int16_t> player_pos = Stage::get().get_player().get_position();
     sprite_offset = player_marker_.get_dimensions() / Point<int16_t>(2, 0);
     player_marker_.draw(
-        (player_pos + center_offset_) / scale_ - sprite_offset
+        (player_pos + char_pos_offset + center_offset_) / scale_ - sprite_offset
             + Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_) + init_pos,
         alpha);
 }
@@ -664,8 +694,9 @@ void UIMiniMap::draw_movable_markers(Point<int16_t> init_pos,
 void UIMiniMap::update_static_markers() {
     static_marker_info_.clear();
 
-    if (!has_map_)
+    if (!has_map_) {
         return;
+    }
 
     Animation marker_sprite;
 
@@ -674,13 +705,15 @@ void UIMiniMap::update_static_markers() {
     marker_sprite = Animation(marker_["portal"]);
     Point<int16_t> marker_offset =
         marker_sprite.get_dimensions() / Point<int16_t>(2, 0);
+    constexpr Point<int16_t> marker_pos_offset = { 0, 65 };
 
     for (nl::node portal = portals.begin(); portal != portals.end(); ++portal) {
         int portal_type = portal["pt"];
 
         if (portal_type == 2) {
             Point<int16_t> marker_pos =
-                (Point<int16_t>(portal["x"], portal["y"]) + center_offset_)
+                (Point<int16_t>(portal["x"], portal["y"]) + marker_pos_offset
+                 + center_offset_)
                     / scale_
                 - marker_offset
                 + Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_);
@@ -692,8 +725,9 @@ void UIMiniMap::update_static_markers() {
 void UIMiniMap::set_npclist_active(bool active) {
     list_npc_enabled_ = active;
 
-    if (!active)
+    if (!active) {
         select_npclist(-1);
+    }
 
     update_dimensions();
 }
@@ -721,20 +755,22 @@ void UIMiniMap::update_npclist() {
     selected_ = -1;
     list_npc_offset_ = 0;
 
-    if (simple_mode_)
+    if (simple_mode_) {
         return;
+    }
 
-    auto npcs = Stage::get().get_npcs().get_npcs();
+    auto *npcs = Stage::get().get_npcs().get_npcs();
 
     for (auto npc = npcs->begin(); npc != npcs->end(); ++npc) {
         list_npc_list_.emplace_back(npc->second.get());
 
-        auto n = static_cast<Npc *>(npc->second.get());
+        auto *n = static_cast<Npc *>(npc->second.get());
         std::string name = n->get_name();
         std::string func = n->get_func();
 
-        if (func != "")
+        if (!func.empty()) {
             name += " (" + func + ")";
+        }
 
         Text name_text = Text(Text::Font::A11M,
                               Text::Alignment::LEFT,
@@ -745,10 +781,11 @@ void UIMiniMap::update_npclist() {
         list_npc_full_names_.emplace_back(name);
     }
 
-    for (size_t i = 0; i < list_npc_names_.size(); i++)
+    for (size_t i = 0; i < list_npc_names_.size(); i++) {
         string_format::format_with_ellipsis(
             list_npc_names_[i],
             LISTNPC_TEXT_WIDTH_ - (list_npc_names_.size() > 8 ? 0 : 20));
+    }
 
     const Point<int16_t> listNpc_pos = Point<int16_t>(
         type_ == Type::MAX ? max_dimensions_.x() : normal_dimensions_.x(),
@@ -769,8 +806,9 @@ void UIMiniMap::update_npclist() {
                        bool below = list_npc_offset_ + 8 + shift
                                     <= list_npc_names_.size();
 
-                       if (above && below)
+                       if (above && below) {
                            list_npc_offset_ += shift;
+                       }
                    });
 
         c_stretch += 12;
@@ -827,8 +865,9 @@ void UIMiniMap::update_npclist() {
 void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
     Animation npc_marker = Animation(marker_["npc"]);
 
-    for (Sprite sprite : list_npc_sprites_)
+    for (const Sprite &sprite : list_npc_sprites_) {
         sprite.draw(position_, alpha);
+    }
 
     Point<int16_t> listNpc_pos =
         position_ + Point<int16_t>(minimap_dims.x() + 10, 23);
@@ -854,8 +893,9 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
         listNpc_pos.shift_y(LISTNPC_ITEM_HEIGHT_);
     }
 
-    if (list_npc_slider_.isenabled())
+    if (list_npc_slider_.isenabled()) {
         list_npc_slider_.draw(position_);
+    }
 
     if (selected_ >= 0) {
         Point<int16_t> npc_pos =
@@ -871,19 +911,22 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
 }
 
 void UIMiniMap::select_npclist(int16_t choice) {
-    if (selected_ == choice)
+    if (selected_ == choice) {
         return;
+    }
 
-    if (selected_ >= 0 && selected_ < list_npc_names_.size())
+    if (selected_ >= 0 && selected_ < list_npc_names_.size()) {
         list_npc_names_[selected_].change_color(Color::Name::WHITE);
+    }
 
     if (choice > list_npc_names_.size() || choice < 0) {
         selected_ = -1;
     } else {
         selected_ = choice != selected_ ? choice : -1;
 
-        if (selected_ >= 0)
+        if (selected_ >= 0) {
             list_npc_names_[selected_].change_color(Color::Name::BLACK);
+        }
     }
 }
 }  // namespace ms

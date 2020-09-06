@@ -68,8 +68,9 @@ UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
                                position_.y() - dimension_.y() / 2);
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
-    if (type_ != NoticeType::ENTERNUMBER)
+    if (type_ != NoticeType::ENTERNUMBER) {
         Sound(Sound::Name::DLGNOTICE).play();
+    }
 }
 
 UINotice::UINotice(std::string message, NoticeType t) :
@@ -102,10 +103,11 @@ void UINotice::draw(bool textfield) const {
         box_.draw(start);
         start.shift_y(box_.height());
 
-        if (type_ == NoticeType::YESNO && alignment_ == Text::Alignment::LEFT)
+        if (type_ == NoticeType::YESNO && alignment_ == Text::Alignment::LEFT) {
             question_.draw(position_ + Point<int16_t>(31, 14));
-        else
+        } else {
             question_.draw(position_ + Point<int16_t>(131, 14));
+        }
     }
 
     bottombox_.draw(start);
@@ -115,9 +117,11 @@ int16_t UINotice::box2offset(bool textfield) const {
     int16_t offset = top_.height() + centerbox_.height() + box_.height()
                      + height_ - (textfield ? 0 : 16);
 
-    if (type_ == NoticeType::OK)
-        if (height_ < 34)
+    if (type_ == NoticeType::OK) {
+        if (height_ < 34) {
             offset += 15;
+        }
+    }
 
     return offset;
 }
@@ -225,8 +229,9 @@ Cursor::State UIEnterNumber::send_cursor(bool clicked,
     if (numfield.get_state() == Textfield::State::NORMAL) {
         Cursor::State nstate = numfield.send_cursor(cursorpos, clicked);
 
-        if (nstate != Cursor::State::IDLE)
+        if (nstate != Cursor::State::IDLE) {
             return nstate;
+        }
     }
 
     return UIElement::send_cursor(clicked, cursorpos);
@@ -268,9 +273,8 @@ void UIEnterNumber::handlestring(std::string numstr) {
         numfield.set_state(Textfield::State::DISABLED);
         UI::get().emplace<UIOk>("Only numbers are allowed.", okhandler);
         return;
-    } else {
-        num = std::stoi(numstr);
     }
+    num = std::stoi(numstr);
 
     if (num < 1) {
         numfield.set_state(Textfield::State::DISABLED);
@@ -278,17 +282,17 @@ void UIEnterNumber::handlestring(std::string numstr) {
             "You may only enter a number equal to or higher than 1.",
             okhandler);
         return;
-    } else if (num > max) {
+    }
+    if (num > max) {
         numfield.set_state(Textfield::State::DISABLED);
         UI::get().emplace<UIOk>(
             "You may only enter a number equal to or lower than "
                 + std::to_string(max) + ".",
             okhandler);
         return;
-    } else {
-        numhandler(num);
-        deactivate();
     }
+    numhandler(num);
+    deactivate();
 
     buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
 }

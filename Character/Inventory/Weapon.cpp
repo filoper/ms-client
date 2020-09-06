@@ -21,9 +21,10 @@ namespace ms {
 Weapon::Type Weapon::by_value(int32_t value) {
     if (value < 130 || (value > 133 && value < 137) || value == 139
         || (value > 149 && value < 170) || value > 170) {
-        if (value != 100)
+        if (value != 100) {
             std::cout << "Unknown Weapon::Type value: [" << value << "]"
                       << std::endl;
+        }
 
         return Weapon::NONE;
     }

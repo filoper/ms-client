@@ -42,7 +42,7 @@ public:
 
     void update_stats(int32_t character_id,
                       int16_t job_id,
-                      int8_t level,
+                      uint8_t level,
                       int16_t fame,
                       std::string guild,
                       std::string alliance);

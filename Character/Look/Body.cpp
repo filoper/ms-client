@@ -27,26 +27,25 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
     nl::node bodynode = nl::nx::character["000020" + strid + ".img"];
     nl::node headnode = nl::nx::character["000120" + strid + ".img"];
 
-    for (auto iter : Stance::names) {
-        Stance::Id stance = iter.first;
-        const std::string &stancename = iter.second;
+    for (const auto &[stance, stance_name] : Stance::names) {
+        nl::node stancenode = bodynode[stance_name];
 
-        nl::node stancenode = bodynode[stancename];
-
-        if (!stancenode)
+        if (!stancenode) {
             continue;
+        }
 
         for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
-            for (nl::node partnode : framenode) {
+            for (const auto &partnode : framenode) {
                 std::string part = partnode.name();
 
                 if (part != "delay" && part != "face") {
                     std::string z = partnode["z"];
                     Body::Layer layer = layer_by_name(z);
 
-                    if (layer == Body::Layer::NONE)
+                    if (layer == Body::Layer::NONE) {
                         continue;
+                    }
 
                     Point<int16_t> shift;
 
@@ -67,7 +66,7 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
                 }
             }
 
-            if (nl::node headsfnode = headnode[stancename][frame]["head"]) {
+            if (nl::node headsfnode = headnode[stance_name][frame]["head"]) {
                 Point<int16_t> shift =
                     drawinfo.get_head_position(stance, frame);
 
@@ -93,8 +92,9 @@ void Body::draw(Stance::Id stance,
                 const DrawArgument &args) const {
     auto frameit = stances_[stance][layer].find(frame);
 
-    if (frameit == stances_[stance][layer].end())
+    if (frameit == stances_[stance][layer].end()) {
         return;
+    }
 
     frameit->second.draw(args);
 }
@@ -107,9 +107,10 @@ Body::Layer Body::layer_by_name(const std::string &name) {
     auto layer_iter = layers_by_name_.find(name);
 
     if (layer_iter == layers_by_name_.end()) {
-        if (name != "")
+        if (!name.empty()) {
             std::cout << "Unknown Body::Layer name: [" << name << "]"
                       << std::endl;
+        }
 
         return Body::Layer::NONE;
     }

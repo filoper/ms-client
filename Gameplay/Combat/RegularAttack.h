@@ -30,6 +30,8 @@ public:
 
     void apply_hiteffects(const AttackUser &user, Mob &target) const override;
 
+    void apply_affected_effects(Char &) const override {};
+
     Animation get_bullet(const Char &user, int32_t bulletid) const override;
 
     bool is_attack() const override;

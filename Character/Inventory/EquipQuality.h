@@ -18,12 +18,10 @@
 #include "../../Template/EnumMap.h"
 #include "../EquipStat.h"
 
-namespace ms {
-namespace EquipQuality {
+namespace ms::EquipQuality {
 enum Id { GREY, WHITE, ORANGE, BLUE, VIOLET, GOLD };
 
 Id check_quality(int32_t item_id,
                  bool scrolled,
                  const EnumMap<EquipStat::Id, uint16_t> &stats);
-}  // namespace EquipQuality
-}  // namespace ms
+}  // namespace ms::EquipQuality

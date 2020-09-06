@@ -48,8 +48,9 @@ Text::Text(Font f,
 Text::Text() : Text(Font::A11M, Alignment::LEFT, Color::BLACK) {}
 
 void Text::reset_layout() {
-    if (text_.empty())
+    if (text_.empty()) {
         return;
+    }
 
     layout_ = GraphicsGL::get().createlayout(text_,
                                              font_,
@@ -60,8 +61,9 @@ void Text::reset_layout() {
 }
 
 void Text::change_text(const std::string &t) {
-    if (text_ == t)
+    if (text_ == t) {
         return;
+    }
 
     text_ = t;
 
@@ -69,8 +71,9 @@ void Text::change_text(const std::string &t) {
 }
 
 void Text::change_color(Color::Name c) {
-    if (color_ == c)
+    if (color_ == c) {
         return;
+    }
 
     color_ = c;
 
@@ -115,7 +118,7 @@ Point<int16_t> Text::dimensions() const {
     return layout_.get_dimensions();
 }
 
-Point<int16_t> Text::endoffset() const {
+Point<int16_t> Text::end_offset() const {
     return layout_.get_endoffset();
 }
 

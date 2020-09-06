@@ -23,7 +23,7 @@ template<class T>
 class Point {
 public:
     // Construct a point from a vector property
-    Point(nl::node src) {
+    Point(const nl::node &src) {
         a = static_cast<T>(src.x());
         b = static_cast<T>(src.y());
     }

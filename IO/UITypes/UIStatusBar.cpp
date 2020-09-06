@@ -39,6 +39,10 @@
 #include "UIWorldSelect.h"
 
 namespace ms {
+auto fn_enter_cashshop = []<typename... T>(T && ... args) {
+    EnterCashShopPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
     stats_(st),
     channel_count_(channel_count) {
@@ -55,8 +59,9 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
 
     std::string stat = "status";
 
-    if (VWIDTH_ == 800)
+    if (VWIDTH_ == 800) {
         stat += "800";
+    }
 
     nl::node mainBar = nl::nx::ui["StatusBar3.img"]["mainBar"];
     nl::node status = mainBar[stat];
@@ -84,17 +89,19 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
 
     int16_t pos_adj = 0;
 
-    if (VWIDTH_ == 1280)
+    if (VWIDTH_ == 1280) {
         pos_adj = 87;
-    else if (VWIDTH_ == 1366)
+    } else if (VWIDTH_ == 1366) {
         pos_adj = 171;
-    else if (VWIDTH_ == 1920)
+    } else if (VWIDTH_ == 1920) {
         pos_adj = 448;
+    }
 
-    if (VWIDTH_ == 1024)
+    if (VWIDTH_ == 1024) {
         quickslot_min_ = 1;
-    else
+    } else {
         quickslot_min_ = 0;
+    }
 
     if (VWIDTH_ == 800) {
         hpmp_pos_ = Point<int16_t>(412, 40);
@@ -163,16 +170,18 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
     hpmp_sprites_.emplace_back(status["layer:cover"],
                                hpmp_pos_ - Point<int16_t>(1, 0));
 
-    if (VWIDTH_ == 800)
+    if (VWIDTH_ == 800) {
         hpmp_sprites_.emplace_back(status["layer:Lv"], hpmp_pos_);
-    else
+    } else {
         hpmp_sprites_.emplace_back(status["layer:Lv"],
                                    hpmp_pos_ - Point<int16_t>(1, 0));
+    }
 
     int16_t hpmp_max = 139;
 
-    if (VWIDTH_ > 800)
+    if (VWIDTH_ > 800) {
         hpmp_max += 30;
+    }
 
     hp_bar_ = Gauge(Gauge::Type::GAME,
                     status.resolve("gauge/hp/layer:0"),
@@ -197,14 +206,15 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
 
     Point<int16_t> buttonPos = Point<int16_t>(591 + pos_adj, 73);
 
-    if (VWIDTH_ == 1024)
+    if (VWIDTH_ == 1024) {
         buttonPos += Point<int16_t>(38, 0);
-    else if (VWIDTH_ == 1280)
+    } else if (VWIDTH_ == 1280) {
         buttonPos += Point<int16_t>(31, 0);
-    else if (VWIDTH_ == 1366)
+    } else if (VWIDTH_ == 1366) {
         buttonPos += Point<int16_t>(33, 0);
-    else if (VWIDTH_ == 1920)
+    } else if (VWIDTH_ == 1920) {
         buttonPos += Point<int16_t>(310, 0);
+    }
 
     buttons_[Buttons::BT_CASHSHOP] =
         std::make_unique<MapleButton>(menu["button:CashShop"], buttonPos);
@@ -236,10 +246,11 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
         extend += "800";
     }
 
-    if (VWIDTH_ == 1366)
+    if (VWIDTH_ == 1366) {
         quickslot_qs_adj_ = Point<int16_t>(213, 0);
-    else
+    } else {
         quickslot_qs_adj_ = Point<int16_t>(211, 0);
+    }
 
     if (VWIDTH_ == 800) {
         Point<int16_t> quickslot_qs = Point<int16_t>(579, 0);
@@ -283,10 +294,11 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
                                           quickslot_qs + quickslot_qs_adj_);
     }
 
-    if (quickslot_active_)
+    if (quickslot_active_) {
         buttons_[Buttons::BT_EXTEND_QS]->set_active(false);
-    else
+    } else {
         buttons_[Buttons::BT_FOLD_QS]->set_active(false);
+    }
 
 #pragma region Menu
     menu_background_[0] = submenu["backgrnd"]["0"];
@@ -380,8 +392,9 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
         std::make_unique<MapleButton>(submenu["event"]["button:schedule"],
                                       event_pos_);
 
-    for (size_t i = Buttons::BT_MENU_QUEST; i <= Buttons::BT_EVENT_DAILY; i++)
+    for (size_t i = Buttons::BT_MENU_QUEST; i <= Buttons::BT_EVENT_DAILY; i++) {
         buttons_[i]->set_active(false);
+    }
 
     menu_title_[0] = submenu["title"]["character"];
     menu_title_[1] = submenu["title"]["community"];
@@ -421,8 +434,9 @@ UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
 void UIStatusBar::draw(float alpha) const {
     UIElement::draw_sprites(alpha);
 
-    for (size_t i = 0; i <= Buttons::BT_EVENT; i++)
+    for (size_t i = 0; i <= Buttons::BT_EVENT; i++) {
         buttons_.at(i)->draw(position_);
+    }
 
     hpmp_sprites_[0].draw(position_, alpha);
 
@@ -474,10 +488,11 @@ void UIStatusBar::draw(float alpha) const {
     Point<int16_t> pos_adj = Point<int16_t>(0, 0);
 
     if (quickslot_active_) {
-        if (VWIDTH_ == 800)
+        if (VWIDTH_ == 800) {
             pos_adj += Point<int16_t>(0, -73);
-        else
+        } else {
             pos_adj += Point<int16_t>(0, -31);
+        }
     }
 
     Point<int16_t> pos;
@@ -511,8 +526,9 @@ void UIStatusBar::draw(float alpha) const {
 
     uint16_t end_y = std::floor(28.2 * button_count);
 
-    if (menu_active_)
+    if (menu_active_) {
         end_y -= 1;
+    }
 
     uint16_t mid_y = end_y - mid_pos.y();
 
@@ -524,16 +540,18 @@ void UIStatusBar::draw(float alpha) const {
 
     menu_title_[menutitle_index].draw(position_ + pos + pos_adj);
 
-    for (size_t i = Buttons::BT_MENU_QUEST; i <= Buttons::BT_EVENT_DAILY; i++)
+    for (size_t i = Buttons::BT_MENU_QUEST; i <= Buttons::BT_EVENT_DAILY; i++) {
         buttons_.at(i)->draw(position_);
+    }
 #pragma endregion
 }
 
 void UIStatusBar::update() {
     UIElement::update();
 
-    for (auto sprite : hpmp_sprites_)
+    for (auto sprite : hpmp_sprites_) {
         sprite.update();
+    }
 
     exp_bar_.update(getexppercent());
     hp_bar_.update(gethppercent());
@@ -547,52 +565,59 @@ void UIStatusBar::update() {
         if (quickslot_adj_.x() > quickslot_min_) {
             int16_t new_x = quickslot_adj_.x() - Constants::TIMESTEP;
 
-            if (new_x < quickslot_min_)
+            if (new_x < quickslot_min_) {
                 quickslot_adj_.set_x(quickslot_min_);
-            else
+            } else {
                 quickslot_adj_.shift_x(-Constants::TIMESTEP);
+            }
         }
     } else {
         if (quickslot_adj_.x() < QUICKSLOT_MAX_) {
             int16_t new_x = quickslot_adj_.x() + Constants::TIMESTEP;
 
-            if (new_x > QUICKSLOT_MAX_)
+            if (new_x > QUICKSLOT_MAX_) {
                 quickslot_adj_.set_x(QUICKSLOT_MAX_);
-            else
+            } else {
                 quickslot_adj_.shift_x(Constants::TIMESTEP);
+            }
         }
     }
 
     for (size_t i = Buttons::BT_MENU_QUEST; i <= Buttons::BT_MENU_CLAIM; i++) {
         Point<int16_t> menu_adj = Point<int16_t>(0, 0);
 
-        if (i == Buttons::BT_MENU_FISHING)
+        if (i == Buttons::BT_MENU_FISHING) {
             menu_adj = Point<int16_t>(3, 1);
+        }
 
         buttons_[i]->set_position(menu_pos_ + menu_adj + pos_adj);
     }
 
     for (size_t i = Buttons::BT_SETTING_CHANNEL; i <= Buttons::BT_SETTING_QUIT;
-         i++)
+         i++) {
         buttons_[i]->set_position(setting_pos_ + pos_adj);
+    }
 
     for (size_t i = Buttons::BT_COMMUNITY_FRIENDS;
          i <= Buttons::BT_COMMUNITY_MAPLECHAT;
-         i++)
+         i++) {
         buttons_[i]->set_position(community_pos_ + pos_adj);
+    }
 
     for (size_t i = Buttons::BT_CHARACTER_INFO; i <= Buttons::BT_CHARACTER_ITEM;
-         i++)
+         i++) {
         buttons_[i]->set_position(character_pos_ + pos_adj);
+    }
 
     for (size_t i = Buttons::BT_EVENT_SCHEDULE; i <= Buttons::BT_EVENT_DAILY;
-         i++)
+         i++) {
         buttons_[i]->set_position(event_pos_ + pos_adj);
+    }
 }
 
 Button::State UIStatusBar::button_pressed(uint16_t id) {
     switch (id) {
-        case Buttons::BT_CASHSHOP: EnterCashShopPacket().dispatch(); break;
+        case Buttons::BT_CASHSHOP: fn_enter_cashshop(); break;
         case Buttons::BT_MENU: toggle_menu(); break;
         case Buttons::BT_OPTIONS: toggle_setting(); break;
         case Buttons::BT_CHARACTER: toggle_character(); break;
@@ -660,13 +685,15 @@ Button::State UIStatusBar::button_pressed(uint16_t id) {
                 auto is_active = userlist->is_active();
 
                 if (cur_tab == tab) {
-                    if (is_active)
+                    if (is_active) {
                         userlist->deactivate();
-                    else
+                    } else {
                         userlist->makeactive();
+                    }
                 } else {
-                    if (!is_active)
+                    if (!is_active) {
                         userlist->makeactive();
+                    }
 
                     userlist->change_tab(tab);
                 }
@@ -725,16 +752,19 @@ void UIStatusBar::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
         if (escape) {
             if (!menu_active_ && !setting_active_ && !community_active_
-                && !character_active_ && !event_active_)
+                && !character_active_ && !event_active_) {
                 toggle_setting();
-            else
+            } else {
                 remove_menus();
+            }
         } else if (keycode == KeyAction::Id::RETURN) {
             for (size_t i = Buttons::BT_MENU_QUEST;
                  i <= Buttons::BT_EVENT_DAILY;
-                 i++)
-                if (buttons_[i]->get_state() == Button::State::MOUSEOVER)
+                 i++) {
+                if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
                     button_pressed(i);
+                }
+            }
         } else if (keycode == KeyAction::Id::UP
                    || keycode == KeyAction::Id::DOWN) {
             uint16_t min_id, max_id;
@@ -768,15 +798,17 @@ void UIStatusBar::send_key(int32_t keycode, bool pressed, bool escape) {
             }
 
             if (keycode == KeyAction::Id::DOWN) {
-                if (id < max_id)
+                if (id < max_id) {
                     id++;
-                else
+                } else {
                     id = min_id;
+                }
             } else if (keycode == KeyAction::Id::UP) {
-                if (id > min_id)
+                if (id > min_id) {
                     id--;
-                else
+                } else {
                     id = max_id;
+                }
             }
 
             buttons_[id]->set_state(Button::State::MOUSEOVER);
@@ -837,13 +869,15 @@ UIElement::Type UIStatusBar::get_type() const {
 
 void UIStatusBar::toggle_qs() {
     if (!menu_active_ && !setting_active_ && !community_active_
-        && !character_active_ && !event_active_)
+        && !character_active_ && !event_active_) {
         toggle_qs(!quickslot_active_);
+    }
 }
 
 void UIStatusBar::toggle_qs(bool quick_slot_active) {
-    if (quickslot_active_ == quick_slot_active)
+    if (quickslot_active_ == quick_slot_active) {
         return;
+    }
 
     quickslot_active_ = quick_slot_active;
     buttons_[Buttons::BT_FOLD_QS]->set_active(quickslot_active_);
@@ -956,40 +990,43 @@ void UIStatusBar::toggle_event() {
 }
 
 void UIStatusBar::remove_menus() {
-    if (menu_active_)
+    if (menu_active_) {
         toggle_menu();
-    else if (setting_active_)
+    } else if (setting_active_) {
         toggle_setting();
-    else if (community_active_)
+    } else if (community_active_) {
         toggle_community();
-    else if (character_active_)
+    } else if (character_active_) {
         toggle_character();
-    else if (event_active_)
+    } else if (event_active_) {
         toggle_event();
+    }
 }
 
 void UIStatusBar::remove_active_menu(MenuType type) {
-    for (size_t i = Buttons::BT_MENU_QUEST; i <= Buttons::BT_EVENT_DAILY; i++)
+    for (size_t i = Buttons::BT_MENU_QUEST; i <= Buttons::BT_EVENT_DAILY; i++) {
         buttons_[i]->set_state(Button::State::NORMAL);
+    }
 
-    if (menu_active_ && type != MenuType::MENU)
+    if (menu_active_ && type != MenuType::MENU) {
         toggle_menu();
-    else if (setting_active_ && type != MenuType::SETTING)
+    } else if (setting_active_ && type != MenuType::SETTING) {
         toggle_setting();
-    else if (community_active_ && type != MenuType::COMMUNITY)
+    } else if (community_active_ && type != MenuType::COMMUNITY) {
         toggle_community();
-    else if (character_active_ && type != MenuType::CHARACTER)
+    } else if (character_active_ && type != MenuType::CHARACTER) {
         toggle_character();
-    else if (event_active_ && type != MenuType::EVENT)
+    } else if (event_active_ && type != MenuType::EVENT) {
         toggle_event();
+    }
 }
 
 Point<int16_t> UIStatusBar::get_quickslot_pos() const {
     if (quickslot_active_) {
-        if (VWIDTH_ == 800)
+        if (VWIDTH_ == 800) {
             return Point<int16_t>(0, -73);
-        else
-            return Point<int16_t>(0, -31);
+        }
+        return Point<int16_t>(0, -31);
     }
 
     return Point<int16_t>(0, 0);
@@ -1003,8 +1040,9 @@ bool UIStatusBar::is_menu_active() {
 float UIStatusBar::getexppercent() const {
     int16_t level = stats_.get_stat(MapleStat::Id::LEVEL);
 
-    if (level >= ExpTable::LEVELCAP)
+    if (level >= ExpTable::LEVELCAP) {
         return 0.0f;
+    }
 
     int64_t exp = stats_.get_exp();
 

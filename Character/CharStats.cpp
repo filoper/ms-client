@@ -136,8 +136,9 @@ void CharStats::set_total(EquipStat::Id stat, int32_t value) {
     if (iter != EQSTAT_CAPS.end()) {
         int32_t cap_value = iter->second;
 
-        if (value > cap_value)
+        if (value > cap_value) {
             value = cap_value;
+        }
     }
 
     total_stats_[stat] = value;
@@ -191,8 +192,9 @@ int32_t CharStats::calculate_damage(int32_t mobatk) const {
     // TODO: Random stuff, need to find the actual formula somewhere.
     auto weapon_def = get_total(EquipStat::Id::WDEF);
 
-    if (weapon_def == 0)
+    if (weapon_def == 0) {
         return mobatk;
+    }
 
     int32_t reduceatk = mobatk / 2 + mobatk / weapon_def;
 

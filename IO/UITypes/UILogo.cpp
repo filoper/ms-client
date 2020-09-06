@@ -22,12 +22,12 @@
 #include "UILogin.h"
 
 namespace ms {
-UILogo::UILogo() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
+UILogo::UILogo() :
+    UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)),
+    nexon_ended_(false),
+    wizet_ended_(false),
+    user_clicked_(false) {
     Music("BgmUI.img/NxLogo").play_once();
-
-    nexon_ended_ = false;
-    wizet_ended_ = false;
-    user_clicked_ = false;
 
     nl::node Logo = nl::nx::ui["Logo.img"];
 
@@ -43,10 +43,11 @@ void UILogo::draw(float inter) const {
         if (!nexon_ended_) {
             nexon_.draw(position_ + Point<int16_t>(440, 360), inter);
         } else {
-            if (!wizet_ended_)
+            if (!wizet_ended_) {
                 wizet_.draw(position_ + Point<int16_t>(263, 195), inter);
-            else
+            } else {
                 wizet_end_.draw(position_ + Point<int16_t>(263, 195));
+            }
         }
     } else {
         wizet_end_.draw(position_ + Point<int16_t>(263, 195));
@@ -73,8 +74,9 @@ void UILogo::update() {
 Cursor::State UILogo::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
-    if (clicked && !user_clicked_)
+    if (clicked && !user_clicked_) {
         user_clicked_ = true;
+    }
 
     return ret;
 }

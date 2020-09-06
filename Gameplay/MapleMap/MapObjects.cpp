@@ -20,11 +20,12 @@ void MapObjects::draw(Layer::Id layer,
                       double viewx,
                       double viewy,
                       float alpha) const {
-    for (auto &oid : layers_[layer]) {
+    for (const auto &oid : layers_[layer]) {
         auto mmo = get(oid);
 
-        if (mmo && mmo->is_active())
+        if (mmo && mmo->is_active()) {
             mmo->draw(viewx, viewy, alpha);
+        }
     }
 }
 
@@ -47,18 +48,20 @@ void MapObjects::update(const Physics &physics) {
             remove_mob = true;
         }
 
-        if (remove_mob)
+        if (remove_mob) {
             iter = objects_.erase(iter);
-        else
+        } else {
             iter++;
+        }
     }
 }
 
 void MapObjects::clear() {
     objects_.clear();
 
-    for (auto &layer : layers_)
+    for (auto &layer : layers_) {
         layer.clear();
+    }
 }
 
 bool MapObjects::contains(int32_t oid) const {

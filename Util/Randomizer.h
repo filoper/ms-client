@@ -35,8 +35,9 @@ public:
 
     template<class T>
     T next_real(T from, T to) const {
-        if (from >= to)
+        if (from >= to) {
             return from;
+        }
 
         std::uniform_real_distribution<T> range(from, to);
         std::random_device rd;
@@ -52,8 +53,9 @@ public:
 
     template<class T>
     T next_int(T from, T to) const {
-        if (from >= to)
+        if (from >= to) {
             return from;
+        }
 
         std::uniform_int_distribution<T> range(from, to - 1);
         std::random_device rd;

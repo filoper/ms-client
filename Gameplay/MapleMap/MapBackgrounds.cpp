@@ -51,11 +51,13 @@ void Background::settype(Type type) {
     int16_t dim_y = animation_.get_dimensions().y();
 
     // TODO: Double check for zero. Is this a WZ reading issue?
-    if (cx_ == 0)
+    if (cx_ == 0) {
         cx_ = (dim_x > 0) ? dim_x : 1;
+    }
 
-    if (cy_ == 0)
+    if (cy_ == 0) {
         cy_ = (dim_y > 0) ? dim_y : 1;
+    }
 
     htile_ = 1;
     vtile_ = 1;
@@ -101,19 +103,23 @@ void Background::draw(double viewx, double viewy, float alpha) const {
     }
 
     if (htile_ > 1) {
-        while (x > 0)
+        while (x > 0) {
             x -= cx_;
+        }
 
-        while (x < -cx_)
+        while (x < -cx_) {
             x += cx_;
+        }
     }
 
     if (vtile_ > 1) {
-        while (y > 0)
+        while (y > 0) {
             y -= cy_;
+        }
 
-        while (y < -cy_)
+        while (y < -cy_) {
             y += cy_;
+        }
     }
 
     int16_t ix = static_cast<int16_t>(std::round(x));
@@ -122,12 +128,14 @@ void Background::draw(double viewx, double viewy, float alpha) const {
     int16_t tw = cx_ * htile_;
     int16_t th = cy_ * vtile_;
 
-    for (int16_t tx = 0; tx < tw; tx += cx_)
-        for (int16_t ty = 0; ty < th; ty += cy_)
+    for (int16_t tx = 0; tx < tw; tx += cx_) {
+        for (int16_t ty = 0; ty < th; ty += cy_) {
             animation_.draw(DrawArgument(Point<int16_t>(ix + tx, iy + ty),
                                          flipped_,
                                          opacity_ / 255),
                             alpha);
+        }
+    }
 }
 
 void Background::update() {
@@ -142,16 +150,17 @@ MapBackgrounds::MapBackgrounds(nl::node src) {
     while (back.size() > 0) {
         bool front = back["front"].get_bool();
 
-        if (front)
+        if (front) {
             foregrounds_.push_back(back);
-        else
+        } else {
             backgrounds_.push_back(back);
+        }
 
         no++;
         back = src[std::to_string(no)];
     }
 
-    black_ = src["0"]["bS"].get_string() == "";
+    black_ = src["0"]["bS"].get_string().empty();
 }
 
 MapBackgrounds::MapBackgrounds() {}
@@ -159,25 +168,30 @@ MapBackgrounds::MapBackgrounds() {}
 void MapBackgrounds::drawbackgrounds(double viewx,
                                      double viewy,
                                      float alpha) const {
-    if (black_)
+    if (black_) {
         GraphicsGL::get().drawscreenfill(0.0f, 0.0f, 0.0f, 1.0f);
+    }
 
-    for (auto &background : backgrounds_)
+    for (const auto &background : backgrounds_) {
         background.draw(viewx, viewy, alpha);
+    }
 }
 
 void MapBackgrounds::drawforegrounds(double viewx,
                                      double viewy,
                                      float alpha) const {
-    for (auto &foreground : foregrounds_)
+    for (const auto &foreground : foregrounds_) {
         foreground.draw(viewx, viewy, alpha);
+    }
 }
 
 void MapBackgrounds::update() {
-    for (auto &background : backgrounds_)
+    for (auto &background : backgrounds_) {
         background.update();
+    }
 
-    for (auto &foreground : foregrounds_)
+    for (auto &foreground : foregrounds_) {
         foreground.update();
+    }
 }
 }  // namespace ms

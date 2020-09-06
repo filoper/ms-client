@@ -15,7 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../MapleStory.h"
+#include "../MSClient.h"
 #include "NetConstants.h"
 
 namespace ms {
@@ -25,7 +25,7 @@ public:
     // Obtain the initialization vector from the handshake
     Cryptography(const int8_t *handshake);
     Cryptography();
-    ~Cryptography();
+    ~Cryptography() = default;
 
     // Encrypt a byte array with the given length and iv
     void encrypt(int8_t *bytes, size_t length);

@@ -33,12 +33,14 @@ MapEffect::MapEffect(std::string path) : active_(false) {
 MapEffect::MapEffect() {}
 
 void MapEffect::draw() const {
-    if (!active_)
+    if (!active_) {
         effect_.draw(position_, 1.0f);
+    }
 }
 
 void MapEffect::update() {
-    if (!active_)
+    if (!active_) {
         active_ = effect_.update(6);
+    }
 }
 }  // namespace ms

@@ -27,7 +27,7 @@ public:
 
     Texture();
 
-    ~Texture();
+    ~Texture() = default;
 
     void draw(const DrawArgument &args) const;
 
@@ -44,7 +44,7 @@ public:
     Point<int16_t> get_dimensions() const;
 
 private:
-    nl::node find_child(nl::node source, std::string link);
+    static nl::node find_child(const nl::node &source, const std::string &link);
 
     nl::bitmap bitmap_;
     Point<int16_t> origin_;

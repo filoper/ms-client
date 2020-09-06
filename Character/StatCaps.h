@@ -17,6 +17,8 @@
 
 #include <unordered_map>
 
+#include "EquipStat.h"
+
 namespace ms {
 // Externalising this for easier configurability.
 const std::unordered_map<EquipStat::Id, int32_t> EQSTAT_CAPS = {

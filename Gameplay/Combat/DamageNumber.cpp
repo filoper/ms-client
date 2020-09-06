@@ -117,23 +117,25 @@ int16_t DamageNumber::getadvance(char c, bool first) const {
 
         switch (type_) {
             case DamageNumber::Type::CRITICAL:
-                if (first)
+                if (first) {
                     advance += 8;
-                else
+                } else {
                     advance += 4;
+                }
 
                 break;
             default:
-                if (first)
+                if (first) {
                     advance += 2;
+                }
 
                 break;
         }
 
         return advance;
-    } else {
-        return 0;
     }
+
+    return 0;
 }
 
 void DamageNumber::set_x(int16_t headx) {

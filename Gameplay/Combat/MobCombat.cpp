@@ -113,13 +113,15 @@ void MobCombat::show_buff(int32_t cid, int32_t skillid, int8_t level) {}
 void MobCombat::show_player_buff(int32_t skillid) {}
 
 const SpecialMove &MobCombat::get_move(int32_t move_id) {
-    if (move_id == 0)
+    if (move_id == 0) {
         return regular_attack_;
+    }
 
     auto iter = skills_.find(move_id);
 
-    if (iter == skills_.end())
+    if (iter == skills_.end()) {
         iter = skills_.emplace(move_id, move_id).first;
+    }
 
     return iter->second;
 }

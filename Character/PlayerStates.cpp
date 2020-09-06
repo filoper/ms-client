@@ -40,11 +40,12 @@ void PlayerNullState::update_state(Player &player) const {
     } else {
         Optional<const Ladder> ladder = player.get_ladder();
 
-        if (ladder)
+        if (ladder) {
             state =
                 ladder->is_ladder() ? Char::State::LADDER : Char::State::ROPE;
-        else
+        } else {
             state = Char::State::FALL;
+        }
     }
 
     player.get_phobj().clear_flags();
@@ -60,8 +61,9 @@ void PlayerStandState::initialize(Player &player) const {
 void PlayerStandState::send_action(Player &player,
                                    KeyAction::Id ka,
                                    bool down) const {
-    if (player.is_attacking())
+    if (player.is_attacking()) {
         return;
+    }
 
     if (down) {
         switch (ka) {
@@ -85,13 +87,15 @@ void PlayerStandState::send_action(Player &player,
 }
 
 void PlayerStandState::update(Player &player) const {
-    if (player.get_phobj().enablejd == false)
+    if (player.get_phobj().enablejd == false) {
         player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+    }
 }
 
 void PlayerStandState::update_state(Player &player) const {
-    if (!player.get_phobj().onground)
+    if (!player.get_phobj().onground) {
         player.set_state(Char::State::FALL);
+    }
 }
 
 // Walking
@@ -102,8 +106,9 @@ void PlayerWalkState::initialize(Player &player) const {
 void PlayerWalkState::send_action(Player &player,
                                   KeyAction::Id ka,
                                   bool down) const {
-    if (player.is_attacking())
+    if (player.is_attacking()) {
         return;
+    }
 
     if (down) {
         switch (ka) {
@@ -126,18 +131,21 @@ bool PlayerWalkState::haswalkinput(const Player &player) const {
 }
 
 void PlayerWalkState::update(Player &player) const {
-    if (!player.is_attacking() && haswalkinput(player))
+    if (!player.is_attacking() && haswalkinput(player)) {
         player.get_phobj().hforce +=
             player.getflip() ? player.get_walkforce() : -player.get_walkforce();
+    }
 
-    if (player.get_phobj().enablejd == false)
+    if (player.get_phobj().enablejd == false) {
         player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+    }
 }
 
 void PlayerWalkState::update_state(Player &player) const {
     if (player.get_phobj().onground) {
-        if (!haswalkinput(player) || player.get_phobj().hspeed == 0.0f)
+        if (!haswalkinput(player) || player.get_phobj().hspeed == 0.0f) {
             player.set_state(Char::State::STAND);
+        }
     } else {
         player.set_state(Char::State::FALL);
     }
@@ -165,13 +173,15 @@ void PlayerFallState::update(Player &player) const {
     if (player.is_key_down(KeyAction::Id::LEFT) && hspeed > 0.0) {
         hspeed -= 0.025;
 
-        if (hspeed < 0.0)
+        if (hspeed < 0.0) {
             hspeed = 0.0;
+        }
     } else if (player.is_key_down(KeyAction::Id::RIGHT) && hspeed < 0.0) {
         hspeed += 0.025;
 
-        if (hspeed > 0.0)
+        if (hspeed > 0.0) {
             hspeed = 0.0;
+        }
     }
 }
 
@@ -219,8 +229,9 @@ void PlayerProneState::send_action(Player &player,
 }
 
 void PlayerProneState::update(Player &player) const {
-    if (player.get_phobj().enablejd == false)
+    if (player.get_phobj().enablejd == false) {
         player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+    }
 }
 
 // Sitting
@@ -265,18 +276,21 @@ void PlayerFlyState::send_action(Player &player,
 }
 
 void PlayerFlyState::update(Player &player) const {
-    if (player.is_attacking())
+    if (player.is_attacking()) {
         return;
+    }
 
-    if (player.is_key_down(KeyAction::Id::LEFT))
+    if (player.is_key_down(KeyAction::Id::LEFT)) {
         player.get_phobj().hforce = -player.get_flyforce();
-    else if (player.is_key_down(KeyAction::Id::RIGHT))
+    } else if (player.is_key_down(KeyAction::Id::RIGHT)) {
         player.get_phobj().hforce = player.get_flyforce();
+    }
 
-    if (player.is_key_down(KeyAction::Id::UP))
+    if (player.is_key_down(KeyAction::Id::UP)) {
         player.get_phobj().vforce = -player.get_flyforce();
-    else if (player.is_key_down(KeyAction::Id::DOWN))
+    } else if (player.is_key_down(KeyAction::Id::DOWN)) {
         player.get_phobj().vforce = player.get_flyforce();
+    }
 }
 
 void PlayerFlyState::update_state(Player &player) const {
@@ -330,12 +344,13 @@ void PlayerClimbState::send_action(Player &player,
 }
 
 void PlayerClimbState::update(Player &player) const {
-    if (player.is_key_down(KeyAction::Id::UP))
+    if (player.is_key_down(KeyAction::Id::UP)) {
         player.get_phobj().vspeed = -player.get_climbforce();
-    else if (player.is_key_down(KeyAction::Id::DOWN))
+    } else if (player.is_key_down(KeyAction::Id::DOWN)) {
         player.get_phobj().vspeed = player.get_climbforce();
-    else
+    } else {
         player.get_phobj().vspeed = 0.0;
+    }
 }
 
 void PlayerClimbState::update_state(Player &player) const {
@@ -343,8 +358,9 @@ void PlayerClimbState::update_state(Player &player) const {
     bool downwards = player.is_key_down(KeyAction::Id::DOWN);
     auto ladder = player.get_ladder();
 
-    if (ladder && ladder->felloff(y, downwards))
+    if (ladder && ladder->felloff(y, downwards)) {
         cancel_ladder(player);
+    }
 }
 
 void PlayerClimbState::cancel_ladder(Player &player) const {

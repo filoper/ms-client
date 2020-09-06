@@ -32,15 +32,16 @@ Afterimage::Afterimage(int32_t skill_id,
                            ["afterimage"][name][stance_name];
     }
 
-    if (!src)
+    if (!src) {
         src = nl::nx::character["Afterimage"][name + ".img"][level / 10]
                                [stance_name];
+    }
 
     range_ = src;
     first_frame_ = 0;
     displayed_ = false;
 
-    for (nl::node sub : src) {
+    for (const nl::node &sub : src) {
         uint8_t frame = string_conversion::or_default<uint8_t>(sub.name(), 255);
 
         if (frame < 255) {
@@ -58,13 +59,15 @@ Afterimage::Afterimage() {
 void Afterimage::draw(uint8_t stframe,
                       const DrawArgument &args,
                       float alpha) const {
-    if (!displayed_ && stframe >= first_frame_)
+    if (!displayed_ && stframe >= first_frame_) {
         animation_.draw(args, alpha);
+    }
 }
 
 void Afterimage::update(uint8_t stframe, uint16_t timestep) {
-    if (!displayed_ && stframe >= first_frame_)
+    if (!displayed_ && stframe >= first_frame_) {
         displayed_ = animation_.update(timestep);
+    }
 }
 
 uint8_t Afterimage::get_first_frame() const {

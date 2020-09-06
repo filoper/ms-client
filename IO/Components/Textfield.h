@@ -63,9 +63,9 @@ public:
     const std::string &get_text() const;
 
 private:
-    void modifytext(const std::string &);
+    void modify_text(const std::string &);
 
-    bool belowlimit() const;
+    bool below_limit() const;
 
     Text text_label_;
     std::string text_;

@@ -30,11 +30,12 @@ JobData::JobData(int32_t id) {
 
     name_ = std::string(strsrc["bookName"]);
 
-    for (nl::node sub : src["skill"]) {
+    for (const nl::node &sub : src["skill"]) {
         int32_t skill_id = string_conversion::or_zero<int32_t>(sub.name());
 
-        if (skill_id == 0)
+        if (skill_id == 0) {
             continue;
+        }
 
         skills_.push_back(skill_id);
     }

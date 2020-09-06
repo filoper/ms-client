@@ -18,8 +18,7 @@
 #include "../../InPacket.h"
 #include "../../Login.h"
 
-namespace ms {
-namespace CashShopParser {
+namespace ms::CashShopParser {
 enum Jobs : uint16_t {
     EVAN = 2001,
     EVAN1 = 2200,
@@ -38,5 +37,4 @@ StatsEntry parseCharacterInfo(InPacket &recv);
 StatsEntry parseCharStats(InPacket &recv);
 bool hasSPTable(int16_t job);
 void parseRemainingSkillInfo(InPacket &recv);
-}  // namespace CashShopParser
-}  // namespace ms
+}  // namespace ms::CashShopParser

@@ -40,8 +40,9 @@ Slider::Slider(int32_t t,
     } else {
         std::string VScr = "VScr";
 
-        if (type_ != Type::LINE_CYAN)
+        if (type_ != Type::LINE_CYAN) {
             VScr += std::to_string(type_);
+        }
 
         src = nl::nx::ui["Basic.img"][VScr];
     }
@@ -83,10 +84,11 @@ void Slider::setenabled(bool en) {
 void Slider::setrows(int16_t nr, int16_t ur, int16_t rm) {
     row_max_ = rm - ur;
 
-    if (row_max_ > 0)
+    if (row_max_ > 0) {
         row_height_ = (vertical_.length() - button_height_ * 2) / row_max_;
-    else
+    } else {
         row_height_ = 0;
+    }
 
     row_ = nr;
 }
@@ -102,10 +104,11 @@ void Slider::setvertical(Range<int16_t> ver) {
     prev_.set_position(start_);
     next_.set_position(end_);
 
-    if (row_max_ > 0)
+    if (row_max_ > 0) {
         row_height_ = (vertical_.length() - button_height_ * 2) / row_max_;
-    else
+    } else {
         row_height_ = 0;
+    }
 }
 
 Range<int16_t> Slider::getvertical() const {
@@ -176,9 +179,10 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
             }
 
             return Cursor::State::VSCROLLIDLE;
-        } else {
-            scrolling_ = false;
         }
+
+        scrolling_ = false;
+
     } else if (relative.x() < 0 || relative.y() < 0 || relative.x() > 8
                || relative.y() > vertical_.second()) {
         thumb_.set_state(Button::State::NORMAL);
@@ -196,14 +200,14 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
             thumb_.set_state(Button::State::PRESSED);
 
             return Cursor::State::VSCROLLIDLE;
-        } else {
-            thumb_.set_state(Button::State::NORMAL);
-
-            return Cursor::State::VSCROLL;
         }
-    } else {
+
         thumb_.set_state(Button::State::NORMAL);
+
+        return Cursor::State::VSCROLL;
     }
+
+    thumb_.set_state(Button::State::NORMAL);
 
     if (prev_.bounds(Point<int16_t>()).contains(cursor)) {
         if (pressed) {
@@ -215,14 +219,14 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
             prev_.set_state(Button::State::PRESSED);
 
             return Cursor::State::VSCROLLIDLE;
-        } else {
-            prev_.set_state(Button::State::MOUSEOVER);
-
-            return Cursor::State::VSCROLL;
         }
-    } else {
-        prev_.set_state(Button::State::NORMAL);
+
+        prev_.set_state(Button::State::MOUSEOVER);
+
+        return Cursor::State::VSCROLL;
     }
+
+    prev_.set_state(Button::State::NORMAL);
 
     if (next_.bounds(Point<int16_t>()).contains(cursor)) {
         if (pressed) {
@@ -234,14 +238,14 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
             next_.set_state(Button::State::PRESSED);
 
             return Cursor::State::VSCROLLIDLE;
-        } else {
-            next_.set_state(Button::State::MOUSEOVER);
-
-            return Cursor::State::VSCROLL;
         }
-    } else {
-        next_.set_state(Button::State::NORMAL);
+
+        next_.set_state(Button::State::MOUSEOVER);
+
+        return Cursor::State::VSCROLL;
     }
+
+    next_.set_state(Button::State::NORMAL);
 
     if (cursor.y() < vertical_.second()) {
         if (pressed) {
@@ -250,10 +254,11 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
             auto cursorrow =
                 static_cast<int16_t>(std::round(yoffset / row_height_));
 
-            if (cursorrow < 0)
+            if (cursorrow < 0) {
                 cursorrow = 0;
-            else if (cursorrow > row_max_)
+            } else if (cursorrow > row_max_) {
                 cursorrow = row_max_;
+            }
 
             int16_t delta = row_ - cursorrow;
 

@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include "../../Template/Optional.h"
 #include "../../Util/Randomizer.h"
 #include "../Components/TextTooltip.h"
 #include "../Components/Textfield.h"

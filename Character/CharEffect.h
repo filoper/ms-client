@@ -17,8 +17,7 @@
 
 #include "../Template/EnumMap.h"
 
-namespace ms {
-namespace CharEffect {
+namespace ms::CharEffect {
 // Character effects from Effect.wz
 enum Id {
     LEVELUP,
@@ -30,5 +29,4 @@ enum Id {
 };
 
 extern const EnumMap<Id, const char *> PATHS;
-}  // namespace CharEffect
-}  // namespace ms
+}  // namespace ms::CharEffect

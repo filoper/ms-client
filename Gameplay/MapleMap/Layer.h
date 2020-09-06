@@ -17,10 +17,8 @@
 
 #include "../Template/Enumeration.h"
 
-namespace ms {
-namespace Layer {
+namespace ms::Layer {
 enum Id { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, LENGTH };
 
 constexpr Enumeration<Id> IDs;
-}  // namespace Layer
-}  // namespace ms
+}  // namespace ms::Layer

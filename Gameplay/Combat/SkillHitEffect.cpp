@@ -32,28 +32,30 @@ void TwoHandedHitEffect::apply(const AttackUser &user, Mob &target) const {
 }
 
 ByLevelHitEffect::ByLevelHitEffect(nl::node src) {
-    for (auto sub : src["CharLevel"]) {
+    for (const auto &sub : src["CharLevel"]) {
         uint16_t level = string_conversion::or_zero<uint16_t>(sub.name());
         effects_.emplace(level, sub["hit"]["0"]);
     }
 }
 
 void ByLevelHitEffect::apply(const AttackUser &user, Mob &target) const {
-    if (effects_.empty())
+    if (effects_.empty()) {
         return;
+    }
 
     auto iter = effects_.begin();
     for (; iter != effects_.end() && user.level > iter->first; ++iter) {
     }
 
-    if (iter != effects_.begin())
+    if (iter != effects_.begin()) {
         iter--;
+    }
 
     iter->second.apply(target, user.flip);
 }
 
 ByLevelTwoHandedHitEffect::ByLevelTwoHandedHitEffect(nl::node src) {
-    for (auto sub : src["CharLevel"]) {
+    for (const auto &sub : src["CharLevel"]) {
         auto level = string_conversion::or_zero<uint16_t>(sub.name());
 
         effects_.emplace(
@@ -65,21 +67,23 @@ ByLevelTwoHandedHitEffect::ByLevelTwoHandedHitEffect(nl::node src) {
 
 void ByLevelTwoHandedHitEffect::apply(const AttackUser &user,
                                       Mob &target) const {
-    if (effects_.empty())
+    if (effects_.empty()) {
         return;
+    }
 
     auto iter = effects_.begin();
     for (; iter != effects_.end() && user.level > iter->first; ++iter) {
     }
 
-    if (iter != effects_.begin())
+    if (iter != effects_.begin()) {
         iter--;
+    }
 
     iter->second[user.second_weapon].apply(target, user.flip);
 }
 
 BySkillLevelHitEffect::BySkillLevelHitEffect(nl::node src) {
-    for (auto sub : src["level"]) {
+    for (const auto &sub : src["level"]) {
         auto level = string_conversion::or_zero<int32_t>(sub.name());
         effects_.emplace(level, sub["hit"]["0"]);
     }
@@ -88,7 +92,8 @@ BySkillLevelHitEffect::BySkillLevelHitEffect(nl::node src) {
 void BySkillLevelHitEffect::apply(const AttackUser &user, Mob &target) const {
     auto iter = effects_.find(user.skill_level);
 
-    if (iter != effects_.end())
+    if (iter != effects_.end()) {
         iter->second.apply(target, user.flip);
+    }
 }
 }  // namespace ms

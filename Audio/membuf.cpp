@@ -17,12 +17,13 @@ membuf::pos_type membuf::seekoff(
     off_type off,
     std::ios_base::seekdir dir,
     std::ios_base::openmode which = std::ios_base::in) {
-    if (dir == std::ios_base::cur)
+    if (dir == std::ios_base::cur) {
         gbump(off);
-    else if (dir == std::ios_base::end)
+    } else if (dir == std::ios_base::end) {
         setg(eback(), egptr() + off, egptr());
-    else if (dir == std::ios_base::beg)
+    } else if (dir == std::ios_base::beg) {
         setg(eback(), eback() + off, egptr());
+    }
     return gptr() - eback();
 }
 

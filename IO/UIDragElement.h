@@ -39,7 +39,8 @@ public:
                 position_ = cursorpos - cursor_offset_;
 
                 return Cursor::State::CLICKING;
-            } else if (indragrange(cursorpos)) {
+            }
+            if (indragrange(cursorpos)) {
                 cursor_offset_ = cursorpos - position_;
                 dragged_ = true;
 

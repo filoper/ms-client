@@ -160,23 +160,23 @@ Keyboard::Keyboard() {
     text_actions_[GLFW_KEY_DELETE] = KeyAction::Id::DELETE;
 }
 
-int32_t Keyboard::leftshiftcode() const {
+int32_t Keyboard::left_shift_code() const {
     return GLFW_KEY_LEFT_SHIFT;
 }
 
-int32_t Keyboard::rightshiftcode() const {
+int32_t Keyboard::right_shift_code() const {
     return GLFW_KEY_RIGHT_SHIFT;
 }
 
-int32_t Keyboard::capslockcode() const {
+int32_t Keyboard::capslock_code() const {
     return GLFW_KEY_CAPS_LOCK;
 }
 
-int32_t Keyboard::leftctrlcode() const {
+int32_t Keyboard::left_ctrl_code() const {
     return GLFW_KEY_LEFT_CONTROL;
 }
 
-int32_t Keyboard::rightctrlcode() const {
+int32_t Keyboard::right_ctrl_code() const {
     return GLFW_KEY_LEFT_CONTROL;
 }
 
@@ -196,7 +196,7 @@ KeyAction::Id Keyboard::get_ctrl_action(int32_t keycode) const {
 }
 
 void Keyboard::assign(uint8_t key, uint8_t tid, int32_t action) {
-    if (KeyType::Id type = KeyType::typebyid(tid)) {
+    if (KeyType::Id type = KeyType::get_type_by_id(tid)) {
         Mapping mapping = Mapping(type, action);
 
         keymap_[Keytable[key]] = mapping;
@@ -213,36 +213,42 @@ void Keyboard::remove(uint8_t key) {
 
 Keyboard::Mapping Keyboard::get_text_mapping(int32_t keycode,
                                              bool shift) const {
-    if (text_actions_.count(keycode)) {
+    if (text_actions_.count(keycode) != 0u) {
         return Mapping(KeyType::Id::ACTION, text_actions_.at(keycode));
-    } else if (keycode == 39 || (keycode >= 44 && keycode <= 57)
-               || keycode == 59 || keycode == 61
-               || (keycode >= 91 && keycode <= 93) || keycode == 96) {
-        if (!shift)
+    }
+
+    if (keycode == 39 || (keycode >= 44 && keycode <= 57) || keycode == 59
+        || keycode == 61 || (keycode >= 91 && keycode <= 93) || keycode == 96) {
+        if (!shift) {
             return Mapping(KeyType::Id::TEXT, keycode);
-        else
-            return Mapping(KeyType::Id::TEXT, Specialtable[keycode - 1]);
-    } else if (keycode >= 33 && keycode <= 126) {
-        if (shift)
-            return Mapping(KeyType::Id::TEXT, keycode);
-        else
-            return Mapping(KeyType::Id::TEXT, Shifttable[keycode - 1]);
-    } else {
-        switch (keycode) {
-            case GLFW_KEY_LEFT:
-            case GLFW_KEY_RIGHT:
-            case GLFW_KEY_UP:
-            case GLFW_KEY_DOWN: return keymap_.at(keycode);
-            default: return Mapping(KeyType::Id::NONE, 0);
         }
+
+        return Mapping(KeyType::Id::TEXT, Specialtable[keycode - 1]);
+    }
+
+    if (keycode >= 33 && keycode <= 126) {
+        if (shift) {
+            return Mapping(KeyType::Id::TEXT, keycode);
+        }
+
+        return Mapping(KeyType::Id::TEXT, Shifttable[keycode - 1]);
+    }
+
+    switch (keycode) {
+        case GLFW_KEY_LEFT:
+        case GLFW_KEY_RIGHT:
+        case GLFW_KEY_UP:
+        case GLFW_KEY_DOWN: return keymap_.at(keycode);
+        default: return Mapping(KeyType::Id::NONE, 0);
     }
 }
 
 Keyboard::Mapping Keyboard::get_mapping(int32_t keycode) const {
     auto iter = keymap_.find(keycode);
 
-    if (iter == keymap_.end())
+    if (iter == keymap_.end()) {
         return Mapping(KeyType::Id::NONE, 0);
+    }
 
     return iter->second;
 }
@@ -250,8 +256,9 @@ Keyboard::Mapping Keyboard::get_mapping(int32_t keycode) const {
 Keyboard::Mapping Keyboard::get_maple_mapping(int32_t keycode) const {
     auto iter = maple_keys_.find(keycode);
 
-    if (iter == maple_keys_.end())
+    if (iter == maple_keys_.end()) {
         return Mapping(KeyType::Id::NONE, 0);
+    }
 
     return iter->second;
 }

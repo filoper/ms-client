@@ -30,8 +30,9 @@ ItemDrop::ItemDrop(int32_t oid,
     item_id_(iid) {}
 
 void ItemDrop::draw(double viewx, double viewy, float alpha) const {
-    if (!active_)
+    if (!active_) {
         return;
+    }
 
     Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
     icon_.draw({ angle_.get(alpha), absp, opacity_.get(alpha) });

@@ -30,18 +30,20 @@ void MapReactors::update(const Physics &physics) {
 
         int32_t oid = spawn.get_oid();
 
-        if (auto reactor = reactors_.get(oid))
+        if (auto reactor = reactors_.get(oid)) {
             reactor->makeactive();
-        else
+        } else {
             reactors_.add(spawn.instantiate(physics));
+        }
     }
 
     reactors_.update(physics);
 }
 
 void MapReactors::trigger(int32_t oid, int8_t state) {
-    if (Optional<Reactor> reactor = reactors_.get(oid))
+    if (Optional<Reactor> reactor = reactors_.get(oid)) {
         reactor->set_state(state);
+    }
 }
 
 void MapReactors::spawn(ReactorSpawn &&spawn) {
@@ -49,8 +51,9 @@ void MapReactors::spawn(ReactorSpawn &&spawn) {
 }
 
 void MapReactors::remove(int32_t oid, int8_t state, Point<int16_t> position) {
-    if (Optional<Reactor> reactor = reactors_.get(oid))
+    if (Optional<Reactor> reactor = reactors_.get(oid)) {
         reactor->destroy(state, position);
+    }
 }
 
 void MapReactors::clear() {

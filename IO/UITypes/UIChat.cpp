@@ -66,8 +66,9 @@ UIChat::UIChat() : UIDragElement<PosMAPLECHAT>() {
 
     dimension_ = Texture(backgrnd).get_dimensions();
 
-    if (show_weekly_)
+    if (show_weekly_) {
         UI::get().emplace<UIRank>();
+    }
 }
 
 void UIChat::draw(float inter) const {
@@ -81,8 +82,9 @@ void UIChat::draw(float inter) const {
 }
 
 void UIChat::send_key(int32_t keycode, bool pressed, bool escape) {
-    if (pressed && escape)
+    if (pressed && escape) {
         close();
+    }
 }
 
 UIElement::Type UIChat::get_type() const {
@@ -156,8 +158,9 @@ void UIRank::draw(float inter) const {
 }
 
 void UIRank::send_key(int32_t keycode, bool pressed, bool escape) {
-    if (pressed && escape)
+    if (pressed && escape) {
         close();
+    }
 }
 
 UIElement::Type UIRank::get_type() const {

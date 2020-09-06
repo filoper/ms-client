@@ -52,8 +52,9 @@ UIUserList::UIUserList(uint16_t t) :
     party_tab_ = Tab::PARTY_MINE;
     party_title_ = Party["title"];
 
-    for (size_t i = 0; i <= 4; i++)
+    for (size_t i = 0; i <= 4; i++) {
         party_mine_grid_[i] = user_list_["Sheet2"][i];
+    }
 
     party_mine_name_ = Text(Text::Font::A12M,
                             Text::Alignment::LEFT,
@@ -119,8 +120,9 @@ UIUserList::UIUserList(uint16_t t) :
                                       Point<int16_t>(13, 118));
     buttons_[Buttons::BT_FRIEND_GROUP_0]->set_active(false);
 
-    for (size_t i = 0; i <= 3; i++)
+    for (size_t i = 0; i <= 3; i++) {
         friend_grid_[i] = user_list_["Sheet1"][i];
+    }
 
     std::string text = "(" + std::to_string(friend_count_) + std::string("/")
                        + std::to_string(friend_total_) + std::string(")");
@@ -223,8 +225,9 @@ UIUserList::UIUserList(uint16_t t) :
 
     blacklist_title_ = Blacklist["base"];
 
-    for (size_t i = 0; i <= 3; i++)
+    for (size_t i = 0; i <= 3; i++) {
         blacklist_grid_[i] = user_list_["Sheet6"][i];
+    }
 
     blacklist_name_ = Text(Text::Font::A12M,
                            Text::Alignment::LEFT,
@@ -272,8 +275,9 @@ void UIUserList::draw(float alpha) const {
             party_slider_.draw(position_);
         }
     } else if (tab_ == Buttons::BT_TAB_FRIEND) {
-        for (auto sprite : friend_sprites_)
+        for (const auto &sprite : friend_sprites_) {
             sprite.draw(position_, alpha);
+        }
 
         friends_online_text_.draw(position_ + Point<int16_t>(211, 62));
         friends_cur_location_.draw(position_ + Point<int16_t>(9, 279));
@@ -283,8 +287,9 @@ void UIUserList::draw(float alpha) const {
         friends_group_name_.draw(position_ + Point<int16_t>(29, 114));
         friends_slider_.draw(position_);
     } else if (tab_ == Buttons::BT_TAB_BOSS) {
-        for (auto sprite : boss_sprites_)
+        for (const auto &sprite : boss_sprites_) {
             sprite.draw(position_, alpha);
+        }
     } else if (tab_ == Buttons::BT_TAB_BLACKLIST) {
         blacklist_title_.draw(position_ + Point<int16_t>(24, 104));
         blacklist_grid_[0].draw(position_ + Point<int16_t>(24, 134));
@@ -297,13 +302,17 @@ void UIUserList::draw(float alpha) const {
 void UIUserList::update() {
     UIElement::update();
 
-    if (tab_ == Buttons::BT_TAB_FRIEND)
-        for (auto sprite : friend_sprites_)
+    if (tab_ == Buttons::BT_TAB_FRIEND) {
+        for (auto sprite : friend_sprites_) {
             sprite.update();
+        }
+    }
 
-    if (tab_ == Buttons::BT_TAB_BOSS)
-        for (auto sprite : boss_sprites_)
+    if (tab_ == Buttons::BT_TAB_BOSS) {
+        for (auto sprite : boss_sprites_) {
             sprite.update();
+        }
+    }
 }
 
 void UIUserList::send_key(int32_t keycode, bool pressed, bool escape) {
@@ -313,10 +322,11 @@ void UIUserList::send_key(int32_t keycode, bool pressed, bool escape) {
         } else if (keycode == KeyAction::Id::TAB) {
             uint16_t new_tab = tab_;
 
-            if (new_tab < Buttons::BT_TAB_BLACKLIST)
+            if (new_tab < Buttons::BT_TAB_BLACKLIST) {
                 new_tab++;
-            else
+            } else {
                 new_tab = Buttons::BT_TAB_FRIEND;
+            }
 
             change_tab(new_tab);
         }
@@ -362,9 +372,10 @@ void UIUserList::change_tab(uint8_t tabid) {
                       ? user_list_["Main"]["Boss"]["backgrnd3"]
                       : user_list_["Main"]["backgrnd2"];
 
-    if (oldtab != tab_)
+    if (oldtab != tab_) {
         buttons_[Buttons::BT_TAB_FRIEND + oldtab]->set_state(
             Button::State::NORMAL);
+    }
 
     buttons_[Buttons::BT_TAB_FRIEND + tab_]->set_state(Button::State::PRESSED);
 
@@ -451,26 +462,29 @@ void UIUserList::change_party_tab(uint8_t tabid) {
     uint8_t oldtab = party_tab_;
     party_tab_ = tabid;
 
-    if (oldtab != party_tab_)
+    if (oldtab != party_tab_) {
         buttons_[Buttons::BT_TAB_FRIEND + oldtab]->set_state(
             Button::State::NORMAL);
+    }
 
     buttons_[Buttons::BT_TAB_FRIEND + party_tab_]->set_state(
         Button::State::PRESSED);
 
-    if (party_tab_ == Buttons::BT_TAB_PARTY_SEARCH)
+    if (party_tab_ == Buttons::BT_TAB_PARTY_SEARCH) {
         buttons_[Buttons::BT_PARTY_SEARCH_LEVEL]->set_active(true);
-    else
+    } else {
         buttons_[Buttons::BT_PARTY_SEARCH_LEVEL]->set_active(false);
+    }
 }
 
 void UIUserList::change_friend_tab(uint8_t tabid) {
     uint8_t oldtab = friend_tab_;
     friend_tab_ = tabid;
 
-    if (oldtab != friend_tab_)
+    if (oldtab != friend_tab_) {
         buttons_[Buttons::BT_TAB_FRIEND + oldtab]->set_state(
             Button::State::NORMAL);
+    }
 
     buttons_[Buttons::BT_TAB_FRIEND + friend_tab_]->set_state(
         Button::State::PRESSED);
@@ -480,9 +494,10 @@ void UIUserList::change_blacklist_tab(uint8_t tabid) {
     uint8_t oldtab = blacklist_tab_;
     blacklist_tab_ = tabid;
 
-    if (oldtab != blacklist_tab_)
+    if (oldtab != blacklist_tab_) {
         buttons_[Buttons::BT_TAB_FRIEND + oldtab]->set_state(
             Button::State::NORMAL);
+    }
 
     buttons_[Buttons::BT_TAB_FRIEND + blacklist_tab_]->set_state(
         Button::State::PRESSED);

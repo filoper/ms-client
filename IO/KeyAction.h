@@ -17,8 +17,7 @@
 
 #include <cstdint>
 
-namespace ms {
-namespace KeyAction {
+namespace ms::KeyAction {
 // Maple-specific keycodes, sent via the Keymap Packet.
 enum Id : int32_t {
     NONE = 0,
@@ -101,8 +100,7 @@ enum Id : int32_t {
     LENGTH
 };
 
-inline Id actionbyid(int32_t id) {
+inline Id get_action_by_id(int32_t id) {
     return static_cast<Id>(id);
 }
-}  // namespace KeyAction
-}  // namespace ms
+}  // namespace ms::KeyAction

@@ -15,8 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Buff.h"
 
-namespace ms {
-namespace Buffstat {
+namespace ms::Buffstat {
 bool is_disease(Id buff_id) {
     return diseases.find(buff_id) != diseases.end();
 }
@@ -112,5 +111,4 @@ const std::unordered_map<Id, uint64_t> diseases = {
     { Id::DARKNESS, 0x10000000000000L },
     { Id::WEAKEN, 0x4000000000000000L }
 };
-}  // namespace Buffstat
-}  // namespace ms
+}  // namespace ms::Buffstat

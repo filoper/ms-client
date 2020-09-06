@@ -15,7 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../MapleStory.h"
+#include "../MSClient.h"
 
 #ifndef USE_ASIO
 #include "NetConstants.h"

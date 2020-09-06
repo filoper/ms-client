@@ -22,8 +22,9 @@ void Geometry::draw(int16_t x,
                     int16_t h,
                     Color::Name cid,
                     float opacity) const {
-    if (w == 0 || h == 0 || opacity <= 0.0f)
+    if (w == 0 || h == 0 || opacity <= 0.0f) {
         return;
+    }
 
     const float *color = Color::colors[cid];
 
@@ -39,11 +40,11 @@ ColorBox::ColorBox(int16_t w, int16_t h, Color::Name c, float o) :
 
 ColorBox::ColorBox() : ColorBox(0, 0, Color::Name::BLACK, 0.0f) {}
 
-void ColorBox::setwidth(int16_t w) {
+void ColorBox::set_width(int16_t w) {
     width_ = w;
 }
 
-void ColorBox::setheight(int16_t h) {
+void ColorBox::set_height(int16_t h) {
     height_ = h;
 }
 
@@ -51,21 +52,23 @@ void ColorBox::set_color(Color::Name c) {
     color_ = c;
 }
 
-void ColorBox::setopacity(float o) {
+void ColorBox::set_opacity(float o) {
     opacity_ = o;
 }
 
 void ColorBox::draw(const DrawArgument &args) const {
-    Point<int16_t> absp = args.getpos();
-    int16_t absw = args.getstretch().x();
+    Point<int16_t> absp = args.get_pos();
+    int16_t absw = args.get_stretch().x();
 
-    if (absw == 0)
+    if (absw == 0) {
         absw = width_;
+    }
 
-    int16_t absh = args.getstretch().y();
+    int16_t absh = args.get_stretch().y();
 
-    if (absh == 0)
+    if (absh == 0) {
         absh = height_;
+    }
 
     absw = static_cast<int16_t>(absw * args.get_xscale());
     absh = static_cast<int16_t>(absh * args.get_yscale());
@@ -82,7 +85,7 @@ ColorLine::ColorLine(int16_t w, Color::Name c, float o) :
 
 ColorLine::ColorLine() : ColorLine(0, Color::Name::BLACK, 0.0f) {}
 
-void ColorLine::setwidth(int16_t w) {
+void ColorLine::set_width(int16_t w) {
     width_ = w;
 }
 
@@ -90,21 +93,23 @@ void ColorLine::set_color(Color::Name c) {
     color_ = c;
 }
 
-void ColorLine::setopacity(float o) {
+void ColorLine::set_opacity(float o) {
     opacity_ = o;
 }
 
 void ColorLine::draw(const DrawArgument &args) const {
-    Point<int16_t> absp = args.getpos();
-    int16_t absw = args.getstretch().x();
+    Point<int16_t> absp = args.get_pos();
+    int16_t absw = args.get_stretch().x();
 
-    if (absw == 0)
+    if (absw == 0) {
         absw = width_;
+    }
 
-    int16_t absh = args.getstretch().y();
+    int16_t absh = args.get_stretch().y();
 
-    if (absh == 0)
+    if (absh == 0) {
         absh = 1;
+    }
 
     absw = static_cast<int16_t>(absw * args.get_xscale());
     absh = static_cast<int16_t>(absh * args.get_yscale());

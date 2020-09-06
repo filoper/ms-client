@@ -114,8 +114,8 @@ public:
         stretch_(stretch),
         xscale_(xscale),
         yscale_(yscale),
-        color_(1.0f, 1.0f, 1.0f, opacity),
-        angle_(angle) {}
+        angle_(angle),
+        color_(1.0f, 1.0f, 1.0f, opacity) {}
 
     constexpr DrawArgument(Point<int16_t> position,
                            Point<int16_t> center,
@@ -129,12 +129,12 @@ public:
         stretch_(stretch),
         xscale_(xscale),
         yscale_(yscale),
-        color_(color),
-        angle_(angle) {}
+        angle_(angle),
+        color_(color) {}
 
-    constexpr Point<int16_t> getpos() const { return pos_; }
+    constexpr Point<int16_t> get_pos() const { return pos_; }
 
-    constexpr Point<int16_t> getstretch() const { return stretch_; }
+    constexpr Point<int16_t> get_stretch() const { return stretch_; }
 
     constexpr float get_xscale() const { return xscale_; }
 
@@ -173,13 +173,15 @@ public:
                                      Point<int16_t> dimensions) const {
         int16_t w = stretch_.x();
 
-        if (w == 0)
+        if (w == 0) {
             w = dimensions.x();
+        }
 
         int16_t h = stretch_.y();
 
-        if (h == 0)
+        if (h == 0) {
             h = dimensions.y();
+        }
 
         Point<int16_t> rlt = pos_ - center_ - origin;
         int16_t rl = rlt.x();

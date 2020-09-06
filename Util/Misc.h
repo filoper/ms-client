@@ -57,8 +57,7 @@ namespace bytecode {
 bool compare(int32_t mask, int32_t value);
 }  // namespace bytecode
 
-namespace NxHelper {
-namespace Map {
+namespace NxHelper::Map {
 struct MapInfo {
     std::string description;
     std::string name;
@@ -78,6 +77,5 @@ get_life_on_map(int32_t mapid);
 
 // Returns the name of the node, under which the argument map id is in
 nl::node get_map_node_name(int32_t mapid);
-}  // namespace Map
-}  // namespace NxHelper
+}  // namespace NxHelper::Map
 }  // namespace ms

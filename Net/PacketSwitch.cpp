@@ -15,8 +15,6 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "PacketSwitch.h"
 
-#include <string_view>
-
 #include "../Configuration.h"
 #include "Handlers/AttackHandlers.h"
 #include "Handlers/CashShopHandlers.h"
@@ -529,12 +527,12 @@ PacketSwitch::PacketSwitch() {
     emplace<FIELD_EFFECT, FieldEffectHandler>();
 }
 
-void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
+void PacketSwitch::forward(int8_t *bytes, size_t length) const {
     // Wrap the bytes with a parser
     InPacket recv = { bytes, length };
 
     // Read the opcode to determine handler responsible
-    uint16_t opcode = recv.read_short();
+    uint16_t opcode = recv.read_ushort();
 
     if (Configuration::get().get_show_packets()) {
         if (opcode == PING) {
@@ -566,11 +564,11 @@ void PacketSwitch::forward(const int8_t *bytes, size_t length) const {
         }
     } else {
         // Warn about a packet with opcode out of bounds
-        warn(MSG_OUTOFBOUNDS, opcode);
+        warn(MSG_OUT_OF_BOUNDS, opcode);
     }
 }
 
-void PacketSwitch::warn(const std::string &message, size_t opcode) const {
+void PacketSwitch::warn(std::string_view message, size_t opcode) const {
     std::cout << "Opcode [" << opcode << "] Error: " << message << std::endl;
 }
 }  // namespace ms

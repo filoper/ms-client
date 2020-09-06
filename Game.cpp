@@ -1,5 +1,5 @@
 //	This file is part of the continued Journey MMORPG client
-//	Copyright (C) 2015-2019  Daniel Allendorf, Ryan Payton
+//	Copyright (C) 2015-2020  Daniel Allendorf, Ryan Payton
 //
 //	This program is free software: you can redistribute it and/or modify
 //	it under the terms of the GNU Affero General Public License as published by
@@ -13,8 +13,12 @@
 //
 //	You should have received a copy of the GNU Affero General Public License
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#include "Game.h"
+
 #include <iostream>
 
+#include "Character/Char.h"
+#include "Constants.h"
 #include "Gameplay/Combat/DamageNumber.h"
 #include "Gameplay/Stage.h"
 #include "IO/UI.h"
@@ -26,7 +30,12 @@
 #include "Util/ScreenResolution.h"
 
 namespace ms {
-Error init() {
+Game::Game() {
+    HardwareInfo();
+    ScreenResolution();
+}
+
+Error Game::init() {
     if (Error error = Session::get().init()) {
         return error;
     }
@@ -58,7 +67,7 @@ Error init() {
     return Error::NONE;
 }
 
-void update() {
+void Game::update() {
     Window::get().check_events();
     Window::get().update();
     Stage::get().update();
@@ -67,22 +76,22 @@ void update() {
     Music::update_context();
 }
 
-void draw(float alpha) {
+void Game::draw(float alpha) {
     Window::get().begin();
     Stage::get().draw(alpha);
     UI::get().draw(alpha);
     Window::get().end();
 }
 
-bool is_running() {
+bool Game::is_running() {
     return Session::get().is_connected() && UI::get().not_quitted()
            && Window::get().not_closed();
 }
 
-void game_loop() {
+void Game::game_loop() {
     Timer::get().start();
 
-    int64_t timestep = Constants::TIMESTEP * 1000;
+    const int64_t timestep = Constants::TIMESTEP * 1000;
     int64_t accumulator = timestep;
 
     int64_t period = 0;
@@ -121,18 +130,15 @@ void game_loop() {
     Sound::close();
 }
 
-void start() {
+void Game::start() {
     // Initialize and check for errors
     if (Error error = init()) {
-        const char *message = error.get_message();
-        const char *args = error.get_args();
+        auto message = error.get_message();
+        auto details = error.get_details();
         bool can_retry = error.can_retry();
 
         std::cout << "Error: " << message << std::endl;
-
-        if (args && args[0]) {
-            std::cout << "Message: " << args << std::endl;
-        }
+        std::cout << "Message: " << details << std::endl;
 
         if (can_retry) {
             std::cout << "Enter 'retry' to try again." << std::endl;
@@ -149,11 +155,3 @@ void start() {
     }
 }
 }  // namespace ms
-
-int main() {
-    ms::HardwareInfo();
-    ms::ScreenResolution();
-    ms::start();
-
-    return 0;
-}

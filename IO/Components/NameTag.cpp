@@ -23,12 +23,12 @@ NameTag::NameTag(nl::node src, Text::Font f, std::string n) {
                          Color::Name::JAMBALAYA);
     name_.change_text(n);
 
-    textures_[false].push_back(src["0"]["0"]);
-    textures_[false].push_back(src["0"]["1"]);
-    textures_[false].push_back(src["0"]["2"]);
-    textures_[true].push_back(src["1"]["0"]);
-    textures_[true].push_back(src["1"]["1"]);
-    textures_[true].push_back(src["1"]["2"]);
+    textures_[false].emplace_back(src["0"]["0"]);
+    textures_[false].emplace_back(src["0"]["1"]);
+    textures_[false].emplace_back(src["0"]["2"]);
+    textures_[true].emplace_back(src["1"]["0"]);
+    textures_[true].emplace_back(src["1"]["1"]);
+    textures_[true].emplace_back(src["1"]["2"]);
 
     selected_ = false;
 }
@@ -36,7 +36,7 @@ NameTag::NameTag(nl::node src, Text::Font f, std::string n) {
 void NameTag::draw(Point<int16_t> position) const {
     position = position + Point<int16_t>(1, 2);
 
-    auto &tag = textures_[selected_];
+    const auto &tag = textures_[selected_];
 
     int16_t width = name_.width();
     auto startpos = position - Point<int16_t>(6 + width / 2, -1);
@@ -52,9 +52,10 @@ void NameTag::draw(Point<int16_t> position) const {
 void NameTag::set_selected(bool s) {
     selected_ = s;
 
-    if (s)
+    if (s) {
         name_.change_color(Color::Name::WHITE);
-    else
+    } else {
         name_.change_color(Color::Name::EAGLE);
+    }
 }
 }  // namespace ms

@@ -28,8 +28,9 @@ MesoDrop::MesoDrop(int32_t oid,
     icon_(icn) {}
 
 void MesoDrop::draw(double viewx, double viewy, float alpha) const {
-    if (!active_)
+    if (!active_) {
         return;
+    }
 
     Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
     icon_.draw({ angle_.get(alpha), absp, opacity_.get(alpha) }, alpha);

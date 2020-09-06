@@ -38,11 +38,12 @@ UIJoypad::UIJoypad() : UIDragElement<PosJOYPAD>() {
     buttons_[Buttons::OK] =
         std::make_unique<MapleButton>(Basic["BtOK4"], Point<int16_t>(82, 303));
 
-    for (auto &text : key_text_)
+    for (auto &text : key_text_) {
         text = Text(Text::Font::A12M,
                     Text::Alignment::LEFT,
                     Color::Name::BLACK,
                     "None");
+    }
 
     dimension_ = backgrnd_[true].get_dimensions();
 }
@@ -55,14 +56,15 @@ void UIJoypad::draw(float inter) const {
     int16_t y_adj = 18;
 
     for (size_t i = 0; i < Setting::SETTING_NUM; i++) {
-        if (i == 0)
+        if (i == 0) {
             key_text_[i].draw(position_ + Point<int16_t>(x, y));
-        else if (i > 0 && i < 4)
+        } else if (i > 0 && i < 4) {
             key_text_[i].draw(
                 position_ + Point<int16_t>(x - 16, y + 44 + y_adj * (i - 1)));
-        else
+        } else {
             key_text_[i].draw(
                 position_ + Point<int16_t>(x - 16, y + 123 + y_adj * (i - 4)));
+        }
     }
 
     UIElement::draw(inter);
@@ -70,10 +72,11 @@ void UIJoypad::draw(float inter) const {
 
 void UIJoypad::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
-        if (escape)
+        if (escape) {
             cancel();
-        else if (keycode == KeyAction::Id::RETURN)
+        } else if (keycode == KeyAction::Id::RETURN) {
             save();
+        }
     }
 }
 

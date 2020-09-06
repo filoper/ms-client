@@ -19,7 +19,7 @@ namespace ms {
 template<class T>
 class Singleton {
 public:
-    virtual ~Singleton() {}
+    virtual ~Singleton() = default;
 
     static T &get() { return instance_; }
 

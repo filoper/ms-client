@@ -54,7 +54,7 @@ void TwoHandedAction::apply(Char &target, Attack::Type) const {
 }
 
 ByLevelAction::ByLevelAction(nl::node src, int32_t id) {
-    for (auto sub : src["level"]) {
+    for (const auto &sub : src["level"]) {
         int32_t level = string_conversion::or_zero<int32_t>(sub.name());
         actions_[level] = std::string(sub["action"]);
     }
@@ -66,7 +66,8 @@ void ByLevelAction::apply(Char &target, Attack::Type) const {
     int32_t level = target.get_skilllevel(skill_id_);
     auto iter = actions_.find(level);
 
-    if (iter != actions_.end())
+    if (iter != actions_.end()) {
         target.attack(iter->second);
+    }
 }
 }  // namespace ms

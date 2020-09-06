@@ -30,9 +30,10 @@ size_t InPacket::length() const {
 }
 
 void InPacket::skip(size_t count) {
-    if (count > length())
+    if (count > length()) {
         throw PacketError("Read at index " + std::to_string(pos_) + " "
                           + "when packet size = " + std::to_string(top_));
+    }
 
     pos_ += count;
 }
@@ -71,8 +72,8 @@ int64_t InPacket::read_long() {
 }
 
 Point<int16_t> InPacket::read_point() {
-    int16_t x = read<int16_t>();
-    int16_t y = read<int16_t>();
+    auto x = read<int16_t>();
+    auto y = read<int16_t>();
 
     return Point<int16_t>(x, y);
 }

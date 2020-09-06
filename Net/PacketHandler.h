@@ -21,7 +21,7 @@ namespace ms {
 // Interface for classes that handle InPackets.
 class PacketHandler {
 public:
-    virtual ~PacketHandler() {}
+    virtual ~PacketHandler() = default;
 
     virtual void handle(InPacket &recv) const = 0;
 };

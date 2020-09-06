@@ -87,11 +87,13 @@ void Gauge::update(float t) {
         percentage_ += step_;
 
         if (step_ < 0.0f) {
-            if (target_ - percentage_ >= step_)
+            if (target_ - percentage_ >= step_) {
                 percentage_ = target_;
+            }
         } else if (step_ > 0.0f) {
-            if (target_ - percentage_ <= step_)
+            if (target_ - percentage_ <= step_) {
                 percentage_ = target_;
+            }
         }
     }
 }

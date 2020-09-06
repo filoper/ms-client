@@ -66,7 +66,8 @@ ActiveBuffs::ActiveBuffs() {
 void ActiveBuffs::apply_buff(CharStats &stats,
                              Buffstat::Id stat,
                              int16_t value) const {
-    if (auto &buff = buffs_[stat])
+    if (const auto &buff = buffs_[stat]) {
         buff->apply_to(stats, value);
+    }
 }
 }  // namespace ms

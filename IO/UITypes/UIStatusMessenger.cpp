@@ -57,8 +57,9 @@ void UIStatusMessenger::draw(float inter) const {
 }
 
 void UIStatusMessenger::update() {
-    for (StatusInfo &info : status_infos_)
+    for (StatusInfo &info : status_infos_) {
         info.update();
+    }
 }
 
 void UIStatusMessenger::update_screen(int16_t new_width, int16_t new_height) {
@@ -75,7 +76,8 @@ void UIStatusMessenger::show_status(Color::Name color,
                                     const std::string &message) {
     status_infos_.push_front(StatusInfo(message, color));
 
-    if (status_infos_.size() > MAX_MESSAGES_)
+    if (status_infos_.size() > MAX_MESSAGES_) {
         status_infos_.pop_back();
+    }
 }
 }  // namespace ms

@@ -241,7 +241,7 @@ private:
 
     const char *FILENAME = "Settings";
     const char *TITLE = "msclient";
-    const char *VERSION = "212.1";
+    const char *VERSION = "0.1.0";
     const char *JOINLINK = "https://www.nexon.com/account/en/create";
     const char *WEBSITE = "http://maplestory.nexon.net/";
     const char *FINDID = "https://www.nexon.com/account/en/login";
@@ -478,10 +478,9 @@ struct Setting {
 
         if (entry) {
             return *entry;
-        } else {
-            static T defaultentry;
-            return defaultentry;
         }
+        static T defaultentry;
+        return defaultentry;
     }
 };
 }  // namespace ms

@@ -117,12 +117,13 @@ void PetLook::update(const Physics &physics, Point<int16_t> charpos) {
                     phobj_.hforce = 0.0f;
                 }
 
-                if (charpos.y() - curpos.y() > 50.0f)
+                if (charpos.y() - curpos.y() > 50.0f) {
                     phobj_.vforce = PETFLYFORCE;
-                else if (charpos.y() - curpos.y() < -50.0f)
+                } else if (charpos.y() - curpos.y() < -50.0f) {
                     phobj_.vforce = -PETFLYFORCE;
-                else
+                } else {
                     phobj_.vforce = 0.0f;
+                }
             }
 
             phobj_.type = PhysicsObject::Type::FLYING;

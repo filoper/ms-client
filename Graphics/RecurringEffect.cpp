@@ -17,15 +17,20 @@
 
 namespace ms {
 void RecurringEffect::drawbelow(Point<int16_t> position, float alpha) const {
-    for (auto iter = effects_.begin(); iter != effects_.upper_bound(-1); ++iter)
-        for (auto &effect : iter->second)
+    for (auto iter = effects_.begin(); iter != effects_.upper_bound(-1);
+         ++iter) {
+        for (const auto &effect : iter->second) {
             effect.draw(position, alpha);
+        }
+    }
 }
 
 void RecurringEffect::drawabove(Point<int16_t> position, float alpha) const {
-    for (auto iter = effects_.upper_bound(-1); iter != effects_.end(); ++iter)
-        for (auto &effect : iter->second)
+    for (auto iter = effects_.upper_bound(-1); iter != effects_.end(); ++iter) {
+        for (const auto &effect : iter->second) {
             effect.draw(position, alpha);
+        }
+    }
 }
 
 void RecurringEffect::update() {
@@ -37,15 +42,15 @@ void RecurringEffect::update() {
 }
 
 void RecurringEffect::add(const Animation &animation,
-                      const DrawArgument &args,
-                      int8_t z,
-                      float speed) {
+                          const DrawArgument &args,
+                          int8_t z,
+                          float speed) {
     effects_[z].emplace_back(animation, args, speed);
 }
 
 void RecurringEffect::add(const Animation &animation,
-                      const DrawArgument &args,
-                      int8_t z) {
+                          const DrawArgument &args,
+                          int8_t z) {
     add(animation, args, z, 1.0f);
 }
 

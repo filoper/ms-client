@@ -24,17 +24,17 @@ class ScrollingNotice {
 public:
     ScrollingNotice();
 
-    void setnotice(std::string notice);
+    void set_notice(std::string notice);
 
     void draw(float alpha) const;
 
     void update();
 
 private:
+    bool active_;
+    int16_t width_;
     ColorBox background_;
     Text notice_;
     Linear<double> xpos_;
-    bool active_;
-    int16_t width_;
 };
 }  // namespace ms

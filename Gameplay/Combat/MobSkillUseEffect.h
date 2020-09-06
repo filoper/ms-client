@@ -17,8 +17,8 @@
 
 #include <cstdint>
 #include <functional>
-#include <vector>
 #include <nlnx/nx.hpp>
+#include <vector>
 
 #include "../../Graphics/Animation.h"
 

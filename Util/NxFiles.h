@@ -20,8 +20,7 @@
 
 #include "../Error.h"
 
-namespace ms {
-namespace NxFiles {
+namespace ms::NxFiles {
 // Number of needed files
 constexpr uint8_t NUM_FILES = 18;
 
@@ -39,5 +38,4 @@ constexpr std::array<const char *, NUM_FILES> filenames = {
 // Initialize NX
 // When successful test if the UI file is the correct version
 Error init();
-}  // namespace NxFiles
-}  // namespace ms
+}  // namespace ms::NxFiles

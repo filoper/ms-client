@@ -16,47 +16,47 @@
 #include "Textfield.h"
 
 #include <sstream>
+#include <utility>
 
 #include "../UI.h"
 
 namespace ms {
 Textfield::Textfield() :
+    text_(""),
     show_marker_(true),
     elapsed_(0),
+    marker_pos_(0),
     bounds_(),
-    limit_() {
-    text_ = "";
-    marker_pos_ = 0;
-    crypt_ = 0;
-    state_ = State::NORMAL;
-}
+    limit_(),
+    crypt_(0),
+    state_(State::NORMAL) {}
 
 Textfield::Textfield(Text::Font font,
                      Text::Alignment alignment,
                      Color::Name color,
                      Rectangle<int16_t> bounds,
                      size_t limit) :
+    text_label_(font, alignment, color, "", 0, false),
+    text_(""),
+    marker_(font, alignment, color, "|"),
     show_marker_(true),
     elapsed_(0),
+    marker_pos_(0),
     bounds_(bounds),
-    limit_(limit) {
-    text_label_ = Text(font, alignment, color, "", 0, false);
-    marker_ = Text(font, alignment, color, "|");
-
-    text_ = "";
-    marker_pos_ = 0;
-    crypt_ = 0;
-    state_ = State::NORMAL;
-}
+    limit_(limit),
+    crypt_(0),
+    state_(State::NORMAL) {}
 
 void Textfield::draw(Point<int16_t> posiiton) const {
-    if (state_ == State::DISABLED)
+    if (state_ == State::DISABLED) {
         return;
+    }
 
     Point<int16_t> absp = bounds_.get_left_top() + posiiton;
 
-    if (text_.size() > 0)
+    if (!text_.empty()) {
         text_label_.draw(absp);
+    }
 
     if (state_ == State::FOCUSED && show_marker_) {
         Point<int16_t> mpos =
@@ -67,8 +67,9 @@ void Textfield::draw(Point<int16_t> posiiton) const {
 }
 
 void Textfield::update(Point<int16_t> parent) {
-    if (state_ == State::DISABLED)
+    if (state_ == State::DISABLED) {
         return;
+    }
 
     parent_pos_ = parent;
     elapsed_ += Constants::TIMESTEP;
@@ -90,18 +91,19 @@ void Textfield::set_state(State st) {
             UI::get().remove_textfield();
         }
 
-        if (state_ == State::FOCUSED)
+        if (state_ == State::FOCUSED) {
             UI::get().focus_textfield(this);
+        }
     }
 }
 
 void Textfield::set_enter_callback(std::function<void(std::string)> onr) {
-    onreturn_ = onr;
+    onreturn_ = std::move(onr);
 }
 
 void Textfield::set_key_callback(KeyAction::Id key,
                                  std::function<void(void)> action) {
-    callbacks_[key] = action;
+    callbacks_[key] = std::move(action);
 }
 
 void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
@@ -109,44 +111,48 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
         if (type == KeyType::Id::ACTION) {
             switch (key) {
                 case KeyAction::Id::LEFT:
-                    if (marker_pos_ > 0)
+                    if (marker_pos_ > 0) {
                         marker_pos_--;
+                    }
 
                     break;
                 case KeyAction::Id::RIGHT:
-                    if (marker_pos_ < text_.size())
+                    if (marker_pos_ < text_.size()) {
                         marker_pos_++;
+                    }
 
                     break;
                 case KeyAction::Id::BACK:
-                    if (text_.size() > 0 && marker_pos_ > 0) {
+                    if (!text_.empty() && marker_pos_ > 0) {
                         text_.erase(marker_pos_ - 1, 1);
 
                         marker_pos_--;
 
-                        modifytext(text_);
+                        modify_text(text_);
                     }
 
                     break;
                 case KeyAction::Id::RETURN:
-                    if (onreturn_)
+                    if (onreturn_) {
                         onreturn_(text_);
+                    }
 
                     break;
                 case KeyAction::Id::SPACE: add_string(" "); break;
                 case KeyAction::Id::HOME: marker_pos_ = 0; break;
                 case KeyAction::Id::END: marker_pos_ = text_.size(); break;
                 case KeyAction::Id::DELETE:
-                    if (text_.size() > 0 && marker_pos_ < text_.size()) {
+                    if (!text_.empty() && marker_pos_ < text_.size()) {
                         text_.erase(marker_pos_, 1);
 
-                        modifytext(text_);
+                        modify_text(text_);
                     }
 
                     break;
                 default:
-                    if (callbacks_.count(key))
+                    if (callbacks_.count(key) != 0) {
                         callbacks_.at(key)();
+                    }
 
                     break;
             }
@@ -163,17 +169,17 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
 
 void Textfield::add_string(const std::string &str) {
     for (char c : str) {
-        if (belowlimit()) {
+        if (below_limit()) {
             text_.insert(marker_pos_, 1, c);
 
             marker_pos_++;
 
-            modifytext(text_);
+            modify_text(text_);
         }
     }
 }
 
-void Textfield::modifytext(const std::string &t) {
+void Textfield::modify_text(const std::string &t) {
     if (crypt_ > 0) {
         std::string crypted;
         crypted.insert(0, t.size(), crypt_);
@@ -187,28 +193,29 @@ void Textfield::modifytext(const std::string &t) {
 }
 
 Cursor::State Textfield::send_cursor(Point<int16_t> cursorpos, bool clicked) {
-    if (state_ == State::DISABLED)
+    if (state_ == State::DISABLED) {
         return Cursor::State::IDLE;
+    }
 
     if (get_bounds().contains(cursorpos)) {
         if (clicked) {
-            if (state_ == State::NORMAL)
+            if (state_ == State::NORMAL) {
                 set_state(State::FOCUSED);
-
+            }
             return Cursor::State::CLICKING;
-        } else {
-            return Cursor::State::CANCLICK;
         }
-    } else {
-        if (clicked && state_ == State::FOCUSED)
-            set_state(State::NORMAL);
-
-        return Cursor::State::IDLE;
+        return Cursor::State::CANCLICK;
     }
+
+    if (clicked && state_ == State::FOCUSED) {
+        set_state(State::NORMAL);
+    }
+
+    return Cursor::State::IDLE;
 }
 
 void Textfield::change_text(const std::string &t) {
-    modifytext(t);
+    modify_text(t);
 
     marker_pos_ = text_.size();
 }
@@ -217,14 +224,14 @@ void Textfield::set_cryptchar(int8_t character) {
     crypt_ = character;
 }
 
-bool Textfield::belowlimit() const {
+bool Textfield::below_limit() const {
     if (limit_ > 0) {
         return text_.size() < limit_;
-    } else {
-        uint16_t advance = text_label_.advance(text_.size());
-
-        return (advance + 50) < bounds_.get_horizontal().length();
     }
+
+    uint16_t advance = text_label_.advance(text_.size());
+
+    return (advance + 50) < bounds_.get_horizontal().length();
 }
 
 const std::string &Textfield::get_text() const {

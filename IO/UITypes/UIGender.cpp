@@ -24,6 +24,10 @@
 #include "../UITypes/UILoginWait.h"
 
 namespace ms {
+auto fn_gender = []<typename... T>(T && ... args) {
+    GenderPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIGender::UIGender(std::function<void()> oh) :
     UIElement(Point<int16_t>(0, 15), Point<int16_t>(0, 0)),
     okhandler_(oh) {
@@ -33,8 +37,9 @@ UIGender::UIGender(std::function<void()> oh) :
     nl::node Gender = Login["Gender"];
     nl::node scroll = Gender["scroll"][0];
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++) {
         gender_sprites_[i] = scroll[i];
+    }
 
     sprites_.emplace_back(Gender["text"][0], Point<int16_t>(601, 326));
 
@@ -79,16 +84,20 @@ void UIGender::draw(float inter) const {
 void UIGender::update() {
     UIElement::update();
 
-    if (cur_timestep_ <= Constants::TIMESTEP * 6)
+    if (cur_timestep_ <= Constants::TIMESTEP * 6) {
         cur_timestep_ += Constants::TIMESTEP;
+    }
 }
 
 Cursor::State UIGender::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     auto &combobox = buttons_[Buttons::SELECT];
 
-    if (combobox->is_pressed() && combobox->in_combobox(cursorpos))
-        if (Cursor::State new_state = combobox->send_cursor(clicked, cursorpos))
+    if (combobox->is_pressed() && combobox->in_combobox(cursorpos)) {
+        if (Cursor::State new_state =
+                combobox->send_cursor(clicked, cursorpos)) {
             return new_state;
+        }
+    }
 
     return UIElement::send_cursor(clicked, cursorpos);
 }
@@ -107,7 +116,7 @@ Button::State UIGender::button_pressed(uint16_t buttonid) {
             UI::get().emplace<UILoginWait>();
 
             uint16_t selected_value = buttons_[Buttons::SELECT]->get_selected();
-            GenderPacket(selected_value).dispatch();
+            fn_gender(selected_value);
         } break;
         case Buttons::SELECT:
             buttons_[Buttons::SELECT]->toggle_pressed();

@@ -21,6 +21,16 @@
 #include "../../Net/Packets/GameplayPackets.h"
 
 namespace ms {
+auto fn_attack = []<typename... T>(T && ... args) {
+    AttackPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_damage_reactor = []<typename... T>(T && ... args) {
+    DamageReactorPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_use_skill = []<typename... T>(T && ... args) {
+    UseSkillPacket(std::forward<T>(args)...).dispatch();
+};
+
 Combat::Combat(Player &in_player,
                MapChars &in_chars,
                MapMobs &in_mobs,
@@ -36,11 +46,13 @@ Combat::Combat(Player &in_player,
         [&](const DamageEffect &effect) { apply_damage_effect(effect); }) {}
 
 void Combat::draw(double viewx, double viewy, float alpha) const {
-    for (auto &be : bullets_)
+    for (const auto &be : bullets_) {
         be.bullet.draw(viewx, viewy, alpha);
+    }
 
-    for (auto &dn : damage_numbers_)
+    for (const auto &dn : damage_numbers_) {
         dn.draw(viewx, viewy, alpha);
+    }
 }
 
 void Combat::update() {
@@ -55,21 +67,23 @@ void Combat::update() {
             mb.target = mobs_.get_mob_head_position(target_oid);
             bool apply = mb.bullet.update(mb.target);
 
-            if (apply)
+            if (apply) {
                 apply_damage_effect(mb.damageeffect);
+            }
 
             return apply;
-        } else {
-            return mb.bullet.update(mb.target);
         }
+        return mb.bullet.update(mb.target);
+       
     });
 
     damage_numbers_.remove_if([](DamageNumber &dn) { return dn.update(); });
 }
 
 void Combat::use_move(int32_t move_id) {
-    if (!player_.can_attack())
+    if (!player_.can_attack()) {
         return;
+    }
 
     const SpecialMove &move = get_move(move_id);
     SpecialMove::ForbidReason reason = player_.can_use(move);
@@ -127,23 +141,24 @@ void Combat::apply_move(const SpecialMove &move) {
         apply_use_movement(move);
         apply_result_movement(move, result);
 
-        AttackPacket(result).dispatch();
+        fn_attack(result);
 
-        if (reactor_targets.size())
+        if (!reactor_targets.empty()) {
             if (Optional<Reactor> reactor =
-                    reactor_objs->get(reactor_targets.at(0)))
-                DamageReactorPacket(reactor->get_oid(),
-                                    player_.get_position(),
-                                    0,
-                                    0)
-                    .dispatch();
+                    reactor_objs->get(reactor_targets.at(0))) {
+                fn_damage_reactor(reactor->get_oid(),
+                                  player_.get_position(),
+                                  0,
+                                  0);
+            }
+        }
     } else {
         move.apply_useeffects(player_);
         move.apply_actions(player_, Attack::Type::MAGIC);
 
         int32_t moveid = move.get_id();
         int32_t level = player_.get_skills().get_level(moveid);
-        UseSkillPacket(moveid, level).dispatch();
+        fn_use_skill(moveid, level);
     }
 }
 
@@ -180,8 +195,9 @@ std::vector<int32_t> Combat::find_closest(MapObjects *objs,
     std::vector<int32_t> targets;
 
     for (auto &iter : distances) {
-        if (targets.size() >= objcount)
+        if (targets.size() >= objcount) {
             break;
+        }
 
         targets.push_back(iter.second);
     }
@@ -210,8 +226,9 @@ void Combat::apply_result_movement(const SpecialMove &move,
 }
 
 void Combat::apply_rush(const AttackResult &result) {
-    if (result.mobcount == 0)
+    if (result.mobcount == 0) {
         return;
+    }
 
     Point<int16_t> mob_position = mobs_.get_mob_position(result.last_oid);
     int16_t targetx = mob_position.x();
@@ -254,10 +271,11 @@ void Combat::apply_attack(const AttackResult &attack) {
         const SpecialMove &move = get_move(attack.skill);
         move.apply_useeffects(user);
 
-        if (Stance::Id stance = Stance::by_id(attack.stance))
+        if (Stance::Id stance = Stance::by_id(attack.stance)) {
             user.attack(stance);
-        else
+        } else {
             move.apply_actions(user, attack.type);
+        }
 
         user.set_afterimage(attack.skill);
 
@@ -278,7 +296,7 @@ void Combat::extract_effects(const Char &user,
                         user.get_position(),
                         result.toleft };
 
-        for (auto &line : result.damage_lines) {
+        for (const auto &line : result.damage_lines) {
             int32_t oid = line.first;
 
             if (mobs_.contains(oid)) {
@@ -317,7 +335,7 @@ void Combat::extract_effects(const Char &user,
             }
         }
     } else {
-        for (auto &line : result.damage_lines) {
+        for (const auto &line : result.damage_lines) {
             int32_t oid = line.first;
 
             if (mobs_.contains(oid)) {
@@ -348,7 +366,7 @@ std::vector<DamageNumber> Combat::place_numbers(
     std::vector<DamageNumber> numbers;
     int16_t head = mobs_.get_mob_head_position(oid).y();
 
-    for (auto &line : damagelines) {
+    for (const auto &line : damagelines) {
         int32_t amount = line.first;
         bool critical = line.second;
         DamageNumber::Type type = critical ? DamageNumber::Type::CRITICAL
@@ -411,13 +429,15 @@ void Combat::show_player_disease(int32_t skillid, int8_t level) {
 }
 
 const SpecialMove &Combat::get_move(int32_t move_id) {
-    if (move_id == 0)
+    if (move_id == 0) {
         return regular_attack_;
+    }
 
     auto iter = skills_.find(move_id);
 
-    if (iter == skills_.end())
+    if (iter == skills_.end()) {
         iter = skills_.emplace(move_id, move_id).first;
+    }
 
     return iter->second;
 }

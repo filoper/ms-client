@@ -19,10 +19,11 @@ namespace ms {
 IconCover::IconCover(Type t, int32_t duration) {
     cover_ = ColorBox(30, 30, Color::Name::BLACK, 0.6f);
 
-    if (duration <= Constants::TIMESTEP)
+    if (duration <= Constants::TIMESTEP) {
         scale_step_ = 1.0f;
-    else
+    } else {
         scale_step_ = Constants::TIMESTEP * 1.0f / duration;
+    }
 
     type_ = t;
 
@@ -36,8 +37,9 @@ void IconCover::draw(Point<int16_t> position, float alpha) const {
     float interyscale = yscale_.get(alpha);
     auto interheight = static_cast<int16_t>(30 * interyscale);
 
-    if (interheight == 0)
+    if (interheight == 0) {
         return;
+    }
 
     cover_.draw(DrawArgument(position + Point<int16_t>(0, 30 - interheight),
                              Point<int16_t>(30, interheight)));

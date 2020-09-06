@@ -26,10 +26,11 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
 
     eq_slot_ = equipdata.get_eqslot();
 
-    if (eq_slot_ == EquipSlot::Id::WEAPON)
+    if (eq_slot_ == EquipSlot::Id::WEAPON) {
         two_handed_ = WeaponData::get(item_id_).is_twohanded();
-    else
+    } else {
         two_handed_ = false;
+    }
 
     constexpr size_t NON_WEAPON_TYPES = 15;
     constexpr size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
@@ -49,12 +50,13 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
     Clothing::Layer chlayer;
     size_t index = (item_id_ / 10000) - 100;
 
-    if (index < NON_WEAPON_TYPES)
+    if (index < NON_WEAPON_TYPES) {
         chlayer = layers[index];
-    else if (index >= WEAPON_OFFSET && index < WEAPON_OFFSET + WEAPON_TYPES)
+    } else if (index >= WEAPON_OFFSET && index < WEAPON_OFFSET + WEAPON_TYPES) {
         chlayer = Clothing::Layer::WEAPON;
-    else
+    } else {
         chlayer = Clothing::Layer::CAPE;
+    }
 
     std::string strid = "0" + std::to_string(item_id_);
     std::string category = equipdata.get_itemdata().get_category();
@@ -85,16 +87,19 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
 
         nl::node stancenode = src[stancename];
 
-        if (!stancenode)
+        if (!stancenode) {
             continue;
+        }
 
         for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
-            for (nl::node partnode : framenode) {
+            for (const nl::node &partnode : framenode) {
                 std::string part = partnode.name();
 
-                if (!partnode || partnode.data_type() != nl::node::type::bitmap)
+                if (!partnode
+                    || partnode.data_type() != nl::node::type::bitmap) {
                     continue;
+                }
 
                 Clothing::Layer z = chlayer;
                 std::string zs = partnode["z"];
@@ -104,14 +109,15 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
                 } else {
                     auto sublayer_iter = sub_layer_names_.find(zs);
 
-                    if (sublayer_iter != sub_layer_names_.end())
+                    if (sublayer_iter != sub_layer_names_.end()) {
                         z = sublayer_iter->second;
+                    }
                 }
 
                 std::string parent;
                 Point<int16_t> parentpos;
 
-                for (auto mapnode : partnode["map"]) {
+                for (const auto &mapnode : partnode["map"]) {
                     if (mapnode.data_type() == nl::node::type::vector) {
                         parent = mapnode.name();
                         parentpos = mapnode;
@@ -138,12 +144,13 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
                         break;
                     case EquipSlot::Id::SHIELD:
                     case EquipSlot::Id::WEAPON:
-                        if (parent == "handMove")
+                        if (parent == "handMove") {
                             shift += drawinfo.get_hand_position(stance, frame);
-                        else if (parent == "hand")
+                        } else if (parent == "hand") {
                             shift += drawinfo.get_arm_position(stance, frame);
-                        else if (parent == "navel")
+                        } else if (parent == "navel") {
                             shift += drawinfo.get_body_position(stance, frame);
+                        }
 
                         shift -= parentpos;
                         break;
@@ -167,8 +174,9 @@ void Clothing::draw(Stance::Id stance,
                     const DrawArgument &args) const {
     auto range = stances_[stance][layer].equal_range(frame);
 
-    for (auto iter = range.first; iter != range.second; ++iter)
+    for (auto iter = range.first; iter != range.second; ++iter) {
         iter->second.draw(args);
+    }
 }
 
 bool Clothing::contains_layer(Stance::Id stance, Layer layer) const {

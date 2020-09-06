@@ -29,8 +29,9 @@ void RegularAttack::apply_stats(const Char &user, Attack &attack) const {
     attack.hitcount = 1;
     attack.stance = user.get_look().get_stance();
 
-    if (attack.type == Attack::CLOSE)
+    if (attack.type == Attack::CLOSE) {
         attack.range = user.get_afterimage().get_range();
+    }
 }
 
 void RegularAttack::apply_hiteffects(const AttackUser &, Mob &) const {}

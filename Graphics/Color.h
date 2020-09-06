@@ -152,7 +152,7 @@ public:
               static_cast<uint8_t>(code)) {}
 
     // Create a color by named code.
-    constexpr Color(Code code) : Color((uint32_t)code) {}
+    constexpr Color(Code code) : Color(static_cast<uint32_t>(code)) {}
 
     constexpr Color() : Color(Code::CNONE) {}
 

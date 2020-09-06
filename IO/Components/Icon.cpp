@@ -45,8 +45,9 @@ void Icon::draw(Point<int16_t> position) const {
 }
 
 void Icon::dragdraw(Point<int16_t> cursorpos) const {
-    if (dragged_ && texture_.is_valid())
+    if (dragged_ && texture_.is_valid()) {
         texture_.draw(DrawArgument(cursorpos - cursor_offset_, 0.5f));
+    }
 }
 
 void Icon::drop_on_stage() const {
@@ -61,13 +62,15 @@ bool Icon::drop_on_items(InventoryType::Id tab,
                          EquipSlot::Id eqslot,
                          int16_t slot,
                          bool equip) const {
-    if (!texture_.is_valid())
+    if (!texture_.is_valid()) {
         return false;
+    }
 
     bool remove_icon = type_->drop_on_items(tab, eqslot, slot, equip);
 
-    if (remove_icon)
+    if (remove_icon) {
         Sound(Sound::Name::DRAGEND).play();
+    }
 
     return remove_icon;
 }

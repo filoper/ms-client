@@ -33,23 +33,26 @@ bool Bullet::settarget(Point<int16_t> target) {
     double xdelta = target.x() - move_obj_.crnt_x();
     double ydelta = target.y() - move_obj_.crnt_y();
 
-    if (std::abs(xdelta) < 10.0)
+    if (std::abs(xdelta) < 10.0) {
         return true;
+    }
 
     flip_ = xdelta > 0.0;
 
     move_obj_.hspeed = xdelta / 32;
 
     if (xdelta > 0.0) {
-        if (move_obj_.hspeed < 3.0)
+        if (move_obj_.hspeed < 3.0) {
             move_obj_.hspeed = 3.0;
-        else if (move_obj_.hspeed > 6.0)
+        } else if (move_obj_.hspeed > 6.0) {
             move_obj_.hspeed = 6.0;
+        }
     } else if (xdelta < 0.0) {
-        if (move_obj_.hspeed > -3.0)
+        if (move_obj_.hspeed > -3.0) {
             move_obj_.hspeed = -3.0;
-        else if (move_obj_.hspeed < -6.0)
+        } else if (move_obj_.hspeed < -6.0) {
             move_obj_.hspeed = -6.0;
+        }
     }
 
     move_obj_.vspeed = move_obj_.hspeed * ydelta / xdelta;

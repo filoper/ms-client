@@ -93,25 +93,28 @@ void UIQuestLog::draw(float alpha) const {
 
     Point<int16_t> notice_position = Point<int16_t>(0, 26);
 
-    if (tab_ == Buttons::TAB0)
+    if (tab_ == Buttons::TAB0) {
         notice_sprites_[tab_].draw(
             position_ + notice_position + Point<int16_t>(9, 0),
             alpha);
-    else if (tab_ == Buttons::TAB1)
+    } else if (tab_ == Buttons::TAB1) {
         notice_sprites_[tab_].draw(
             position_ + notice_position + Point<int16_t>(0, 0),
             alpha);
-    else
+    } else {
         notice_sprites_[tab_].draw(
             position_ + notice_position + Point<int16_t>(-10, 0),
             alpha);
+    }
 
     if (tab_ != Buttons::TAB2) {
         search_area_.draw(position_);
         search_.draw(Point<int16_t>(0, 0));
 
-        if (search_.get_state() == Textfield::State::NORMAL && search_.empty())
+        if (search_.get_state() == Textfield::State::NORMAL
+            && search_.empty()) {
             placeholder_.draw(position_ + Point<int16_t>(39, 51));
+        }
     }
 
     slider_.draw(position_ + Point<int16_t>(126, 75));
@@ -126,10 +129,11 @@ void UIQuestLog::send_key(int32_t keycode, bool pressed, bool escape) {
         } else if (keycode == KeyAction::Id::TAB) {
             uint16_t new_tab = tab_;
 
-            if (new_tab < Buttons::TAB2)
+            if (new_tab < Buttons::TAB2) {
                 new_tab++;
-            else
+            } else {
                 new_tab = Buttons::TAB0;
+            }
 
             change_tab(new_tab);
         }
@@ -137,8 +141,9 @@ void UIQuestLog::send_key(int32_t keycode, bool pressed, bool escape) {
 }
 
 Cursor::State UIQuestLog::send_cursor(bool clicking, Point<int16_t> cursorpos) {
-    if (Cursor::State new_state = search_.send_cursor(cursorpos, clicking))
+    if (Cursor::State new_state = search_.send_cursor(cursorpos, clicking)) {
         return new_state;
+    }
 
     return UIDragElement::send_cursor(clicking, cursorpos);
 }
@@ -172,10 +177,11 @@ void UIQuestLog::change_tab(uint16_t tabid) {
         buttons_[Buttons::ALL_LEVEL]->set_active(tab_ == Buttons::TAB0);
         buttons_[Buttons::SEARCH]->set_active(tab_ != Buttons::TAB2);
 
-        if (tab_ == Buttons::TAB2)
+        if (tab_ == Buttons::TAB2) {
             search_.set_state(Textfield::State::DISABLED);
-        else
+        } else {
             search_.set_state(Textfield::State::NORMAL);
+        }
     }
 
     buttons_[Buttons::TAB0 + tab_]->set_state(Button::State::PRESSED);

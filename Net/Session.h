@@ -16,7 +16,7 @@
 #pragma once
 
 #include "../Error.h"
-#include "../MapleStory.h"
+#include "../MSClient.h"
 #include "../Template/Singleton.h"
 #include "Cryptography.h"
 #include "PacketSwitch.h"
@@ -57,7 +57,7 @@ private:
     int8_t buffer_[MAX_PACKET_LENGTH];
     size_t length_;
     size_t pos_;
-    bool connected_;
+    bool is_connected_;
 
 #ifdef USE_ASIO
     SocketAsio socket_;

@@ -116,7 +116,7 @@ public:
 
     Point<int16_t> dimensions() const;
 
-    Point<int16_t> endoffset() const;
+    Point<int16_t> end_offset() const;
 
     const std::string &get_text() const;
 

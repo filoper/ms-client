@@ -70,10 +70,11 @@ void Physics::move_normal(PhysicsObject &phobj) const {
             double inertia = phobj.hspeed / GROUNDSLIP;
             double slopef = phobj.fhslope;
 
-            if (slopef > 0.5)
+            if (slopef > 0.5) {
                 slopef = 0.5;
-            else if (slopef < -0.5)
+            } else if (slopef < -0.5) {
                 slopef = -0.5;
+            }
 
             phobj.hacc -=
                 (FRICTION + SLOPEFACTOR * (1.0 + slopef * -inertia)) * inertia;
@@ -101,11 +102,13 @@ void Physics::move_flying(PhysicsObject &phobj) const {
     phobj.hspeed += phobj.hacc;
     phobj.vspeed += phobj.vacc;
 
-    if (phobj.hacc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1)
+    if (phobj.hacc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
         phobj.hspeed = 0.0;
+    }
 
-    if (phobj.vacc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1)
+    if (phobj.vacc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1) {
         phobj.vspeed = 0.0;
+    }
 }
 
 void Physics::move_swimming(PhysicsObject &phobj) const {
@@ -117,17 +120,20 @@ void Physics::move_swimming(PhysicsObject &phobj) const {
     phobj.hacc -= SWIMFRICTION * phobj.hspeed;
     phobj.vacc -= SWIMFRICTION * phobj.vspeed;
 
-    if (phobj.is_flag_not_set(PhysicsObject::Flag::NOGRAVITY))
+    if (phobj.is_flag_not_set(PhysicsObject::Flag::NOGRAVITY)) {
         phobj.vacc += SWIMGRAVFORCE;
+    }
 
     phobj.hspeed += phobj.hacc;
     phobj.vspeed += phobj.vacc;
 
-    if (phobj.hacc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1)
+    if (phobj.hacc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
         phobj.hspeed = 0.0;
+    }
 
-    if (phobj.vacc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1)
+    if (phobj.vacc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1) {
         phobj.vspeed = 0.0f;
+    }
 }
 
 Point<int16_t> Physics::get_y_below(Point<int16_t> position) const {

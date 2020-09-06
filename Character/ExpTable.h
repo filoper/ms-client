@@ -18,9 +18,7 @@
 #include <array>
 #include <cstdint>
 
-namespace ms {
-namespace ExpTable {
+namespace ms::ExpTable {
 constexpr size_t LEVELCAP = 201;
 extern const std::array<int64_t, LEVELCAP> values;
-}  // namespace ExpTable
-}  // namespace ms
+}  // namespace ms::ExpTable

@@ -16,12 +16,16 @@
 #include "Window.h"
 
 #include "../Configuration.h"
+#include "../Constants.h"
+#include "../Graphics/GraphicsGL.h"
 #include "../Timer.h"
 #include "UI.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 // TODO: (rich) is needed?
 #include <stb_image.h>
+
+#include <utility>
 #ifdef _WIN32
 #include <Windows.h>
 //#else
@@ -29,14 +33,14 @@
 #endif
 
 namespace ms {
-Window::Window() {
-    context_ = nullptr;
-    glwnd_ = nullptr;
-    opacity_ = 1.0f;
-    opc_step_ = 0.0f;
-    width_ = Constants::Constants::get().get_viewwidth();
-    height_ = Constants::Constants::get().get_viewheight();
-}
+Window::Window() :
+    glwnd_(nullptr),
+    context_(nullptr),
+    fullscreen_(false),
+    opacity_(1.0f),
+    opc_step_(0.0f),
+    width_(Constants::Constants::get().get_viewwidth()),
+    height_(Constants::Constants::get().get_viewheight()) {}
 
 Window::~Window() {
     glfwTerminate();
@@ -62,8 +66,9 @@ void mousekey_callback(GLFWwindow *, int button, int action, int) {
                     auto diff_ms = ContinuousTimer::get().stop(start) / 1000;
                     start = ContinuousTimer::get().start();
 
-                    if (diff_ms > 10 && diff_ms < 200)
+                    if (diff_ms > 10 && diff_ms < 200) {
                         UI::get().doubleclick();
+                    }
 
                     UI::get().send_cursor(false);
                 } break;
@@ -80,8 +85,8 @@ void mousekey_callback(GLFWwindow *, int button, int action, int) {
 }
 
 void cursor_callback(GLFWwindow *, double xpos, double ypos) {
-    int16_t x = static_cast<int16_t>(xpos);
-    int16_t y = static_cast<int16_t>(ypos);
+    auto x = static_cast<int16_t>(xpos);
+    auto y = static_cast<int16_t>(ypos);
     Point<int16_t> pos = Point<int16_t>(x, y);
     UI::get().send_cursor(pos);
 }
@@ -103,8 +108,9 @@ void close_callback(GLFWwindow *window) {
 Error Window::init() {
     fullscreen_ = Setting<Fullscreen>::get().load();
 
-    if (!glfwInit())
+    if (!glfwInit()) {
         return Error::Code::GLFW;
+    }
 
     glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
     context_ = glfwCreateWindow(1, 1, "", nullptr, nullptr);
@@ -113,15 +119,17 @@ Error Window::init() {
     glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    if (Error error = GraphicsGL::get().init())
+    if (Error error = GraphicsGL::get().init()) {
         return error;
+    }
 
-    return initwindow();
+    return init_window();
 }
 
-Error Window::initwindow() {
-    if (glwnd_)
+Error Window::init_window() {
+    if (glwnd_) {
         glfwDestroyWindow(glwnd_);
+    }
 
     glwnd_ = glfwCreateWindow(width_,
                               height_,
@@ -129,8 +137,9 @@ Error Window::initwindow() {
                               fullscreen_ ? glfwGetPrimaryMonitor() : nullptr,
                               context_);
 
-    if (!glwnd_)
+    if (!glwnd_) {
         return Error::Code::WINDOW;
+    }
 
     glfwMakeContextCurrent(glwnd_);
 
@@ -143,7 +152,8 @@ Error Window::initwindow() {
 
     glfwSetInputMode(glwnd_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-    double xpos, ypos;
+    double xpos = 0;
+    double ypos = 0;
 
     glfwGetCursorPos(glwnd_, &xpos, &ypos);
     cursor_callback(glwnd_, xpos, ypos);
@@ -156,19 +166,18 @@ Error Window::initwindow() {
     glfwSetScrollCallback(glwnd_, scroll_callback);
     glfwSetWindowCloseCallback(glwnd_, close_callback);
 
-    /*char buf[256];
-    GetCurrentWorkingDir()
-    GetCurrentDirectoryA(256, buf);*/
-    std::string icon_path = GetCurrentWorkingDir() + "/Icon.png";
-    // strcat(buf, "\\Icon.png");
-
+    std::string icon_path = get_current_working_dir() + "/Icon.png";
     GLFWimage images[1];
 
-    auto stbi =
-        stbi_load(icon_path.c_str(), &images[0].width, &images[0].height, 0, 4);
+    auto *stbi = stbi_load(icon_path.c_str(),
+                           &images[0].width,
+                           &images[0].height,
+                           nullptr,
+                           4);
 
-    if (stbi == NULL)
+    if (stbi == nullptr) {
         return Error(Error::Code::MISSING_ICON, stbi_failure_reason());
+    }
 
     images[0].pixels = stbi;
 
@@ -185,10 +194,10 @@ bool Window::not_closed() const {
 }
 
 void Window::update() {
-    updateopc();
+    update_opc();
 }
 
-void Window::updateopc() {
+void Window::update_opc() {
     if (opc_step_ != 0.0f) {
         opacity_ += opc_step_;
 
@@ -214,10 +223,11 @@ void Window::check_events() {
         width_ = new_width;
         height_ = new_height;
 
-        if (new_width >= max_width || new_height >= max_height)
+        if (new_width >= max_width || new_height >= max_height) {
             fullscreen_ = true;
+        }
 
-        initwindow();
+        init_window();
     }
 
     glfwPollEvents();
@@ -234,17 +244,17 @@ void Window::end() const {
 
 void Window::fadeout(float step, std::function<void()> fadeproc) {
     opc_step_ = -step;
-    fade_procedure_ = fadeproc;
+    fade_procedure_ = std::move(fadeproc);
 }
 
-void Window::setclipboard(const std::string &text) const {
+void Window::set_clipboard(const std::string &text) const {
     glfwSetClipboardString(glwnd_, text.c_str());
 }
 
-std::string Window::getclipboard() const {
+std::string Window::get_clipboard() const {
     const char *text = glfwGetClipboardString(glwnd_);
 
-    return text ? text : "";
+    return text != nullptr ? text : "";
 }
 
 void Window::toggle_fullscreen() {
@@ -255,12 +265,12 @@ void Window::toggle_fullscreen() {
         fullscreen_ = !fullscreen_;
         Setting<Fullscreen>::get().save(fullscreen_);
 
-        initwindow();
+        init_window();
         glfwPollEvents();
     }
 }
 
-std::string Window::GetCurrentWorkingDir(void) {
+std::string Window::get_current_working_dir(void) {
     char buff[FILENAME_MAX];
     GetCurrentDir(buff, FILENAME_MAX);
     std::string current_working_dir(buff);

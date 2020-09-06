@@ -61,9 +61,11 @@ void Char::draw(double viewx, double viewy, float alpha) const {
         look_.draw(DrawArgument(absp, scale, scale, opacity), alpha);
     }
 
-    for (auto &pet : pets_)
-        if (pet.get_itemid())
+    for (const auto &pet : pets_) {
+        if (pet.get_itemid()) {
             pet.draw(viewx, viewy, alpha);
+        }
+    }
 
     // If ever changing code for namelabel confirm placements with map 10000
     name_label_.draw(absp + Point<int16_t>(0, -4));
@@ -72,8 +74,9 @@ void Char::draw(double viewx, double viewy, float alpha) const {
     effects_.drawabove(absp, alpha);
     recurring_effects_.drawabove(absp, alpha);
 
-    for (auto &number : damage_numbers_)
+    for (const auto &number : damage_numbers_) {
         number.draw(viewx, viewy, alpha);
+    }
 }
 
 void Char::draw_preview(Point<int16_t> position, float alpha) const {
@@ -101,8 +104,9 @@ bool Char::update(const Physics &physics, float speed) {
                 case State::SWIM: pet.set_stance(PetLook::Stance::FLY); break;
                 default:
                     if (pet.get_stance() == PetLook::Stance::HANG
-                        || pet.get_stance() == PetLook::Stance::FLY)
+                        || pet.get_stance() == PetLook::Stance::FLY) {
                         pet.set_stance(PetLook::Stance::STAND);
+                    }
 
                     break;
             }
@@ -113,8 +117,9 @@ bool Char::update(const Physics &physics, float speed) {
 
     uint16_t stancespeed = 0;
 
-    if (speed >= 1.0f / Constants::TIMESTEP)
+    if (speed >= 1.0f / Constants::TIMESTEP) {
         stancespeed = static_cast<uint16_t>(Constants::TIMESTEP * speed);
+    }
 
     after_image_.update(look_.get_frame(), stancespeed);
 
@@ -122,8 +127,9 @@ bool Char::update(const Physics &physics, float speed) {
 }
 
 float Char::get_stancespeed() const {
-    if (attacking_)
+    if (attacking_) {
         return get_real_attackspeed();
+    }
 
     switch (state_) {
         case State::WALK: return static_cast<float>(std::abs(phobj_.hspeed));
@@ -248,8 +254,9 @@ void Char::attack(bool degenerate) {
 void Char::set_afterimage(int32_t skill_id) {
     int32_t weapon_id = look_.get_equips().get_weapon();
 
-    if (weapon_id <= 0)
+    if (weapon_id <= 0) {
         return;
+    }
 
     const WeaponData &weapon = WeaponData::get(weapon_id);
 
@@ -284,15 +291,17 @@ void Char::add_pet(uint8_t index,
                    Point<int16_t> pos,
                    uint8_t stance,
                    int32_t fhid) {
-    if (index > 2)
+    if (index > 2) {
         return;
+    }
 
     pets_[index] = PetLook(iid, name, uniqueid, pos, stance, fhid);
 }
 
 void Char::remove_pet(uint8_t index, bool hunger) {
-    if (index > 2)
+    if (index > 2) {
         return;
+    }
 
     pets_[index] = PetLook();
 
@@ -320,8 +329,9 @@ bool Char::is_twohanded() const {
 Weapon::Type Char::get_weapontype() const {
     int32_t weapon_id = look_.get_equips().get_weapon();
 
-    if (weapon_id <= 0)
+    if (weapon_id <= 0) {
         return Weapon::Type::NONE;
+    }
 
     return WeaponData::get(weapon_id).get_type();
 }
@@ -351,8 +361,9 @@ void Char::init() {
 
     nl::node src = nl::nx::effect["BasicEff.img"];
 
-    for (auto iter : CharEffect::PATHS)
+    for (auto iter : CharEffect::PATHS) {
         char_effects_.emplace(iter.first, src.resolve(iter.second));
+    }
 }
 
 EnumMap<CharEffect::Id, Animation> Char::char_effects_;

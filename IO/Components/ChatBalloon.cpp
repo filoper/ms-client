@@ -54,8 +54,9 @@ void ChatBalloon::change_text(const std::string &text) {
 }
 
 void ChatBalloon::draw(Point<int16_t> position) const {
-    if (duration_ == 0)
+    if (duration_ == 0) {
         return;
+    }
 
     int16_t width = text_label_.width();
     int16_t height = text_label_.height();
@@ -68,8 +69,9 @@ void ChatBalloon::draw(Point<int16_t> position) const {
 void ChatBalloon::update() {
     duration_ -= Constants::TIMESTEP;
 
-    if (duration_ < 0)
+    if (duration_ < 0) {
         duration_ = 0;
+    }
 }
 
 void ChatBalloon::expire() {

@@ -18,8 +18,7 @@
 #include "../../../Character/Player.h"
 #include "../../InPacket.h"
 
-namespace ms {
-namespace CharacterParser {
+namespace ms::CharacterParser {
 void parse_inventory(InPacket &recv, Inventory &inventory);
 void parse_skillbook(InPacket &recv, SkillBook &skills);
 void parse_cooldowns(InPacket &recv, Player &player);
@@ -32,5 +31,4 @@ void parse_monsterbook(InPacket &recv, MonsterBook &monsterbook);
 void parse_teleportrock(InPacket &recv, TeleportRock &teleportrock);
 void parse_nyinfo(InPacket &recv);
 void parse_areainfo(InPacket &recv);
-}  // namespace CharacterParser
-}  // namespace ms
+}  // namespace ms::CharacterParser

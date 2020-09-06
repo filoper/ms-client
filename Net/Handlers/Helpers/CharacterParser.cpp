@@ -171,11 +171,13 @@ void CharacterParser::parse_monsterbook(InPacket &recv,
 
 void CharacterParser::parse_teleportrock(InPacket &recv,
                                          TeleportRock &teleportrock) {
-    for (size_t i = 0; i < 5; i++)
+    for (size_t i = 0; i < 5; i++) {
         teleportrock.addlocation(recv.read_int());
+    }
 
-    for (size_t i = 0; i < 10; i++)
+    for (size_t i = 0; i < 10; i++) {
         teleportrock.addviplocation(recv.read_int());
+    }
 }
 
 void CharacterParser::parse_nyinfo(InPacket &recv) {

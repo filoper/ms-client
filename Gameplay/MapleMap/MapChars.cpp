@@ -58,13 +58,15 @@ MapObjects *MapChars::get_chars() {
 
 void MapChars::send_movement(int32_t cid,
                              const std::vector<Movement> &movements) {
-    if (Optional<OtherChar> otherchar = get_char(cid))
+    if (Optional<OtherChar> otherchar = get_char(cid)) {
         otherchar->send_movement(movements);
+    }
 }
 
 void MapChars::update_look(int32_t cid, const LookEntry &look) {
-    if (Optional<OtherChar> otherchar = get_char(cid))
+    if (Optional<OtherChar> otherchar = get_char(cid)) {
         otherchar->update_look(look);
+    }
 }
 
 Optional<OtherChar> MapChars::get_char(int32_t cid) {

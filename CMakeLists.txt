@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 3.14)
 
+if (UNIX AND NOT APPLE)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "-stdlib=libc++")
+    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libc++")
+  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "-stdlib=libstdc++")
+    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libstdc++")
+  else()
+    message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+  endif()
+endif()
+
 project(msclient)
 
 # Set project options
@@ -7,8 +19,7 @@ include(cmake/StandardSettings.cmake)
 include(cmake/Utils.cmake)
 include(cmake/Doxygen.cmake)
 include(cmake/CompilerWarnings.cmake)
-
-set(CMAKE_CXX_STANDARD 20)
+include(cmake/StaticAnalyzers.cmake)
 
 if (APPLE)
   if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
@@ -249,13 +260,17 @@ add_executable(msclient
     Util/Misc.cpp
     Util/NxFiles.cpp
     Configuration.cpp
-    MapleStory.cpp
+    MSClient.cpp
+    Game.cpp
     Audio/membuf.cpp 
 )
 
 IF (WIN32)
-    target_sources(msclient PUBLIC MapleStory.rc)
+    target_sources(msclient PUBLIC MSClient.rc)
 ENDIF()
+
+set_property(TARGET msclient PROPERTY CXX_STANDARD 20)
+set_property(TARGET msclient PROPERTY CXX_STANDARD_REQUIRED ON)
 
 set_project_warnings(${PROJECT_NAME})
 

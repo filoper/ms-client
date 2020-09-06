@@ -34,7 +34,7 @@ Animation SingleBullet::get(const Char &, int32_t) const {
 BySkillLevelBullet::BySkillLevelBullet(nl::node src, int32_t id) {
     skill_id_ = id;
 
-    for (auto sub : src["level"]) {
+    for (const auto &sub : src["level"]) {
         auto level = string_conversion::or_zero<int32_t>(sub.name());
         bullets_[level] = sub["ball"];
     }
@@ -44,9 +44,9 @@ Animation BySkillLevelBullet::get(const Char &user, int32_t) const {
     int32_t level = user.get_skilllevel(skill_id_);
     auto iter = bullets_.find(level);
 
-    if (iter != bullets_.end())
+    if (iter != bullets_.end()) {
         return iter->second.animation;
-    else
-        return {};
+    }
+    return {};
 }
 }  // namespace ms

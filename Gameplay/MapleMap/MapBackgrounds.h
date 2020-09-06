@@ -33,8 +33,9 @@ private:
     enum Type { NORMAL, HTILED, VTILED, TILED, HMOVEA, VMOVEA, HMOVEB, VMOVEB };
 
     static Type typebyid(int32_t id) {
-        if (id >= NORMAL && id <= VMOVEB)
+        if (id >= NORMAL && id <= VMOVEB) {
             return static_cast<Type>(id);
+        }
 
         std::cout << "Unknown Background::Type id: [" << id << "]" << std::endl;
 

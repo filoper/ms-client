@@ -28,24 +28,26 @@ void Job::change_job(uint16_t i) {
     id_ = i;
     name_ = get_name(id_);
 
-    if (id_ == 0)
+    if (id_ == 0) {
         level_ = Level::BEGINNER;
-    else if (id_ % 100 == 0)
+    } else if (id_ % 100 == 0) {
         level_ = Level::FIRST;
-    else if (id_ % 10 == 0)
+    } else if (id_ % 10 == 0) {
         level_ = Level::SECOND;
-    else if (id_ % 10 == 1)
+    } else if (id_ % 10 == 1) {
         level_ = Level::THIRD;
-    else
+    } else {
         level_ = Level::FOURTH;
+    }
 }
 
 bool Job::is_sub_job(uint16_t subid) const {
     for (int32_t lvit = BEGINNER; lvit <= FOURTH; lvit++) {
         Level lv = static_cast<Level>(lvit);
 
-        if (subid == get_subjob(lv))
+        if (subid == get_subjob(lv)) {
             return true;
+        }
     }
 
     return false;

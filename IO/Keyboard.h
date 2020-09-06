@@ -48,15 +48,15 @@ public:
 
     void remove(uint8_t key);
 
-    int32_t leftshiftcode() const;
+    int32_t left_shift_code() const;
 
-    int32_t rightshiftcode() const;
+    int32_t right_shift_code() const;
 
-    int32_t capslockcode() const;
+    int32_t capslock_code() const;
 
-    int32_t leftctrlcode() const;
+    int32_t left_ctrl_code() const;
 
-    int32_t rightctrlcode() const;
+    int32_t right_ctrl_code() const;
 
     std::map<int32_t, Mapping> get_maplekeys() const;
 

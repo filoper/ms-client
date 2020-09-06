@@ -31,8 +31,9 @@ public:
         write_byte((attack.mobcount << 4) | attack.hitcount);
         write_int(attack.skill);
 
-        if (attack.charge > 0)
+        if (attack.charge > 0) {
             write_int(attack.charge);
+        }
 
         skip(8);
 
@@ -63,8 +64,9 @@ public:
                 // TODO: Add critical here
             }
 
-            if (attack.skill != 5221004)
+            if (attack.skill != 5221004) {
                 skip(4);
+            }
         }
     }
 
@@ -122,8 +124,9 @@ public:
 
         // If monster magnet : some more bytes
 
-        if (skillid % 10000000 == 1004)
+        if (skillid % 10000000 == 1004) {
             skip(2);  // TODO: No idea what this could be
+        }
 
         // TODO: A point (4 bytes) could be added at the end
     }

@@ -31,12 +31,13 @@ Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
 
         nl::node stancenode = hairnode[stancename];
 
-        if (!stancenode)
+        if (!stancenode) {
             continue;
+        }
 
         for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
-            for (nl::node layernode : framenode) {
+            for (const nl::node &layernode : framenode) {
                 std::string layername = layernode.name();
                 auto layer_iter = layers_by_name_.find(layername);
 
@@ -76,8 +77,9 @@ void Hair::draw(Stance::Id stance,
                 const DrawArgument &args) const {
     auto frameit = stances_[stance][layer].find(frame);
 
-    if (frameit == stances_[stance][layer].end())
+    if (frameit == stances_[stance][layer].end()) {
         return;
+    }
 
     frameit->second.draw(args);
 }

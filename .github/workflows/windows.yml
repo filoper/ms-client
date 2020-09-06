@@ -26,18 +26,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - os: windows-2016
-            compiler: MSVC
-            cc: cl
-            cxx: cl
-            version: "2017"
-
-          - os: windows-latest
-            compiler: gcc
-            cc: gcc
-            cxx: g++
-            version: "8.1.0"
-
           - os: windows-latest
             compiler: MSVC
             cc: cl

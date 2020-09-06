@@ -30,8 +30,9 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
     for (const auto &[stance, stance_name] : Stance::names) {
         nl::node stancenode = bodynode[stance_name];
 
-        if (!stancenode)
+        if (!stancenode) {
             continue;
+        }
 
         for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
@@ -42,8 +43,9 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
                     std::string z = partnode["z"];
                     Body::Layer layer = layer_by_name(z);
 
-                    if (layer == Body::Layer::NONE)
+                    if (layer == Body::Layer::NONE) {
                         continue;
+                    }
 
                     Point<int16_t> shift;
 
@@ -90,8 +92,9 @@ void Body::draw(Stance::Id stance,
                 const DrawArgument &args) const {
     auto frameit = stances_[stance][layer].find(frame);
 
-    if (frameit == stances_[stance][layer].end())
+    if (frameit == stances_[stance][layer].end()) {
         return;
+    }
 
     frameit->second.draw(args);
 }
@@ -104,9 +107,10 @@ Body::Layer Body::layer_by_name(const std::string &name) {
     auto layer_iter = layers_by_name_.find(name);
 
     if (layer_iter == layers_by_name_.end()) {
-        if (name != "")
+        if (!name.empty()) {
             std::cout << "Unknown Body::Layer name: [" << name << "]"
                       << std::endl;
+        }
 
         return Body::Layer::NONE;
     }

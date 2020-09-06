@@ -15,8 +15,9 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-namespace ms {
-namespace SkillId {
+#include <cstdint>
+
+namespace ms::SkillId {
 enum Id : uint32_t {
     // Beginner
     FOLLOW_THE_LEAD = 8,
@@ -156,5 +157,4 @@ enum Id : uint32_t {
     // Bandit
     MESO_EXPLOSION = 4211006
 };
-}
-}  // namespace ms
+}  // namespace ms::SkillId

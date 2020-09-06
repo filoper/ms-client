@@ -64,14 +64,16 @@ UICashShop::UICashShop() :
 
     best_new_dim_ = Texture(BestNew).get_dimensions();
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++) {
         preview_sprites_[i] = Preview[i];
+    }
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++) {
         buttons_[Buttons::BtPreview1 + i] = std::make_unique<TwoSpriteButton>(
             Base["Tab"]["Disable"][i],
             Base["Tab"]["Enable"][i],
             Point<int16_t>(957 + (i * 17), 46));
+    }
 
     buttons_[Buttons::BtPreview1]->set_state(Button::State::PRESSED);
 
@@ -84,8 +86,9 @@ UICashShop::UICashShop() :
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
                                       Point<int16_t>(92, 554));
 
-    for (size_t i = 0; i < 9; i++)
+    for (size_t i = 0; i < 9; i++) {
         menu_tabs_[i] = CSTab["Tab"][i];
+    }
 
     buttons_[Buttons::BtChargeRefresh] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
@@ -126,8 +129,9 @@ UICashShop::UICashShop() :
         std::make_unique<MapleButton>(CSPromotionBanner["BtPrev"],
                                       promotion_pos_);
 
-    for (size_t i = 0; i < 7; i++)
+    for (size_t i = 0; i < 7; i++) {
         mvp_sprites_[i] = CSMVPBanner["grade"][i];
+    }
 
     mvp_pos_ = Point<int16_t>(63, 681);
     buttons_[Buttons::BtDetailPackage] =
@@ -173,8 +177,9 @@ UICashShop::UICashShop() :
     item_line_ = Base["line"];
     item_none_ = Base["noItem"];
 
-    for (const nl::node &item_label : CSEffect)
+    for (const nl::node &item_label : CSEffect) {
         item_labels_.emplace_back(item_label);
+    }
 
     items_.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
     items_.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
@@ -266,15 +271,16 @@ void UICashShop::draw(float inter) const {
     charge_charset_.draw("8,698,565", charge_pos + Point<int16_t>(0, 30 * 4));
     charge_charset_.draw("0", charge_pos + Point<int16_t>(0, 30 * 5));
 
-    if (items_.size() > 0)
+    if (items_.size() > 0) {
         item_line_.draw(position_ + Point<int16_t>(139, 566), inter);
-    else
+    } else {
         item_none_.draw(
             position_ + Point<int16_t>(137, 372)
                 + Point<int16_t>(best_new_dim_.x() / 2,
                                  list_slider_.getvertical().length() / 2)
                 - item_none_.get_dimensions() / 2,
             inter);
+    }
 
     for (size_t i = 0; i < MAX_ITEMS; i++) {
         int16_t index = i + list_offset_;
@@ -292,11 +298,12 @@ void UICashShop::draw(float inter) const {
                 2.0f,
                 2.0f));
 
-            if (item.label != Item::Label::NONE)
+            if (item.label != Item::Label::NONE) {
                 item_labels_[item.label + 1].draw(
                     position_ + Point<int16_t>(152, 372)
                         + Point<int16_t>(124 * div.rem, 205 * div.quot),
                     inter);
+            }
 
             item_name_[i].draw(position_ + Point<int16_t>(192, 480)
                                + Point<int16_t>(124 * div.rem, 205 * div.quot));
@@ -366,8 +373,9 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 
             promotion_index_++;
 
-            if (promotion_index_ > size)
+            if (promotion_index_ > size) {
                 promotion_index_ = 0;
+            }
 
             return Button::State::NORMAL;
         }
@@ -376,8 +384,9 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 
             promotion_index_--;
 
-            if (promotion_index_ < 0)
+            if (promotion_index_ < 0) {
                 promotion_index_ = size;
+            }
 
             return Button::State::NORMAL;
         }
@@ -414,8 +423,9 @@ Cursor::State UICashShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
         Cursor::State state =
             list_slider_.send_cursor(cursor_relative, clicked);
 
-        if (state != Cursor::State::IDLE)
+        if (state != Cursor::State::IDLE) {
             return state;
+        }
     }
 
     return UIElement::send_cursor(clicked, cursorpos);
@@ -481,11 +491,13 @@ void UICashShop::update_items() {
 
             price_text += " NX";
 
-            if (discount_text != "")
+            if (discount_text != "") {
                 discount_text += " NX";
+            }
 
-            if (item.count > 0)
+            if (item.count > 0) {
                 price_text += "(" + std::to_string(item.count) + ")";
+            }
         }
 
         item_name_[i].change_text(name);

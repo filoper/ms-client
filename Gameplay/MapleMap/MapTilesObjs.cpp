@@ -35,21 +35,25 @@ TilesObjs::TilesObjs(nl::node src) {
 TilesObjs::TilesObjs() {}
 
 void TilesObjs::update() {
-    for (auto &iter : objs_)
+    for (auto &iter : objs_) {
         iter.second.update();
+    }
 }
 
 void TilesObjs::draw(Point<int16_t> viewpos, float alpha) const {
-    for (const auto &iter : objs_)
+    for (const auto &iter : objs_) {
         iter.second.draw(viewpos, alpha);
+    }
 
-    for (const auto &iter : tiles_)
+    for (const auto &iter : tiles_) {
         iter.second.draw(viewpos);
+    }
 }
 
 MapTilesObjs::MapTilesObjs(nl::node src) {
-    for (auto iter : layers_)
+    for (auto iter : layers_) {
         iter.second = src[iter.first];
+    }
 }
 
 MapTilesObjs::MapTilesObjs() {}
@@ -61,7 +65,8 @@ void MapTilesObjs::draw(Layer::Id layer,
 }
 
 void MapTilesObjs::update() {
-    for (auto iter : layers_)
+    for (auto iter : layers_) {
         iter.second.update();
+    }
 }
 }  // namespace ms

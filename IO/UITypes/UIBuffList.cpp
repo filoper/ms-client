@@ -51,8 +51,9 @@ bool BuffIcon::update() {
         bool fadedout = opcstep_ < 0.0f && opacity_.last() <= 0.0f;
         bool fadedin = opcstep_ > 0.0f && opacity_.last() >= 1.0f;
 
-        if (fadedout || fadedin)
+        if (fadedout || fadedin) {
             opcstep_ = -opcstep_;
+        }
     }
 
     cover_.update();
@@ -82,10 +83,11 @@ void UIBuffList::update() {
     for (auto iter = icons_.begin(); iter != icons_.end();) {
         bool expired = iter->second.update();
 
-        if (expired)
+        if (expired) {
             iter = icons_.erase(iter);
-        else
+        } else {
             iter++;
+        }
     }
 }
 

@@ -57,8 +57,9 @@ void CharInfoHandler::handle(InPacket &recv) const {
 
     int8_t wishlist_size = recv.read_byte();
 
-    for (int8_t sn = 0; sn < wishlist_size; sn++)
+    for (int8_t sn = 0; sn < wishlist_size; sn++) {
         recv.skip_int();  // wishlist_item
+    }
 
     recv.skip_int();  // monster_book_level
     recv.skip_int();  // monster_book_card_normal
@@ -70,16 +71,18 @@ void CharInfoHandler::handle(InPacket &recv) const {
 
     int16_t medal_quests_size = recv.read_short();
 
-    for (int16_t s = 0; s < medal_quests_size; s++)
+    for (int16_t s = 0; s < medal_quests_size; s++) {
         recv.skip_short();  // medal_quest
+    }
 
     // Update the character information window
-    if (auto charinfo = UI::get().get_element<UICharInfo>())
+    if (auto charinfo = UI::get().get_element<UICharInfo>()) {
         charinfo->update_stats(character_id,
                                character_job_id,
                                character_level,
                                character_fame,
                                guild_name,
                                alliance_name);
+    }
 }
 }  // namespace ms

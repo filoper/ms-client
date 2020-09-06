@@ -33,8 +33,9 @@ UIWorldMap::UIWorldMap() : UIDragElement<PosMAP>() {
 
     cur_pos_ = MapHelper["curPos"];
 
-    for (size_t i = 0; i < MAPSPOT_TYPE_MAX_; i++)
+    for (size_t i = 0; i < MAPSPOT_TYPE_MAX_; i++) {
         npc_pos_[i] = MapHelper["npcPos" + std::to_string(i)];
+    }
 
     sprites_.emplace_back(Border);
 
@@ -110,11 +111,13 @@ void UIWorldMap::draw(float alpha) const {
         }
     }
 
-    if (show_path_img_)
+    if (show_path_img_) {
         path_img_.draw(position_ + base_position_);
+    }
 
-    for (const auto &spot : map_spots_)
+    for (const auto &spot : map_spots_) {
         spot.second.marker.draw(spot.first + position_ + base_position_);
+    }
 
     bool found = false;
 
@@ -132,8 +135,9 @@ void UIWorldMap::draw(float alpha) const {
                 }
             }
 
-            if (found)
+            if (found) {
                 break;
+            }
         }
     }
 
@@ -152,11 +156,13 @@ void UIWorldMap::update() {
         update_world(parent_map);
     }
 
-    if (search_)
+    if (search_) {
         search_text_.update(position_);
+    }
 
-    for (size_t i = 0; i < MAPSPOT_TYPE_MAX_; i++)
+    for (size_t i = 0; i < MAPSPOT_TYPE_MAX_; i++) {
         npc_pos_[i].update(1);
+    }
 
     cur_pos_.update();
 
@@ -220,8 +226,10 @@ void UIWorldMap::remove_cursor() {
 }
 
 Cursor::State UIWorldMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
-    if (Cursor::State new_state = search_text_.send_cursor(cursorpos, clicked))
+    if (Cursor::State new_state =
+            search_text_.send_cursor(cursorpos, clicked)) {
         return new_state;
+    }
 
     show_path_img_ = false;
 
@@ -265,8 +273,9 @@ void UIWorldMap::set_search(bool enable) {
 void UIWorldMap::update_world(std::string map) {
     nl::node WorldMap = nl::nx::map["WorldMap"][map + ".img"];
 
-    if (!WorldMap)
+    if (!WorldMap) {
         WorldMap = nl::nx::map["WorldMap"]["WorldMap.img"];
+    }
 
     base_img_ = WorldMap["BaseImg"][0];
     parent_map_ = std::string(WorldMap["info"]["parentMap"]);
@@ -274,10 +283,13 @@ void UIWorldMap::update_world(std::string map) {
     link_images_.clear();
     link_maps_.clear();
 
-    for (auto &iter : buttons_)
-        if (auto *const button = iter.second.get())
-            if (iter.first >= Buttons::BT_LINK0)
+    for (auto &iter : buttons_) {
+        if (auto *const button = iter.second.get()) {
+            if (iter.first >= Buttons::BT_LINK0) {
                 button->set_active(false);
+            }
+        }
+    }
 
     size_t i = Buttons::BT_LINK0;
 
@@ -311,8 +323,9 @@ void UIWorldMap::update_world(std::string map) {
 
         std::vector<int32_t> map_ids;
 
-        for (const nl::node &map_no : mapNo)
+        for (const nl::node &map_no : mapNo) {
             map_ids.push_back(map_no);
+        }
 
         if (!desc && !title) {
             NxHelper::Map::MapInfo map_info =

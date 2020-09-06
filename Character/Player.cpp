@@ -80,8 +80,9 @@ void Player::respawn(Point<int16_t> pos, bool uw) {
 void Player::send_action(KeyAction::Id action, bool down) {
     const PlayerState *pst = get_state(state_);
 
-    if (pst)
+    if (pst) {
         pst->send_action(*this, action, down);
+    }
 
     keys_down_[action] = down;
 }
@@ -92,8 +93,9 @@ void Player::recalc_stats(bool equipchanged) {
     stats_.set_weapontype(weapontype);
     stats_.init_totalstats();
 
-    if (equipchanged)
+    if (equipchanged) {
         inventory_.recalc_stats(weapontype);
+    }
 
     for (auto stat : EquipStat::values) {
         int32_t inventory_total = inventory_.get_stat(stat);
@@ -109,37 +111,43 @@ void Player::recalc_stats(bool equipchanged) {
         passive_buffs_.apply_buff(stats_, skill_id, skill_level);
     }
 
-    for (const Buff &buff : buffs_.values())
+    for (const Buff &buff : buffs_.values()) {
         active_buffs_.apply_buff(stats_, buff.stat, buff.value);
+    }
 
     stats_.close_totalstats();
 
-    if (auto statsinfo = UI::get().get_element<UIStatsInfo>())
+    if (auto statsinfo = UI::get().get_element<UIStatsInfo>()) {
         statsinfo->update_all_stats();
+    }
 }
 
 void Player::change_equip(int16_t slot) {
     if (int32_t itemid =
-            inventory_.get_item_id(InventoryType::Id::EQUIPPED, slot))
+            inventory_.get_item_id(InventoryType::Id::EQUIPPED, slot)) {
         look_.add_equip(itemid);
-    else
+    } else {
         look_.remove_equip(EquipSlot::by_id(slot));
+    }
 }
 
 void Player::use_item(int32_t itemid) {
     InventoryType::Id type = InventoryType::by_item_id(itemid);
 
-    if (int16_t slot = inventory_.find_item(type, itemid))
-        if (type == InventoryType::Id::USE)
+    if (int16_t slot = inventory_.find_item(type, itemid)) {
+        if (type == InventoryType::Id::USE) {
             fn_use_item(slot, itemid);
+        }
+    }
 }
 
 void Player::draw(Layer::Id layer,
                   double viewx,
                   double viewy,
                   float alpha) const {
-    if (layer == get_layer())
+    if (layer == get_layer()) {
         Char::draw(viewx, viewy, alpha);
+    }
 }
 
 int8_t Player::update(const Physics &physics) {
@@ -174,8 +182,9 @@ int8_t Player::update(const Physics &physics) {
 int8_t Player::get_integer_attackspeed() const {
     int32_t weapon_id = look_.get_equips().get_weapon();
 
-    if (weapon_id <= 0)
+    if (weapon_id <= 0) {
         return 0;
+    }
 
     const WeaponData &weapon = WeaponData::get(weapon_id);
 
@@ -186,8 +195,9 @@ int8_t Player::get_integer_attackspeed() const {
 }
 
 void Player::set_direction(bool flipped) {
-    if (!attacking_)
+    if (!attacking_) {
         Char::set_direction(flipped);
+    }
 }
 
 void Player::set_channel_id(uint8_t ch) {
@@ -200,8 +210,9 @@ void Player::set_state(State st) {
 
         const PlayerState *pst = get_state(st);
 
-        if (pst)
+        if (pst) {
             pst->initialize(*this);
+        }
     }
 }
 
@@ -215,15 +226,18 @@ bool Player::can_attack() const {
 }
 
 SpecialMove::ForbidReason Player::can_use(const SpecialMove &move) const {
-    if (move.is_skill() && state_ == Char::State::PRONE)
+    if (move.is_skill() && state_ == Char::State::PRONE) {
         return SpecialMove::ForbidReason::FBR_OTHER;
+    }
 
     if (move.is_attack()
-        && (state_ == Char::State::LADDER || state_ == Char::State::ROPE))
+        && (state_ == Char::State::LADDER || state_ == Char::State::ROPE)) {
         return SpecialMove::ForbidReason::FBR_OTHER;
+    }
 
-    if (has_cooldown(move.get_id()))
+    if (has_cooldown(move.get_id())) {
         return SpecialMove::ForbidReason::FBR_COOLDOWN;
+    }
 
     int32_t level = skill_book_.get_level(move.get_id());
     Weapon::Type weapon = get_weapontype();
@@ -300,11 +314,13 @@ void Player::rush(double targetx) {
 }
 
 bool Player::is_invincible() const {
-    if (state_ == Char::State::DIED)
+    if (state_ == Char::State::DIED) {
         return true;
+    }
 
-    if (has_buff(Buffstat::Id::DARKSIGHT))
+    if (has_buff(Buffstat::Id::DARKSIGHT)) {
         return true;
+    }
 
     return Char::is_invincible();
 }
@@ -349,8 +365,9 @@ void Player::change_skill(int32_t skill_id,
     int32_t old_level = skill_book_.get_level(skill_id);
     skill_book_.set_skill(skill_id, skill_level, masterlevel, expiration);
 
-    if (old_level != skill_level)
+    if (old_level != skill_level) {
         recalc_stats(false);
+    }
 }
 
 void Player::add_cooldown(int32_t skill_id, int32_t cooltime) {
@@ -360,8 +377,9 @@ void Player::add_cooldown(int32_t skill_id, int32_t cooltime) {
 bool Player::has_cooldown(int32_t skill_id) const {
     auto iter = cooldowns_.find(skill_id);
 
-    if (iter == cooldowns_.end())
+    if (iter == cooldowns_.end()) {
         return false;
+    }
 
     return iter->second > 0;
 }
@@ -369,8 +387,9 @@ bool Player::has_cooldown(int32_t skill_id) const {
 void Player::change_level(uint16_t level) {
     uint16_t oldlevel = get_level();
 
-    if (level > oldlevel)
+    if (level > oldlevel) {
         show_effect_id(CharEffect::Id::LEVELUP);
+    }
 
     stats_.set_stat(MapleStat::Id::LEVEL, level);
 }

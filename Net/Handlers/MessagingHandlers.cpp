@@ -42,8 +42,9 @@ void ShowStatusInfoHandler::handle(InPacket &recv) const {
 
             const ItemData &idata = ItemData::get(itemid);
 
-            if (!idata.is_valid())
+            if (!idata.is_valid()) {
                 return;
+            }
 
             std::string name = idata.get_name();
 
@@ -68,18 +69,19 @@ void ShowStatusInfoHandler::handle(InPacket &recv) const {
             // TODO: show_status(Color::Name::WHITE, "You have lost items in the
             // " + tab + " tab (" + name + " " + std::to_string(qty) + ")");
 
-            if (qty < 0)
+            if (qty < 0) {
                 show_status(Color::Name::WHITE,
                             "You have lost an item in the " + tab + " tab ("
                                 + name + ")");
-            else if (qty == 1)
+            } else if (qty == 1) {
                 show_status(Color::Name::WHITE,
                             "You have gained an item in the " + tab + " tab ("
                                 + name + ")");
-            else
+            } else {
                 show_status(Color::Name::WHITE,
                             "You have gained items in the " + tab + " tab ("
                                 + name + " " + std::to_string(qty) + ")");
+            }
         } else if (mode2 == 1) {
             recv.skip(1);
 
@@ -116,9 +118,10 @@ void ShowStatusInfoHandler::handle(InPacket &recv) const {
             show_status(white ? Color::Name::WHITE : Color::Name::YELLOW,
                         message);
 
-            if (bonus1 > 0)
+            if (bonus1 > 0) {
                 show_status(Color::Name::YELLOW,
                             "+ Bonus EXP (+" + std::to_string(bonus1) + ")");
+            }
         }
     } else if (mode == 4) {
         int32_t gain = recv.read_int();
@@ -136,16 +139,18 @@ void ShowStatusInfoHandler::handle(InPacket &recv) const {
 
 void ShowStatusInfoHandler::show_status(Color::Name color,
                                         const std::string &message) const {
-    if (auto messenger = UI::get().get_element<UIStatusMessenger>())
+    if (auto messenger = UI::get().get_element<UIStatusMessenger>()) {
         messenger->show_status(color, message);
+    }
 }
 
 void ServerMessageHandler::handle(InPacket &recv) const {
     int8_t type = recv.read_byte();
     bool servermessage = recv.inspect_bool();
 
-    if (servermessage)
+    if (servermessage) {
         recv.skip(1);
+    }
 
     std::string message = recv.read_string();
 
@@ -166,8 +171,9 @@ void WeekEventMessageHandler::handle(InPacket &recv) const {
 
     static const std::string MAPLETIP = "[MapleTip]";
 
-    if (message.substr(0, MAPLETIP.length()).compare("[MapleTip]"))
+    if (message.substr(0, MAPLETIP.length()).compare("[MapleTip]")) {
         message = "[Notice] " + message;
+    }
 
     UI::get().get_element<UIChatBar>()->send_chatline(
         message,
@@ -189,8 +195,9 @@ void ChatReceivedHandler::handle(InPacket &recv) const {
 
     auto linetype = static_cast<UIChatBar::LineType>(type);
 
-    if (auto chatbar = UI::get().get_element<UIChatBar>())
+    if (auto chatbar = UI::get().get_element<UIChatBar>()) {
         chatbar->send_chatline(message, linetype);
+    }
 }
 
 void ScrollResultHandler::handle(InPacket &recv) const {
@@ -209,17 +216,19 @@ void ScrollResultHandler::handle(InPacket &recv) const {
     } else {
         effect = CharEffect::Id::SCROLL_FAILURE;
 
-        if (destroyed)
+        if (destroyed) {
             message = Messages::Type::SCROLL_DESTROYED;
-        else
+        } else {
             message = Messages::Type::SCROLL_FAILURE;
+        }
     }
 
     Stage::get().show_character_effect(cid, effect);
 
     if (Stage::get().is_player(cid)) {
-        if (auto chatbar = UI::get().get_element<UIChatBar>())
+        if (auto chatbar = UI::get().get_element<UIChatBar>()) {
             chatbar->display_message(message, UIChatBar::LineType::RED);
+        }
 
         UI::get().enable();
     }
@@ -238,16 +247,18 @@ void ShowItemGainInChatHandler::handle(InPacket &recv) const {
 
             const ItemData &idata = ItemData::get(itemid);
 
-            if (!idata.is_valid())
+            if (!idata.is_valid()) {
                 return;
+            }
 
             std::string name = idata.get_name();
             std::string sign = (qty < 0) ? "-" : "+";
             std::string message = "Gained an item: " + name + " (" + sign
                                   + std::to_string(qty) + ")";
 
-            if (auto chatbar = UI::get().get_element<UIChatBar>())
+            if (auto chatbar = UI::get().get_element<UIChatBar>()) {
                 chatbar->send_chatline(message, UIChatBar::LineType::BLUE);
+            }
         }
     } else if (mode1 == 13)  // card effect
     {

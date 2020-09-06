@@ -97,8 +97,9 @@ Mob::Mob(int32_t oi,
     fly_speed_ += 100;
     fly_speed_ *= 0.0005f;
 
-    if (can_fly_)
+    if (can_fly_) {
         phobj_.type = PhysicsObject::Type::FLYING;
+    }
 
     id_ = mid;
     team_ = tm;
@@ -129,18 +130,21 @@ Mob::Mob(int32_t oi,
         opacity_.set(1.0f);
     }
 
-    if (control_ && stance_ == Stance::STAND)
+    if (control_ && stance_ == Stance::STAND) {
         next_move();
+    }
 }
 
 void Mob::set_stance(uint8_t stancebyte) {
     flip_ = (stancebyte % 2) == 0;
 
-    if (!flip_)
+    if (!flip_) {
         stancebyte -= 1;
+    }
 
-    if (stancebyte < Stance::MOVE)
+    if (stancebyte < Stance::MOVE) {
         stancebyte = Stance::MOVE;
+    }
 
     set_stance(static_cast<Stance>(stancebyte));
 }
@@ -154,8 +158,9 @@ void Mob::set_stance(Stance newstance) {
 }
 
 int8_t Mob::update(const Physics &physics) {
-    if (!active_)
+    if (!active_) {
         return phobj_.fhlayer;
+    }
 
     bool aniend = animations_.at(stance_).update();
 
@@ -163,8 +168,9 @@ int8_t Mob::update(const Physics &physics) {
         set_stance(Stance::STAND);
     }
 
-    if (aniend && stance_ == Stance::DIE)
+    if (aniend && stance_ == Stance::DIE) {
         dead_ = true;
+    }
 
     if (fading_) {
         opacity_ -= 0.025f;
@@ -294,9 +300,10 @@ void Mob::next_move() {
                 break;
         }
 
-        if (stance_ == Stance::MOVE && can_fly_)
+        if (stance_ == Stance::MOVE && can_fly_) {
             fly_direction_ =
                 randomizer_.next_enum(FlyDirection::NUM_DIRECTIONS);
+        }
     } else {
         set_stance(Stance::STAND);
     }
@@ -350,8 +357,9 @@ void Mob::use_attack(const MobSpecialAttack &attack) {
 }
 
 void Mob::use_some_attack() {
-    if (stance_ == Stance::SKILL || attack_stands_.empty())
+    if (stance_ == Stance::SKILL || attack_stands_.empty()) {
         return;
+    }
 
     animations_[Stance::SKILL] =
         attack_stands_.at((std::rand() % attack_stands_.size()) + 1);
@@ -382,8 +390,9 @@ void Mob::draw(double viewx, double viewy, float alpha) const {
         if (show_hp_) {
             name_label_.draw(absp);
 
-            if (!dying_ && hp_percent_ > 0)
+            if (!dying_ && hp_percent_ > 0) {
                 hp_bar_.draw(headpos, hp_percent_);
+            }
         }
     }
 
@@ -397,15 +406,17 @@ void Mob::set_control(int8_t mode) {
 
 void Mob::send_movement(Point<int16_t> start,
                         std::vector<Movement> &&in_movements) {
-    if (control_)
+    if (control_) {
         return;
+    }
 
     set_position(start);
 
     movements_ = std::forward<decltype(in_movements)>(in_movements);
 
-    if (movements_.empty())
+    if (movements_.empty()) {
         return;
+    }
 
     const Movement &lastmove = movements_.front();
 
@@ -443,16 +454,18 @@ void Mob::show_hp(int8_t percent, uint16_t playerlevel) {
     if (hp_percent_ == 0) {
         int16_t delta = playerlevel - level_;
 
-        if (delta > 9)
+        if (delta > 9) {
             name_label_.change_color(Color::Name::YELLOW);
-        else if (delta < -9)
+        } else if (delta < -9) {
             name_label_.change_color(Color::Name::RED);
+        }
     }
 
-    if (percent > 100)
+    if (percent > 100) {
         percent = 100;
-    else if (percent < 0)
+    } else if (percent < 0) {
         percent = 0;
+    }
 
     hp_percent_ = percent;
     show_hp_.set_for(2000);
@@ -462,8 +475,9 @@ void Mob::show_effect(const Animation &animation,
                       int8_t pos,
                       int8_t z,
                       bool f) {
-    if (!active_)
+    if (!active_) {
         return;
+    }
 
     Point<int16_t> shift;
 
@@ -484,8 +498,9 @@ float Mob::calculate_hitchance(int16_t leveldelta,
     float hitchance =
         faccuracy / (((1.84f + 0.07f * leveldelta) * avoid_) + 1.0f);
 
-    if (hitchance < 0.01f)
+    if (hitchance < 0.01f) {
         hitchance = 0.01f;
+    }
 
     return hitchance;
 }
@@ -516,8 +531,9 @@ std::vector<std::pair<int32_t, bool>> Mob::calculate_damage(
     float critical;
     int16_t leveldelta = level_ - attack.playerlevel;
 
-    if (leveldelta < 0)
+    if (leveldelta < 0) {
         leveldelta = 0;
+    }
 
     Attack::DamageType damagetype = attack.damagetype;
 
@@ -560,21 +576,24 @@ std::pair<int32_t, bool> Mob::next_damage(double mindamage,
                                           float critical) const {
     bool hit = randomizer_.below(hitchance);
 
-    if (!hit)
+    if (!hit) {
         return std::pair<int32_t, bool>(0, false);
+    }
 
     constexpr double DAMAGECAP = 999999.0;
 
     double damage = randomizer_.next_real(mindamage, maxdamage);
     bool iscritical = randomizer_.below(critical);
 
-    if (iscritical)
+    if (iscritical) {
         damage *= 1.5;
+    }
 
-    if (damage < 1)
+    if (damage < 1) {
         damage = 1;
-    else if (damage > DAMAGECAP)
+    } else if (damage > DAMAGECAP) {
         damage = DAMAGECAP;
+    }
 
     auto intdamage = static_cast<int32_t>(damage);
 
@@ -596,8 +615,9 @@ void Mob::apply_damage(int32_t damage, bool toleft) {
 }
 
 MobAttack Mob::create_touch_attack() const {
-    if (!touch_damage_)
+    if (!touch_damage_) {
         return MobAttack();
+    }
 
     int32_t minattack = static_cast<int32_t>(watk_ * 0.8f);
     int32_t maxattack = watk_;
@@ -617,8 +637,9 @@ bool Mob::is_alive() const {
 }
 
 bool Mob::is_in_range(const Rectangle<int16_t> &range) const {
-    if (!active_)
+    if (!active_) {
         return false;
+    }
 
     Rectangle<int16_t> bounds = animations_.at(stance_).get_bounds();
     bounds.shift(get_position());
@@ -635,8 +656,9 @@ Point<int16_t> Mob::get_head_position() const {
 const MobSkill &Mob::get_move(int32_t move_id, uint8_t level) {
     auto iter = skills_.find(move_id);
 
-    if (iter == skills_.end())
+    if (iter == skills_.end()) {
         iter = skills_.emplace(move_id, MobSkill(move_id, level)).first;
+    }
 
     return iter->second;
 }
@@ -644,8 +666,9 @@ const MobSkill &Mob::get_move(int32_t move_id, uint8_t level) {
 const MobSpecialAttack &Mob::get_move(int32_t move_id) {
     auto iter = attacks_.find(move_id);
 
-    if (iter == attacks_.end())
+    if (iter == attacks_.end()) {
         iter = attacks_.emplace(move_id, MobSpecialAttack(id_, move_id)).first;
+    }
 
     return iter->second;
 }

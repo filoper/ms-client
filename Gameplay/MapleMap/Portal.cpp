@@ -38,8 +38,9 @@ void Portal::update(Point<int16_t> playerpos) {
 }
 
 void Portal::draw(Point<int16_t> viewpos, float inter) const {
-    if (!animation_ || (type_ == HIDDEN && !touched_))
+    if (!animation_ || (type_ == HIDDEN && !touched_)) {
         return;
+    }
 
     animation_->draw(position_ + viewpos, inter);
 }

@@ -99,10 +99,13 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
     background_[Buttons::BT_TAB3] =
         Equip[tab_source_[Buttons::BT_TAB3]]["backgrnd"];
 
-    for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++)
-        for (const auto &slot : Equip[tab_source_[i]]["Slots"])
-            if (slot.name().find("_") == std::string::npos)
+    for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++) {
+        for (const auto &slot : Equip[tab_source_[i]]["Slots"]) {
+            if (slot.name().find("_") == std::string::npos) {
                 slots_[i].emplace_back(slot);
+            }
+        }
+    }
 
     nl::node EquipGL = nl::nx::ui["UIWindowGL.img"]["Equip"];
     nl::node backgrnd = Equip["backgrnd"];
@@ -142,11 +145,12 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
 
     nl::node Tab = Equip["Tab"];
 
-    for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++)
+    for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++) {
         buttons_[Buttons::BT_TAB0 + i] =
             std::make_unique<TwoSpriteButton>(Tab["disabled"][i],
                                               Tab["enabled"][i],
                                               Point<int16_t>(0, 3));
+    }
 
     dimension_ = bg_dimensions;
     drag_area_ = Point<int16_t>(bg_dimensions.x(), 20);
@@ -161,21 +165,26 @@ void UIEquipInventory::draw(float alpha) const {
     background_[tab_].draw(position_);
     tab_bar_.draw(position_);
 
-    for (auto slot : slots_[tab_])
+    for (auto slot : slots_[tab_]) {
         slot.draw(position_);
+    }
 
     if (tab_ == Buttons::BT_TAB0) {
-        if (!has_pendant_slot_)
+        if (!has_pendant_slot_) {
             disabled_.draw(position_
                            + icon_positions_[EquipSlot::Id::PENDANT2]);
+        }
 
-        if (!has_pocket_slot_)
+        if (!has_pocket_slot_) {
             disabled_.draw(position_ + icon_positions_[EquipSlot::Id::POCKET]);
+        }
 
-        for (auto iter : icons_)
-            if (iter.second)
+        for (auto iter : icons_) {
+            if (iter.second) {
                 iter.second->draw(position_ + icon_positions_[iter.first]
                                   + Point<int16_t>(4, 4));
+            }
+        }
     } else if (tab_ == Buttons::BT_TAB2) {
         disabled2_.draw(position_ + Point<int16_t>(113, 57));
         disabled2_.draw(position_ + Point<int16_t>(113, 106));
@@ -214,8 +223,9 @@ void UIEquipInventory::update_slot(EquipSlot::Id slot) {
 void UIEquipInventory::load_icons() {
     icons_.clear();
 
-    for (auto iter : EquipSlot::values)
+    for (auto iter : EquipSlot::values) {
         update_slot(iter);
+    }
 }
 
 Cursor::State UIEquipInventory::send_cursor(bool pressed,
@@ -258,8 +268,9 @@ void UIEquipInventory::send_key(int32_t keycode, bool pressed, bool escape) {
         } else if (keycode == KeyAction::Id::TAB) {
             uint16_t newtab = tab_ + 1;
 
-            if (newtab >= Buttons::BT_TABE)
+            if (newtab >= Buttons::BT_TABE) {
                 newtab = Buttons::BT_TAB0;
+            }
 
             change_tab(newtab);
         }
@@ -273,10 +284,12 @@ UIElement::Type UIEquipInventory::get_type() const {
 void UIEquipInventory::doubleclick(Point<int16_t> cursorpos) {
     EquipSlot::Id slot = slot_by_position(cursorpos);
 
-    if (icons_[slot])
+    if (icons_[slot]) {
         if (int16_t freeslot =
-                inventory_.find_free_slot(InventoryType::Id::EQUIP))
+                inventory_.find_free_slot(InventoryType::Id::EQUIP)) {
             fn_unequip_item(slot, freeslot);
+        }
+    }
 }
 
 bool UIEquipInventory::is_in_range(Point<int16_t> cursorpos) const {
@@ -291,8 +304,9 @@ bool UIEquipInventory::is_in_range(Point<int16_t> cursorpos) const {
 }
 
 bool UIEquipInventory::send_icon(const Icon &icon, Point<int16_t> cursorpos) {
-    if (EquipSlot::Id slot = slot_by_position(cursorpos))
+    if (EquipSlot::Id slot = slot_by_position(cursorpos)) {
         icon.drop_on_equips(slot);
+    }
 
     return true;
 }
@@ -327,16 +341,18 @@ void UIEquipInventory::clear_tooltip() {
 
 EquipSlot::Id UIEquipInventory::slot_by_position(
     Point<int16_t> cursorpos) const {
-    if (tab_ != Buttons::BT_TAB0)
+    if (tab_ != Buttons::BT_TAB0) {
         return EquipSlot::Id::NONE;
+    }
 
     for (auto iter : icon_positions_) {
         Rectangle<int16_t> iconrect = Rectangle<int16_t>(
             position_ + iter.second,
             position_ + iter.second + Point<int16_t>(32, 32));
 
-        if (iconrect.contains(cursorpos))
+        if (iconrect.contains(cursorpos)) {
             return iter.first;
+        }
     }
 
     return EquipSlot::Id::NONE;
@@ -352,10 +368,11 @@ void UIEquipInventory::change_tab(uint16_t tabid) {
         buttons_[oldtab]->set_state(Button::State::NORMAL);
         buttons_[tab_]->set_state(Button::State::PRESSED);
 
-        if (tab_ == Buttons::BT_TAB0)
+        if (tab_ == Buttons::BT_TAB0) {
             buttons_[Buttons::BT_SLOT]->set_active(true);
-        else
+        } else {
             buttons_[Buttons::BT_SLOT]->set_active(false);
+        }
 
         if (tab_ == Buttons::BT_TAB2) {
             buttons_[Buttons::BT_CONSUMESETTING]->set_active(true);
@@ -365,10 +382,11 @@ void UIEquipInventory::change_tab(uint16_t tabid) {
             buttons_[Buttons::BT_EXCEPTION]->set_active(false);
         }
 
-        if (tab_ == Buttons::BT_TAB3)
+        if (tab_ == Buttons::BT_TAB3) {
             buttons_[Buttons::BT_SHOP]->set_active(true);
-        else
+        } else {
             buttons_[Buttons::BT_SHOP]->set_active(false);
+        }
     }
 }
 
@@ -381,8 +399,9 @@ void UIEquipInventory::EquipIcon::drop_on_stage() const {
 }
 
 void UIEquipInventory::EquipIcon::drop_on_equips(EquipSlot::Id slot) const {
-    if (source_ == slot)
+    if (source_ == slot) {
         Sound(Sound::Name::DRAGEND).play();
+    }
 }
 
 bool UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
@@ -399,8 +418,9 @@ bool UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
     }
 
     if (equip) {
-        if (eqslot == source_)
+        if (eqslot == source_) {
             fn_equip_item(slot, eqslot);
+        }
     } else {
         fn_unequip_item(source_, slot);
     }

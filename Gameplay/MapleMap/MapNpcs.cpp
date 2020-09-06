@@ -37,10 +37,11 @@ void MapNpcs::update(const Physics &physics) {
         int32_t oid = spawn.get_oid();
         Optional<MapObject> npc = npcs_.get(oid);
 
-        if (npc)
+        if (npc) {
             npc->makeactive();
-        else
+        } else {
             npcs_.add(spawn.instantiate(physics));
+        }
     }
 
     npcs_.update(physics);
@@ -51,8 +52,9 @@ void MapNpcs::spawn(NpcSpawn &&spawn) {
 }
 
 void MapNpcs::remove(int32_t oid) {
-    if (auto npc = npcs_.get(oid))
+    if (auto npc = npcs_.get(oid)) {
         npc->deactivate();
+    }
 }
 
 void MapNpcs::clear() {

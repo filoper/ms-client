@@ -45,8 +45,9 @@ MultiUseEffect::MultiUseEffect(nl::node src) {
 }
 
 void MultiUseEffect::apply(Char &target) const {
-    for (const auto &effect : effects_)
+    for (const auto &effect : effects_) {
         effect.apply(target);
+    }
 }
 
 ByLevelUseEffect::ByLevelUseEffect(nl::node src) {
@@ -57,16 +58,18 @@ ByLevelUseEffect::ByLevelUseEffect(nl::node src) {
 }
 
 void ByLevelUseEffect::apply(Char &target) const {
-    if (effects_.empty())
+    if (effects_.empty()) {
         return;
+    }
 
     uint16_t level = target.get_level();
     auto iter = effects_.begin();
     for (; iter != effects_.end() && level > iter->first; ++iter) {
     }
 
-    if (iter != effects_.begin())
+    if (iter != effects_.begin()) {
         iter--;
+    }
 
     iter->second.apply(target);
 }

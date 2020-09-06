@@ -42,23 +42,27 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
     bool in_progress = false;
     bool item_rewards = false;
 
-    for (size_t i = 0; i < 5; i++)
+    for (size_t i = 0; i < 5; i++) {
         events_.emplace_back(BoolPair<bool>(true, true));
+    }
 
-    for (size_t i = 0; i < 10; i++)
+    for (size_t i = 0; i < 10; i++) {
         events_.emplace_back(BoolPair<bool>(false, true));
+    }
 
     events_.emplace_back(BoolPair<bool>(false, false));
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++) {
         event_title_[i] = ShadowText(Text::Font::A18M,
                                      Text::Alignment::LEFT,
                                      Color::Name::HALFANDHALF,
                                      Color::Name::ENDEAVOUR);
+    }
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++) {
         event_date_[i] =
             Text(Text::Font::A12B, Text::Alignment::LEFT, Color::Name::WHITE);
+    }
 
     item_reward_ = main["event"]["normal"];
     text_reward_ = main["liveEvent"]["normal"];
@@ -76,8 +80,9 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
                          bool above = offset_ + shift >= 0;
                          bool below = offset_ + shift <= event_count_ - 3;
 
-                         if (above && below)
+                         if (above && below) {
                              offset_ += shift;
+                         }
                      });
 
     dimension_ = bg_dimensions;
@@ -92,8 +97,9 @@ void UIEvent::draw(float inter) const {
     for (size_t i = 0; i < 3; i++) {
         int16_t slot = i + offset_;
 
-        if (slot >= event_count_)
+        if (slot >= event_count_) {
             break;
+        }
 
         auto event_pos = Point<int16_t>(12, 87 + 125 * i);
 
@@ -110,12 +116,13 @@ void UIEvent::draw(float inter) const {
                 const ItemData &item_data = ItemData::get(2000000 + f);
                 Texture icon = item_data.get_icon(true);
 
-                if (f == 2)
+                if (f == 2) {
                     x_adj = 2;
-                else if (f == 3)
+                } else if (f == 3) {
                     x_adj = 6;
-                else if (f == 4)
+                } else if (f == 4) {
                     x_adj = 9;
+                }
 
                 icon.draw(position_
                           + Point<int16_t>(33 + x_adj + 46 * f, 191 + 125 * i));
@@ -123,14 +130,16 @@ void UIEvent::draw(float inter) const {
         } else {
             text_reward_.draw(position_ + event_pos);
 
-            if (!in_progress)
+            if (!in_progress) {
                 next_.draw(position_ + event_pos);
+            }
         }
 
-        if (in_progress)
+        if (in_progress) {
             label_on_.draw(position_ + event_pos);
-        else
+        } else {
             label_next_.draw(position_ + event_pos);
+        }
 
         auto title_pos = Point<int16_t>(28, 95 + 125 * i);
         auto date_pos = Point<int16_t>(28, 123 + 125 * i);
@@ -146,13 +155,15 @@ void UIEvent::update() {
     for (size_t i = 0; i < 3; i++) {
         int16_t slot = i + offset_;
 
-        if (slot >= event_count_)
+        if (slot >= event_count_) {
             break;
+        }
 
         std::string title = get_event_title(slot);
 
-        if (title.length() > 35)
+        if (title.length() > 35) {
             title = title.substr(0, 35) + "..";
+        }
 
         event_title_[i].change_text(title);
         event_date_[i].change_text(get_event_date(slot));
@@ -170,25 +181,29 @@ void UIEvent::remove_cursor() {
 Cursor::State UIEvent::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Point<int16_t> cursoroffset = cursorpos - position_;
 
-    if (slider_.isenabled())
+    if (slider_.isenabled()) {
         if (Cursor::State new_state =
-                slider_.send_cursor(cursoroffset, clicked))
+                slider_.send_cursor(cursoroffset, clicked)) {
             return new_state;
+        }
+    }
 
     int16_t yoff = cursoroffset.y();
     int16_t xoff = cursoroffset.x();
     int16_t row = row_by_position(yoff);
     int16_t col = col_by_position(xoff);
 
-    if (row > 0 && row < 4 && col > 0 && col < 6)
+    if (row > 0 && row < 4 && col > 0 && col < 6) {
         show_item(row, col);
+    }
 
     return UIDragElement::send_cursor(clicked, cursorpos);
 }
 
 void UIEvent::send_key(int32_t keycode, bool pressed, bool escape) {
-    if (pressed && escape)
+    if (pressed && escape) {
         close();
+    }
 }
 
 UIElement::Type UIEvent::get_type() const {
@@ -255,31 +270,33 @@ std::string UIEvent::get_event_date(uint8_t id) {
 int16_t UIEvent::row_by_position(int16_t y) {
     int16_t item_height = 43;
 
-    if (y >= 148 && y <= 148 + item_height)
+    if (y >= 148 && y <= 148 + item_height) {
         return 1;
-    else if (y >= 273 && y <= 273 + item_height)
+    } else if (y >= 273 && y <= 273 + item_height) {
         return 2;
-    else if (y >= 398 && y <= 398 + item_height)
+    } else if (y >= 398 && y <= 398 + item_height) {
         return 3;
-    else
+    } else {
         return -1;
+    }
 }
 
 int16_t UIEvent::col_by_position(int16_t x) {
     int16_t item_width = 43;
 
-    if (x >= 25 && x <= 25 + item_width)
+    if (x >= 25 && x <= 25 + item_width) {
         return 1;
-    else if (x >= 71 && x <= 71 + item_width)
+    } else if (x >= 71 && x <= 71 + item_width) {
         return 2;
-    else if (x >= 117 && x <= 117 + item_width)
+    } else if (x >= 117 && x <= 117 + item_width) {
         return 3;
-    else if (x >= 163 && x <= 163 + item_width)
+    } else if (x >= 163 && x <= 163 + item_width) {
         return 4;
-    else if (x >= 209 && x <= 209 + item_width)
+    } else if (x >= 209 && x <= 209 + item_width) {
         return 5;
-    else
+    } else {
         return -1;
+    }
 }
 
 void UIEvent::show_item(int16_t row, int16_t col) {

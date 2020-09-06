@@ -53,8 +53,9 @@ Npc::Npc(int32_t id,
             states_.push_back(state);
         }
 
-        for (const auto &speaknode : npcnode["speak"])
+        for (const auto &speaknode : npcnode["speak"]) {
             lines_[state].push_back(strsrc[speaknode.get_string()]);
+        }
     }
 
     name_ = std::string(strsrc["name"]);
@@ -83,8 +84,9 @@ Npc::Npc(int32_t id,
 void Npc::draw(double viewx, double viewy, float alpha) const {
     Point<int16_t> absp = phobj_.get_absolute(viewx, viewy, alpha);
 
-    if (animations_.count(stance_))
+    if (animations_.count(stance_)) {
         animations_.at(stance_).draw(DrawArgument(absp, flip_), alpha);
+    }
 
     if (!hide_name_) {
         // If ever changing code for namelabel confirm placements with map 10000
@@ -94,8 +96,9 @@ void Npc::draw(double viewx, double viewy, float alpha) const {
 }
 
 int8_t Npc::update(const Physics &physics) {
-    if (!active_)
+    if (!active_) {
         return phobj_.fhlayer;
+    }
 
     physics.move_object(phobj_);
 
@@ -118,8 +121,9 @@ void Npc::set_stance(const std::string &st) {
 
         auto iter = animations_.find(stance_);
 
-        if (iter == animations_.end())
+        if (iter == animations_.end()) {
             return;
+        }
 
         iter->second.reset();
     }
@@ -130,8 +134,9 @@ bool Npc::isscripted() const {
 }
 
 bool Npc::inrange(Point<int16_t> cursorpos, Point<int16_t> viewpos) const {
-    if (!active_)
+    if (!active_) {
         return false;
+    }
 
     Point<int16_t> absp = get_position() + viewpos;
 

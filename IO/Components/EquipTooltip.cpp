@@ -101,8 +101,9 @@ EquipTooltip::EquipTooltip() {
 }
 
 void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
-    if (inv_pos_ == ivp)
+    if (inv_pos_ == ivp) {
         return;
+    }
 
     inv_pos_ = ivp;
     inv_pos_preview_ = 0;
@@ -151,8 +152,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
                     std::string reqstr =
                         std::to_string(equipdata.get_reqstat(ms));
 
-                    if (ms != MapleStat::Id::LEVEL)
+                    if (ms != MapleStat::Id::LEVEL) {
                         reqstr.insert(0, 3 - reqstr.size(), '0');
+                    }
 
                     req_stat_strings_preview_[ms] = reqstr;
                 }
@@ -331,8 +333,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
 
                     std::string vicious = std::to_string(equip.get_vicious());
 
-                    if (equip.get_vicious() > 1)
+                    if (equip.get_vicious() > 1) {
                         vicious.append(" (MAX) ");
+                    }
 
                     hammers_preview_ = Text(Text::Font::A11M,
                                             Text::Alignment::LEFT,
@@ -374,8 +377,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
         }
     }
 
-    if (!oequip)
+    if (!oequip) {
         return;
+    }
 
     const Equip &equip = *oequip;
 
@@ -392,8 +396,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
         can_equip_[ms] = stats.get_stat(ms) >= equipdata.get_reqstat(ms);
         std::string reqstr = std::to_string(equipdata.get_reqstat(ms));
 
-        if (ms != MapleStat::Id::LEVEL)
+        if (ms != MapleStat::Id::LEVEL) {
             reqstr.insert(0, 3 - reqstr.size(), '0');
+        }
 
         req_stat_strings_[ms] = reqstr;
     }
@@ -554,8 +559,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
 
         std::string vicious = std::to_string(equip.get_vicious());
 
-        if (equip.get_vicious() > 1)
+        if (equip.get_vicious() > 1) {
             vicious.append(" (MAX) ");
+        }
 
         hammers_ = Text(Text::Font::A11M,
                         Text::Alignment::LEFT,
@@ -591,8 +597,9 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
 }
 
 void EquipTooltip::draw(Point<int16_t> pos) const {
-    if (inv_pos_ == 0)
+    if (inv_pos_ == 0) {
         return;
+    }
 
     draw_preview(pos);
 
@@ -601,22 +608,26 @@ void EquipTooltip::draw(Point<int16_t> pos) const {
     int16_t cur_width = pos.x() + top_.width();
     int16_t cur_height = pos.y() + 36;
 
-    if (inv_pos_preview_ == 1)
+    if (inv_pos_preview_ == 1) {
         cur_width += top_.width();
+    }
 
-    if (inv_pos_preview_ == 1)
+    if (inv_pos_preview_ == 1) {
         cur_height += (height_ > height_preview_) ? height_ : height_preview_;
-    else
+    } else {
         cur_height += height_;
+    }
 
     int16_t adj_x = cur_width - max_width;
     int16_t adj_y = cur_height - max_height;
 
-    if (adj_x > 0)
+    if (adj_x > 0) {
         pos.shift_x(adj_x * -1);
+    }
 
-    if (adj_y > 0)
+    if (adj_y > 0) {
         pos.shift_y(adj_y * -1);
+    }
 
     top_.draw(pos);
     mid_.draw(
@@ -670,14 +681,15 @@ void EquipTooltip::draw(Point<int16_t> pos) const {
         bool reqok = can_equip_[ms];
         req_stat_textures_[ms][reqok].draw(pos + reqpos);
 
-        if (ms != MapleStat::Id::LEVEL)
+        if (ms != MapleStat::Id::LEVEL) {
             reqset_[reqok].draw(req_stat_strings_[ms],
                                 6,
                                 pos + reqpos + Point<int16_t>(54, 0));
-        else
+        } else {
             lvset_[reqok].draw(req_stat_strings_[ms],
                                6,
                                pos + reqpos + Point<int16_t>(54, 0));
+        }
     }
 
     pos.shift_y(88);
@@ -685,8 +697,9 @@ void EquipTooltip::draw(Point<int16_t> pos) const {
     Point<int16_t> job_position(pos + Point<int16_t>(10, 14));
     jobs_back_.draw(job_position);
 
-    for (const auto &jbit : okjobs_)
+    for (const auto &jbit : okjobs_) {
         jobs_[can_equip_[MapleStat::Id::JOB]].at(jbit).draw(job_position);
+    }
 
     line_.draw(pos + Point<int16_t>(0, 47));
 
@@ -705,8 +718,9 @@ void EquipTooltip::draw(Point<int16_t> pos) const {
     }
 
     for (const Text &label : stat_labels_.values()) {
-        if (label.empty())
+        if (label.empty()) {
             continue;
+        }
 
         label.draw(pos + Point<int16_t>(stat_x, 0));
         pos.shift_y(stat_y);
@@ -727,8 +741,9 @@ void EquipTooltip::draw(Point<int16_t> pos) const {
 }
 
 void EquipTooltip::draw_preview(Point<int16_t> pos) const {
-    if (inv_pos_preview_ == 0)
+    if (inv_pos_preview_ == 0) {
         return;
+    }
 
     pos.shift_x(top_.width());
 
@@ -740,11 +755,13 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
     int16_t adj_x = cur_width - max_width;
     int16_t adj_y = cur_height - max_height;
 
-    if (adj_x > 0)
+    if (adj_x > 0) {
         pos.shift_x(adj_x * -1);
+    }
 
-    if (adj_y > 0)
+    if (adj_y > 0) {
         pos.shift_y(adj_y * -1);
+    }
 
     top_.draw(pos);
     mid_.draw(DrawArgument(pos + Point<int16_t>(0, 13),
@@ -799,14 +816,15 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
         bool reqok = can_equip_preview_[ms];
         req_stat_textures_[ms][reqok].draw(pos + reqpos);
 
-        if (ms != MapleStat::Id::LEVEL)
+        if (ms != MapleStat::Id::LEVEL) {
             reqset_[reqok].draw(req_stat_strings_preview_[ms],
                                 6,
                                 pos + reqpos + Point<int16_t>(54, 0));
-        else
+        } else {
             lvset_[reqok].draw(req_stat_strings_preview_[ms],
                                6,
                                pos + reqpos + Point<int16_t>(54, 0));
+        }
     }
 
     pos.shift_y(88);
@@ -814,9 +832,10 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
     Point<int16_t> job_position(pos + Point<int16_t>(10, 14));
     jobs_back_.draw(job_position);
 
-    for (const auto &jbit : okjobs_preview_)
+    for (const auto &jbit : okjobs_preview_) {
         jobs_[can_equip_preview_[MapleStat::Id::JOB]].at(jbit).draw(
             job_position);
+    }
 
     line_.draw(pos + Point<int16_t>(0, 47));
 
@@ -835,8 +854,9 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
     }
 
     for (const Text &label : stat_labels_preview_.values()) {
-        if (label.empty())
+        if (label.empty()) {
             continue;
+        }
 
         label.draw(pos + Point<int16_t>(stat_x, 0));
         pos.shift_y(stat_y);

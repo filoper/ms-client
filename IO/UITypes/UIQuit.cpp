@@ -138,8 +138,9 @@ void UIQuit::draw(float inter) const {
                       level_number_width_,
                       position_ + level_after_pos_ + level_adj_ - screen_adj_);
 
-    if (cur_level_ > uplevel_)
+    if (cur_level_ > uplevel_) {
         levelup_effect_.draw(position_ - screen_adj_, inter);
+    }
 
     exp_before_.draw(position_ + exp_before_pos_ - exp_adj_ - screen_adj_);
     exp_after_.draw(position_ + exp_after_pos_ - exp_adj_ - screen_adj_);
@@ -157,22 +158,24 @@ Cursor::State UIQuit::send_cursor(bool clicked, Point<int16_t> cursorpos) {
 
     auto bounds = Rectangle<int16_t>(lt, rb);
 
-    if (bounds.contains(cursorpos))
+    if (bounds.contains(cursorpos)) {
         UI::get().show_text(Tooltip::Parent::TEXT,
                             std::to_string(hours_) + "Hour "
                                 + std::to_string(minutes_) + "Minute");
-    else
+    } else {
         UI::get().clear_tooltip(Tooltip::Parent::TEXT);
+    }
 
     return UIElement::send_cursor(clicked, cursorpos);
 }
 
 void UIQuit::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed) {
-        if (escape)
+        if (escape) {
             close();
-        else if (keycode == KeyAction::Id::RETURN)
+        } else if (keycode == KeyAction::Id::RETURN) {
             button_pressed(Buttons::YES);
+        }
     }
 }
 
@@ -215,15 +218,17 @@ std::string UIQuit::pad_time(int64_t time) {
     std::string ctime = std::to_string(time);
     size_t length = ctime.length();
 
-    if (length > 2)
+    if (length > 2) {
         return "99";
+    }
 
     return std::string(2 - length, '0') + ctime;
 }
 
 float UIQuit::getexppercent(uint16_t level, int64_t exp) const {
-    if (level >= ExpTable::LEVELCAP)
+    if (level >= ExpTable::LEVELCAP) {
         return 0.0f;
+    }
 
     return static_cast<float>(static_cast<double>(exp)
                               / ExpTable::values[level]);

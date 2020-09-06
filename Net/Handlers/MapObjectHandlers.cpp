@@ -24,8 +24,9 @@ void SpawnCharHandler::handle(InPacket &recv) const {
     int32_t cid = recv.read_int();
 
     // We don't need to spawn the player twice
-    if (Stage::get().is_player(cid))
+    if (Stage::get().is_player(cid)) {
         return;
+    }
 
     uint8_t level = recv.read_byte();
     std::string name = recv.read_string();
@@ -42,8 +43,9 @@ void SpawnCharHandler::handle(InPacket &recv) const {
     int32_t buffmask1 = recv.read_int();
     int16_t buffvalue = 0;
 
-    if (buffmask1 != 0)
+    if (buffmask1 != 0) {
         buffvalue = morphed ? recv.read_short() : recv.read_byte();
+    }
 
     recv.read_int();  // buffmask 2
 
@@ -110,8 +112,9 @@ void SpawnPetHandler::handle(InPacket &recv) const {
     int32_t cid = recv.read_int();
     Optional<Char> character = Stage::get().get_character(cid);
 
-    if (!character)
+    if (!character) {
         return;
+    }
 
     uint8_t petindex = recv.read_byte();
     int8_t mode = recv.read_byte();
@@ -192,13 +195,17 @@ void ForeignBuffHandler::handle(InPacket &recv) const {
             return;
     }
 
-    for (const auto &[buff_id, mask] : Buffstat::first_codes)
-        if (firstmask & mask)
+    for (const auto &[buff_id, mask] : Buffstat::first_codes) {
+        if (firstmask & mask) {
             handle_buff(recv, cid, buff_id);
+        }
+    }
 
-    for (const auto &[buff_id, mask] : Buffstat::second_codes)
-        if (secondmask & mask)
+    for (const auto &[buff_id, mask] : Buffstat::second_codes) {
+        if (secondmask & mask) {
             handle_buff(recv, cid, buff_id);
+        }
+    }
 }
 
 void GiveForeignBuffHandler::handle_buff(InPacket &recv,
@@ -257,8 +264,9 @@ void SpawnMobHandler::handle(InPacket &recv) const {
         recv.read_byte();
         recv.read_short();
 
-        if (effect == 15)
+        if (effect == 15) {
             recv.read_byte();
+        }
     }
 
     int8_t team = recv.read_byte();
@@ -302,8 +310,9 @@ void SpawnMobControllerHandler::handle(InPacket &recv) const {
                 recv.read_byte();
                 recv.read_short();
 
-                if (effect == 15)
+                if (effect == 15) {
                     recv.read_byte();
+                }
             }
 
             int8_t team = recv.read_byte();
@@ -458,8 +467,9 @@ void DropLootHandler::handle(InPacket &recv) const {
         dropfrom = dropto;
     }
 
-    if (!meso)
+    if (!meso) {
         recv.skip(8);
+    }
 
     bool playerdrop = !recv.read_bool();
 
@@ -483,10 +493,11 @@ void RemoveLootHandler::handle(InPacket &recv) const {
     if (mode > 1) {
         int32_t cid = recv.read_int();
 
-        if (recv.length() > 0)
+        if (recv.length() > 0) {
             recv.read_byte();  // pet
-        else if (auto character = Stage::get().get_character(cid))
+        } else if (auto character = Stage::get().get_character(cid)) {
             looter = character->get_phobj();
+        }
 
         Sound(Sound::Name::PICKUP).play();
     }

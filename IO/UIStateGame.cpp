@@ -67,15 +67,18 @@ void UIStateGame::draw(float inter, Point<int16_t> cursor) const {
     for (const auto &type : element_order_) {
         const auto &element = elements_[type];
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->draw(inter);
+        }
     }
 
-    if (tooltip_)
+    if (tooltip_) {
         tooltip_->draw(cursor + Point<int16_t>(0, 22));
+    }
 
-    if (dragged_icon_)
+    if (dragged_icon_) {
         dragged_icon_->dragdraw(cursor);
+    }
 }
 
 void UIStateGame::update() {
@@ -100,17 +103,19 @@ void UIStateGame::update() {
         if (element && element->is_active()) {
             element->update();
 
-            if (update_screen)
+            if (update_screen) {
                 element->update_screen(new_width, new_height);
+            }
         }
     }
 }
 
 bool UIStateGame::drop_icon(const Icon &icon, Point<int16_t> pos) {
-    if (UIElement *front = get_front(pos))
+    if (UIElement *front = get_front(pos)) {
         return front->send_icon(icon, pos);
-    else
+    } else {
         icon.drop_on_stage();
+    }
 
     return true;
 }
@@ -124,8 +129,9 @@ void UIStateGame::remove_cursors() {
     for (auto type : element_order_) {
         auto *element = elements_[type].get();
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->remove_cursor();
+        }
     }
 }
 
@@ -133,19 +139,22 @@ void UIStateGame::remove_cursor(UIElement::Type t) {
     for (auto type : element_order_) {
         auto *element = elements_[type].get();
 
-        if (element && element->is_active() && element->get_type() != t)
+        if (element && element->is_active() && element->get_type() != t) {
             element->remove_cursor();
+        }
     }
 }
 
 void UIStateGame::doubleclick(Point<int16_t> pos) {
-    if (UIElement *front = get_front(pos))
+    if (UIElement *front = get_front(pos)) {
         front->doubleclick(pos);
+    }
 }
 
 void UIStateGame::rightclick(Point<int16_t> pos) {
-    if (UIElement *front = get_front(pos))
+    if (UIElement *front = get_front(pos)) {
         front->rightclick(pos);
+    }
 }
 
 void UIStateGame::send_key(KeyType::Id type,
@@ -208,8 +217,9 @@ void UIStateGame::send_key(KeyType::Id type,
                                 emplace<UIUserList>(tab);
 
                                 if (userlist && userlist->get_tab() != tab
-                                    && userlist->is_active())
+                                    && userlist->is_active()) {
                                     userlist->change_tab(tab);
+                                }
                             }
                         } break;
                         case KeyAction::Id::WORLDMAP:
@@ -218,13 +228,15 @@ void UIStateGame::send_key(KeyType::Id type,
                         case KeyAction::Id::MAPLECHAT: {
                             auto chat = UI::get().get_element<UIChat>();
 
-                            if (!chat || !chat->is_active())
+                            if (!chat || !chat->is_active()) {
                                 emplace<UIChat>();
+                            }
                         } break;
                         case KeyAction::Id::MINIMAP:
                             if (auto minimap =
-                                    UI::get().get_element<UIMiniMap>())
+                                    UI::get().get_element<UIMiniMap>()) {
                                 minimap->send_key(action, pressed, escape);
+                            }
 
                             break;
                         case KeyAction::Id::QUESTLOG:
@@ -233,14 +245,16 @@ void UIStateGame::send_key(KeyType::Id type,
                             break;
                         case KeyAction::Id::MENU:
                             if (auto statusbar =
-                                    UI::get().get_element<UIStatusBar>())
+                                    UI::get().get_element<UIStatusBar>()) {
                                 statusbar->toggle_menu();
+                            }
 
                             break;
                         case KeyAction::Id::QUICKSLOTS:
                             if (auto statusbar =
-                                    UI::get().get_element<UIStatusBar>())
+                                    UI::get().get_element<UIStatusBar>()) {
                                 statusbar->toggle_qs();
+                            }
 
                             break;
                         case KeyAction::Id::CASHSHOP:
@@ -248,28 +262,32 @@ void UIStateGame::send_key(KeyType::Id type,
                             break;
                         case KeyAction::Id::TOGGLECHAT:
                             if (auto chatbar =
-                                    UI::get().get_element<UIChatBar>())
-                                if (!chatbar->is_chatfieldopen())
+                                    UI::get().get_element<UIChatBar>()) {
+                                if (!chatbar->is_chatfieldopen()) {
                                     chatbar->toggle_chat();
+                                }
+                            }
 
                             break;
                         case KeyAction::Id::KEYBINDINGS: {
                             auto keyconfig =
                                 UI::get().get_element<UIKeyConfig>();
 
-                            if (!keyconfig || !keyconfig->is_active())
+                            if (!keyconfig || !keyconfig->is_active()) {
                                 emplace<UIKeyConfig>(
                                     Stage::get().get_player().get_inventory(),
                                     Stage::get().get_player().get_skills());
-                            else if (keyconfig && keyconfig->is_active())
+                            } else if (keyconfig && keyconfig->is_active()) {
                                 keyconfig->close();
+                            }
 
                             break;
                         }
                         case KeyAction::Id::MAINMENU:
                             if (auto statusbar =
-                                    UI::get().get_element<UIStatusBar>())
+                                    UI::get().get_element<UIStatusBar>()) {
                                 statusbar->send_key(action, pressed, escape);
+                            }
 
                             break;
                         case KeyAction::Id::EVENT: emplace<UIEvent>(); break;
@@ -326,9 +344,11 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
                 if (auto *front = get_front(cursorpos)) {
                     UIElement::Type front_type = front->get_type();
 
-                    if (tooltip_parent_ != UIElement::Type::NONE)
-                        if (front_type != tooltip_parent_)
+                    if (tooltip_parent_ != UIElement::Type::NONE) {
+                        if (front_type != tooltip_parent_) {
                             clear_tooltip(tooltip_parent_);
+                        }
+                    }
 
                     remove_cursor(front_type);
                     return front->send_cursor(clicked, cursorpos);
@@ -383,8 +403,9 @@ void UIStateGame::send_scroll(double yoffset) {
     for (auto &type : element_order_) {
         auto &element = elements_[type];
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->send_scroll(yoffset);
+        }
     }
 }
 
@@ -477,10 +498,11 @@ void UIStateGame::emplace(Args &&... args) {
 
         if (std::find(silent_types.begin(), silent_types.end(), T::TYPE)
             == silent_types.end()) {
-            if (T::TYPE == UIElement::Type::WORLDMAP)
+            if (T::TYPE == UIElement::Type::WORLDMAP) {
                 Sound(Sound::Name::WORLDMAPOPEN).play();
-            else
+            } else {
                 Sound(Sound::Name::MENUUP).play();
+            }
 
             UI::get().send_cursor(false);
         }
@@ -502,24 +524,28 @@ UIState::Iterator UIStateGame::pre_add(UIElement::Type type,
 
         if (active != element->is_active()) {
             if (element->is_active()) {
-                if (type == UIElement::Type::WORLDMAP)
+                if (type == UIElement::Type::WORLDMAP) {
                     Sound(Sound::Name::WORLDMAPOPEN).play();
-                else
+                } else {
                     Sound(Sound::Name::MENUUP).play();
+                }
 
                 UI::get().send_cursor(false);
             } else {
-                if (type == UIElement::Type::WORLDMAP)
+                if (type == UIElement::Type::WORLDMAP) {
                     Sound(Sound::Name::WORLDMAPCLOSE).play();
-                else
+                } else {
                     Sound(Sound::Name::MENUDOWN).play();
+                }
 
                 element->remove_cursor();
 
-                if (dragged_icon_)
+                if (dragged_icon_) {
                     if (element->get_type()
-                        == icon_map_[dragged_icon_.get()->get_type()])
+                        == icon_map_[dragged_icon_.get()->get_type()]) {
                         remove_icon();
+                    }
+                }
 
                 UI::get().send_cursor(false);
             }
@@ -530,19 +556,22 @@ UIState::Iterator UIStateGame::pre_add(UIElement::Type type,
         remove(type);
         element_order_.push_back(type);
 
-        if (is_focused)
+        if (is_focused) {
             focused_ = type;
+        }
 
         return elements_.find(type);
     }
 }
 
 void UIStateGame::remove(UIElement::Type type) {
-    if (type == focused_)
+    if (type == focused_) {
         focused_ = UIElement::Type::NONE;
+    }
 
-    if (type == tooltip_parent_)
+    if (type == tooltip_parent_) {
         clear_tooltip(tooltip_parent_);
+    }
 
     element_order_.remove(type);
 
@@ -564,8 +593,9 @@ UIElement *UIStateGame::get_front(std::list<UIElement::Type> types) {
         if (std::find(types.begin(), types.end(), *iter) != types.end()) {
             auto &element = elements_[*iter];
 
-            if (element && element->is_active())
+            if (element && element->is_active()) {
                 return element.get();
+            }
         }
     }
 
@@ -580,8 +610,9 @@ UIElement *UIStateGame::get_front(Point<int16_t> pos) {
     for (auto iter = begin; iter != end; ++iter) {
         auto &element = elements_[*iter];
 
-        if (element && element->is_active() && element->is_in_range(pos))
+        if (element && element->is_active() && element->is_in_range(pos)) {
             return element.get();
+        }
     }
 
     return nullptr;

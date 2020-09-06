@@ -120,8 +120,9 @@ void Stage::respawn(int8_t portalid) {
 }
 
 void Stage::draw(float alpha) const {
-    if (state_ != State::ACTIVE)
+    if (state_ != State::ACTIVE) {
         return;
+    }
 
     Point<int16_t> viewpos = camera_.position(alpha);
     Point<double> viewrpos = camera_.real_position(alpha);
@@ -148,8 +149,9 @@ void Stage::draw(float alpha) const {
 }
 
 void Stage::update() {
-    if (state_ != State::ACTIVE)
+    if (state_ != State::ACTIVE) {
         return;
+    }
 
     combat_.update();
     mob_combat_.update();
@@ -167,8 +169,9 @@ void Stage::update() {
     portals_.update(player_.get_position());
     camera_.update(player_.get_position());
 
-    if (player_.is_invincible())
+    if (player_.is_invincible()) {
         return;
+    }
 
     if (int32_t oid_id = mobs_.find_colliding(player_.get_phobj())) {
         if (MobAttack attack = mobs_.create_attack(oid_id)) {
@@ -179,13 +182,15 @@ void Stage::update() {
 }
 
 void Stage::show_character_effect(int32_t cid, CharEffect::Id effect) {
-    if (auto character = get_character(cid))
+    if (auto character = get_character(cid)) {
         character->show_effect_id(effect);
+    }
 }
 
 void Stage::check_portals() {
-    if (player_.is_attacking())
+    if (player_.is_attacking()) {
         return;
+    }
 
     Point<int16_t> playerpos = player_.get_position();
     Portal::WarpInfo warpinfo = portals_.find_warp_at(playerpos);
@@ -208,16 +213,18 @@ void Stage::check_portals() {
 }
 
 void Stage::check_seats() {
-    if (player_.is_sitting() || player_.is_attacking())
+    if (player_.is_sitting() || player_.is_attacking()) {
         return;
+    }
 
     Optional<const Seat> seat = map_info_.findseat(player_.get_position());
     player_.set_seat(seat);
 }
 
 void Stage::check_ladders(bool up) {
-    if (player_.is_climbing() || player_.is_attacking())
+    if (player_.is_climbing() || player_.is_attacking()) {
         return;
+    }
 
     Optional<const Ladder> ladder =
         map_info_.findladder(player_.get_position(), up);
@@ -228,13 +235,15 @@ void Stage::check_drops() {
     Point<int16_t> playerpos = player_.get_position();
     MapDrops::Loot loot = drops_.find_loot_at(playerpos);
 
-    if (loot.first)
+    if (loot.first) {
         fn_pickup_item(loot.first, loot.second);
+    }
 }
 
 void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
-    if (state_ != State::ACTIVE || !playable_)
+    if (state_ != State::ACTIVE || !playable_) {
         return;
+    }
 
     switch (type) {
         case KeyType::Id::ACTION:
@@ -263,11 +272,13 @@ Cursor::State Stage::send_cursor(bool pressed, Point<int16_t> position) {
     auto statusbar = UI::get().get_element<UIStatusBar>();
 
     if (statusbar && statusbar->is_menu_active()) {
-        if (pressed)
+        if (pressed) {
             statusbar->remove_menus();
+        }
 
-        if (statusbar->is_in_range(position))
+        if (statusbar->is_in_range(position)) {
             return statusbar->send_cursor(pressed, position);
+        }
     }
 
     return npcs_.send_cursor(pressed, position, camera_.position());
@@ -310,10 +321,11 @@ MobCombat &Stage::get_mob_combat() {
 }
 
 Optional<Char> Stage::get_character(int32_t cid) {
-    if (is_player(cid))
+    if (is_player(cid)) {
         return player_;
-    else
+    } else {
         return chars_.get_char(cid);
+    }
 }
 
 int Stage::get_mapid() {
@@ -339,8 +351,9 @@ int64_t Stage::get_upexp() {
 void Stage::transfer_player() {
     fn_player_map_transfer();
 
-    if (Configuration::get().get_admin())
+    if (Configuration::get().get_admin()) {
         fn_admin_enter_map(AdminEnterMapPacket::Operation::ALERT_ADMINS);
+    }
 }
 
 void Stage::clear_channel_objects() {

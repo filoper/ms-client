@@ -103,9 +103,10 @@ UIStatsInfo::UIStatsInfo(const CharStats &st) :
     update_ap();
 
     // Normal
-    for (size_t i = StatLabel::NAME; i <= LUK; i++)
+    for (size_t i = StatLabel::NAME; i <= LUK; i++) {
         stat_labels_[i] =
             Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
+    }
 
     stat_labels_[StatLabel::AP] =
         Text(Text::Font::A11M, Text::Alignment::RIGHT, Color::Name::EMPEROR);
@@ -196,8 +197,9 @@ void UIStatsInfo::draw(float alpha) const {
     for (size_t i = 0; i < last; i++) {
         Point<int16_t> labelpos = position_ + stat_offsets_[i];
 
-        if (i >= StatLabel::NUM_NORMAL)
+        if (i >= StatLabel::NUM_NORMAL) {
             labelpos.shift_x(213);
+        }
 
         stat_labels_[i].draw(labelpos);
     }
@@ -206,17 +208,19 @@ void UIStatsInfo::draw(float alpha) const {
 }
 
 void UIStatsInfo::send_key(int32_t keycode, bool pressed, bool escape) {
-    if (pressed && escape)
+    if (pressed && escape) {
         deactivate();
+    }
 }
 
 bool UIStatsInfo::is_in_range(Point<int16_t> cursorpos) const {
     Point<int16_t> pos_adj;
 
-    if (show_detail_)
+    if (show_detail_) {
         pos_adj = Point<int16_t>(211, 25);
-    else
+    } else {
         pos_adj = Point<int16_t>(0, 0);
+    }
 
     auto bounds =
         Rectangle<int16_t>(position_, position_ + dimension_ + pos_adj);
@@ -230,8 +234,9 @@ UIElement::Type UIStatsInfo::get_type() const {
 void UIStatsInfo::update_all_stats() {
     update_simple(AP, MapleStat::Id::AP);
 
-    if (has_ap_ ^ (stats_.get_stat(MapleStat::Id::AP) > 0))
+    if (has_ap_ ^ (stats_.get_stat(MapleStat::Id::AP) > 0)) {
         update_ap();
+    }
 
     stat_labels_[StatLabel::NAME].change_text(stats_.get_name());
     stat_labels_[StatLabel::GUILD].change_text("-");
@@ -251,10 +256,11 @@ void UIStatsInfo::update_all_stats() {
         std::to_string(stats_.get_mindamage()) + " ~ "
         + std::to_string(stats_.get_maxdamage()));
 
-    if (stats_.is_damage_buffed())
+    if (stats_.is_damage_buffed()) {
         stat_labels_[StatLabel::DAMAGE].change_color(Color::Name::RED);
-    else
+    } else {
         stat_labels_[StatLabel::DAMAGE].change_color(Color::Name::EMPEROR);
+    }
 
     stat_labels_[StatLabel::DAMAGE_DETAILED].change_text(
         std::to_string(stats_.get_mindamage()) + " ~ "
@@ -331,21 +337,29 @@ Button::State UIStatsInfo::button_pressed(uint16_t id) {
             std::function<void(bool)> yesnohandler =
                 [&, autostr, autodex, autoint, autoluk](bool yes) {
                     if (yes) {
-                        if (autostr > 0)
-                            for (size_t i = 0; i < autostr; i++)
+                        if (autostr > 0) {
+                            for (size_t i = 0; i < autostr; i++) {
                                 send_apup(MapleStat::Id::STR);
+                            }
+                        }
 
-                        if (autodex > 0)
-                            for (size_t i = 0; i < autodex; i++)
+                        if (autodex > 0) {
+                            for (size_t i = 0; i < autodex; i++) {
                                 send_apup(MapleStat::Id::DEX);
+                            }
+                        }
 
-                        if (autoint > 0)
-                            for (size_t i = 0; i < autoint; i++)
+                        if (autoint > 0) {
+                            for (size_t i = 0; i < autoint; i++) {
                                 send_apup(MapleStat::Id::INT);
+                            }
+                        }
 
-                        if (autoluk > 0)
-                            for (size_t i = 0; i < autoluk; i++)
+                        if (autoluk > 0) {
+                            for (size_t i = 0; i < autoluk; i++) {
                                 send_apup(MapleStat::Id::LUK);
+                            }
+                        }
                     }
                 };
 
@@ -355,10 +369,11 @@ Button::State UIStatsInfo::button_pressed(uint16_t id) {
         } break;
         case Buttons::BT_HYPERSTATOPEN: break;
         case Buttons::BT_HYPERSTATCLOSE: {
-            if (player.get_level() < 140)
+            if (player.get_level() < 140) {
                 UI::get().emplace<UIOk>(
                     "You can use the Hyper Stat at Lv. 140 and above.",
                     [](bool) {});
+            }
         } break;
         case Buttons::BT_DETAILOPEN: set_detail(true); break;
         case Buttons::BT_DETAILCLOSE:
@@ -389,8 +404,9 @@ void UIStatsInfo::update_ap() {
     Button::State newstate =
         nowap ? Button::State::NORMAL : Button::State::DISABLED;
 
-    for (int i = Buttons::BT_HP; i <= Buttons::BT_AUTO; i++)
+    for (int i = Buttons::BT_HP; i <= Buttons::BT_AUTO; i++) {
         buttons_[i]->set_state(newstate);
+    }
 
     has_ap_ = nowap;
 }
@@ -411,10 +427,11 @@ void UIStatsInfo::update_basevstotal(StatLabel label,
     if (delta) {
         stattext += " (" + std::to_string(base);
 
-        if (delta > 0)
+        if (delta > 0) {
             stattext += "+" + std::to_string(delta);
-        else if (delta < 0)
+        } else if (delta < 0) {
             stattext += "-" + std::to_string(-delta);
+        }
 
         stattext += ")";
     }

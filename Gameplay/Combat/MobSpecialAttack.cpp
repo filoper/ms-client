@@ -25,10 +25,11 @@ MobSpecialAttack::MobSpecialAttack(int32_t mob_id, int32_t move_id) :
     move_id_(move_id) {
     std::string strid;
 
-    if (mob_id < 10000000)
+    if (mob_id < 10000000) {
         strid = string_format::extend_id(mob_id, 7);
-    else
+    } else {
         strid = std::to_string(mob_id);
+    }
 
     nl::node src =
         nl::nx::mob[strid + ".img"]["attack" + std::to_string(move_id)]["info"];

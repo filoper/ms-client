@@ -31,22 +31,25 @@ void NpcDialogueHandler::handle(InPacket &recv) const {
 
     int16_t style = 0;
 
-    if (msgtype == 0 && recv.length() > 0)
+    if (msgtype == 0 && recv.length() > 0) {
         style = recv.read_short();
+    }
 
     UI::get().emplace<UINpcTalk>();
     UI::get().enable();
 
-    if (auto npctalk = UI::get().get_element<UINpcTalk>())
+    if (auto npctalk = UI::get().get_element<UINpcTalk>()) {
         npctalk->change_text(npcid, msgtype, style, speaker, text);
+    }
 }
 
 void OpenNpcShopHandler::handle(InPacket &recv) const {
     int32_t npcid = recv.read_int();
     auto oshop = UI::get().get_element<UIShop>();
 
-    if (!oshop)
+    if (!oshop) {
         return;
+    }
 
     UIShop &shop = *oshop;
 

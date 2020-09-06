@@ -40,11 +40,13 @@ MapInfo::MapInfo(nl::node src, Range<int16_t> walls, Range<int16_t> borders) {
     swim_ = info["swim"].get_bool();
     town_ = info["town"].get_bool();
 
-    for (const auto &seat : src["seat"])
+    for (const auto &seat : src["seat"]) {
         seats_.push_back(seat);
+    }
 
-    for (const auto &ladder : src["ladderRope"])
+    for (const auto &ladder : src["ladderRope"]) {
         ladders_.push_back(ladder);
+    }
 }
 
 MapInfo::MapInfo() {}
@@ -66,18 +68,22 @@ Range<int16_t> MapInfo::get_borders() const {
 }
 
 Optional<const Seat> MapInfo::findseat(Point<int16_t> position) const {
-    for (const auto &seat : seats_)
-        if (seat.inrange(position))
+    for (const auto &seat : seats_) {
+        if (seat.inrange(position)) {
             return seat;
+        }
+    }
 
     return nullptr;
 }
 
 Optional<const Ladder> MapInfo::findladder(Point<int16_t> position,
                                            bool upwards) const {
-    for (const auto &ladder : ladders_)
-        if (ladder.inrange(position, upwards))
+    for (const auto &ladder : ladders_) {
+        if (ladder.inrange(position, upwards)) {
             return ladder;
+        }
+    }
 
     return nullptr;
 }

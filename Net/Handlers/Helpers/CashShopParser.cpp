@@ -32,8 +32,9 @@ StatsEntry parseCharacterInfo(InPacket &recv) {
 
     recv.read_byte();  // 'buddycap'
 
-    if (recv.read_bool())
+    if (recv.read_bool()) {
         recv.read_string();  // 'linkedname'
+    }
 
     CharacterParser::parse_inventory(recv, player.get_inventory());
     CharacterParser::parse_skillbook(recv, player.get_skills());
@@ -68,8 +69,9 @@ StatsEntry parseCharStats(InPacket &recv) {
     recv.read_int();   // face
     recv.read_int();   // hair
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++) {
         statsentry.petids.push_back(recv.read_long());
+    }
 
     statsentry.stats[MapleStat::Id::LEVEL] =
         recv.read_byte();  // TODO: Change to recv.read_short(); to increase
@@ -88,10 +90,11 @@ StatsEntry parseCharStats(InPacket &recv) {
     statsentry.stats[MapleStat::Id::MAXMP] = recv.read_short();
     statsentry.stats[MapleStat::Id::AP] = recv.read_short();
 
-    if (hasSPTable(job))
+    if (hasSPTable(job)) {
         parseRemainingSkillInfo(recv);
-    else
+    } else {
         recv.read_short();  // remaining sp
+    }
 
     statsentry.exp = recv.read_int();
     statsentry.stats[MapleStat::Id::FAME] = recv.read_short();

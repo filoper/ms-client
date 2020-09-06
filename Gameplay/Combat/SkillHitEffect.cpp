@@ -39,15 +39,17 @@ ByLevelHitEffect::ByLevelHitEffect(nl::node src) {
 }
 
 void ByLevelHitEffect::apply(const AttackUser &user, Mob &target) const {
-    if (effects_.empty())
+    if (effects_.empty()) {
         return;
+    }
 
     auto iter = effects_.begin();
     for (; iter != effects_.end() && user.level > iter->first; ++iter) {
     }
 
-    if (iter != effects_.begin())
+    if (iter != effects_.begin()) {
         iter--;
+    }
 
     iter->second.apply(target, user.flip);
 }
@@ -65,15 +67,17 @@ ByLevelTwoHandedHitEffect::ByLevelTwoHandedHitEffect(nl::node src) {
 
 void ByLevelTwoHandedHitEffect::apply(const AttackUser &user,
                                       Mob &target) const {
-    if (effects_.empty())
+    if (effects_.empty()) {
         return;
+    }
 
     auto iter = effects_.begin();
     for (; iter != effects_.end() && user.level > iter->first; ++iter) {
     }
 
-    if (iter != effects_.begin())
+    if (iter != effects_.begin()) {
         iter--;
+    }
 
     iter->second[user.second_weapon].apply(target, user.flip);
 }
@@ -88,7 +92,8 @@ BySkillLevelHitEffect::BySkillLevelHitEffect(nl::node src) {
 void BySkillLevelHitEffect::apply(const AttackUser &user, Mob &target) const {
     auto iter = effects_.find(user.skill_level);
 
-    if (iter != effects_.end())
+    if (iter != effects_.end()) {
         iter->second.apply(target, user.flip);
+    }
 }
 }  // namespace ms

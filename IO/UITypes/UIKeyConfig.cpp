@@ -113,8 +113,9 @@ void UIKeyConfig::load_keys_pos() {
 
         row_special_x += slot_width;
 
-        if (id == KeyConfig::Key::F4 || id == KeyConfig::Key::F8)
+        if (id == KeyConfig::Key::F4 || id == KeyConfig::Key::F8) {
             row_special_x += 17;
+        }
     }
 
     keys_pos_[KeyConfig::Key::SCROLL_LOCK] =
@@ -1003,14 +1004,17 @@ void UIKeyConfig::draw(float inter) const {
         }
     }
 
-    for (auto ubicon : action_icons_)
-        if (ubicon.second)
+    for (auto ubicon : action_icons_) {
+        if (ubicon.second) {
             if (std::find(bound_actions_.begin(),
                           bound_actions_.end(),
                           ubicon.first)
-                == bound_actions_.end())
+                == bound_actions_.end()) {
                 ubicon.second->draw(position_
                                     + unbound_actions_pos_[ubicon.first]);
+            }
+        }
+    }
 
     for (auto fkey : key_textures_) {
         KeyConfig::Key key = fkey.first;
@@ -1039,10 +1043,11 @@ Button::State UIKeyConfig::button_pressed(uint16_t buttonid) {
                     auto keysel_onok = [&](bool alternate) {
                         clear();
 
-                        if (alternate)
+                        if (alternate) {
                             staged_mappings_ = alternate_keys_;
-                        else
+                        } else {
                             staged_mappings_ = basic_keys_;
+                        }
 
                         bind_staged_action_keys();
                     };
@@ -1059,8 +1064,9 @@ Button::State UIKeyConfig::button_pressed(uint16_t buttonid) {
                 "Would you like to clear all key bindings?";
 
             auto onok = [&](bool ok) {
-                if (ok)
+                if (ok) {
                     clear();
+                }
             };
 
             UI::get().emplace<UIOk>(message, onok);
@@ -1081,8 +1087,9 @@ Button::State UIKeyConfig::button_pressed(uint16_t buttonid) {
 Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
 
-    if (dragged_)
+    if (dragged_) {
         return dstate;
+    }
 
     KeyAction::Id icon_slot = unbound_action_by_position(cursorpos);
 
@@ -1155,21 +1162,24 @@ bool UIKeyConfig::send_icon(const Icon &icon, Point<int16_t> cursorpos) {
             position_ + iter.second,
             position_ + iter.second + Point<int16_t>(32, 32));
 
-        if (icon_rect.contains(cursorpos))
+        if (icon_rect.contains(cursorpos)) {
             icon.drop_on_bindings(cursorpos, true);
+        }
     }
 
     KeyConfig::Key fkey = key_by_position(cursorpos);
 
-    if (fkey != KeyConfig::Key::LENGTH)
+    if (fkey != KeyConfig::Key::LENGTH) {
         icon.drop_on_bindings(cursorpos, false);
+    }
 
     return true;
 }
 
 void UIKeyConfig::send_key(int32_t keycode, bool pressed, bool escape) {
-    if (pressed && escape)
+    if (pressed && escape) {
         safe_close();
+    }
 }
 
 UIElement::Type UIKeyConfig::get_type() const {
@@ -1222,8 +1232,9 @@ void UIKeyConfig::stage_mapping(Point<int16_t> cursorposition,
     KeyConfig::Key key = key_by_position(cursorposition);
     Keyboard::Mapping prior_staged = staged_mappings_[key];
 
-    if (prior_staged == mapping)
+    if (prior_staged == mapping) {
         return;
+    }
 
     unstage_mapping(prior_staged);
 
@@ -1232,8 +1243,9 @@ void UIKeyConfig::stage_mapping(Point<int16_t> cursorposition,
         auto iter =
             std::find(bound_actions_.begin(), bound_actions_.end(), action);
 
-        if (iter == bound_actions_.end())
+        if (iter == bound_actions_.end()) {
             bound_actions_.emplace_back(action);
+        }
     }
 
     for (auto const &it : staged_mappings_) {
@@ -1308,8 +1320,9 @@ void UIKeyConfig::unstage_mapping(Keyboard::Mapping mapping) {
         auto iter =
             std::find(bound_actions_.begin(), bound_actions_.end(), action);
 
-        if (iter != bound_actions_.end())
+        if (iter != bound_actions_.end()) {
             bound_actions_.erase(iter);
+        }
     }
 
     for (auto const &it : staged_mappings_) {
@@ -1357,9 +1370,10 @@ void UIKeyConfig::save_staged_mappings() {
         Keyboard::Mapping saved_mapping =
             keyboard_->get_maple_mapping(key.first);
 
-        if (mapping != saved_mapping)
+        if (mapping != saved_mapping) {
             updated_actions.emplace_back(
                 std::make_tuple(k, mapping.type, mapping.action));
+        }
     }
 
     auto maplekeys = keyboard_->get_maplekeys();
@@ -1377,25 +1391,28 @@ void UIKeyConfig::save_staged_mappings() {
             }
         }
 
-        if (!keyFound)
+        if (!keyFound) {
             updated_actions.emplace_back(
                 std::make_tuple(keyConfig,
                                 KeyType::Id::NONE,
                                 KeyAction::Id::LENGTH));
+        }
     }
 
-    if (updated_actions.size() > 0)
+    if (updated_actions.size() > 0) {
         fn_change_keymap(updated_actions);
+    }
 
     for (auto action : updated_actions) {
         KeyConfig::Key key = std::get<0>(action);
         KeyType::Id type = std::get<1>(action);
         int32_t keyAction = std::get<2>(action);
 
-        if (type == KeyType::Id::NONE)
+        if (type == KeyType::Id::NONE) {
             keyboard_->remove(key);
-        else
+        } else {
             keyboard_->assign(key, type, keyAction);
+        }
     }
 
     dirty_ = false;
@@ -1408,8 +1425,9 @@ void UIKeyConfig::bind_staged_action_keys() {
         if (mapping.type != KeyType::Id::NONE) {
             KeyAction::Id action = KeyAction::get_action_by_id(mapping.action);
 
-            if (action)
+            if (action) {
                 bound_actions_.emplace_back(action);
+            }
         }
     }
 }
@@ -1448,8 +1466,9 @@ KeyConfig::Key UIKeyConfig::key_by_position(Point<int16_t> cursorpos) const {
             position_ + iter.second,
             position_ + iter.second + Point<int16_t>(32, 32));
 
-        if (icon_rect.contains(cursorpos))
+        if (icon_rect.contains(cursorpos)) {
             return iter.first;
+        }
     }
 
     return KeyConfig::Key::LENGTH;
@@ -1459,15 +1478,17 @@ KeyAction::Id UIKeyConfig::unbound_action_by_position(
     Point<int16_t> cursorpos) const {
     for (auto iter : unbound_actions_pos_) {
         if (std::find(bound_actions_.begin(), bound_actions_.end(), iter.first)
-            != bound_actions_.end())
+            != bound_actions_.end()) {
             continue;
+        }
 
         Rectangle<int16_t> icon_rect = Rectangle<int16_t>(
             position_ + iter.second,
             position_ + iter.second + Point<int16_t>(32, 32));
 
-        if (icon_rect.contains(cursorpos))
+        if (icon_rect.contains(cursorpos)) {
             return iter.first;
+        }
     }
 
     return KeyAction::Id::LENGTH;
@@ -1476,8 +1497,9 @@ KeyAction::Id UIKeyConfig::unbound_action_by_position(
 Keyboard::Mapping UIKeyConfig::get_staged_mapping(int32_t keycode) const {
     auto iter = staged_mappings_.find(keycode);
 
-    if (iter == staged_mappings_.end())
+    if (iter == staged_mappings_.end()) {
         return {};
+    }
 
     return iter->second;
 }
@@ -1575,8 +1597,9 @@ void UIKeyConfig::update_item_count(InventoryType::Id type,
                                     int16_t change) {
     int32_t item_id = inventory_.get_item_id(type, slot);
 
-    if (item_icons_.find(item_id) == item_icons_.end())
+    if (item_icons_.find(item_id) == item_icons_.end()) {
         return;
+    }
 
     int16_t item_count = item_icons_[item_id]->get_count();
     item_icons_[item_id]->set_count(item_count + change);
@@ -1602,10 +1625,11 @@ void UIKeyConfig::MappingIcon::drop_on_bindings(Point<int16_t> cursorposition,
                                                 bool remove) const {
     auto keyconfig = UI::get().get_element<UIKeyConfig>();
 
-    if (remove)
+    if (remove) {
         keyconfig->unstage_mapping(mapping_);
-    else
+    } else {
         keyconfig->stage_mapping(cursorposition, mapping_);
+    }
 }
 
 Icon::IconType UIKeyConfig::MappingIcon::get_type() {

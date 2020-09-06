@@ -44,9 +44,10 @@ Animation BySkillLevelBullet::get(const Char &user, int32_t) const {
     int32_t level = user.get_skilllevel(skill_id_);
     auto iter = bullets_.find(level);
 
-    if (iter != bullets_.end())
+    if (iter != bullets_.end()) {
         return iter->second.animation;
-    else
+    } else {
         return {};
+    }
 }
 }  // namespace ms

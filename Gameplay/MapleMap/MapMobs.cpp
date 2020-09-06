@@ -36,8 +36,9 @@ void MapMobs::update(const Physics &physics) {
         if (Optional<Mob> mob = mobs_.get(spawn.get_oid())) {
             int8_t mode = spawn.get_mode();
 
-            if (mode > 0)
+            if (mode > 0) {
                 mob->set_control(mode);
+            }
 
             mob->makeactive();
         } else {
@@ -53,8 +54,9 @@ void MapMobs::spawn(MobSpawn &&spawn) {
 }
 
 void MapMobs::remove(int32_t oid, int8_t animation) {
-    if (Optional<Mob> mob = mobs_.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid)) {
         mob->kill(animation);
+    }
 
     if (animation == 0) {
         mobs_.remove(oid);
@@ -68,20 +70,23 @@ void MapMobs::clear() {
 void MapMobs::set_control(int32_t oid, bool control) {
     int8_t mode = control ? 1 : 0;
 
-    if (Optional<Mob> mob = mobs_.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid)) {
         mob->set_control(mode);
+    }
 }
 
 void MapMobs::send_mobhp(int32_t oid, int8_t percent, uint16_t playerlevel) {
-    if (Optional<Mob> mob = mobs_.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid)) {
         mob->show_hp(percent, playerlevel);
+    }
 }
 
 void MapMobs::send_movement(int32_t oid,
                             Point<int16_t> start,
                             std::vector<Movement> &&movements) {
-    if (Optional<Mob> mob = mobs_.get(oid))
+    if (Optional<Mob> mob = mobs_.get(oid)) {
         mob->send_movement(start, std::move(movements));
+    }
 }
 
 void MapMobs::send_attack(AttackResult &result,
@@ -93,11 +98,13 @@ void MapMobs::send_attack(AttackResult &result,
             result.damage_lines[target] = mob->calculate_damage(attack);
             result.mobcount++;
 
-            if (result.mobcount == 1)
+            if (result.mobcount == 1) {
                 result.first_oid = target;
+            }
 
-            if (result.mobcount == mobcount)
+            if (result.mobcount == mobcount) {
                 result.last_oid = target;
+            }
         }
     }
 }
@@ -136,31 +143,35 @@ int32_t MapMobs::find_colliding(const MovingObject &moveobj) const {
             return mob && mob->is_alive() && mob->is_in_range(player_rect);
         });
 
-    if (iter == mobs_.end())
+    if (iter == mobs_.end()) {
         return 0;
+    }
 
     return iter->second->get_oid();
 }
 
 MobAttack MapMobs::create_attack(int32_t oid) const {
-    if (Optional<const Mob> mob = mobs_.get(oid))
+    if (Optional<const Mob> mob = mobs_.get(oid)) {
         return mob->create_touch_attack();
-    else
+    } else {
         return {};
+    }
 }
 
 Point<int16_t> MapMobs::get_mob_position(int32_t oid) const {
-    if (auto mob = mobs_.get(oid))
+    if (auto mob = mobs_.get(oid)) {
         return mob->get_position();
-    else
+    } else {
         return Point<int16_t>(0, 0);
+    }
 }
 
 Point<int16_t> MapMobs::get_mob_head_position(int32_t oid) const {
-    if (Optional<const Mob> mob = mobs_.get(oid))
+    if (Optional<const Mob> mob = mobs_.get(oid)) {
         return mob->get_head_position();
-    else
+    } else {
         return Point<int16_t>(0, 0);
+    }
 }
 
 MapObjects *MapMobs::get_mobs() {

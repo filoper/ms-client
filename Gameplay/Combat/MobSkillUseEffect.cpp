@@ -51,7 +51,8 @@ void MobMultiUseEffect::apply(Mob &mob) const {
             mob.show_effect(a, b, c, d);
         };
 
-    for (const auto &effect : effects_)
+    for (const auto &effect : effects_) {
         effect.apply(func);
+    }
 }
 }  // namespace ms

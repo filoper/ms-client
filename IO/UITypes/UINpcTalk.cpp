@@ -86,8 +86,9 @@ UINpcTalk::UINpcTalk() :
         bool above = offset_ + shift >= 0;
         bool below = offset_ + shift <= row_max_ - unit_rows_;
 
-        if (above && below)
+        if (above && below) {
             offset_ += shift;
+        }
     };
 
     UI::get().remove_textfield();
@@ -212,10 +213,12 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
 Cursor::State UINpcTalk::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     Point<int16_t> cursor_relative = cursorpos - position_;
 
-    if (show_slider_ && slider_.isenabled())
+    if (show_slider_ && slider_.isenabled()) {
         if (Cursor::State sstate =
-                slider_.send_cursor(cursor_relative, clicked))
+                slider_.send_cursor(cursor_relative, clicked)) {
             return sstate;
+        }
+    }
 
     Cursor::State estate = UIElement::send_cursor(clicked, cursorpos);
 
@@ -240,8 +243,9 @@ UIElement::Type UINpcTalk::get_type() const {
 }
 
 UINpcTalk::TalkType UINpcTalk::get_by_value(int8_t value) {
-    if (value > TalkType::NONE && value < TalkType::LENGTH)
+    if (value > TalkType::NONE && value < TalkType::LENGTH) {
         return static_cast<TalkType>(value);
+    }
 
     return TalkType::NONE;
 }

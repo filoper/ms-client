@@ -28,8 +28,9 @@ void UIStateCashShop::draw(float inter, Point<int16_t> cursor) const {
     for (auto iter : elements_) {
         UIElement *element = iter.second.get();
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->draw(inter);
+        }
     }
 }
 
@@ -37,8 +38,9 @@ void UIStateCashShop::update() {
     for (auto iter : elements_) {
         UIElement *element = iter.second.get();
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->update();
+        }
     }
 }
 
@@ -73,15 +75,17 @@ UIState::Iterator UIStateCashShop::pre_add(UIElement::Type type,
                                            bool is_focused) {
     remove(type);
 
-    if (is_focused)
+    if (is_focused) {
         focused_ = type;
+    }
 
     return elements_.find(type);
 }
 
 void UIStateCashShop::remove(UIElement::Type type) {
-    if (focused_ == type)
+    if (focused_ == type) {
         focused_ = UIElement::Type::NONE;
+    }
 
     if (auto &element = elements_[type]) {
         element->deactivate();
@@ -99,8 +103,9 @@ UIElement *UIStateCashShop::get_front() {
     for (auto iter : elements_) {
         auto &element = iter.second;
 
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             front = element.get();
+        }
     }
 
     return front;
@@ -110,8 +115,9 @@ void UIStateCashShop::remove_cursor(UIElement::Type type) {
     for (auto iter : elements_) {
         auto &element = iter.second;
 
-        if (element && element->is_active() && element->get_type() != type)
+        if (element && element->is_active() && element->get_type() != type) {
             element->remove_cursor();
+        }
     }
 }
 

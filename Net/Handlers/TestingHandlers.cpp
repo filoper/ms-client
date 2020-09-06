@@ -24,11 +24,12 @@ namespace ms {
 void CheckSpwResultHandler::handle(InPacket &recv) const {
     auto reason = recv.read_byte();
 
-    if (reason == 0)
+    if (reason == 0) {
         UI::get().emplace<UILoginNotice>(UILoginNotice::Message::INCORRECT_PIC);
-    else
+    } else {
         std::cout << "[CheckSpwResultHandler]: Unknown reason: [" << reason
                   << "]" << std::endl;
+    }
 
     UI::get().enable();
 }

@@ -66,7 +66,8 @@ void ByLevelAction::apply(Char &target, Attack::Type) const {
     int32_t level = target.get_skilllevel(skill_id_);
     auto iter = actions_.find(level);
 
-    if (iter != actions_.end())
+    if (iter != actions_.end()) {
         target.attack(iter->second);
+    }
 }
 }  // namespace ms

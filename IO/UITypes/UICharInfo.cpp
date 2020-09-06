@@ -199,9 +199,11 @@ UICharInfo::UICharInfo(int32_t cid) :
 void UICharInfo::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
-    for (size_t i = 0; i < Buttons::BtArrayGet; i++)
-        if (auto *const button = buttons_.at(i).get())
+    for (size_t i = 0; i < Buttons::BtArrayGet; i++) {
+        if (auto *const button = buttons_.at(i).get()) {
             button->draw(position_);
+        }
+    }
 
     /// Main Window
     int16_t row_height = 18;
@@ -220,28 +222,32 @@ void UICharInfo::draw(float inter) const {
     /// Farm
     Point<int16_t> farm_pos = position_ + farm_adj_;
 
-    if (is_loading_)
+    if (is_loading_) {
         loading_.draw(farm_pos, inter);
+    }
 
     farm_name_.draw(farm_pos + Point<int16_t>(136, 51));
     farm_level_.draw(farm_level_text_, farm_pos + Point<int16_t>(126, 34));
 
     /// Personality
     if (personality_enabled_) {
-        for (const Sprite &sprite : personality_sprites_)
+        for (const Sprite &sprite : personality_sprites_) {
             sprite.draw(position_, inter);
+        }
 
         bool show_personality = (target_character_->get_level() >= 30);
 
         for (const Sprite &sprite :
-             personality_sprites_enabled_[show_personality])
+             personality_sprites_enabled_[show_personality]) {
             sprite.draw(position_, inter);
+        }
     }
 
     /// Collect
     if (collect_enabled_) {
-        for (const Sprite &sprite : collect_sprites_)
+        for (const Sprite &sprite : collect_sprites_) {
             sprite.draw(position_, inter);
+        }
 
         for (size_t i = 0; i < 15; i++) {
             div_t div = std::div(i, 5);
@@ -251,9 +257,11 @@ void UICharInfo::draw(float inter) const {
                 inter);
         }
 
-        for (size_t i = Buttons::BtArrayGet; i < Buttons::BtFAQ; i++)
-            if (auto *const button = buttons_.at(i).get())
+        for (size_t i = Buttons::BtArrayGet; i < Buttons::BtFAQ; i++) {
+            if (auto *const button = buttons_.at(i).get()) {
                 button->draw(position_);
+            }
+        }
 
         Point<int16_t> text_pos = Point<int16_t>(121, 8);
 
@@ -264,18 +272,23 @@ void UICharInfo::draw(float inter) const {
 
     /// Damage
     if (damage_enabled_) {
-        for (const Sprite &sprite : damage_sprites_)
+        for (const Sprite &sprite : damage_sprites_) {
             sprite.draw(position_, inter);
+        }
 
-        for (size_t i = Buttons::BtFAQ; i < buttons_.size(); i++)
-            if (auto *const button = buttons_.at(i).get())
+        for (size_t i = Buttons::BtFAQ; i < buttons_.size(); i++) {
+            if (auto *const button = buttons_.at(i).get()) {
                 button->draw(position_);
+            }
+        }
     }
 
     /// Item
-    if (item_enabled_)
-        for (const Sprite &sprite : item_sprites_)
+    if (item_enabled_) {
+        for (const Sprite &sprite : item_sprites_) {
             sprite.draw(position_, inter);
+        }
+    }
 }
 
 void UICharInfo::update() {
@@ -359,8 +372,9 @@ bool UICharInfo::is_in_range(Point<int16_t> cursorpos) const {
 }
 
 void UICharInfo::send_key(int32_t keycode, bool pressed, bool escape) {
-    if (pressed && escape)
+    if (pressed && escape) {
         deactivate();
+    }
 }
 
 UIElement::Type UICharInfo::get_type() const {

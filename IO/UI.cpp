@@ -321,21 +321,23 @@ void UI::send_key(int32_t keycode, bool pressed) {
             auto chatbar = UI::get().get_element<UIChatBar>();
 
             if (escape) {
-                if (chatbar && chatbar->is_chatopen())
+                if (chatbar && chatbar->is_chatopen()) {
                     chatbar->send_key(mapping.action, pressed, escape);
-                else
+                } else {
                     state_->send_key(mapping.type,
                                      mapping.action,
                                      pressed,
                                      escape);
+                }
             } else if (enter) {
-                if (chatbar)
+                if (chatbar) {
                     chatbar->send_key(mapping.action, pressed, escape);
-                else
+                } else {
                     state_->send_key(mapping.type,
                                      mapping.action,
                                      pressed,
                                      escape);
+                }
             } else {
                 state_->send_key(mapping.type, mapping.action, pressed, escape);
             }

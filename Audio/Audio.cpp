@@ -311,10 +311,11 @@ Sound::Sound(int32_t itemid) {
         auto pid = (10000 * (itemid / 10000));
         auto fpid = format_id(pid);
 
-        if (itemids_.find(fpid) != itemids_.end())
+        if (itemids_.find(fpid) != itemids_.end()) {
             id = itemids_.at(fpid);
-        else
+        } else {
             id = itemids_.at("02000000");
+        }
     }
     create_alure_source();
 }
@@ -333,8 +334,9 @@ void Sound::play() {
     if (id > 0) {
         std::string id_s = std::to_string((uint32_t)id);
         alure::Buffer buff = Music::ctx_.getBuffer(id_s);
-        if (sound_src_)
+        if (sound_src_) {
             sound_src_.play(buff);
+        }
     }
 }
 
@@ -372,8 +374,9 @@ Error Sound::init() {
 
     nl::node itemsrc = nl::nx::sound["Item.img"];
 
-    for (const auto &node : itemsrc)
+    for (const auto &node : itemsrc) {
         add_sound(node.name(), node["Use"]);
+    }
 
     uint8_t volume = Setting<SFXVolume>::get().load();
 
@@ -415,15 +418,17 @@ size_t Sound::add_sound(nl::node src) {
 void Sound::add_sound(Name name, nl::node src) {
     size_t id = add_sound(src);
 
-    if (id)
+    if (id) {
         soundids_[name] = id;
+    }
 }
 
 void Sound::add_sound(std::string itemid, nl::node src) {
     size_t id = add_sound(src);
 
-    if (id)
+    if (id) {
         itemids_[itemid] = id;
+    }
 }
 
 std::string Sound::format_id(int32_t itemid) {
@@ -443,8 +448,9 @@ Music::Music(std::string p) {
 void Music::play() const {
     static std::string bgmpath = "";
 
-    if (path_ == bgmpath)
+    if (path_ == bgmpath) {
         return;
+    }
 
     /* will throw std::out:of:range if not used before. */
     try {
@@ -465,8 +471,9 @@ void Music::play() const {
 void Music::play_once() const {
     static std::string bgmpath = "";
 
-    if (path_ == bgmpath)
+    if (path_ == bgmpath) {
         return;
+    }
 
     /* will throw std::out:of:range if not used before. */
     try {
@@ -508,8 +515,9 @@ bool Music::set_bgmvolume(uint8_t vol) {
 }
 
 void Music::update_context() {
-    if (ctx_)
+    if (ctx_) {
         ctx_.update();
+    }
 }
 }  // namespace ms
 #endif

@@ -685,7 +685,7 @@ void EquipTooltip::draw(Point<int16_t> pos) const {
     Point<int16_t> job_position(pos + Point<int16_t>(10, 14));
     jobs_back_.draw(job_position);
 
-    for (auto &jbit : okjobs_)
+    for (const auto &jbit : okjobs_)
         jobs_[can_equip_[MapleStat::Id::JOB]].at(jbit).draw(job_position);
 
     line_.draw(pos + Point<int16_t>(0, 47));
@@ -814,7 +814,7 @@ void EquipTooltip::draw_preview(Point<int16_t> pos) const {
     Point<int16_t> job_position(pos + Point<int16_t>(10, 14));
     jobs_back_.draw(job_position);
 
-    for (auto &jbit : okjobs_preview_)
+    for (const auto &jbit : okjobs_preview_)
         jobs_[can_equip_preview_[MapleStat::Id::JOB]].at(jbit).draw(
             job_position);
 

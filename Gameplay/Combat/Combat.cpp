@@ -46,10 +46,10 @@ Combat::Combat(Player &in_player,
         [&](const DamageEffect &effect) { apply_damage_effect(effect); }) {}
 
 void Combat::draw(double viewx, double viewy, float alpha) const {
-    for (auto &be : bullets_)
+    for (const auto &be : bullets_)
         be.bullet.draw(viewx, viewy, alpha);
 
-    for (auto &dn : damage_numbers_)
+    for (const auto &dn : damage_numbers_)
         dn.draw(viewx, viewy, alpha);
 }
 
@@ -287,7 +287,7 @@ void Combat::extract_effects(const Char &user,
                         user.get_position(),
                         result.toleft };
 
-        for (auto &line : result.damage_lines) {
+        for (const auto &line : result.damage_lines) {
             int32_t oid = line.first;
 
             if (mobs_.contains(oid)) {
@@ -326,7 +326,7 @@ void Combat::extract_effects(const Char &user,
             }
         }
     } else {
-        for (auto &line : result.damage_lines) {
+        for (const auto &line : result.damage_lines) {
             int32_t oid = line.first;
 
             if (mobs_.contains(oid)) {
@@ -357,7 +357,7 @@ std::vector<DamageNumber> Combat::place_numbers(
     std::vector<DamageNumber> numbers;
     int16_t head = mobs_.get_mob_head_position(oid).y();
 
-    for (auto &line : damagelines) {
+    for (const auto &line : damagelines) {
         int32_t amount = line.first;
         bool critical = line.second;
         DamageNumber::Type type = critical ? DamageNumber::Type::CRITICAL

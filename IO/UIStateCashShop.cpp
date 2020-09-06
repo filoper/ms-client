@@ -47,7 +47,7 @@ Cursor::State UIStateCashShop::send_cursor(Cursor::State cursorstate,
     bool clicked = cursorstate == Cursor::State::CLICKING
                    || cursorstate == Cursor::State::VSCROLLIDLE;
 
-    if (auto focusedelement = get(focused_)) {
+    if (auto *focusedelement = get(focused_)) {
         if (focusedelement->is_active()) {
             remove_cursor(focusedelement->get_type());
 
@@ -58,7 +58,7 @@ Cursor::State UIStateCashShop::send_cursor(Cursor::State cursorstate,
             return cursorstate;
         }
     } else {
-        if (auto front = get_front()) {
+        if (auto *front = get_front()) {
             remove_cursor(front->get_type());
 
             return front->send_cursor(clicked, cursorpos);

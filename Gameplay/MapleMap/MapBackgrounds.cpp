@@ -162,14 +162,14 @@ void MapBackgrounds::drawbackgrounds(double viewx,
     if (black_)
         GraphicsGL::get().drawscreenfill(0.0f, 0.0f, 0.0f, 1.0f);
 
-    for (auto &background : backgrounds_)
+    for (const auto &background : backgrounds_)
         background.draw(viewx, viewy, alpha);
 }
 
 void MapBackgrounds::drawforegrounds(double viewx,
                                      double viewy,
                                      float alpha) const {
-    for (auto &foreground : foregrounds_)
+    for (const auto &foreground : foregrounds_)
         foreground.draw(viewx, viewy, alpha);
 }
 

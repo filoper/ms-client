@@ -59,7 +59,7 @@ int64_t SkillBook::get_expiration(int32_t id) const {
 std::map<int32_t, int32_t> SkillBook::collect_passives() const {
     std::map<int32_t, int32_t> passives;
 
-    for (auto &iter : skill_entries_)
+    for (const auto &iter : skill_entries_)
         if (SkillData::get(iter.first).is_passive())
             passives.emplace(iter.first, iter.second.level);
 

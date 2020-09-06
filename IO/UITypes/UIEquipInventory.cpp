@@ -100,7 +100,7 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
         Equip[tab_source_[Buttons::BT_TAB3]]["backgrnd"];
 
     for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++)
-        for (auto slot : Equip[tab_source_[i]]["Slots"])
+        for (const auto &slot : Equip[tab_source_[i]]["Slots"])
             if (slot.name().find("_") == std::string::npos)
                 slots_[i].emplace_back(slot);
 
@@ -230,7 +230,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
 
     EquipSlot::Id slot = slot_by_position(cursorpos);
 
-    if (auto icon = icons_[slot].get()) {
+    if (auto *icon = icons_[slot].get()) {
         if (pressed) {
             icon->start_drag(cursorpos - position_ - icon_positions_[slot]);
 

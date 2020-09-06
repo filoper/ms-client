@@ -42,7 +42,7 @@ SkillData::SkillData(int32_t id) {
     /// Load stats
     nl::node levelsrc = src["level"];
 
-    for (auto sub : levelsrc) {
+    for (const auto &sub : levelsrc) {
         float damage = (float)sub["damage"] / 100;
         int32_t matk = sub["mad"];
         int32_t fixdamage = sub["fixdamage"];
@@ -95,7 +95,7 @@ SkillData::SkillData(int32_t id) {
     /// Load required skills
     nl::node reqsrc = src["req"];
 
-    for (auto sub : reqsrc) {
+    for (const auto &sub : reqsrc) {
         int32_t skillid =
             string_conversion::or_default<int32_t>(sub.name(), -1);
         int32_t reqlv = sub.get_integer();

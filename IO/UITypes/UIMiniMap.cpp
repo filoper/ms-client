@@ -78,18 +78,18 @@ UIMiniMap::UIMiniMap(const CharStats &stats) :
 
 void UIMiniMap::draw(float alpha) const {
     if (type_ == Type::MIN) {
-        for (auto sprite : min_sprites_)
+        for (const auto &sprite : min_sprites_)
             sprite.draw(position_, alpha);
 
         combined_text_.draw(position_ + Point<int16_t>(7, -3));
     } else if (type_ == Type::NORMAL) {
-        for (auto sprite : normal_sprites_)
+        for (const auto &sprite : normal_sprites_)
             sprite.draw(position_, alpha);
 
         if (has_map_) {
             Animation portal_marker = Animation(marker_["portal"]);
 
-            for (auto sprite : static_marker_info_)
+            for (const auto &sprite : static_marker_info_)
                 portal_marker.draw(position_ + sprite.second, alpha);
 
             draw_movable_markers(position_, alpha);
@@ -98,7 +98,7 @@ void UIMiniMap::draw(float alpha) const {
                 draw_npclist(normal_dimensions_, alpha);
         }
     } else {
-        for (auto sprite : max_sprites_)
+        for (const auto &sprite : max_sprites_)
             sprite.draw(position_, alpha);
 
         region_text_.draw(position_ + Point<int16_t>(48, 14));
@@ -107,7 +107,7 @@ void UIMiniMap::draw(float alpha) const {
         if (has_map_) {
             Animation portal_marker(marker_["portal"]);
 
-            for (auto sprite : static_marker_info_)
+            for (const auto &sprite : static_marker_info_)
                 portal_marker.draw(
                     position_ + sprite.second + Point<int16_t>(0, MAX_ADJ_),
                     alpha);
@@ -228,7 +228,7 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     }
 
     bool found = false;
-    auto npcs = Stage::get().get_npcs().get_npcs();
+    auto *npcs = Stage::get().get_npcs().get_npcs();
 
     for (auto npc = npcs->begin(); npc != npcs->end(); npc++) {
         Point<int16_t> npc_pos =
@@ -243,7 +243,7 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
         if (marker_spot.contains(cursor_relative)) {
             found = true;
 
-            auto n = static_cast<Npc *>(npc->second.get());
+            auto *n = static_cast<Npc *>(npc->second.get());
             std::string name = n->get_name();
             std::string func = n->get_func();
 
@@ -253,7 +253,7 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     }
 
     if (!found) {
-        for (auto sprite : static_marker_info_) {
+        for (const auto &sprite : static_marker_info_) {
             Rectangle<int16_t> marker_spot =
                 Rectangle<int16_t>(sprite.second, sprite.second + 8);
 
@@ -729,12 +729,12 @@ void UIMiniMap::update_npclist() {
     if (simple_mode_)
         return;
 
-    auto npcs = Stage::get().get_npcs().get_npcs();
+    auto *npcs = Stage::get().get_npcs().get_npcs();
 
     for (auto npc = npcs->begin(); npc != npcs->end(); ++npc) {
         list_npc_list_.emplace_back(npc->second.get());
 
-        auto n = static_cast<Npc *>(npc->second.get());
+        auto *n = static_cast<Npc *>(npc->second.get());
         std::string name = n->get_name();
         std::string func = n->get_func();
 
@@ -832,7 +832,7 @@ void UIMiniMap::update_npclist() {
 void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
     Animation npc_marker = Animation(marker_["npc"]);
 
-    for (Sprite sprite : list_npc_sprites_)
+    for (const Sprite &sprite : list_npc_sprites_)
         sprite.draw(position_, alpha);
 
     Point<int16_t> listNpc_pos =

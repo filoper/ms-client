@@ -88,7 +88,7 @@ void MapMobs::send_attack(AttackResult &result,
                           const Attack &attack,
                           const std::vector<int32_t> &targets,
                           uint8_t mobcount) {
-    for (auto &target : targets) {
+    for (const auto &target : targets) {
         if (Optional<Mob> mob = mobs_.get(target)) {
             result.damage_lines[target] = mob->calculate_damage(attack);
             result.mobcount++;

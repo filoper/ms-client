@@ -22,7 +22,7 @@
 
 namespace ms {
 MapPortals::MapPortals(nl::node src, int32_t mapid) {
-    for (auto sub : src) {
+    for (const auto &sub : src) {
         int8_t portal_id =
             string_conversion::or_default<int8_t>(sub.name(), -1);
 
@@ -75,7 +75,7 @@ void MapPortals::update(Point<int16_t> playerpos) {
 }
 
 void MapPortals::draw(Point<int16_t> viewpos, float inter) const {
-    for (auto &ptit : portals_by_id_)
+    for (const auto &ptit : portals_by_id_)
         ptit.second.draw(viewpos, inter);
 }
 

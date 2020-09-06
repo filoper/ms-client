@@ -19,13 +19,13 @@ namespace ms {
 TilesObjs::TilesObjs(nl::node src) {
     auto tileset = src["info"]["tS"] + ".img";
 
-    for (auto tilenode : src["tile"]) {
+    for (const auto &tilenode : src["tile"]) {
         Tile tile { tilenode, tileset };
         int8_t z = tile.getz();
         tiles_.emplace(z, std::move(tile));
     }
 
-    for (auto objnode : src["obj"]) {
+    for (const auto &objnode : src["obj"]) {
         Obj obj { objnode };
         int8_t z = obj.getz();
         objs_.emplace(z, std::move(obj));
@@ -40,10 +40,10 @@ void TilesObjs::update() {
 }
 
 void TilesObjs::draw(Point<int16_t> viewpos, float alpha) const {
-    for (auto &iter : objs_)
+    for (const auto &iter : objs_)
         iter.second.draw(viewpos, alpha);
 
-    for (auto &iter : tiles_)
+    for (const auto &iter : tiles_)
         iter.second.draw(viewpos);
 }
 

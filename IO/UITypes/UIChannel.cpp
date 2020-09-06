@@ -94,7 +94,7 @@ void UIChannel::draw(float inter) const {
                                           position_.y() + current_channel_y_));
     }
 
-    for (auto &sprite : ch_)
+    for (const auto &sprite : ch_)
         sprite.draw(position_, inter);
 }
 

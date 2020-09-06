@@ -272,7 +272,7 @@ void UIUserList::draw(float alpha) const {
             party_slider_.draw(position_);
         }
     } else if (tab_ == Buttons::BT_TAB_FRIEND) {
-        for (auto sprite : friend_sprites_)
+        for (const auto &sprite : friend_sprites_)
             sprite.draw(position_, alpha);
 
         friends_online_text_.draw(position_ + Point<int16_t>(211, 62));
@@ -283,7 +283,7 @@ void UIUserList::draw(float alpha) const {
         friends_group_name_.draw(position_ + Point<int16_t>(29, 114));
         friends_slider_.draw(position_);
     } else if (tab_ == Buttons::BT_TAB_BOSS) {
-        for (auto sprite : boss_sprites_)
+        for (const auto &sprite : boss_sprites_)
             sprite.draw(position_, alpha);
     } else if (tab_ == Buttons::BT_TAB_BLACKLIST) {
         blacklist_title_.draw(position_ + Point<int16_t>(24, 104));

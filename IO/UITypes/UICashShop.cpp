@@ -173,7 +173,7 @@ UICashShop::UICashShop() :
     item_line_ = Base["line"];
     item_none_ = Base["noItem"];
 
-    for (nl::node item_label : CSEffect)
+    for (const nl::node &item_label : CSEffect)
         item_labels_.emplace_back(item_label);
 
     items_.push_back({ 5220000, Item::Label::HOT, 34000, 11 });

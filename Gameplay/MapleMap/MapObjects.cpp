@@ -20,7 +20,7 @@ void MapObjects::draw(Layer::Id layer,
                       double viewx,
                       double viewy,
                       float alpha) const {
-    for (auto &oid : layers_[layer]) {
+    for (const auto &oid : layers_[layer]) {
         auto mmo = get(oid);
 
         if (mmo && mmo->is_active())

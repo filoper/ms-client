@@ -96,8 +96,8 @@ void UIWorldMap::draw(float alpha) const {
     base_img_.draw(position_ + base_position_);
 
     if (link_images_.size() > 0) {
-        for (auto &iter : buttons_) {
-            if (const auto button = iter.second.get()) {
+        for (const auto &iter : buttons_) {
+            if (auto *const button = iter.second.get()) {
                 if (iter.first >= Buttons::BT_LINK0
                     && button->get_state() == Button::State::MOUSEOVER) {
                     if (link_images_.find(iter.first) != link_images_.end()) {
@@ -113,13 +113,13 @@ void UIWorldMap::draw(float alpha) const {
     if (show_path_img_)
         path_img_.draw(position_ + base_position_);
 
-    for (auto spot : map_spots_)
+    for (const auto &spot : map_spots_)
         spot.second.marker.draw(spot.first + position_ + base_position_);
 
     bool found = false;
 
     if (!found) {
-        for (auto spot : map_spots_) {
+        for (const auto &spot : map_spots_) {
             for (auto map_id : spot.second.map_ids) {
                 if (map_id == mapid_) {
                     found = true;
@@ -275,13 +275,13 @@ void UIWorldMap::update_world(std::string map) {
     link_maps_.clear();
 
     for (auto &iter : buttons_)
-        if (const auto button = iter.second.get())
+        if (auto *const button = iter.second.get())
             if (iter.first >= Buttons::BT_LINK0)
                 button->set_active(false);
 
     size_t i = Buttons::BT_LINK0;
 
-    for (nl::node link : WorldMap["MapLink"]) {
+    for (const nl::node &link : WorldMap["MapLink"]) {
         nl::node l = link["link"];
         Texture link_image = l["linkImg"];
 
@@ -300,7 +300,7 @@ void UIWorldMap::update_world(std::string map) {
 
     map_spots_.clear();
 
-    for (nl::node list : WorldMap["MapList"]) {
+    for (const nl::node &list : WorldMap["MapList"]) {
         nl::node desc = list["desc"];
         nl::node mapNo = list["mapNo"];
         nl::node path = list["path"];
@@ -311,7 +311,7 @@ void UIWorldMap::update_world(std::string map) {
 
         std::vector<int32_t> map_ids;
 
-        for (nl::node map_no : mapNo)
+        for (const nl::node &map_no : mapNo)
             map_ids.push_back(map_no);
 
         if (!desc && !title) {

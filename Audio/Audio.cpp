@@ -372,7 +372,7 @@ Error Sound::init() {
 
     nl::node itemsrc = nl::nx::sound["Item.img"];
 
-    for (auto node : itemsrc)
+    for (const auto &node : itemsrc)
         add_sound(node.name(), node["Use"]);
 
     uint8_t volume = Setting<SFXVolume>::get().load();
@@ -398,7 +398,7 @@ bool Sound::set_sfxvolume(uint8_t vol) {
 size_t Sound::add_sound(nl::node src) {
     nl::audio ad = src;
 
-    auto data = reinterpret_cast<const char *>(ad.data());
+    const auto *data = reinterpret_cast<const char *>(ad.data());
 
     if (data) {
         size_t id = ad.id();
@@ -451,7 +451,7 @@ void Music::play() const {
         audiodb_.at(path_);
     } catch (std::out_of_range e) {
         nl::audio ad = nl::nx::sound.resolve(path_);
-        auto data = reinterpret_cast<const char *>(ad.data());
+        const auto *data = reinterpret_cast<const char *>(ad.data());
         audiodb_[path_] = new membuf(data + 82, ad.length() - 82);
     }
 
@@ -473,7 +473,7 @@ void Music::play_once() const {
         audiodb_.at(path_);
     } catch (std::out_of_range e) {
         nl::audio ad = nl::nx::sound.resolve(path_);
-        auto data = reinterpret_cast<const char *>(ad.data());
+        const auto *data = reinterpret_cast<const char *>(ad.data());
         audiodb_[path_] = new membuf(data + 82, ad.length() - 82);
     }
 

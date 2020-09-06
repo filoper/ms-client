@@ -789,7 +789,7 @@ const UISkillBook::SkillDisplayMeta *UISkillBook::skill_by_position(
     if (skill_idx >= skills_.size())
         return nullptr;
 
-    auto iter = skills_.data() + skill_idx;
+    const auto *iter = skills_.data() + skill_idx;
 
     return iter;
 }

@@ -32,7 +32,7 @@ void TwoHandedHitEffect::apply(const AttackUser &user, Mob &target) const {
 }
 
 ByLevelHitEffect::ByLevelHitEffect(nl::node src) {
-    for (auto sub : src["CharLevel"]) {
+    for (const auto &sub : src["CharLevel"]) {
         uint16_t level = string_conversion::or_zero<uint16_t>(sub.name());
         effects_.emplace(level, sub["hit"]["0"]);
     }
@@ -53,7 +53,7 @@ void ByLevelHitEffect::apply(const AttackUser &user, Mob &target) const {
 }
 
 ByLevelTwoHandedHitEffect::ByLevelTwoHandedHitEffect(nl::node src) {
-    for (auto sub : src["CharLevel"]) {
+    for (const auto &sub : src["CharLevel"]) {
         auto level = string_conversion::or_zero<uint16_t>(sub.name());
 
         effects_.emplace(
@@ -79,7 +79,7 @@ void ByLevelTwoHandedHitEffect::apply(const AttackUser &user,
 }
 
 BySkillLevelHitEffect::BySkillLevelHitEffect(nl::node src) {
-    for (auto sub : src["level"]) {
+    for (const auto &sub : src["level"]) {
         auto level = string_conversion::or_zero<int32_t>(sub.name());
         effects_.emplace(level, sub["hit"]["0"]);
     }

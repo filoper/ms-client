@@ -32,7 +32,7 @@ Reactor::Reactor(int32_t o, int32_t r, int8_t s, Point<int16_t> p) :
     dead_ = false;
     hit_table_ = false;
 
-    for (auto sub : src_[0])
+    for (const auto &sub : src_[0])
         if (sub.name() == "event")
             if (sub["0"]["type"].get_integer() == 0)
                 hit_table_ = true;

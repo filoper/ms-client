@@ -218,7 +218,7 @@ void UIItemInventory::draw(float alpha) const {
             full_enabled_ ? get_full_slotpos(i) : get_slotpos(i);
 
         if (icons_.find(i) != icons_.end()) {
-            auto &icon = icons_.at(i);
+            const auto &icon = icons_.at(i);
 
             if (icon && i >= firstslot && i <= lastslot)
                 icon->draw(position_ + slotpos);
@@ -495,7 +495,7 @@ void UIItemInventory::modify(InventoryType::Id type,
                 break;
             case Inventory::Modification::CHANGECOUNT:
             case Inventory::Modification::ADDCOUNT:
-                if (auto icon = get_icon(slot))
+                if (auto *icon = get_icon(slot))
                     icon->set_count(arg);
 
                 break;

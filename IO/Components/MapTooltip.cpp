@@ -248,7 +248,7 @@ void MapTooltip::set_mapid(int32_t mapid) {
     size_t n = 0;
     auto life = NxHelper::Map::get_life_on_map(mapid);
 
-    for (auto l : life) {
+    for (const auto &l : life) {
         auto life_object = l.second;
 
         if (life_object.first == "m" && m < MAX_LIFE) {

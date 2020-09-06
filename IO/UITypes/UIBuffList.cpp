@@ -72,7 +72,7 @@ UIBuffList::UIBuffList() {
 void UIBuffList::draw(float alpha) const {
     Point<int16_t> icpos = position_;
 
-    for (auto &icon : icons_) {
+    for (const auto &icon : icons_) {
         icon.second.draw(icpos, alpha);
         icpos.shift_x(-32);
     }

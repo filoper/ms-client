@@ -1087,7 +1087,7 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     KeyAction::Id icon_slot = unbound_action_by_position(cursorpos);
 
     if (icon_slot != KeyAction::Id::LENGTH) {
-        if (auto icon = action_icons_[icon_slot].get()) {
+        if (auto *icon = action_icons_[icon_slot].get()) {
             if (clicked) {
                 icon->start_drag(cursorpos - position_
                                  - unbound_actions_pos_[icon_slot]);

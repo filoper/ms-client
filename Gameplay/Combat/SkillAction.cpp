@@ -54,7 +54,7 @@ void TwoHandedAction::apply(Char &target, Attack::Type) const {
 }
 
 ByLevelAction::ByLevelAction(nl::node src, int32_t id) {
-    for (auto sub : src["level"]) {
+    for (const auto &sub : src["level"]) {
         int32_t level = string_conversion::or_zero<int32_t>(sub.name());
         actions_[level] = std::string(sub["action"]);
     }

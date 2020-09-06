@@ -45,7 +45,7 @@ Npc::Npc(int32_t id,
     mouse_only_ = info["talkMouseOnly"].get_bool();
     scripted_ = info["script"].size() > 0 || info["shop"].get_bool();
 
-    for (auto npcnode : src) {
+    for (const auto &npcnode : src) {
         std::string state = npcnode.name();
 
         if (state != "info") {
@@ -53,7 +53,7 @@ Npc::Npc(int32_t id,
             states_.push_back(state);
         }
 
-        for (auto speaknode : npcnode["speak"])
+        for (const auto &speaknode : npcnode["speak"])
             lines_[state].push_back(strsrc[speaknode.get_string()]);
     }
 

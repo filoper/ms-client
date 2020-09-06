@@ -200,7 +200,7 @@ void UICharInfo::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
     for (size_t i = 0; i < Buttons::BtArrayGet; i++)
-        if (const auto button = buttons_.at(i).get())
+        if (auto *const button = buttons_.at(i).get())
             button->draw(position_);
 
     /// Main Window
@@ -228,18 +228,19 @@ void UICharInfo::draw(float inter) const {
 
     /// Personality
     if (personality_enabled_) {
-        for (Sprite sprite : personality_sprites_)
+        for (const Sprite &sprite : personality_sprites_)
             sprite.draw(position_, inter);
 
         bool show_personality = (target_character_->get_level() >= 30);
 
-        for (Sprite sprite : personality_sprites_enabled_[show_personality])
+        for (const Sprite &sprite :
+             personality_sprites_enabled_[show_personality])
             sprite.draw(position_, inter);
     }
 
     /// Collect
     if (collect_enabled_) {
-        for (Sprite sprite : collect_sprites_)
+        for (const Sprite &sprite : collect_sprites_)
             sprite.draw(position_, inter);
 
         for (size_t i = 0; i < 15; i++) {
@@ -251,7 +252,7 @@ void UICharInfo::draw(float inter) const {
         }
 
         for (size_t i = Buttons::BtArrayGet; i < Buttons::BtFAQ; i++)
-            if (const auto button = buttons_.at(i).get())
+            if (auto *const button = buttons_.at(i).get())
                 button->draw(position_);
 
         Point<int16_t> text_pos = Point<int16_t>(121, 8);
@@ -263,17 +264,17 @@ void UICharInfo::draw(float inter) const {
 
     /// Damage
     if (damage_enabled_) {
-        for (Sprite sprite : damage_sprites_)
+        for (const Sprite &sprite : damage_sprites_)
             sprite.draw(position_, inter);
 
         for (size_t i = Buttons::BtFAQ; i < buttons_.size(); i++)
-            if (const auto button = buttons_.at(i).get())
+            if (auto *const button = buttons_.at(i).get())
                 button->draw(position_);
     }
 
     /// Item
     if (item_enabled_)
-        for (Sprite sprite : item_sprites_)
+        for (const Sprite &sprite : item_sprites_)
             sprite.draw(position_, inter);
 }
 

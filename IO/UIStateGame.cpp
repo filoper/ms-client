@@ -64,8 +64,8 @@ UIStateGame::UIStateGame(uint8_t channel_count) :
 }
 
 void UIStateGame::draw(float inter, Point<int16_t> cursor) const {
-    for (auto &type : element_order_) {
-        auto &element = elements_[type];
+    for (const auto &type : element_order_) {
+        const auto &element = elements_[type];
 
         if (element && element->is_active())
             element->draw(inter);
@@ -122,7 +122,7 @@ void UIStateGame::remove_icon() {
 
 void UIStateGame::remove_cursors() {
     for (auto type : element_order_) {
-        auto element = elements_[type].get();
+        auto *element = elements_[type].get();
 
         if (element && element->is_active())
             element->remove_cursor();
@@ -131,7 +131,7 @@ void UIStateGame::remove_cursors() {
 
 void UIStateGame::remove_cursor(UIElement::Type t) {
     for (auto type : element_order_) {
-        auto element = elements_[type].get();
+        auto *element = elements_[type].get();
 
         if (element && element->is_active() && element->get_type() != t)
             element->remove_cursor();
@@ -311,7 +311,7 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
         bool clicked = cursorstate == Cursor::State::CLICKING
                        || cursorstate == Cursor::State::VSCROLLIDLE;
 
-        if (auto focusedelement = get(focused_)) {
+        if (auto *focusedelement = get(focused_)) {
             if (focusedelement->is_active()) {
                 remove_cursor(focusedelement->get_type());
                 return focusedelement->send_cursor(clicked, cursorpos);
@@ -323,7 +323,7 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
             if (!clicked) {
                 dragged_ = nullptr;
 
-                if (auto front = get_front(cursorpos)) {
+                if (auto *front = get_front(cursorpos)) {
                     UIElement::Type front_type = front->get_type();
 
                     if (tooltip_parent_ != UIElement::Type::NONE)

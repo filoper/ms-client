@@ -26,6 +26,10 @@
 #include "../UI.h"
 
 namespace ms {
+auto fn_spend_sp = []<typename... T>(T && ... args) {
+    SpendSpPacket(std::forward<T>(args)...).dispatch();
+};
+
 UISkillBook::SkillIcon::SkillIcon(int32_t id) : skill_id_(id) {}
 
 void UISkillBook::SkillIcon::drop_on_bindings(Point<int16_t> cursorposition,
@@ -741,7 +745,7 @@ void UISkillBook::send_spup(uint16_t row) {
 }
 
 void UISkillBook::spend_sp(int32_t skill_id) {
-    SpendSpPacket(skill_id).dispatch();
+    fn_spend_sp(skill_id);
 
     UI::get().disable();
 }

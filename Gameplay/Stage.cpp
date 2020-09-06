@@ -26,6 +26,25 @@
 #include "Timer.h"
 
 namespace ms {
+auto fn_take_damage = []<typename... T>(T && ... args) {
+    TakeDamagePacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_change_map = []<typename... T>(T && ... args) {
+    ChangeMapPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_pickup_item = []<typename... T>(T && ... args) {
+    PickupItemPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_player_map_transfer = []<typename... T>(T && ... args) {
+    PlayerMapTransferPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_admin_enter_map = []<typename... T>(T && ... args) {
+    AdminEnterMapPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_change_channel = []<typename... T>(T && ... args) {
+    ChangeChannelPacket(std::forward<T>(args)...).dispatch();
+};
+
 Stage::Stage() :
     combat_(player_, chars_, mobs_, reactors_),
     mob_combat_(player_, chars_, mobs_) {
@@ -154,7 +173,7 @@ void Stage::update() {
     if (int32_t oid_id = mobs_.find_colliding(player_.get_phobj())) {
         if (MobAttack attack = mobs_.create_attack(oid_id)) {
             MobAttackResult result = player_.damage(attack);
-            TakeDamagePacket(result, TakeDamagePacket::From::TOUCH).dispatch();
+            fn_take_damage(result, TakeDamagePacket::From::TOUCH);
         }
     }
 }
@@ -178,7 +197,7 @@ void Stage::check_portals() {
 
         player_.respawn(startpos, map_info_.is_underwater());
     } else if (warpinfo.valid) {
-        ChangeMapPacket(false, -1, warpinfo.name, false).dispatch();
+        fn_change_map(false, -1, warpinfo.name, false);
 
         CharStats &stats = Stage::get().get_player().get_stats();
 
@@ -210,7 +229,7 @@ void Stage::check_drops() {
     MapDrops::Loot loot = drops_.find_loot_at(playerpos);
 
     if (loot.first)
-        PickupItemPacket(loot.first, loot.second).dispatch();
+        fn_pickup_item(loot.first, loot.second);
 }
 
 void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
@@ -318,11 +337,10 @@ int64_t Stage::get_upexp() {
 }
 
 void Stage::transfer_player() {
-    PlayerMapTransferPacket().dispatch();
+    fn_player_map_transfer();
 
     if (Configuration::get().get_admin())
-        AdminEnterMapPacket(AdminEnterMapPacket::Operation::ALERT_ADMINS)
-            .dispatch();
+        fn_admin_enter_map(AdminEnterMapPacket::Operation::ALERT_ADMINS);
 }
 
 void Stage::clear_channel_objects() {
@@ -335,7 +353,7 @@ void Stage::clear_channel_objects() {
 void Stage::change_channel(uint8_t ch) {
     UI::get().disable();
     GraphicsGL::get().lock();
-    ChangeChannelPacket(ch).dispatch();
+    fn_change_channel(ch);
     player_.set_channel_id(ch);
     state_ = State::TRANSITION;
 }

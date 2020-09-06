@@ -23,6 +23,10 @@
 #include "../UI.h"
 
 namespace ms {
+auto fn_npc_talk_more = []<typename... T>(T && ... args) {
+    NpcTalkMorePacket(std::forward<T>(args)...).dispatch();
+};
+
 UINpcTalk::UINpcTalk() :
     offset_(0),
     unit_rows_(0),
@@ -151,51 +155,33 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
         case TalkType::SENDOK:
             // Type = 0
             switch (buttonid) {
-                case Buttons::CLOSE:
-                    NpcTalkMorePacket(type_, -1).dispatch();
-                    break;
+                case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
                 case Buttons::NEXT:
-                case Buttons::OK: NpcTalkMorePacket(type_, 1).dispatch(); break;
+                case Buttons::OK: fn_npc_talk_more(type_, 1); break;
             }
             break;
         case TalkType::SENDNEXTPREV:
             // Type = 0
             switch (buttonid) {
-                case Buttons::CLOSE:
-                    NpcTalkMorePacket(type_, -1).dispatch();
-                    break;
-                case Buttons::NEXT:
-                    NpcTalkMorePacket(type_, 1).dispatch();
-                    break;
-                case Buttons::PREV:
-                    NpcTalkMorePacket(type_, 0).dispatch();
-                    break;
+                case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
+                case Buttons::NEXT: fn_npc_talk_more(type_, 1); break;
+                case Buttons::PREV: fn_npc_talk_more(type_, 0); break;
             }
             break;
         case TalkType::SENDYESNO:
             // Type = 1
             switch (buttonid) {
-                case Buttons::CLOSE:
-                    NpcTalkMorePacket(type_, -1).dispatch();
-                    break;
-                case Buttons::NO: NpcTalkMorePacket(type_, 0).dispatch(); break;
-                case Buttons::YES:
-                    NpcTalkMorePacket(type_, 1).dispatch();
-                    break;
+                case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
+                case Buttons::NO: fn_npc_talk_more(type_, 0); break;
+                case Buttons::YES: fn_npc_talk_more(type_, 1); break;
             }
             break;
         case TalkType::SENDACCEPTDECLINE:
             // Type = 1
             switch (buttonid) {
-                case Buttons::CLOSE:
-                    NpcTalkMorePacket(type_, -1).dispatch();
-                    break;
-                case Buttons::QNO:
-                    NpcTalkMorePacket(type_, 0).dispatch();
-                    break;
-                case Buttons::QYES:
-                    NpcTalkMorePacket(type_, 1).dispatch();
-                    break;
+                case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
+                case Buttons::QNO: fn_npc_talk_more(type_, 0); break;
+                case Buttons::QYES: fn_npc_talk_more(type_, 1); break;
             }
             break;
         case TalkType::SENDGETTEXT:
@@ -204,20 +190,16 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
         case TalkType::SENDGETNUMBER:
             // Type = 3
             switch (buttonid) {
-                case Buttons::CLOSE:
-                    NpcTalkMorePacket(type_, 0).dispatch();
-                    break;
-                case Buttons::OK: NpcTalkMorePacket(type_, 1).dispatch(); break;
+                case Buttons::CLOSE: fn_npc_talk_more(type_, 0); break;
+                case Buttons::OK: fn_npc_talk_more(type_, 1); break;
             }
             break;
         case TalkType::SENDSIMPLE:
             // Type = 4
             switch (buttonid) {
-                case Buttons::CLOSE:
-                    NpcTalkMorePacket(type_, 0).dispatch();
-                    break;
+                case Buttons::CLOSE: fn_npc_talk_more(type_, 0); break;
                 default:
-                    NpcTalkMorePacket(0).dispatch();  // TODO: Selection
+                    fn_npc_talk_more(type_, 0);  // TODO: Selection
                     break;
             }
             break;
@@ -249,7 +231,7 @@ void UINpcTalk::send_key(int32_t keycode, bool pressed, bool escape) {
     if (pressed && escape) {
         deactivate();
 
-        NpcTalkMorePacket(type_, 0).dispatch();
+        fn_npc_talk_more(type_, 0);
     }
 }
 

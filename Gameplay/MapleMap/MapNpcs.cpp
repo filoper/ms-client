@@ -19,6 +19,10 @@
 #include "Npc.h"
 
 namespace ms {
+auto fn_talk_to_npc = []<typename... T>(T && ... args) {
+    TalkToNPCPacket(std::forward<T>(args)...).dispatch();
+};
+
 void MapNpcs::draw(Layer::Id layer,
                    double viewx,
                    double viewy,
@@ -68,8 +72,8 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
         if (npc && npc->is_active() && npc->inrange(position, viewpos)) {
             if (pressed) {
                 // TODO: Try finding dialog first
-                TalkToNPCPacket(npc->get_oid()).dispatch();
-
+                fn_talk_to_npc(npc->get_oid());
+                
                 return Cursor::State::IDLE;
             } else {
                 return Cursor::State::CANCLICK;

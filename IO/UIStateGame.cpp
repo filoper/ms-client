@@ -38,6 +38,10 @@
 #include "UITypes/UIWorldMap.h"
 
 namespace ms {
+auto fn_enter_cashshop = []<typename... T>(T && ... args) {
+    EnterCashShopPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIStateGame::UIStateGame(uint8_t channel_count) :
     stats_(Stage::get().get_player().get_stats()),
     dragged_(nullptr),
@@ -240,7 +244,7 @@ void UIStateGame::send_key(KeyType::Id type,
 
                             break;
                         case KeyAction::Id::CASHSHOP:
-                            EnterCashShopPacket().dispatch();
+                            fn_enter_cashshop();
                             break;
                         case KeyAction::Id::TOGGLECHAT:
                             if (auto chatbar =

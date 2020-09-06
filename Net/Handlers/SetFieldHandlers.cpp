@@ -26,6 +26,10 @@
 #include "Timer.h"
 
 namespace ms {
+auto fn_player_update = []<typename... T>(T && ... args) {
+    PlayerUpdatePacket(std::forward<T>(args)...).dispatch();
+};
+
 void SetFieldHandler::transition(int32_t mapid, uint8_t portalid) const {
     float fadestep = 0.025f;
 
@@ -113,7 +117,7 @@ void SetFieldHandler::set_field(InPacket &recv) const {
 
     player.recalc_stats(true);
 
-    PlayerUpdatePacket().dispatch();
+    fn_player_update();
 
     uint8_t portalid = player.get_stats().get_portal();
     int32_t mapid = player.get_stats().get_mapid();

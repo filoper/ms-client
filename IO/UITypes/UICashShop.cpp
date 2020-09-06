@@ -30,6 +30,13 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
+auto fn_change_map= []<typename... T>(T && ... args) {
+    ChangeMapPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_player_login = []<typename... T>(T && ... args) {
+    PlayerLoginPacket(std::forward<T>(args)...).dispatch();
+};
+
 UICashShop::UICashShop() :
     preview_index_(0),
     menu_index_(1),
@@ -345,7 +352,7 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 
             Window::get().fadeout(fadestep, []() {
                 GraphicsGL::get().clear();
-                ChangeMapPacket().dispatch();
+                fn_change_map();
             });
 
             GraphicsGL::get().lock();
@@ -425,7 +432,7 @@ void UICashShop::exit_cashshop() {
     Stage &stage = Stage::get();
     Player &player = stage.get_player();
 
-    PlayerLoginPacket(player.get_oid()).dispatch();
+    fn_player_login(player.get_oid());
 
     int32_t mapid = player.get_stats().get_mapid();
     uint8_t portalid = player.get_stats().get_portal();

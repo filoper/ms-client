@@ -28,6 +28,10 @@
 #include "UINotice.h"
 
 namespace ms {
+auto fn_npc_shop_action = []<typename... T>(T && ... args) {
+    NpcShopActionPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     UIDragElement<PosSHOP>(),
     charlook_(in_charlook),
@@ -489,7 +493,7 @@ void UIShop::exit_shop() {
     clear_tooltip();
 
     deactivate();
-    NpcShopActionPacket().dispatch();
+    fn_npc_shop_action();
 }
 
 UIShop::BuyItem::BuyItem(Texture cur,
@@ -651,7 +655,7 @@ void UIShop::BuyState::buy() const {
         auto onenter = [slot, itemid](int32_t qty) {
             auto shortqty = static_cast<int16_t>(qty);
 
-            NpcShopActionPacket(slot, itemid, shortqty, true).dispatch();
+            fn_npc_shop_action(slot, itemid, shortqty, true);
         };
 
         UI::get().emplace<UIEnterNumber>(question, onenter, buyable, 1);
@@ -660,7 +664,7 @@ void UIShop::BuyState::buy() const {
 
         auto ondecide = [slot, itemid](bool yes) {
             if (yes)
-                NpcShopActionPacket(slot, itemid, 1, true).dispatch();
+                fn_npc_shop_action(slot, itemid, 1, true);
         };
 
         UI::get().emplace<UIYesNo>(question, ondecide);
@@ -757,13 +761,13 @@ void UIShop::SellState::sell(bool skip_confirmation) const {
         auto onenter = [itemid, slot](int32_t qty) {
             auto shortqty = static_cast<int16_t>(qty);
 
-            NpcShopActionPacket(slot, itemid, shortqty, false).dispatch();
+            fn_npc_shop_action(slot, itemid, shortqty, false);
         };
 
         UI::get().emplace<UIEnterNumber>(question, onenter, sellable, 1);
     } else if (sellable > 0) {
         if (skip_confirmation) {
-            NpcShopActionPacket(slot, itemid, 1, false).dispatch();
+            fn_npc_shop_action(slot, itemid, 1, false);
             return;
         }
 
@@ -771,7 +775,7 @@ void UIShop::SellState::sell(bool skip_confirmation) const {
 
         auto ondecide = [itemid, slot](bool yes) {
             if (yes)
-                NpcShopActionPacket(slot, itemid, 1, false).dispatch();
+                fn_npc_shop_action(slot, itemid, 1, false);
         };
 
         UI::get().emplace<UIYesNo>(question, ondecide);

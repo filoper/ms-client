@@ -21,6 +21,10 @@
 #include "../../Util/Misc.h"
 
 namespace ms {
+auto fn_move_mob = []<typename... T>(T && ... args) {
+    MoveMobPacket(std::forward<T>(args)...).dispatch();
+};
+
 Mob::Mob(int32_t oi,
          int32_t mid,
          int8_t mode,
@@ -299,16 +303,15 @@ void Mob::next_move() {
 }
 
 void Mob::update_movement() {
-    MoveMobPacket(oid_,
-                  1,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  get_position(),
-                  Movement(phobj_, value_of(stance_, flip_)))
-        .dispatch();
+    fn_move_mob(oid_,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                get_position(),
+                Movement(phobj_, value_of(stance_, flip_)));
 }
 
 void Mob::update_movement(int16_t type,
@@ -317,16 +320,15 @@ void Mob::update_movement(int16_t type,
                           int8_t skill,
                           int8_t skill_level,
                           int16_t option) {
-    MoveMobPacket(oid_,
-                  type,
-                  nibbles,
-                  action,
-                  skill,
-                  skill_level,
-                  option,
-                  get_position(),
-                  Movement(phobj_, value_of(stance_, flip_)))
-        .dispatch();
+    fn_move_mob(oid_,
+                type,
+                nibbles,
+                action,
+                skill,
+                skill_level,
+                option,
+                get_position(),
+                Movement(phobj_, value_of(stance_, flip_)));
 }
 
 void Mob::give_buff(MobBuff buff) {

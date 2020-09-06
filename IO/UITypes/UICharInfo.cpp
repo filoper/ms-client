@@ -22,6 +22,10 @@
 #include "../Components/MapleButton.h"
 
 namespace ms {
+auto fn_char_info_request = []<typename... T>(T && ... args) {
+    CharInfoRequestPacket(std::forward<T>(args)...).dispatch();
+};
+
 UICharInfo::UICharInfo(int32_t cid) :
     UIDragElement<PosCHARINFO>(),
     is_loading_(true),
@@ -189,7 +193,7 @@ UICharInfo::UICharInfo(int32_t cid) :
 
     target_character_ = Stage::get().get_character(cid).get();
 
-    CharInfoRequestPacket(cid).dispatch();
+    fn_char_info_request(cid);
 }
 
 void UICharInfo::draw(float inter) const {

@@ -27,6 +27,10 @@
 #include "../UITypes/UINotice.h"
 
 namespace ms {
+auto fn_change_keymap = []<typename... T>(T && ... args) {
+    ChangeKeyMapPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIKeyConfig::UIKeyConfig(const Inventory &in_inventory,
                          const SkillBook &in_skillbook) :
     UIDragElement<PosKEYCONFIG>(),
@@ -1381,7 +1385,7 @@ void UIKeyConfig::save_staged_mappings() {
     }
 
     if (updated_actions.size() > 0)
-        ChangeKeyMapPacket(updated_actions).dispatch();
+        fn_change_keymap(updated_actions);
 
     for (auto action : updated_actions) {
         KeyConfig::Key key = std::get<0>(action);

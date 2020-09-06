@@ -25,6 +25,13 @@
 #include "../UITypes/UIItemInventory.h"
 
 namespace ms {
+auto fn_equip_item = []<typename... T>(T && ... args) {
+    EquipItemPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_unequip_item = []<typename... T>(T && ... args) {
+    UnequipItemPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIEquipInventory::UIEquipInventory(const Inventory &invent) :
     UIDragElement<PosEQINV>(),
     inventory_(invent),
@@ -269,7 +276,7 @@ void UIEquipInventory::doubleclick(Point<int16_t> cursorpos) {
     if (icons_[slot])
         if (int16_t freeslot =
                 inventory_.find_free_slot(InventoryType::Id::EQUIP))
-            UnequipItemPacket(slot, freeslot).dispatch();
+            fn_unequip_item(slot, freeslot);
 }
 
 bool UIEquipInventory::is_in_range(Point<int16_t> cursorpos) const {
@@ -393,9 +400,9 @@ bool UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
 
     if (equip) {
         if (eqslot == source_)
-            EquipItemPacket(slot, eqslot).dispatch();
+            fn_equip_item(slot, eqslot);
     } else {
-        UnequipItemPacket(source_, slot).dispatch();
+        fn_unequip_item(source_, slot);
     }
 
     return true;

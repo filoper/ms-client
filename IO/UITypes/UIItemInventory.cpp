@@ -27,6 +27,25 @@
 #include "UINotice.h"
 
 namespace ms {
+auto fn_gather_items = []<typename... T>(T && ... args) {
+    GatherItemsPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_sort_items = []<typename... T>(T && ... args) {
+    SortItemsPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_equip_item = []<typename... T>(T && ... args) {
+    EquipItemPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_use_item = []<typename... T>(T && ... args) {
+    UseItemPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_move_item = []<typename... T>(T && ... args) {
+    MoveItemPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_scroll_equip = []<typename... T>(T && ... args) {
+    ScrollEquipPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIItemInventory::UIItemInventory(const Inventory &invent) :
     UIDragElement<PosINV>(),
     inventory_(invent),
@@ -289,9 +308,9 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
         case Buttons::BT_TAB_ETC: tab_ = InventoryType::Id::ETC; break;
         case Buttons::BT_TAB_CASH: tab_ = InventoryType::Id::CASH; break;
         case Buttons::BT_GATHER:
-        case Buttons::BT_GATHER_SM: GatherItemsPacket(tab_).dispatch(); break;
+        case Buttons::BT_GATHER_SM: fn_gather_items(tab_); break;
         case Buttons::BT_SORT:
-        case Buttons::BT_SORT_SM: SortItemsPacket(tab_).dispatch(); break;
+        case Buttons::BT_SORT_SM: fn_sort_items(tab_); break;
         case Buttons::BT_FULL:
         case Buttons::BT_FULL_SM: set_full(true); return Button::State::NORMAL;
         case Buttons::BT_SMALL:
@@ -339,13 +358,10 @@ void UIItemInventory::doubleclick(Point<int16_t> cursorpos) {
             switch (tab_) {
                 case InventoryType::Id::EQUIP:
                     if (can_wear_equip(slot))
-                        EquipItemPacket(slot,
-                                        inventory_.find_equipslot(item_id))
-                            .dispatch();
-
+                        fn_equip_item(slot, inventory_.find_equipslot(item_id));
                     break;
                 case InventoryType::Id::USE:
-                    UseItemPacket(slot, item_id).dispatch();
+                    fn_use_item(slot, item_id);
                     break;
             }
         }
@@ -822,11 +838,10 @@ void UIItemInventory::ItemIcon::drop_on_stage() const {
             auto onok = [&, dropmessage](bool ok) {
                 if (ok) {
                     if (count_ <= 1) {
-                        MoveItemPacket(source_tab_, source_, 0, 1).dispatch();
+                        fn_move_item(source_tab_, source_, 0, 1);
                     } else {
                         auto onenter = [&](int32_t qty) {
-                            MoveItemPacket(source_tab_, source_, 0, qty)
-                                .dispatch();
+                            fn_move_item(source_tab_, source_, 0, qty);
                         };
 
                         UI::get().emplace<UIEnterNumber>(dropmessage,
@@ -840,10 +855,10 @@ void UIItemInventory::ItemIcon::drop_on_stage() const {
             UI::get().emplace<UIYesNo>(untradablemessage, onok);
         } else {
             if (count_ <= 1) {
-                MoveItemPacket(source_tab_, source_, 0, 1).dispatch();
+                fn_move_item(source_tab_, source_, 0, 1);
             } else {
                 auto onenter = [&](int32_t qty) {
-                    MoveItemPacket(source_tab_, source_, 0, qty).dispatch();
+                    fn_move_item(source_tab_, source_, 0, qty);
                 };
 
                 UI::get().emplace<UIEnterNumber>(dropmessage,
@@ -860,13 +875,13 @@ void UIItemInventory::ItemIcon::drop_on_equips(EquipSlot::Id eqslot) const {
         case InventoryType::Id::EQUIP:
             if (eqsource_ == eqslot)
                 if (parent_.can_wear_equip(source_))
-                    EquipItemPacket(source_, eqslot).dispatch();
+                    fn_equip_item(source_, eqslot);
 
             Sound(Sound::Name::DRAGEND).play();
 
             break;
         case InventoryType::Id::USE:
-            ScrollEquipPacket(source_, eqslot).dispatch();
+            fn_scroll_equip(source_, eqslot);
             break;
     }
 }
@@ -878,7 +893,7 @@ bool UIItemInventory::ItemIcon::drop_on_items(InventoryType::Id tab,
     if (tab != source_tab_ || slot == source_)
         return true;
 
-    MoveItemPacket(tab, source_, slot, 1).dispatch();
+    fn_move_item(tab, source_, slot, 1);
 
     return true;
 }

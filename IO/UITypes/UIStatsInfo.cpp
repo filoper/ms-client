@@ -24,6 +24,10 @@
 #include "UINotice.h"
 
 namespace ms {
+auto fn_spend_ap = []<typename... T>(T && ... args) {
+    SpendApPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIStatsInfo::UIStatsInfo(const CharStats &st) :
     UIDragElement<PosSTATS>(Point<int16_t>(212, 20)),
     stats_(st) {
@@ -367,7 +371,7 @@ Button::State UIStatsInfo::button_pressed(uint16_t id) {
 }
 
 void UIStatsInfo::send_apup(MapleStat::Id stat) const {
-    SpendApPacket(stat).dispatch();
+    fn_spend_ap(stat);
     UI::get().disable();
 }
 

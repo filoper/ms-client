@@ -21,6 +21,10 @@
 #include "../Components/MapleButton.h"
 
 namespace ms {
+auto fn_general_chat = []<typename... T>(T && ... args) {
+    GeneralChatPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
     chatopen_ = Setting<Chatopen>::get().load();
     chatopen_persist_ = chatopen_;
@@ -113,7 +117,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
             if (last != std::string::npos) {
                 msg.erase(last + 1);
 
-                GeneralChatPacket(msg, true).dispatch();
+                fn_general_chat(msg, true);
 
                 last_entered_.push_back(msg);
                 last_pos_ = last_entered_.size();

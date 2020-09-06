@@ -27,6 +27,13 @@
 #include "Helpers/LoginParser.h"
 
 namespace ms {
+auto fn_server_req = []<typename... T>(T && ... args) {
+    ServerRequestPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_player_login = []<typename... T>(T && ... args) {
+    PlayerLoginPacket(std::forward<T>(args)...).dispatch();
+};
+
 void LoginResultHandler::handle(InPacket &recv) const {
     auto loginwait = UI::get().get_element<UILoginWait>();
 
@@ -96,7 +103,7 @@ void LoginResultHandler::handle(InPacket &recv) const {
                 // AfterLoginPacket("1111").dispatch();
 
                 // Request the list of worlds and channels online.
-                ServerRequestPacket().dispatch();
+                fn_server_req();
             }
         }
     }
@@ -176,7 +183,7 @@ void ServerIPHandler::handle(InPacket &recv) const {
     LoginParser::parse_login(recv);
 
     int32_t cid = recv.read_int();
-    PlayerLoginPacket(cid).dispatch();
+    fn_player_login(cid);
 }
 
 void CharnameResponseHandler::handle(InPacket &recv) const {

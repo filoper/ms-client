@@ -21,6 +21,16 @@
 #include "../../Net/Packets/GameplayPackets.h"
 
 namespace ms {
+auto fn_attack = []<typename... T>(T && ... args) {
+    AttackPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_damage_reactor = []<typename... T>(T && ... args) {
+    DamageReactorPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_use_skill = []<typename... T>(T && ... args) {
+    UseSkillPacket(std::forward<T>(args)...).dispatch();
+};
+
 Combat::Combat(Player &in_player,
                MapChars &in_chars,
                MapMobs &in_mobs,
@@ -127,23 +137,22 @@ void Combat::apply_move(const SpecialMove &move) {
         apply_use_movement(move);
         apply_result_movement(move, result);
 
-        AttackPacket(result).dispatch();
+        fn_attack(result);
 
         if (reactor_targets.size())
             if (Optional<Reactor> reactor =
                     reactor_objs->get(reactor_targets.at(0)))
-                DamageReactorPacket(reactor->get_oid(),
-                                    player_.get_position(),
-                                    0,
-                                    0)
-                    .dispatch();
+                fn_damage_reactor(reactor->get_oid(),
+                                  player_.get_position(),
+                                  0,
+                                  0);
     } else {
         move.apply_useeffects(player_);
         move.apply_actions(player_, Attack::Type::MAGIC);
 
         int32_t moveid = move.get_id();
         int32_t level = player_.get_skills().get_level(moveid);
-        UseSkillPacket(moveid, level).dispatch();
+        fn_use_skill(moveid, level);
     }
 }
 

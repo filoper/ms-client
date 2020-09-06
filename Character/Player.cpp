@@ -23,6 +23,13 @@
 #include "PlayerStates.h"
 
 namespace ms {
+auto fn_move_player = []<typename... T>(T && ... args) {
+    MovePlayerPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_use_item = []<typename... T>(T && ... args) {
+    UseItemPacket(std::forward<T>(args)...).dispatch();
+};
+
 const PlayerNullState nullstate;
 
 const PlayerState *get_state(Char::State state) {
@@ -124,7 +131,7 @@ void Player::use_item(int32_t itemid) {
 
     if (int16_t slot = inventory_.find_item(type, itemid))
         if (type == InventoryType::Id::USE)
-            UseItemPacket(slot, itemid).dispatch();
+            fn_use_item(slot, itemid);
 }
 
 void Player::draw(Layer::Id layer,
@@ -157,7 +164,7 @@ int8_t Player::update(const Physics &physics) {
     bool needupdate = last_move_.hasmoved(newmove);
 
     if (needupdate) {
-        MovePlayerPacket(newmove).dispatch();
+        fn_move_player(newmove);
         last_move_ = newmove;
     }
 

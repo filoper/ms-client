@@ -39,6 +39,10 @@
 #include "UIWorldSelect.h"
 
 namespace ms {
+auto fn_enter_cashshop = []<typename... T>(T && ... args) {
+    EnterCashShopPacket(std::forward<T>(args)...).dispatch();
+};
+
 UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
     stats_(st),
     channel_count_(channel_count) {
@@ -592,7 +596,7 @@ void UIStatusBar::update() {
 
 Button::State UIStatusBar::button_pressed(uint16_t id) {
     switch (id) {
-        case Buttons::BT_CASHSHOP: EnterCashShopPacket().dispatch(); break;
+        case Buttons::BT_CASHSHOP: fn_enter_cashshop(); break;
         case Buttons::BT_MENU: toggle_menu(); break;
         case Buttons::BT_OPTIONS: toggle_setting(); break;
         case Buttons::BT_CHARACTER: toggle_character(); break;

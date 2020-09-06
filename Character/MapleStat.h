@@ -17,8 +17,7 @@
 
 #include "../Template/EnumMap.h"
 
-namespace ms {
-namespace MapleStat {
+namespace ms::MapleStat {
 enum Id {
     SKIN,
     FACE,
@@ -46,5 +45,4 @@ enum Id {
 Id by_id(size_t id);
 
 extern const EnumMap<Id, int32_t> codes;
-}  // namespace MapleStat
-}  // namespace ms
+}  // namespace ms::MapleStat

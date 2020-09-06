@@ -18,8 +18,7 @@
 #include "../../../Gameplay/Stage.h"
 #include "CharacterParser.h"
 
-namespace ms {
-namespace CashShopParser {
+namespace ms::CashShopParser {
 StatsEntry parseCharacterInfo(InPacket &recv) {
     recv.read_long();
     recv.read_byte();
@@ -132,5 +131,4 @@ void parseRemainingSkillInfo(InPacket &recv) {
         recv.read_byte();  // The actual SP for that class
     }
 }
-}  // namespace CashShopParser
-}  // namespace ms
+}  // namespace ms::CashShopParser

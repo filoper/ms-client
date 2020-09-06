@@ -18,8 +18,7 @@
 #include "../../Template/EnumMap.h"
 #include "../../Template/Enumeration.h"
 
-namespace ms {
-namespace EquipSlot {
+namespace ms::EquipSlot {
 enum Id : int16_t {
     NONE = 0,
     HAT = 1,
@@ -57,5 +56,4 @@ enum Id : int16_t {
 Id by_id(size_t id);
 
 constexpr Enumeration<Id> values;
-}  // namespace EquipSlot
-}  // namespace ms
+}  // namespace ms::EquipSlot

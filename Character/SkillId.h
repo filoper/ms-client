@@ -17,8 +17,7 @@
 
 #include <cstdint>
 
-namespace ms {
-namespace SkillId {
+namespace ms::SkillId {
 enum Id : uint32_t {
     // Beginner
     FOLLOW_THE_LEAD = 8,
@@ -158,5 +157,4 @@ enum Id : uint32_t {
     // Bandit
     MESO_EXPLOSION = 4211006
 };
-}  // namespace SkillId
-}  // namespace ms
+}  // namespace ms::SkillId

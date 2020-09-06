@@ -15,8 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "EquipStat.h"
 
-namespace ms {
-namespace EquipStat {
+namespace ms::EquipStat {
 Id by_id(size_t id) {
     return static_cast<Id>(id);
 }
@@ -43,5 +42,4 @@ const char *names[Id::LENGTH] = { "STR",
 
                                   "Speed",
                                   "Jump" };
-}  // namespace EquipStat
-}  // namespace ms
+}  // namespace ms::EquipStat

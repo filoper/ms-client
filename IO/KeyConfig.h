@@ -17,8 +17,7 @@
 
 #include <cstdint>
 
-namespace ms {
-namespace KeyConfig {
+namespace ms::KeyConfig {
 enum Key : uint8_t {
     NUM0 = 2,
     NUM1,
@@ -99,5 +98,4 @@ enum Key : uint8_t {
 inline Key actionbyid(int32_t id) {
     return static_cast<Key>(id);
 }
-}  // namespace KeyConfig
-}  // namespace ms
+}  // namespace ms::KeyConfig

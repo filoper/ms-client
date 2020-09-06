@@ -20,8 +20,6 @@
 #include "../Gameplay/Movement.h"
 #include "../Net/InPacket.h"
 
-namespace ms {
-namespace MovementParser {
+namespace ms::MovementParser {
 std::vector<Movement> parse_movements(InPacket &recv);
-}
-}  // namespace ms
+}  // namespace ms::MovementParser

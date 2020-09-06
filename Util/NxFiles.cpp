@@ -19,8 +19,7 @@
 #include <nlnx/node.hpp>
 #include <nlnx/nx.hpp>
 
-namespace ms {
-namespace NxFiles {
+namespace ms::NxFiles {
 Error init() {
     for (const auto *filename : filenames) {
         if (std::ifstream { filename }.good() == false) {
@@ -46,5 +45,4 @@ Error init() {
 
     return Error::Code::NONE;
 }
-}  // namespace NxFiles
-}  // namespace ms
+}  // namespace ms::NxFiles

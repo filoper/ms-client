@@ -51,8 +51,7 @@ bool compare(int32_t mask, int32_t value) {
 }
 }  // namespace bytecode
 
-namespace NxHelper {
-namespace Map {
+namespace NxHelper::Map {
 MapInfo get_map_info_by_id(int32_t mapid) {
     std::string map_category = get_map_category(mapid);
     nl::node map_info = nl::nx::string["Map.img"][map_category][mapid];
@@ -159,6 +158,5 @@ nl::node get_map_node_name(int32_t mapid) {
 
     return nl::nx::map["Map"]["Map" + prefix][mapid_str + ".img"];
 }
-}  // namespace Map
-}  // namespace NxHelper
+}  // namespace NxHelper::Map
 }  // namespace ms

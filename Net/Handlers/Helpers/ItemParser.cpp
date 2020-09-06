@@ -15,8 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ItemParser.h"
 
-namespace ms {
-namespace ItemParser {
+namespace ms::ItemParser {
 // Parse a normal item from a packet
 void add_item(InPacket &recv,
               InventoryType::Id invtype,
@@ -156,5 +155,4 @@ void parse_item(InPacket &recv,
         add_item(recv, invtype, slot, iid, inventory);
     }
 }
-}  // namespace ItemParser
-}  // namespace ms
+}  // namespace ms::ItemParser

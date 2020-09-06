@@ -19,8 +19,7 @@
 
 #include "../Template/EnumMap.h"
 
-namespace ms {
-namespace Stance {
+namespace ms::Stance {
 enum Id : uint8_t {
     NONE,
     ALERT,
@@ -74,5 +73,4 @@ Id baseof(Id value);
 Id secondof(Id value);
 
 extern const EnumMap<Id, std::string> names;
-}  // namespace Stance
-}  // namespace ms
+}  // namespace ms::Stance

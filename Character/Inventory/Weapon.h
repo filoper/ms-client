@@ -17,8 +17,7 @@
 
 #include <cstdint>
 
-namespace ms {
-namespace Weapon {
+namespace ms::Weapon {
 enum Type {
     NONE = 0,
     SWORD_1H = 130,
@@ -41,5 +40,4 @@ enum Type {
 };
 
 Type by_value(int32_t value);
-}  // namespace Weapon
-}  // namespace ms
+}  // namespace ms::Weapon

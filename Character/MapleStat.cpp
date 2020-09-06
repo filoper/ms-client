@@ -17,8 +17,7 @@
 
 #include <iostream>
 
-namespace ms {
-namespace MapleStat {
+namespace ms::MapleStat {
 Id by_id(size_t id) {
     if (id >= LENGTH) {
         std::cout << "Unknown MapleStat::Id id: [" << id << "]" << std::endl;
@@ -32,5 +31,4 @@ const EnumMap<Id, int32_t> codes = { 0x1,     0x2,     0x4,      0x10,
                                      0x200,   0x400,   0x800,    0x1000,
                                      0x2000,  0x4000,  0x8000,   0x10000,
                                      0x20000, 0x40000, 0x180008, 0x200000 };
-}  // namespace MapleStat
-}  // namespace ms
+}  // namespace ms::MapleStat

@@ -1101,9 +1101,8 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                 UI::get().drag_icon(icon);
 
                 return Cursor::State::GRABBING;
-            } else {
-                return Cursor::State::CANGRAB;
             }
+            return Cursor::State::CANGRAB;
         }
     }
 
@@ -1146,9 +1145,8 @@ Cursor::State UIKeyConfig::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                     UI::get().drag_icon(ficon);
 
                     return Cursor::State::GRABBING;
-                } else {
-                    return Cursor::State::CANGRAB;
                 }
+                return Cursor::State::CANGRAB;
             }
         }
     }
@@ -1399,7 +1397,7 @@ void UIKeyConfig::save_staged_mappings() {
         }
     }
 
-    if (updated_actions.size() > 0) {
+    if (!updated_actions.empty()) {
         fn_change_keymap(updated_actions);
     }
 

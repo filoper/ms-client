@@ -111,7 +111,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
                                    : Textfield::State::DISABLED);
 
     chatfield_.set_enter_callback([&](std::string msg) {
-        if (msg.size() > 0) {
+        if (!msg.empty()) {
             size_t last = msg.find_last_not_of(' ');
 
             if (last != std::string::npos) {
@@ -139,7 +139,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
     });
 
     chatfield_.set_key_callback(KeyAction::Id::DOWN, [&]() {
-        if (last_entered_.size() > 0 && last_pos_ < last_entered_.size() - 1) {
+        if (!last_entered_.empty() && last_pos_ < last_entered_.size() - 1) {
             last_pos_++;
             chatfield_.change_text(last_entered_[last_pos_]);
         }
@@ -298,9 +298,8 @@ Cursor::State UIChatBar::send_cursor(bool clicking, Point<int16_t> cursorpos) {
         }
 
         return check_dragtop(clicking, cursorpos);
-    } else {
-        return UIDragElement::send_cursor(clicking, cursorpos);
     }
+    return UIDragElement::send_cursor(clicking, cursorpos);
 }
 
 UIElement::Type UIChatBar::get_type() const {
@@ -363,49 +362,48 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
             // dimension.set_y(getchatbarheight());
 
             return Cursor::State::CLICKING;
-        } else {
-            drag_chat_top_ = false;
         }
+        drag_chat_top_ = false;
+
     } else if (in_chattop) {
         if (clicking) {
             drag_chat_top_ = true;
 
             return Cursor::State::CLICKING;
-        } else {
-            return Cursor::State::CHATBARVDRAG;
         }
+        return Cursor::State::CHATBARVDRAG;
+
     } else if (in_chattopleft) {
         if (clicking) {
             // dragchattopleft = true;
 
             return Cursor::State::CLICKING;
-        } else {
-            return Cursor::State::CHATBARBRTLDRAG;
         }
+        return Cursor::State::CHATBARBRTLDRAG;
+
     } else if (in_chattopright) {
         if (clicking) {
             // dragchattopright = true;
 
             return Cursor::State::CLICKING;
-        } else {
-            return Cursor::State::CHATBARBLTRDRAG;
         }
+        return Cursor::State::CHATBARBLTRDRAG;
+
     } else if (in_chatleft) {
         if (clicking) {
             // dragchatleft = true;
 
             return Cursor::State::CLICKING;
-        } else {
-            return Cursor::State::CHATBARHDRAG;
         }
+        return Cursor::State::CHATBARHDRAG;
+
     } else if (in_chatright) {
         if (clicking) {
             // dragchatright = true;
 
             return Cursor::State::CLICKING;
-        } else {
-            return Cursor::State::CHATBARHDRAG;
         }
+        return Cursor::State::CHATBARHDRAG;
     }
 
     return UIDragElement::send_cursor(clicking, cursorpos);
@@ -549,9 +547,8 @@ Button::State UIChatBar::button_pressed(uint16_t buttonid) {
 int16_t UIChatBar::getchattop(bool chat_open) const {
     if (chat_open) {
         return getchatbarheight() * -1;
-    } else {
-        return -1;
     }
+    return -1;
 }
 
 int16_t UIChatBar::getchatbarheight() const {

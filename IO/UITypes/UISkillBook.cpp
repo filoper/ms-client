@@ -510,16 +510,15 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                         UI::get().drag_icon(skills_[i].get_icon());
 
                         return Cursor::State::GRABBING;
-                    } else {
-                        return Cursor::State::IDLE;
                     }
-                } else {
-                    skills_[i].get_icon()->set_state(
-                        StatefulIcon::State::MOUSEOVER);
-                    show_skill(skills_[i].get_id());
-
                     return Cursor::State::IDLE;
+
                 }
+                skills_[i].get_icon()->set_state(
+                    StatefulIcon::State::MOUSEOVER);
+                show_skill(skills_[i].get_id());
+
+                return Cursor::State::IDLE;
             }
 
             if (i % 2) {
@@ -830,7 +829,7 @@ bool UISkillBook::check_required(int32_t id) const {
     std::unordered_map<int32_t, int32_t> required =
         skillbook_.collect_required(id);
 
-    if (required.size() <= 0) {
+    if (required.empty()) {
         required = SkillData::get(id).get_reqskills();
     }
 

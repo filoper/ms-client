@@ -682,7 +682,7 @@ size_t GraphicsGL::LayoutBuilder::add(const char *text,
         ax_ = 0;
         ay_ += font_.linespace();
 
-        if (lines_.size() > 0) {
+        if (!lines_.empty()) {
             ay_ -= line_adj_;
         }
     }

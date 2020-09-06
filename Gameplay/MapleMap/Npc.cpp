@@ -34,7 +34,7 @@ Npc::Npc(int32_t id,
 
     std::string link = src["info"]["link"];
 
-    if (link.size() > 0) {
+    if (!link.empty()) {
         link.append(".img");
         src = nl::nx::npc[link];
     }
@@ -105,7 +105,7 @@ int8_t Npc::update(const Physics &physics) {
     if (animations_.count(stance_)) {
         bool aniend = animations_.at(stance_).update();
 
-        if (aniend && states_.size() > 0) {
+        if (aniend && !states_.empty()) {
             size_t next_stance = random_.next_int(states_.size());
             std::string new_stance = states_[next_stance];
             set_stance(new_stance);

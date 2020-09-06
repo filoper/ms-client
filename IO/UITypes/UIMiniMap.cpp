@@ -659,7 +659,7 @@ void UIMiniMap::draw_movable_markers(Point<int16_t> init_pos,
     sprite_offset = marker_sprite.get_dimensions() / Point<int16_t>(2, 0);
 
     for (auto npc = npcs->begin(); npc != npcs->end(); ++npc) {
-        Point<int16_t> npc_pos = npc->second.get()->get_position();
+        Point<int16_t> npc_pos = npc->second->get_position();
         marker_sprite.draw(
             (npc_pos + center_offset_ + npc_pos_offset) / scale_ - sprite_offset
                 + Point<int16_t>(map_draw_origin_x_, map_draw_origin_y_)
@@ -673,7 +673,7 @@ void UIMiniMap::draw_movable_markers(Point<int16_t> init_pos,
     sprite_offset = marker_sprite.get_dimensions() / Point<int16_t>(2, 0);
 
     for (auto chr = chars->begin(); chr != chars->end(); ++chr) {
-        Point<int16_t> chr_pos = chr->second.get()->get_position();
+        Point<int16_t> chr_pos = chr->second->get_position();
         marker_sprite.draw(
             (chr_pos + char_pos_offset + center_offset_) / scale_
                 - sprite_offset
@@ -768,7 +768,7 @@ void UIMiniMap::update_npclist() {
         std::string name = n->get_name();
         std::string func = n->get_func();
 
-        if (func != "") {
+        if (!func.empty()) {
             name += " (" + func + ")";
         }
 

@@ -228,9 +228,8 @@ const std::string &SkillData::get_level_desc(int32_t level) const {
         static const std::string null_level = "Missing level description.";
 
         return null_level;
-    } else {
-        return iter->second;
     }
+    return iter->second;
 }
 
 const Texture &SkillData::get_icon(Icon icon) const {

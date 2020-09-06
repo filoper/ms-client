@@ -153,25 +153,22 @@ int32_t MapMobs::find_colliding(const MovingObject &moveobj) const {
 MobAttack MapMobs::create_attack(int32_t oid) const {
     if (Optional<const Mob> mob = mobs_.get(oid)) {
         return mob->create_touch_attack();
-    } else {
-        return {};
     }
+    return {};
 }
 
 Point<int16_t> MapMobs::get_mob_position(int32_t oid) const {
     if (auto mob = mobs_.get(oid)) {
         return mob->get_position();
-    } else {
-        return Point<int16_t>(0, 0);
     }
+    return Point<int16_t>(0, 0);
 }
 
 Point<int16_t> MapMobs::get_mob_head_position(int32_t oid) const {
     if (Optional<const Mob> mob = mobs_.get(oid)) {
         return mob->get_head_position();
-    } else {
-        return Point<int16_t>(0, 0);
     }
+    return Point<int16_t>(0, 0);
 }
 
 MapObjects *MapMobs::get_mobs() {

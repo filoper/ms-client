@@ -126,7 +126,7 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
     const CharStats &stats = player.get_stats();
 
     if (invtype == InventoryType::Id::EQUIP) {
-        const int32_t item_id = oequip.get()->get_item_id();
+        const int32_t item_id = oequip->get_item_id();
         const EquipData &equipdata = EquipData::get(item_id);
         EquipSlot::Id eqslot = equipdata.get_eqslot();
 
@@ -291,7 +291,7 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
                                        "ATT INCREASE");
 
                 std::string desctext = itemdata.get_desc();
-                has_desc_preview_ = desctext.size() > 0;
+                has_desc_preview_ = !desctext.empty();
 
                 if (has_desc_preview_) {
                     desc_preview_ = Text(Text::Font::A12M,
@@ -520,7 +520,7 @@ void EquipTooltip::set_equip(Tooltip::Parent parent, int16_t ivp) {
                    "ATT INCREASE");
 
     std::string desctext = itemdata.get_desc();
-    has_desc_ = desctext.size() > 0;
+    has_desc_ = !desctext.empty();
 
     if (has_desc_) {
         desc_ = Text(Text::Font::A12M,

@@ -273,9 +273,8 @@ void UIEnterNumber::handlestring(std::string numstr) {
         numfield.set_state(Textfield::State::DISABLED);
         UI::get().emplace<UIOk>("Only numbers are allowed.", okhandler);
         return;
-    } else {
-        num = std::stoi(numstr);
     }
+    num = std::stoi(numstr);
 
     if (num < 1) {
         numfield.set_state(Textfield::State::DISABLED);
@@ -283,17 +282,17 @@ void UIEnterNumber::handlestring(std::string numstr) {
             "You may only enter a number equal to or higher than 1.",
             okhandler);
         return;
-    } else if (num > max) {
+    }
+    if (num > max) {
         numfield.set_state(Textfield::State::DISABLED);
         UI::get().emplace<UIOk>(
             "You may only enter a number equal to or lower than "
                 + std::to_string(max) + ".",
             okhandler);
         return;
-    } else {
-        numhandler(num);
-        deactivate();
     }
+    numhandler(num);
+    deactivate();
 
     buttons_[Buttons::OK]->set_state(Button::State::NORMAL);
 }

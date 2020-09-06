@@ -249,16 +249,15 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
             clear_tooltip();
 
             return Cursor::State::GRABBING;
-        } else {
-            show_equip(slot);
-
-            return Cursor::State::CANGRAB;
         }
-    } else {
-        clear_tooltip();
+        show_equip(slot);
 
-        return Cursor::State::IDLE;
+        return Cursor::State::CANGRAB;
+
     }
+    clear_tooltip();
+
+    return Cursor::State::IDLE;
 }
 
 void UIEquipInventory::send_key(int32_t keycode, bool pressed, bool escape) {

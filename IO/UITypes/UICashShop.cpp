@@ -271,7 +271,7 @@ void UICashShop::draw(float inter) const {
     charge_charset_.draw("8,698,565", charge_pos + Point<int16_t>(0, 30 * 4));
     charge_charset_.draw("0", charge_pos + Point<int16_t>(0, 30 * 5));
 
-    if (items_.size() > 0) {
+    if (!items_.empty()) {
         item_line_.draw(position_ + Point<int16_t>(139, 566), inter);
     } else {
         item_none_.draw(
@@ -308,7 +308,7 @@ void UICashShop::draw(float inter) const {
             item_name_[i].draw(position_ + Point<int16_t>(192, 480)
                                + Point<int16_t>(124 * div.rem, 205 * div.quot));
 
-            if (item_discount_[i].get_text() == "") {
+            if (item_discount_[i].get_text().empty()) {
                 item_price_[i].draw(
                     position_ + Point<int16_t>(195, 499)
                     + Point<int16_t>(124 * div.rem, 205 * div.quot));
@@ -491,7 +491,7 @@ void UICashShop::update_items() {
 
             price_text += " NX";
 
-            if (discount_text != "") {
+            if (!discount_text.empty()) {
                 discount_text += " NX";
             }
 

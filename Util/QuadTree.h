@@ -139,7 +139,8 @@ private:
 
             return start;
 
-        } else if (dir == UP) {
+        }
+        if (dir == UP) {
             K top = findfrom(nodes_[start].top, value, predicate);
 
             if (top && predicate(value, nodes_[top].value)) {
@@ -156,41 +157,40 @@ private:
 
             return start;
 
-        } else {
-            K left = findfrom(nodes_[start].left, value, predicate);
+        }
+        K left = findfrom(nodes_[start].left, value, predicate);
 
-            if (left && predicate(value, nodes_[left].value)) {
-                return left;
-            }
-            if (fulfilled) {
-                return start;
-            }
-
-            K bottom = findfrom(nodes_[start].bottom, value, predicate);
-
-            if (bottom && predicate(value, nodes_[bottom].value)) {
-                return bottom;
-            }
-            if (fulfilled) {
-                return start;
-            }
-
-            K top = findfrom(nodes_[start].top, value, predicate);
-
-            if (top && predicate(value, nodes_[top].value)) {
-                return top;
-            }
-            if (fulfilled) {
-                return start;
-            }
-
-            K right = findfrom(nodes_[start].right, value, predicate);
-
-            if (right && predicate(value, nodes_[right].value)) {
-                return right;
-            }
+        if (left && predicate(value, nodes_[left].value)) {
+            return left;
+        }
+        if (fulfilled) {
             return start;
         }
+
+        K bottom = findfrom(nodes_[start].bottom, value, predicate);
+
+        if (bottom && predicate(value, nodes_[bottom].value)) {
+            return bottom;
+        }
+        if (fulfilled) {
+            return start;
+        }
+
+        K top = findfrom(nodes_[start].top, value, predicate);
+
+        if (top && predicate(value, nodes_[top].value)) {
+            return top;
+        }
+        if (fulfilled) {
+            return start;
+        }
+
+        K right = findfrom(nodes_[start].right, value, predicate);
+
+        if (right && predicate(value, nodes_[right].value)) {
+            return right;
+        }
+        return start;
     }
 
     void readd(K start, K key) {
@@ -248,8 +248,8 @@ private:
         K addornext(
             K key,
             V val,
-            std::function<Direction(const V &, const V &)> comparator_) {
-            Direction dir = comparator_(val, value);
+            std::function<Direction(const V &, const V &)> comparator) {
+            Direction dir = comparator(val, value);
             K dirkey = leaf(dir);
 
             if (!dirkey) {

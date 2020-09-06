@@ -89,9 +89,8 @@ Point<int16_t> MapPortals::get_portal_by_id(uint8_t portal_id) const {
         constexpr Point<int16_t> ABOVE(0, 30);
 
         return iter->second.get_position() - ABOVE;
-    } else {
-        return {};
     }
+    return {};
 }
 
 Point<int16_t> MapPortals::get_portal_by_name(
@@ -100,9 +99,8 @@ Point<int16_t> MapPortals::get_portal_by_name(
 
     if (iter != portal_ids_by_name_.end()) {
         return get_portal_by_id(iter->second);
-    } else {
-        return {};
     }
+    return {};
 }
 
 Portal::WarpInfo MapPortals::find_warp_at(Point<int16_t> playerpos) {

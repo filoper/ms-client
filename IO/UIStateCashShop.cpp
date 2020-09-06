@@ -54,20 +54,18 @@ Cursor::State UIStateCashShop::send_cursor(Cursor::State cursorstate,
             remove_cursor(focusedelement->get_type());
 
             return focusedelement->send_cursor(clicked, cursorpos);
-        } else {
-            focused_ = UIElement::NONE;
-
-            return cursorstate;
         }
-    } else {
-        if (auto *front = get_front()) {
-            remove_cursor(front->get_type());
+        focused_ = UIElement::NONE;
 
-            return front->send_cursor(clicked, cursorpos);
-        } else {
-            return Cursor::State::IDLE;
-        }
+        return cursorstate;
+
     }
+    if (auto *front = get_front()) {
+        remove_cursor(front->get_type());
+
+        return front->send_cursor(clicked, cursorpos);
+    }
+    return Cursor::State::IDLE;
 }
 
 UIState::Iterator UIStateCashShop::pre_add(UIElement::Type type,

@@ -72,9 +72,9 @@ void Combat::update() {
             }
 
             return apply;
-        } else {
-            return mb.bullet.update(mb.target);
         }
+        return mb.bullet.update(mb.target);
+       
     });
 
     damage_numbers_.remove_if([](DamageNumber &dn) { return dn.update(); });
@@ -143,7 +143,7 @@ void Combat::apply_move(const SpecialMove &move) {
 
         fn_attack(result);
 
-        if (reactor_targets.size()) {
+        if (!reactor_targets.empty()) {
             if (Optional<Reactor> reactor =
                     reactor_objs->get(reactor_targets.at(0))) {
                 fn_damage_reactor(reactor->get_oid(),

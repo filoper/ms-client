@@ -692,7 +692,7 @@ void CharLook::set_expression(Expression::Id newexpression) {
 }
 
 void CharLook::set_action(const std::string &acstr) {
-    if (acstr == actionstr_ || acstr == "") {
+    if (acstr == actionstr_ || acstr.empty()) {
         return;
     }
 

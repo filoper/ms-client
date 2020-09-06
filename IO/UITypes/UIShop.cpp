@@ -185,49 +185,46 @@ Button::State UIShop::button_pressed(uint16_t buttonid) {
         sell_state_.selection = -1;
 
         return Button::State::NORMAL;
-    } else if (sell.contains(buttonid)) {
+    }
+    if (sell.contains(buttonid)) {
         int16_t selected = buttonid - Buttons::SELL0;
         sell_state_.select(selected);
         buy_state_.selection = -1;
 
         return Button::State::NORMAL;
-    } else {
-        switch (buttonid) {
-            case Buttons::BUY_ITEM:
-                buy_state_.buy();
+    }
+    switch (buttonid) {
+        case Buttons::BUY_ITEM: buy_state_.buy(); return Button::State::NORMAL;
+        case Buttons::SELL_ITEM:
+            sell_state_.sell(false);
 
-                return Button::State::NORMAL;
-            case Buttons::SELL_ITEM:
-                sell_state_.sell(false);
+            return Button::State::NORMAL;
+        case Buttons::EXIT: exit_shop(); return Button::State::PRESSED;
+        case Buttons::CHECKBOX:
+            right_click_sell_ = !right_click_sell_;
+            Configuration::get().set_rightclicksell(right_click_sell_);
 
-                return Button::State::NORMAL;
-            case Buttons::EXIT: exit_shop(); return Button::State::PRESSED;
-            case Buttons::CHECKBOX:
-                right_click_sell_ = !right_click_sell_;
-                Configuration::get().set_rightclicksell(right_click_sell_);
+            return Button::State::NORMAL;
+        case Buttons::EQUIP:
+            changeselltab(InventoryType::Id::EQUIP);
 
-                return Button::State::NORMAL;
-            case Buttons::EQUIP:
-                changeselltab(InventoryType::Id::EQUIP);
+            return Button::State::IDENTITY;
+        case Buttons::USE:
+            changeselltab(InventoryType::Id::USE);
 
-                return Button::State::IDENTITY;
-            case Buttons::USE:
-                changeselltab(InventoryType::Id::USE);
+            return Button::State::IDENTITY;
+        case Buttons::ETC:
+            changeselltab(InventoryType::Id::ETC);
 
-                return Button::State::IDENTITY;
-            case Buttons::ETC:
-                changeselltab(InventoryType::Id::ETC);
+            return Button::State::IDENTITY;
+        case Buttons::SETUP:
+            changeselltab(InventoryType::Id::SETUP);
 
-                return Button::State::IDENTITY;
-            case Buttons::SETUP:
-                changeselltab(InventoryType::Id::SETUP);
+            return Button::State::IDENTITY;
+        case Buttons::CASH:
+            changeselltab(InventoryType::Id::CASH);
 
-                return Button::State::IDENTITY;
-            case Buttons::CASH:
-                changeselltab(InventoryType::Id::CASH);
-
-                return Button::State::IDENTITY;
-        }
+            return Button::State::IDENTITY;
     }
 
     return Button::State::PRESSED;
@@ -474,25 +471,32 @@ int16_t UIShop::slot_by_position(int16_t y) {
 
     if (yoff > 0 && yoff < 38) {
         return 0;
-    } else if (yoff > 42 && yoff < 80) {
-        return 1;
-    } else if (yoff > 84 && yoff < 122) {
-        return 2;
-    } else if (yoff > 126 && yoff < 164) {
-        return 3;
-    } else if (yoff > 168 && yoff < 206) {
-        return 4;
-    } else if (yoff > 210 && yoff < 248) {
-        return 5;
-    } else if (yoff > 252 && yoff < 290) {
-        return 6;
-    } else if (yoff > 294 && yoff < 332) {
-        return 7;
-    } else if (yoff > 336 && yoff < 374) {
-        return 8;
-    } else {
-        return -1;
     }
+    if (yoff > 42 && yoff < 80) {
+        return 1;
+    }
+    if (yoff > 84 && yoff < 122) {
+        return 2;
+    }
+    if (yoff > 126 && yoff < 164) {
+        return 3;
+    }
+    if (yoff > 168 && yoff < 206) {
+        return 4;
+    }
+    if (yoff > 210 && yoff < 248) {
+        return 5;
+    }
+    if (yoff > 252 && yoff < 290) {
+        return 6;
+    }
+    if (yoff > 294 && yoff < 332) {
+        return 7;
+    }
+    if (yoff > 336 && yoff < 374) {
+        return 8;
+    }
+    return -1;
 }
 
 uint16_t UIShop::tabbyinventory(InventoryType::Id type) {

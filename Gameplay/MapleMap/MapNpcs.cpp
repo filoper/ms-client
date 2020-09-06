@@ -77,9 +77,8 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
                 fn_talk_to_npc(npc->get_oid());
                 
                 return Cursor::State::IDLE;
-            } else {
-                return Cursor::State::CANCLICK;
             }
+            return Cursor::State::CANCLICK;
         }
     }
 

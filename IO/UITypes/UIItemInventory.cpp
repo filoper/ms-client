@@ -435,20 +435,20 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
             clear_tooltip();
 
             return Cursor::State::GRABBING;
-        } else if (!ignore_tooltip_) {
+        }
+        if (!ignore_tooltip_) {
             show_item(slot);
 
             return Cursor::State::CANGRAB;
-        } else {
-            ignore_tooltip_ = false;
-
-            return Cursor::State::CANGRAB;
         }
-    } else {
-        clear_tooltip();
+        ignore_tooltip_ = false;
 
-        return UIElement::send_cursor(pressed, cursorpos);
+        return Cursor::State::CANGRAB;
+
     }
+    clear_tooltip();
+
+    return UIElement::send_cursor(pressed, cursorpos);
 }
 
 void UIItemInventory::send_key(int32_t keycode, bool pressed, bool escape) {
@@ -613,9 +613,8 @@ bool UIItemInventory::is_not_visible(int16_t slot) const {
 
     if (full_enabled_) {
         return slot < 1 || slot > 24;
-    } else {
-        return slot < range.first || slot > range.second;
     }
+    return slot < range.first || slot > range.second;
 }
 
 bool UIItemInventory::can_wear_equip(int16_t slot) const {
@@ -762,9 +761,8 @@ Icon *UIItemInventory::get_icon(int16_t slot) {
 
     if (iter != icons_.end()) {
         return iter->second.get();
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 void UIItemInventory::set_full(bool enabled) {

@@ -1025,9 +1025,8 @@ Point<int16_t> UIStatusBar::get_quickslot_pos() const {
     if (quickslot_active_) {
         if (VWIDTH_ == 800) {
             return Point<int16_t>(0, -73);
-        } else {
-            return Point<int16_t>(0, -31);
         }
+        return Point<int16_t>(0, -31);
     }
 
     return Point<int16_t>(0, 0);

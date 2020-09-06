@@ -272,13 +272,14 @@ int16_t UIEvent::row_by_position(int16_t y) {
 
     if (y >= 148 && y <= 148 + item_height) {
         return 1;
-    } else if (y >= 273 && y <= 273 + item_height) {
-        return 2;
-    } else if (y >= 398 && y <= 398 + item_height) {
-        return 3;
-    } else {
-        return -1;
     }
+    if (y >= 273 && y <= 273 + item_height) {
+        return 2;
+    }
+    if (y >= 398 && y <= 398 + item_height) {
+        return 3;
+    }
+    return -1;
 }
 
 int16_t UIEvent::col_by_position(int16_t x) {
@@ -286,17 +287,20 @@ int16_t UIEvent::col_by_position(int16_t x) {
 
     if (x >= 25 && x <= 25 + item_width) {
         return 1;
-    } else if (x >= 71 && x <= 71 + item_width) {
-        return 2;
-    } else if (x >= 117 && x <= 117 + item_width) {
-        return 3;
-    } else if (x >= 163 && x <= 163 + item_width) {
-        return 4;
-    } else if (x >= 209 && x <= 209 + item_width) {
-        return 5;
-    } else {
-        return -1;
     }
+    if (x >= 71 && x <= 71 + item_width) {
+        return 2;
+    }
+    if (x >= 117 && x <= 117 + item_width) {
+        return 3;
+    }
+    if (x >= 163 && x <= 163 + item_width) {
+        return 4;
+    }
+    if (x >= 209 && x <= 209 + item_width) {
+        return 5;
+    }
+    return -1;
 }
 
 void UIEvent::show_item(int16_t row, int16_t col) {

@@ -46,8 +46,7 @@ Animation BySkillLevelBullet::get(const Char &user, int32_t) const {
 
     if (iter != bullets_.end()) {
         return iter->second.animation;
-    } else {
-        return {};
     }
+    return {};
 }
 }  // namespace ms

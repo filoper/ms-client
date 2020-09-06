@@ -10,7 +10,7 @@ if(${PROJECT_NAME}_ENABLE_CLANG_TIDY)
          -p="${PROJECT_SOURCE_DIR}/build" 
          --fix
          --format-style=file 
-         --checks=-*,readability-else-after-return,google-readability-braces-around-statements,llvm-qualified-auto,performance-for-range-copy
+         --checks=-*,readability-redundant-smartptr-get,modernize-concat-nested-namespaces,readability-container-size-empty,readability-else-after-return,google-readability-braces-around-statements,llvm-qualified-auto,performance-for-range-copy
          ${PROJECT_SOURCE_DIR}/*.h
          ${PROJECT_SOURCE_DIR}/*.cpp
          ${PROJECT_SOURCE_DIR}/Character/*.h
@@ -34,8 +34,12 @@ if(${PROJECT_NAME}_ENABLE_CLANG_TIDY)
          ${PROJECT_SOURCE_DIR}/Util/*.h
          ${PROJECT_SOURCE_DIR}/Util/*.cpp
          ${PROJECT_SOURCE_DIR}/Template/*.h
+         ${PROJECT_SOURCE_DIR}/Gameplay/*.h
+         ${PROJECT_SOURCE_DIR}/Gameplay/*.cpp
          ${PROJECT_SOURCE_DIR}/Gameplay/*/*.h
          ${PROJECT_SOURCE_DIR}/Gameplay/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/Audio/*.cpp 
+         ${PROJECT_SOURCE_DIR}/Audio/*.h
     )
   else()
     message(SEND_ERROR "Clang-Tidy requested but executable not found.")

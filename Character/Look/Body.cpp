@@ -107,7 +107,7 @@ Body::Layer Body::layer_by_name(const std::string &name) {
     auto layer_iter = layers_by_name_.find(name);
 
     if (layer_iter == layers_by_name_.end()) {
-        if (name != "") {
+        if (!name.empty()) {
             std::cout << "Unknown Body::Layer name: [" << name << "]"
                       << std::endl;
         }

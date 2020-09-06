@@ -160,7 +160,7 @@ MapBackgrounds::MapBackgrounds(nl::node src) {
         back = src[std::to_string(no)];
     }
 
-    black_ = src["0"]["bS"].get_string() == "";
+    black_ = src["0"]["bS"].get_string().empty();
 }
 
 MapBackgrounds::MapBackgrounds() {}

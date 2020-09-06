@@ -402,7 +402,7 @@ void UICharInfo::update_stats(int32_t character_id,
     job_.change_text(character_job.get_name());
     level_.change_text(std::to_string(lv));
     fame_.change_text(std::to_string(f));
-    guild_.change_text((g == "" ? "-" : g));
+    guild_.change_text((g.empty() ? "-" : g));
     alliance_.change_text(a);
 
     farm_name_.change_text("");

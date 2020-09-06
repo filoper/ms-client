@@ -323,9 +323,8 @@ MobCombat &Stage::get_mob_combat() {
 Optional<Char> Stage::get_character(int32_t cid) {
     if (is_player(cid)) {
         return player_;
-    } else {
-        return chars_.get_char(cid);
     }
+    return chars_.get_char(cid);
 }
 
 int Stage::get_mapid() {

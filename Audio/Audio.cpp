@@ -410,9 +410,8 @@ size_t Sound::add_sound(nl::node src) {
         Music::audiodb_[id_s] = new membuf(data + 82, ad.length() - 82);
 
         return id;
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 void Sound::add_sound(Name name, nl::node src) {

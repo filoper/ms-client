@@ -96,7 +96,7 @@ void UIWorldMap::draw(float alpha) const {
 
     base_img_.draw(position_ + base_position_);
 
-    if (link_images_.size() > 0) {
+    if (!link_images_.empty()) {
         for (const auto &iter : buttons_) {
             if (auto *const button = iter.second.get()) {
                 if (iter.first >= Buttons::BT_LINK0
@@ -183,7 +183,7 @@ void UIWorldMap::send_key(int32_t keycode, bool pressed, bool escape) {
         if (search_) {
             set_search(false);
         } else {
-            if (parent_map_ == "") {
+            if (parent_map_.empty()) {
                 toggle_active();
 
                 update_world(user_map_);

@@ -37,7 +37,7 @@ struct Attack {
     int32_t matk = 0;
     int32_t accuracy = 0;
     int32_t fixdamage = 0;
-    int16_t playerlevel = 1;
+    uint16_t playerlevel = 1;
 
     uint8_t hitcount = 0;
     uint8_t mobcount = 0;

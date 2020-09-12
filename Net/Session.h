@@ -31,7 +31,7 @@ namespace ms {
 class Session : public Singleton<Session> {
 public:
     Session();
-    ~Session();
+    ~Session() override;
 
     // Connect using host and port from the configuration file
     Error init();

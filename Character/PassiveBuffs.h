@@ -34,7 +34,7 @@ public:
 // Abstract base for passives without conditions
 class ConditionlessBuff : public PassiveBuff {
 public:
-    bool is_applicable(CharStats &stats, nl::node level) const final override;
+    bool is_applicable(CharStats &stats, nl::node level) const final;
 };
 
 // Buff for angel blessing/blessing of the spirit

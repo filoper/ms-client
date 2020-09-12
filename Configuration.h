@@ -30,7 +30,7 @@ public:
     Configuration();
 
     // Save.
-    ~Configuration();
+    ~Configuration() override;
 
     // Load all settings
     // If something is missing, set the default value.

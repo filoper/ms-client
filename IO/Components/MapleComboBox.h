@@ -47,7 +47,7 @@ public:
 
     void draw(Point<int16_t> parentpos) const override;
 
-    void update() {}
+    void update() override {}
 
     Rectangle<int16_t> bounds(Point<int16_t> parentpos) const override;
 

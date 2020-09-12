@@ -22,7 +22,7 @@
 namespace ms {
 class Drop : public MapObject {
 public:
-    virtual int8_t update(const Physics &physics) override;
+    int8_t update(const Physics &physics) override;
 
     void expire(int8_t, const PhysicsObject *);
 

@@ -74,7 +74,7 @@ public:
                   int32_t mapid,
                   bool bolded) override;
 
-    Iterator pre_add(UIElement::Type type, bool toggled, bool focused);
+    Iterator pre_add(UIElement::Type type, bool toggled, bool focused) override;
 
     void remove(UIElement::Type type) override;
 

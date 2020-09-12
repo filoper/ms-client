@@ -276,7 +276,7 @@ void Sound::create_alure_source() {
     while (sound_srcs_[source_inc_ - 1] != nullptr
            && !sound_srcs_[source_inc_ - 1].isPlaying()) {
         sound_srcs_[source_inc_ - 1].destroy();
-        sound_srcs_[source_inc_ - 1] = NULL;
+        sound_srcs_[source_inc_ - 1] = nullptr;
         source_inc_--;
     }
 
@@ -390,7 +390,7 @@ Error Sound::init() {
 
 void Sound::close() {
     sound_srcs_[source_inc_ - 1].destroy();
-    sound_srcs_[source_inc_ - 1] = NULL;
+    sound_srcs_[source_inc_ - 1] = nullptr;
     // BASS_Free();
 }
 

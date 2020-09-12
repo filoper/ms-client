@@ -34,7 +34,7 @@ public:
 
     Equip(int32_t item_id,
           int64_t expiration,
-          const std::string &owner,
+          std::string owner,
           int16_t flags,
           uint8_t slots,
           uint8_t level,

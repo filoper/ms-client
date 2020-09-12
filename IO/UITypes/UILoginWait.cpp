@@ -16,6 +16,7 @@
 #include "UILoginWait.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../../Net/Session.h"
 #include "../Components/MapleButton.h"
@@ -24,7 +25,7 @@ namespace ms {
 UILoginWait::UILoginWait() : UILoginWait([]() {}) {}
 
 UILoginWait::UILoginWait(std::function<void()> okhandler) :
-    okhandler_(okhandler) {
+    okhandler_(std::move(okhandler)) {
     nl::node Loading = nl::nx::ui["Login.img"]["Notice"]["Loading"];
     nl::node backgrnd = Loading["backgrnd"];
 

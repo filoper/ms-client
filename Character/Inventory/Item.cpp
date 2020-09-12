@@ -15,13 +15,15 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Item.h"
 
+#include <utility>
+
 namespace ms {
 Item::Item(int32_t item_id,
            int64_t expiration,
-           const std::string &owner,
+           std::string owner,
            int16_t flags) :
     item_id_(item_id),
     expiration_(expiration),
-    owner_(owner),
+    owner_(std::move(owner)),
     flags_(flags) {}
 }  // namespace ms

@@ -16,6 +16,7 @@
 #include "Slider.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 namespace ms {
 Slider::Slider(int32_t t,
@@ -24,7 +25,7 @@ Slider::Slider(int32_t t,
                int16_t ur,
                int16_t rm,
                std::function<void(bool)> om) :
-    onmoved_(om),
+    onmoved_(std::move(om)),
     vertical_(ver),
     type_(t),
     x_(xp) {

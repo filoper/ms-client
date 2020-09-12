@@ -17,6 +17,7 @@
 
 #include <cstdint>
 #include <map>
+#include <utility>
 
 #include "../Graphics/Animation.h"
 #include "../Template/Rectangle.h"
@@ -53,8 +54,8 @@ public:
 
         WarpInfo(int32_t m, bool i, std::string tn, std::string n) :
             mapid(m),
-            toname(tn),
-            name(n),
+            toname(std::move(tn)),
+            name(std::move(n)),
             intramap(i),
             valid(mapid < 999999999) {}
 

@@ -10,7 +10,7 @@ if(${PROJECT_NAME}_ENABLE_CLANG_TIDY)
          -p="${PROJECT_SOURCE_DIR}/build" 
          --fix
          --format-style=file 
-         --checks=-*,modernize-use-equals-default,modernize-use-override,readability-redundant-smartptr-get,modernize-concat-nested-namespaces,readability-container-size-empty,readability-else-after-return,google-readability-braces-around-statements,llvm-qualified-auto,performance-for-range-copy
+         --checks=-*,modernize-pass-by-value,modernize-use-equals-default,modernize-use-override,readability-redundant-smartptr-get,modernize-concat-nested-namespaces,readability-container-size-empty,readability-else-after-return,google-readability-braces-around-statements,llvm-qualified-auto,performance-for-range-copy
          ${PROJECT_SOURCE_DIR}/*.h
          ${PROJECT_SOURCE_DIR}/*.cpp
          ${PROJECT_SOURCE_DIR}/Character/*.h

@@ -16,6 +16,7 @@
 #include "UISoftKey.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../../Constants.h"
 #include "../Components/MapleButton.h"
@@ -26,8 +27,8 @@ UISoftKey::UISoftKey(OkCallback ok,
                      CancelCallback cancel,
                      std::string tooltip_text,
                      Point<int16_t> tooltip_pos) :
-    ok_callback_(ok),
-    cancel_callback_(cancel),
+    ok_callback_(std::move(ok)),
+    cancel_callback_(std::move(cancel)),
     tooltip_position_(tooltip_pos) {
     Point<int16_t> screen_adj = Point<int16_t>(-1, 0);
 

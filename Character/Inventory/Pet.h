@@ -23,7 +23,7 @@ class Pet {
 public:
     Pet(int32_t item_id,
         int64_t expiration,
-        const std::string &name,
+        std::string name,
         uint8_t level,
         uint16_t closeness,
         uint8_t fullness);

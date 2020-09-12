@@ -21,7 +21,7 @@ namespace ms {
 // Combines an Animation with additional state
 class Sprite {
 public:
-    Sprite(const Animation &animation, const DrawArgument &stateargs);
+    Sprite(Animation animation, const DrawArgument &stateargs);
 
     Sprite(nl::node src, const DrawArgument &stateargs);
 

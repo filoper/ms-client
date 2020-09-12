@@ -16,6 +16,7 @@
 #include "UIGender.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../../Net/Packets/LoginPackets.h"
 #include "../Components/MapleButton.h"
@@ -30,7 +31,7 @@ auto fn_gender = []<typename... T>(T && ... args) {
 
 UIGender::UIGender(std::function<void()> oh) :
     UIElement(Point<int16_t>(0, 15), Point<int16_t>(0, 0)),
-    okhandler_(oh) {
+    okhandler_(std::move(oh)) {
     cur_timestep_ = 0;
 
     nl::node Login = nl::nx::ui["Login.img"];

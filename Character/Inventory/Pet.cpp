@@ -15,16 +15,18 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Pet.h"
 
+#include <utility>
+
 namespace ms {
 Pet::Pet(int32_t item_id,
          int64_t expiration,
-         const std::string &petname,
+         std::string petname,
          uint8_t level,
          uint16_t closeness,
          uint8_t fullness) :
     item_id_(item_id),
     expiration_(expiration),
-    pet_name_(petname),
+    pet_name_(std::move(petname)),
     pet_level_(level),
     closeness_(closeness),
     fullness_(fullness) {}

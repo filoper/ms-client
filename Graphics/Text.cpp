@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Text.h"
 
+#include <utility>
+
 #include "GraphicsGL.h"
 
 namespace ms {
@@ -126,14 +128,14 @@ const std::string &Text::get_text() const {
     return text_;
 }
 
-Text::Layout::Layout(const std::vector<Layout::Line> &l,
-                     const std::vector<int16_t> &a,
+Text::Layout::Layout(std::vector<Layout::Line> l,
+                     std::vector<int16_t> a,
                      int16_t w,
                      int16_t h,
                      int16_t ex,
                      int16_t ey) :
-    lines_(l),
-    advances_(a),
+    lines_(std::move(l)),
+    advances_(std::move(a)),
     dimensions_(w, h),
     end_offset_(ex, ey) {}
 

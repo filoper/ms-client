@@ -278,7 +278,7 @@ set_project_warnings(${PROJECT_NAME})
 add_clang_format_target()
 
 TARGET_INCLUDE_DIRECTORIES(msclient 
-  PUBLIC
+  SYSTEM PRIVATE
     ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx
     ${PROJECT_SOURCE_DIR}/thirdparty/asio/asio/include
     ${PROJECT_SOURCE_DIR}/thirdparty/stb
@@ -288,7 +288,7 @@ TARGET_INCLUDE_DIRECTORIES(msclient
 IF (UNIX)
     INCLUDE(FindFreetype)
     TARGET_INCLUDE_DIRECTORIES(msclient 
-      PUBLIC
+      SYSTEM PRIVATE
         ${FREETYPE_INCLUDE_DIRS}
         ${PROJECT_SOURCE_DIR}/thirdparty/alure/include
     )
@@ -302,7 +302,7 @@ ENDIF()
 
 IF (APPLE)
     TARGET_INCLUDE_DIRECTORIES(msclient 
-      PUBLIC
+      SYSTEM PRIVATE
         /usr/local/Cellar/openal-soft/1.20.1/include
         /usr/local/Cellar/glfw/3.3.2/include
     )
@@ -324,7 +324,7 @@ ELSEIF (UNIX AND NOT APPLE)
     )
 ELSEIF (WIN32)
     TARGET_INCLUDE_DIRECTORIES(msclient 
-      PUBLIC
+      SYSTEM PRIVATE
         ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c
         ${PROJECT_SOURCE_DIR}/thirdparty/glfw/include
         ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/include

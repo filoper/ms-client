@@ -28,7 +28,7 @@ Physics::Physics(nl::node src) {
     fh_tree_ = src;
 }
 
-Physics::Physics() {}
+Physics::Physics() = default;
 
 void Physics::move_object(PhysicsObject &phobj) const {
     // Determine which platform the object is currently on

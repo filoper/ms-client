@@ -22,7 +22,7 @@ namespace ms {
 // Interface for hit effects, animations applied to a mob for each hit.
 class SkillHitEffect {
 public:
-    virtual ~SkillHitEffect() {}
+    virtual ~SkillHitEffect() = default;
 
     virtual void apply(const AttackUser &user, Mob &target) const = 0;
 

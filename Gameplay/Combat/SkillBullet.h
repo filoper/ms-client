@@ -23,7 +23,7 @@
 namespace ms {
 class SkillBullet {
 public:
-    virtual ~SkillBullet() {}
+    virtual ~SkillBullet() = default;
 
     virtual Animation get(const Char &user, int32_t bulletid) const = 0;
 
@@ -33,7 +33,7 @@ protected:
 
         Ball(nl::node src) { animation = src; }
 
-        Ball() {}
+        Ball() = default;
     };
 };
 

@@ -46,7 +46,7 @@ public:
         }
     }
 
-    BodyAction() {}
+    BodyAction() = default;
 
     bool isattackframe() const { return attack_frame_; }
 

@@ -157,12 +157,12 @@ CharSpawn::CharSpawn(int32_t c,
                      int8_t st,
                      Point<int16_t> p) :
     cid_(c),
-    look_(lk),
     level_(l),
     job_(j),
     name_(nm),
     stance_(st),
-    position_(p) {}
+    position_(p),
+    look_(lk) {}
 
 int32_t CharSpawn::get_cid() const {
     return cid_;

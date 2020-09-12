@@ -53,11 +53,10 @@ public:
 
         WarpInfo(int32_t m, bool i, std::string tn, std::string n) :
             mapid(m),
-            intramap(i),
             toname(tn),
-            name(n) {
-            valid = mapid < 999999999;
-        }
+            name(n),
+            intramap(i),
+            valid(mapid < 999999999) {}
 
         WarpInfo() : WarpInfo(999999999, false, {}, {}) {}
     };

@@ -32,7 +32,7 @@ TilesObjs::TilesObjs(nl::node src) {
     }
 }
 
-TilesObjs::TilesObjs() {}
+TilesObjs::TilesObjs() = default;
 
 void TilesObjs::update() {
     for (auto &iter : objs_) {
@@ -56,7 +56,7 @@ MapTilesObjs::MapTilesObjs(nl::node src) {
     }
 }
 
-MapTilesObjs::MapTilesObjs() {}
+MapTilesObjs::MapTilesObjs() = default;
 
 void MapTilesObjs::draw(Layer::Id layer,
                         Point<int16_t> viewpos,

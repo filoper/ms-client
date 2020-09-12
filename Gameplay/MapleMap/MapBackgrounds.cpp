@@ -163,7 +163,7 @@ MapBackgrounds::MapBackgrounds(nl::node src) {
     black_ = src["0"]["bS"].get_string().empty();
 }
 
-MapBackgrounds::MapBackgrounds() {}
+MapBackgrounds::MapBackgrounds() = default;
 
 void MapBackgrounds::drawbackgrounds(double viewx,
                                      double viewy,

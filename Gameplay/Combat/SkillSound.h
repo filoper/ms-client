@@ -19,7 +19,7 @@ namespace ms {
 // Interface for skill sound.
 class SkillSound {
 public:
-    virtual ~SkillSound() {}
+    virtual ~SkillSound() = default;
 
     virtual void play_use() = 0;
 

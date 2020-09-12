@@ -27,7 +27,7 @@ public:
 
     class Type {
     public:
-        virtual ~Type() {}
+        virtual ~Type() = default;
 
         virtual void drop_on_stage() const = 0;
 
@@ -55,8 +55,7 @@ public:
                            bool) const override {
             return true;
         }
-        void drop_on_bindings(Point<int16_t> cursorposition,
-                              bool remove) const override {}
+        void drop_on_bindings(Point<int16_t>, bool) const override {}
         void set_count(int16_t) override {}
         IconType get_type() override { return IconType::NONE; }
     };
@@ -64,6 +63,8 @@ public:
     Icon(std::unique_ptr<Type> type, Texture texture, int16_t count);
 
     Icon();
+
+    virtual ~Icon() = default;
 
     void drop_on_stage() const;
     void drop_on_equips(EquipSlot::Id eqslot) const;

@@ -104,7 +104,7 @@ struct AttackResult {
         toleft = attack.toleft;
     }
 
-    AttackResult() {}
+    AttackResult() = default;
 
     Attack::Type type;
     int32_t attacker = 0;

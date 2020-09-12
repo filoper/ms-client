@@ -28,9 +28,9 @@ MapleComboBox::MapleComboBox(Type type,
                              Point<int16_t> pos,
                              int64_t w) :
     options_(o),
+    rwidth_(w),
     selected_index_(default_option),
-    parent_pos_(ppos),
-    rwidth_(w) {
+    parent_pos_(ppos) {
     std::string combobox = "ComboBox";
 
     if (type != Type::DEFAULT) {

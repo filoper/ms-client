@@ -30,7 +30,7 @@ MapEffect::MapEffect(std::string path) : active_(false) {
     position_ = Point<int16_t>(width / 2, 250);
 }
 
-MapEffect::MapEffect() {}
+MapEffect::MapEffect() = default;
 
 void MapEffect::draw() const {
     if (!active_) {

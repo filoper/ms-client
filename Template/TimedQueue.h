@@ -55,12 +55,12 @@ private:
         T value;
         int64_t when;
 
-        Timed(int64_t w, const T &v) : when { w }, value { v } {}
+        Timed(int64_t w, const T &v) : value { v }, when { w } {}
 
         template<typename... Args>
         Timed(int64_t w, Args &&... args) :
-            when { w },
-            value { std::forward<Args>(args)... } {}
+            value { std::forward<Args>(args)... },
+            when { w } {}
     };
 
     struct TimedComparator {

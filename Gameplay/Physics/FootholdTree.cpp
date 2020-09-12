@@ -86,7 +86,7 @@ FootholdTree::FootholdTree(nl::node src) {
     borders_ = { topb - 300, botb + 100 };
 }
 
-FootholdTree::FootholdTree() {}
+FootholdTree::FootholdTree() = default;
 
 void FootholdTree::limit_movement(PhysicsObject &phobj) const {
     if (phobj.hmobile()) {

@@ -21,7 +21,7 @@ namespace ms {
 // Interface for skill effects
 class SkillUseEffect {
 public:
-    virtual ~SkillUseEffect() {}
+    virtual ~SkillUseEffect() = default;
 
     virtual void apply(Char &target) const = 0;
 

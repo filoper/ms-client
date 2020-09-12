@@ -24,7 +24,7 @@ namespace ms {
 // Interface for passive buffs
 class PassiveBuff {
 public:
-    virtual ~PassiveBuff() {}
+    virtual ~PassiveBuff() = default;
 
     virtual bool is_applicable(CharStats &stats, nl::node level) const = 0;
 

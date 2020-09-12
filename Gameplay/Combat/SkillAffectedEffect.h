@@ -23,7 +23,7 @@ namespace ms {
 // Interface for affected effects
 class SkillAffectedEffect {
 public:
-    virtual ~SkillAffectedEffect() {}
+    virtual ~SkillAffectedEffect() = default;
 
     virtual void apply(Char &target) const = 0;
 

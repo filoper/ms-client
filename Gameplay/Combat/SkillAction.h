@@ -21,7 +21,7 @@
 namespace ms {
 class SkillAction {
 public:
-    virtual ~SkillAction() {}
+    virtual ~SkillAction() = default;
 
     virtual void apply(Char &target, Attack::Type atype) const = 0;
 };

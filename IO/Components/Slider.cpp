@@ -24,10 +24,10 @@ Slider::Slider(int32_t t,
                int16_t ur,
                int16_t rm,
                std::function<void(bool)> om) :
-    type_(t),
+    onmoved_(om),
     vertical_(ver),
-    x_(xp),
-    onmoved_(om) {
+    type_(t),
+    x_(xp) {
     start_ = Point<int16_t>(x_, vertical_.first());
     end_ = Point<int16_t>(x_, vertical_.second());
 

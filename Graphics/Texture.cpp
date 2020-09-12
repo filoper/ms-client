@@ -57,7 +57,7 @@ Texture::Texture(nl::node src) {
     }
 }
 
-Texture::Texture() {}
+Texture::Texture() = default;
 
 void Texture::draw(const DrawArgument &args) const {
     size_t id = bitmap_.id();

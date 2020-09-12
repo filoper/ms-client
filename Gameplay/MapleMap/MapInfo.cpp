@@ -49,7 +49,7 @@ MapInfo::MapInfo(nl::node src, Range<int16_t> walls, Range<int16_t> borders) {
     }
 }
 
-MapInfo::MapInfo() {}
+MapInfo::MapInfo() = default;
 
 bool MapInfo::is_underwater() const {
     return swim_;

@@ -30,7 +30,7 @@ public:
         VIEWHEIGHT = 600;
     };
 
-    ~Constants() override {};
+    ~Constants() override = default;
 
     int16_t get_viewwidth() { return VIEWWIDTH; }
 

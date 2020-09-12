@@ -64,7 +64,7 @@ public:
 
     Portal(const Animation *animation,
            Type type,
-           std::string name,
+           const std::string &name,
            bool intramap,
            Point<int16_t> position,
            int32_t tomap,

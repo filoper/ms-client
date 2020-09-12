@@ -246,6 +246,7 @@ void Music::update_context() {}
 
 #include <nlnx/audio.hpp>
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../Configuration.h"
 #include "Audio.h"
@@ -320,7 +321,7 @@ Sound::Sound(int32_t itemid) {
     create_alure_source();
 }
 
-Sound::Sound(nl::node src) {
+Sound::Sound(const nl::node &src) {
     id = add_sound(src);
     create_alure_source();
 }
@@ -398,7 +399,7 @@ bool Sound::set_sfxvolume(uint8_t vol) {
     return false;
 }
 
-size_t Sound::add_sound(nl::node src) {
+size_t Sound::add_sound(const nl::node &src) {
     nl::audio ad = src;
 
     const auto *data = reinterpret_cast<const char *>(ad.data());
@@ -414,7 +415,7 @@ size_t Sound::add_sound(nl::node src) {
     return 0;
 }
 
-void Sound::add_sound(Name name, nl::node src) {
+void Sound::add_sound(Name name, const nl::node &src) {
     size_t id = add_sound(src);
 
     if (id) {
@@ -422,7 +423,7 @@ void Sound::add_sound(Name name, nl::node src) {
     }
 }
 
-void Sound::add_sound(std::string itemid, nl::node src) {
+void Sound::add_sound(const std::string &itemid, const nl::node &src) {
     size_t id = add_sound(src);
 
     if (id) {
@@ -441,7 +442,7 @@ EnumMap<Sound::Name, size_t> Sound::soundids_;
 std::unordered_map<std::string, size_t> Sound::itemids_;
 
 Music::Music(std::string p) {
-    path_ = p;
+    path_ = std::move(p);
 }
 
 void Music::play() const {

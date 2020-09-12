@@ -42,7 +42,7 @@ public:
 
     void add_recommended_world(RecommendedWorld world);
 
-    void change_world(World selectedWorld);
+    void change_world(const World &selectedWorld);
 
     void remove_selected();
 

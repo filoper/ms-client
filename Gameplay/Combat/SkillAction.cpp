@@ -33,7 +33,7 @@ void RegularAction::apply(Char &target, Attack::Type atype) const {
     target.attack(degenerate);
 }
 
-SingleAction::SingleAction(nl::node src) {
+SingleAction::SingleAction(const nl::node &src) {
     action_ = std::string(src["action"]["0"]);
 }
 
@@ -41,7 +41,7 @@ void SingleAction::apply(Char &target, Attack::Type) const {
     target.attack(action_);
 }
 
-TwoHandedAction::TwoHandedAction(nl::node src) {
+TwoHandedAction::TwoHandedAction(const nl::node &src) {
     actions_[false] = std::string(src["action"]["0"]);
     actions_[true] = std::string(src["action"]["1"]);
 }
@@ -53,7 +53,7 @@ void TwoHandedAction::apply(Char &target, Attack::Type) const {
     target.attack(action);
 }
 
-ByLevelAction::ByLevelAction(nl::node src, int32_t id) {
+ByLevelAction::ByLevelAction(const nl::node &src, int32_t id) {
     for (const auto &sub : src["level"]) {
         int32_t level = string_conversion::or_zero<int32_t>(sub.name());
         actions_[level] = std::string(sub["action"]);

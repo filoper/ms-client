@@ -39,7 +39,7 @@ public:
 
     UIElement::Type get_type() const override;
 
-    bool check_name(std::string name) const;
+    bool check_name(const std::string &name) const;
 
     void send_naming_result(bool nameused);
 

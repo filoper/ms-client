@@ -27,7 +27,7 @@ namespace ms {
 // A tile and obj layer.
 class TilesObjs {
 public:
-    TilesObjs(nl::node src);
+    TilesObjs(const nl::node &src);
 
     TilesObjs();
 
@@ -43,7 +43,7 @@ private:
 // The collection of tile and obj layers on a map.
 class MapTilesObjs {
 public:
-    MapTilesObjs(nl::node src);
+    MapTilesObjs(const nl::node &src);
 
     MapTilesObjs();
 

@@ -29,9 +29,9 @@ public:
 
     void draw(Point<int16_t> position) const override;
 
-    void set_name(Tooltip::Parent parent, std::string name, bool bolded);
+    void set_name(Tooltip::Parent parent, const std::string &name, bool bolded);
 
-    void set_desc(std::string description);
+    void set_desc(const std::string &description);
 
     void set_mapid(int32_t mapid);
 

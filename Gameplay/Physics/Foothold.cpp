@@ -16,7 +16,7 @@
 #include "Foothold.h"
 
 namespace ms {
-Foothold::Foothold(nl::node src, uint16_t id, uint8_t ly) :
+Foothold::Foothold(const nl::node &src, uint16_t id, uint8_t ly) :
     m_id_(id),
     m_prev_(src["prev"]),
     m_next_(src["next"]),

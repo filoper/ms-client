@@ -18,7 +18,7 @@
 #include <iostream>
 
 namespace ms {
-FootholdTree::FootholdTree(nl::node src) {
+FootholdTree::FootholdTree(const nl::node &src) {
     int16_t leftw = 30000;
     int16_t rightw = -30000;
     int16_t botb = -30000;

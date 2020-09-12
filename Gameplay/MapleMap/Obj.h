@@ -22,7 +22,7 @@ namespace ms {
 // Represents an obj (map decoration) on a map.
 class Obj {
 public:
-    Obj(nl::node source);
+    Obj(const nl::node &source);
 
     // Update animation.
     void update();

@@ -55,7 +55,7 @@ public:
 
     const CharEntry &get_character(int32_t id);
 
-    bool update_character(int32_t id, StatsEntry stats);
+    bool update_character(int32_t id, const StatsEntry &stats);
 
 protected:
     Button::State button_pressed(uint16_t buttonid) override;
@@ -81,7 +81,7 @@ private:
 
     void request_pic();
 
-    void check_pic(const std::string entered_pic) const;
+    void check_pic(const std::string &entered_pic) const;
 
     static constexpr uint8_t PAGESIZE_ = 8;
 

@@ -18,7 +18,9 @@
 #include "../Constants.h"
 
 namespace ms {
-MapInfo::MapInfo(nl::node src, Range<int16_t> walls, Range<int16_t> borders) {
+MapInfo::MapInfo(const nl::node &src,
+                 Range<int16_t> walls,
+                 Range<int16_t> borders) {
     nl::node info = src["info"];
 
     if (info["VRLeft"].data_type() == nl::node::type::integer) {
@@ -88,7 +90,7 @@ Optional<const Ladder> MapInfo::findladder(Point<int16_t> position,
     return nullptr;
 }
 
-Seat::Seat(nl::node src) {
+Seat::Seat(const nl::node &src) {
     pos_ = src;
 }
 
@@ -103,7 +105,7 @@ Point<int16_t> Seat::getpos() const {
     return pos_;
 }
 
-Ladder::Ladder(nl::node src) {
+Ladder::Ladder(const nl::node &src) {
     x_ = src["x"];
     y1_ = src["y1"];
     y2_ = src["y2"];

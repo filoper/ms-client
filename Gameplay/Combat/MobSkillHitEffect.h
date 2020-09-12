@@ -37,7 +37,7 @@ public:
 protected:
     class Effect {
     public:
-        Effect(nl::node src) {
+        Effect(const nl::node &src) {
             animation_ = src;
             pos_ = src["pos"];
             z_ = src["z"];
@@ -64,7 +64,7 @@ public:
 // A single animation
 class MobSingleHitEffect : public MobSkillHitEffect {
 public:
-    MobSingleHitEffect(nl::node src);
+    MobSingleHitEffect(const nl::node &src);
 
     void apply(Mob &mob) const override;
 
@@ -75,7 +75,7 @@ private:
 // The animation changes with the skill level
 class MobBySkillLevelHitEffect : public MobSkillHitEffect {
 public:
-    MobBySkillLevelHitEffect(nl::node src);
+    MobBySkillLevelHitEffect(const nl::node &src);
 
     void apply(Mob &mob) const override;
 

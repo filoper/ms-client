@@ -16,8 +16,8 @@
 #include "TwoSpriteButton.h"
 
 namespace ms {
-TwoSpriteButton::TwoSpriteButton(nl::node nsrc,
-                                 nl::node ssrc,
+TwoSpriteButton::TwoSpriteButton(const nl::node &nsrc,
+                                 const nl::node &ssrc,
                                  Point<int16_t> np,
                                  Point<int16_t> sp) :
     textures_(ssrc, nsrc),
@@ -27,12 +27,12 @@ TwoSpriteButton::TwoSpriteButton(nl::node nsrc,
     active_ = true;
 }
 
-TwoSpriteButton::TwoSpriteButton(nl::node nsrc,
-                                 nl::node ssrc,
+TwoSpriteButton::TwoSpriteButton(const nl::node &nsrc,
+                                 const nl::node &ssrc,
                                  Point<int16_t> pos) :
     TwoSpriteButton(nsrc, ssrc, pos, pos) {}
 
-TwoSpriteButton::TwoSpriteButton(nl::node nsrc, nl::node ssrc) :
+TwoSpriteButton::TwoSpriteButton(const nl::node &nsrc, const nl::node &ssrc) :
     TwoSpriteButton(nsrc, ssrc, Point<int16_t>()) {}
 
 TwoSpriteButton::TwoSpriteButton() : textures_({}, {}) {}

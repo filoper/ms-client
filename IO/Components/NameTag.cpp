@@ -16,7 +16,7 @@
 #include "NameTag.h"
 
 namespace ms {
-NameTag::NameTag(nl::node src, Text::Font f, std::string n) {
+NameTag::NameTag(const nl::node &src, Text::Font f, const std::string &n) {
     name_ = OutlinedText(f,
                          Text::Alignment::CENTER,
                          Color::Name::EAGLE,

@@ -24,7 +24,7 @@ class ScrollingNotice {
 public:
     ScrollingNotice();
 
-    void set_notice(std::string notice);
+    void set_notice(const std::string &notice);
 
     void draw(float alpha) const;
 

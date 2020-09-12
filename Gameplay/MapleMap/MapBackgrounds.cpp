@@ -20,7 +20,7 @@
 #include "../../Graphics/GraphicsGL.h"
 
 namespace ms {
-Background::Background(nl::node src) {
+Background::Background(const nl::node &src) {
     VWIDTH = Constants::Constants::get().get_viewwidth();
     VHEIGHT = Constants::Constants::get().get_viewheight();
     WOFFSET = VWIDTH / 2;
@@ -143,7 +143,7 @@ void Background::update() {
     animation_.update();
 }
 
-MapBackgrounds::MapBackgrounds(nl::node src) {
+MapBackgrounds::MapBackgrounds(const nl::node &src) {
     int16_t no = 0;
     nl::node back = src[std::to_string(no)];
 

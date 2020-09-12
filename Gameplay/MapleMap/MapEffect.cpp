@@ -16,6 +16,7 @@
 #include "MapEffect.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../../Constants.h"
 
@@ -23,7 +24,7 @@ namespace ms {
 MapEffect::MapEffect(std::string path) : active_(false) {
     nl::node Effect = nl::nx::map["Effect.img"];
 
-    effect_ = Effect.resolve(path);
+    effect_ = Effect.resolve(std::move(path));
 
     int16_t width = Constants::Constants::get().get_viewwidth();
 

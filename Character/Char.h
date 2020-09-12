@@ -97,13 +97,15 @@ public:
     const Afterimage &get_afterimage() const;
 
     // Display an animation as an effect with the character
-    void show_attack_effect(Animation animation, int8_t z);
+    void show_attack_effect(const Animation &animation, int8_t z);
 
     // Display an animation as an effect on top of the character.
     void show_effect_id(CharEffect::Id toshow);
 
     // Display a recurring animation as an effect on top of the character.
-    void add_recurring_effect(int16_t effect_id, Animation animation, int8_t z);
+    void add_recurring_effect(int16_t effect_id,
+                              const Animation &animation,
+                              int8_t z);
 
     // Remove a recurring animation.
     void remove_recurring_effect();

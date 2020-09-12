@@ -16,7 +16,8 @@
 #include "Charset.h"
 
 namespace ms {
-Charset::Charset(nl::node src, Alignment alignment) : alignment_(alignment) {
+Charset::Charset(const nl::node &src, Alignment alignment) :
+    alignment_(alignment) {
     for (const auto &sub : src) {
         std::string name = sub.name();
 

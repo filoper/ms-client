@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-Obj::Obj(nl::node src) {
+Obj::Obj(const nl::node &src) {
     animation_ = Animation(nl::nx::map["Obj"][src["oS"] + ".img"][src["l0"]]
                                       [src["l1"]][src["l2"]]);
     pos_ = Point<int16_t>(src["x"], src["y"]);

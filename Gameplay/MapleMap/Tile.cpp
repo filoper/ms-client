@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-Tile::Tile(nl::node src, const std::string &ts) {
+Tile::Tile(const nl::node &src, const std::string &ts) {
     nl::node dsrc = nl::nx::map["Tile"][ts][src["u"]][src["no"]];
     texture_ = Texture(nl::nx::map["Tile"][ts][src["u"]][src["no"]]);
     pos_ = Point<int16_t>(src["x"], src["y"]);

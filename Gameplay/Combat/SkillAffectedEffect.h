@@ -30,7 +30,7 @@ public:
 protected:
     class Effect {
     public:
-        Effect(nl::node src) {
+        Effect(const nl::node &src) {
             animation_ = src;
             pos_ = src["pos"];
             z_ = src["z"];
@@ -56,7 +56,7 @@ public:
 // An effect which displays an animation over the character's position
 class SingleAffectedEffect : public SkillAffectedEffect {
 public:
-    SingleAffectedEffect(nl::node src);
+    SingleAffectedEffect(const nl::node &src);
 
     void apply(Char &target) const override;
 

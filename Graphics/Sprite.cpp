@@ -22,11 +22,11 @@ Sprite::Sprite(Animation a, const DrawArgument &args) :
     animation_(std::move(a)),
     state_args_(args) {}
 
-Sprite::Sprite(nl::node src, const DrawArgument &args) :
+Sprite::Sprite(const nl::node &src, const DrawArgument &args) :
     animation_(src),
     state_args_(args) {}
 
-Sprite::Sprite(nl::node src) : Sprite(src, {}) {}
+Sprite::Sprite(const nl::node &src) : Sprite(src, {}) {}
 
 Sprite::Sprite() = default;
 

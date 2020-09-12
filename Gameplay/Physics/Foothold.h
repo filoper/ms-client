@@ -23,7 +23,7 @@ namespace ms {
 // Represents a platform part on a maple map
 class Foothold {
 public:
-    Foothold(nl::node src, uint16_t id, uint8_t layer);
+    Foothold(const nl::node &src, uint16_t id, uint8_t layer);
 
     Foothold();
 

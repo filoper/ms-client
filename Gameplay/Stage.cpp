@@ -16,6 +16,7 @@
 #include "Stage.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../Configuration.h"
 #include "../IO/UI.h"
@@ -332,7 +333,7 @@ int Stage::get_mapid() {
 }
 
 void Stage::add_effect(std::string path) {
-    effect_ = MapEffect(path);
+    effect_ = MapEffect(std::move(path));
 }
 
 int64_t Stage::get_uptime() {

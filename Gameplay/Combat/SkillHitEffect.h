@@ -29,7 +29,7 @@ public:
 protected:
     class Effect {
     public:
-        Effect(nl::node src) {
+        Effect(const nl::node &src) {
             animation_ = src;
             pos_ = src["pos"];
             z_ = src["z"];
@@ -55,7 +55,7 @@ public:
 // A single animation
 class SingleHitEffect : public SkillHitEffect {
 public:
-    SingleHitEffect(nl::node src);
+    SingleHitEffect(const nl::node &src);
 
     void apply(const AttackUser &user, Mob &target) const override;
 
@@ -66,7 +66,7 @@ private:
 // The animation changes depending on the weapon used
 class TwoHandedHitEffect : public SkillHitEffect {
 public:
-    TwoHandedHitEffect(nl::node src);
+    TwoHandedHitEffect(const nl::node &src);
 
     void apply(const AttackUser &user, Mob &target) const override;
 
@@ -77,7 +77,7 @@ private:
 // The animation changes with the character level
 class ByLevelHitEffect : public SkillHitEffect {
 public:
-    ByLevelHitEffect(nl::node src);
+    ByLevelHitEffect(const nl::node &src);
 
     void apply(const AttackUser &user, Mob &target) const override;
 
@@ -88,7 +88,7 @@ private:
 // The animation changes with the character level and weapon used
 class ByLevelTwoHandedHitEffect : public SkillHitEffect {
 public:
-    ByLevelTwoHandedHitEffect(nl::node src);
+    ByLevelTwoHandedHitEffect(const nl::node &src);
 
     void apply(const AttackUser &user, Mob &target) const override;
 
@@ -99,7 +99,7 @@ private:
 // The animation changes with the skill level
 class BySkillLevelHitEffect : public SkillHitEffect {
 public:
-    BySkillLevelHitEffect(nl::node src);
+    BySkillLevelHitEffect(const nl::node &src);
 
     void apply(const AttackUser &user, Mob &target) const override;
 

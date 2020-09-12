@@ -19,17 +19,18 @@
 #include "../MapleMap/Mob.h"
 
 namespace ms {
-MobSingleUseEffect::MobSingleUseEffect(nl::node src) : effect_(src["effect"]) {}
+MobSingleUseEffect::MobSingleUseEffect(const nl::node &src) :
+    effect_(src["effect"]) {}
 
 void MobSingleUseEffect::apply(Mob &mob) const {
     const std::function<void(Animation, int8_t, int8_t, bool)> func =
-        [&mob](Animation a, int8_t b, int8_t c, bool d) {
+        [&mob](const Animation &a, int8_t b, int8_t c, bool d) {
             mob.show_effect(a, b, c, d);
         };
     effect_.apply(func);
 }
 
-MobMultiUseEffect::MobMultiUseEffect(nl::node src, bool area_warning) {
+MobMultiUseEffect::MobMultiUseEffect(const nl::node &src, bool area_warning) {
     if (area_warning) {
         effects_.push_back(src["areaWarning"]);
     }
@@ -47,7 +48,7 @@ MobMultiUseEffect::MobMultiUseEffect(nl::node src, bool area_warning) {
 
 void MobMultiUseEffect::apply(Mob &mob) const {
     const std::function<void(Animation, int8_t, int8_t, bool)> func =
-        [&mob](Animation a, int8_t b, int8_t c, bool d) {
+        [&mob](const Animation &a, int8_t b, int8_t c, bool d) {
             mob.show_effect(a, b, c, d);
         };
 

@@ -95,7 +95,7 @@ public:
     void set_macs(std::string macs);
 
     // Set private member HWID
-    void set_hwid(std::string hwid, std::string volumeSerialNumber);
+    void set_hwid(const std::string &hwid, std::string volumeSerialNumber);
 
     // Set private member MAXWIDTH
     void set_max_width(int16_t max_width);

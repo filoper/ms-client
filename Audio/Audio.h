@@ -172,7 +172,7 @@ public:
 
     Sound(int32_t itemid);
 
-    Sound(nl::node src);
+    Sound(const nl::node &src);
 
     Sound();
     //~Sound();
@@ -188,11 +188,11 @@ public:
 private:
     size_t id;
 
-    static size_t add_sound(nl::node src);
+    static size_t add_sound(const nl::node &src);
 
-    static void add_sound(Name name, nl::node src);
+    static void add_sound(Name name, const nl::node &src);
 
-    static void add_sound(std::string itemid, nl::node src);
+    static void add_sound(const std::string &itemid, const nl::node &src);
 
     void create_alure_source();
 

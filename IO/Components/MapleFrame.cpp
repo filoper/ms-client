@@ -19,7 +19,7 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-MapleFrame::MapleFrame(nl::node src) {
+MapleFrame::MapleFrame(const nl::node &src) {
     center_ = src["c"];
     east_ = src["e"];
     north_east_ = src["ne"];

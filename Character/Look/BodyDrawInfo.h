@@ -26,7 +26,7 @@ namespace ms {
 // This simply redirects to a different stance and frame to use
 class BodyAction {
 public:
-    BodyAction(nl::node src) {
+    BodyAction(const nl::node &src) {
         stance_ = Stance::by_string(src["action"]);
         frame_ = src["frame"];
         move_ = src["move"];
@@ -86,11 +86,12 @@ public:
 
     uint16_t get_delay(Stance::Id stance, uint8_t frame) const;
 
-    uint16_t get_attackdelay(std::string action, size_t no) const;
+    uint16_t get_attackdelay(const std::string &action, size_t no) const;
 
-    uint8_t next_actionframe(std::string action, uint8_t frame) const;
+    uint8_t next_actionframe(const std::string &action, uint8_t frame) const;
 
-    const BodyAction *get_action(std::string action, uint8_t frame) const;
+    const BodyAction *get_action(const std::string &action,
+                                 uint8_t frame) const;
 
 private:
     std::unordered_map<uint8_t, Point<int16_t>>

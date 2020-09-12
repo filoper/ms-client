@@ -163,7 +163,7 @@ int8_t Char::get_layer() const {
     return is_climbing() ? 7 : phobj_.fhlayer;
 }
 
-void Char::show_attack_effect(Animation toshow, int8_t z) {
+void Char::show_attack_effect(const Animation &toshow, int8_t z) {
     float attackspeed = get_real_attackspeed();
 
     effects_.add(toshow, DrawArgument(facing_right_), z, attackspeed);
@@ -174,7 +174,7 @@ void Char::show_effect_id(CharEffect::Id toshow) {
 }
 
 void Char::add_recurring_effect(int16_t effect_id,
-                                Animation animation,
+                                const Animation &animation,
                                 int8_t z) {
     recurring_effects_.add(animation, DrawArgument(0, -60));
 }

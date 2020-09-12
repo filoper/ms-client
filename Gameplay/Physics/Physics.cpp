@@ -24,7 +24,7 @@ const double GROUNDSLIP = 3.0;
 const double FLYFRICTION = 0.05;
 const double SWIMFRICTION = 0.08;
 
-Physics::Physics(nl::node src) {
+Physics::Physics(const nl::node &src) {
     fh_tree_ = src;
 }
 

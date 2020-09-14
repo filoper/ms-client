@@ -126,7 +126,7 @@ public:
                          int8_t skill_level,
                          int16_t option);
 
-    void give_buff(MobBuff buff);
+    void give_buff(const MobBuff &buff);
 
     void use_skill(const MobSkill &skill);
 

@@ -108,7 +108,7 @@ float Frame::scalestep(uint16_t timestep) const {
            / delay_;
 }
 
-Animation::Animation(nl::node src) {
+Animation::Animation(const nl::node &src) {
     bool istexture = src.data_type() == nl::node::type::bitmap;
 
     if (istexture) {

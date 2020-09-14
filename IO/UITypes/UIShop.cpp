@@ -659,7 +659,7 @@ void UIShop::BuyState::show_item(int16_t slot) {
     UI::get().show_item(Tooltip::Parent::SHOP, itemid);
 }
 
-void UIShop::BuyState::add(BuyItem item) {
+void UIShop::BuyState::add(const BuyItem &item) {
     items.push_back(item);
 
     last_slot++;

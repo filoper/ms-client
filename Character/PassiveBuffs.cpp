@@ -39,7 +39,7 @@ bool f_is_applicable(CharStats &stats, nl::node level) {
 }
 
 template<Weapon::Type W1>
-bool f_is_applicable(CharStats &stats, nl::node) {
+bool f_is_applicable(CharStats &stats, const nl::node &) {
     return stats.get_weapontype() == W1;
 }
 

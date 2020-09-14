@@ -30,7 +30,7 @@ public:
     Configuration();
 
     // Save.
-    ~Configuration();
+    ~Configuration() override;
 
     // Load all settings
     // If something is missing, set the default value.
@@ -95,7 +95,7 @@ public:
     void set_macs(std::string macs);
 
     // Set private member HWID
-    void set_hwid(std::string hwid, std::string volumeSerialNumber);
+    void set_hwid(const std::string &hwid, std::string volumeSerialNumber);
 
     // Set private member MAXWIDTH
     void set_max_width(int16_t max_width);
@@ -241,7 +241,7 @@ private:
 
     const char *FILENAME = "Settings";
     const char *TITLE = "msclient";
-    const char *VERSION = "0.1.0";
+    const char *VERSION = "0.2.0";
     const char *JOINLINK = "https://www.nexon.com/account/en/create";
     const char *WEBSITE = "http://maplestory.nexon.net/";
     const char *FINDID = "https://www.nexon.com/account/en/login";

@@ -16,6 +16,7 @@
 #include "MapleComboBox.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../Audio/Audio.h"
 #include "AreaButton.h"
@@ -27,10 +28,10 @@ MapleComboBox::MapleComboBox(Type type,
                              Point<int16_t> ppos,
                              Point<int16_t> pos,
                              int64_t w) :
-    options_(o),
+    options_(std::move(o)),
+    rwidth_(w),
     selected_index_(default_option),
-    parent_pos_(ppos),
-    rwidth_(w) {
+    parent_pos_(ppos) {
     std::string combobox = "ComboBox";
 
     if (type != Type::DEFAULT) {

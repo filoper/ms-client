@@ -56,7 +56,7 @@ TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/lz4.lib)
 ```
 
 ```bash
-Download https://www.un4seen.com/download.php?bass24
+Download BASS from https://www.un4seen.com/download.php?bass24 and place inside `thirdparty`.
 ```
 
 ```bash
@@ -96,14 +96,7 @@ git clone https://github.com/nothings/stb.git
 
 #### Mac
 ```bash
-brew install openal-soft
-```
-
-```bash
-git clone https://github.com/kcat/alure
-cd alure
-cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
+Download BASS from https://www.un4seen.com and place inside `thirdparty`.
 ```
 
 ```bash
@@ -139,15 +132,7 @@ git clone https://github.com/nothings/stb.git
 
 #### Linux
 ```bash
-sudo apt-get update
-sudo apt-get install libopenal-dev
-```
-
-```bash
-git clone https://github.com/kcat/alure
-cd alure
-cmake -Bbuild -GNinja 
-cmake --build build --config Release
+Download BASS from https://www.un4seen.com and place inside `thirdparty`.
 ```
 
 ```bash

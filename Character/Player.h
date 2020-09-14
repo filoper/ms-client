@@ -53,7 +53,7 @@ public:
 
     // Sends a Keyaction to the player's state, to apply forces, change the
     // state and other behaviour.
-    void send_action(KeyAction::Id action, bool pressed);
+    void send_action(KeyAction::Id action, bool pressed) override;
 
     // Recalculates the total stats from base stats, inventories and skills.
     void recalc_stats(bool equipchanged);

@@ -26,7 +26,7 @@ namespace ms {
 // Represents a tile on a map.
 class Tile {
 public:
-    Tile(nl::node src, const std::string &tileset);
+    Tile(const nl::node &src, const std::string &tileset);
 
     // Draw the tile.
     void draw(Point<int16_t> viewpos) const;

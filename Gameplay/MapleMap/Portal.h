@@ -17,6 +17,7 @@
 
 #include <cstdint>
 #include <map>
+#include <utility>
 
 #include "../Graphics/Animation.h"
 #include "../Template/Rectangle.h"
@@ -53,18 +54,17 @@ public:
 
         WarpInfo(int32_t m, bool i, std::string tn, std::string n) :
             mapid(m),
+            toname(std::move(tn)),
+            name(std::move(n)),
             intramap(i),
-            toname(tn),
-            name(n) {
-            valid = mapid < 999999999;
-        }
+            valid(mapid < 999999999) {}
 
         WarpInfo() : WarpInfo(999999999, false, {}, {}) {}
     };
 
     Portal(const Animation *animation,
            Type type,
-           std::string name,
+           const std::string &name,
            bool intramap,
            Point<int16_t> position,
            int32_t tomap,

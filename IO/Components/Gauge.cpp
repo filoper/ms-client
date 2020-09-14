@@ -52,7 +52,7 @@ Gauge::Gauge(Type type,
     target_ = percentage_;
 }
 
-Gauge::Gauge() {}
+Gauge::Gauge() = default;
 
 void Gauge::draw(const DrawArgument &args) const {
     int16_t length = static_cast<int16_t>(percentage_ * maximum_);

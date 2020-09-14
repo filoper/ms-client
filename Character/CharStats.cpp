@@ -33,7 +33,7 @@ CharStats::CharStats(const StatsEntry &s) :
     init_totalstats();
 }
 
-CharStats::CharStats() {}
+CharStats::CharStats() = default;
 
 void CharStats::init_totalstats() {
     total_stats_.clear();

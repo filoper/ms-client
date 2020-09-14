@@ -22,7 +22,7 @@ namespace ms {
 // Base for objects on a map, e.g., Mobs, NPCs, Characters, etc.
 class MapObject {
 public:
-    virtual ~MapObject() {}
+    virtual ~MapObject() = default;
 
     // Draws the object at the given position and with the specified
     // interpolation.

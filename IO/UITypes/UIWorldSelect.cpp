@@ -437,7 +437,7 @@ void UIWorldSelect::add_recommended_world(RecommendedWorld world) {
     }
 }
 
-void UIWorldSelect::change_world(World selectedWorld) {
+void UIWorldSelect::change_world(const World &selectedWorld) {
     buttons_[Buttons::BT_WORLD0 + selectedWorld.wid]->set_state(
         Button::State::PRESSED);
 

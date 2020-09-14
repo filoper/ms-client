@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-SingleSkillSound::SingleSkillSound(std::string strid) {
+SingleSkillSound::SingleSkillSound(const std::string &strid) {
     nl::node soundsrc = nl::nx::sound["Skill.img"][strid];
 
     use_sound_ = soundsrc["Use"];

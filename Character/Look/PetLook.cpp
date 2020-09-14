@@ -16,6 +16,7 @@
 #include "PetLook.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 namespace ms {
 PetLook::PetLook(int32_t iid,
@@ -25,7 +26,7 @@ PetLook::PetLook(int32_t iid,
                  uint8_t st,
                  int32_t) {
     item_id_ = iid;
-    name_ = nm;
+    name_ = std::move(nm);
     unique_id_ = uqid;
 
     set_position(pos.x(), pos.y());

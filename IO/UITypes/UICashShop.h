@@ -31,10 +31,10 @@ public:
 
     UICashShop();
 
-    void draw(float inter) const;
+    void draw(float inter) const override;
     void update() override;
 
-    Button::State button_pressed(uint16_t buttonid);
+    Button::State button_pressed(uint16_t buttonid) override;
 
     Cursor::State send_cursor(bool clicked, Point<int16_t> cursorpos) override;
 

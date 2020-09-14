@@ -59,7 +59,7 @@ protected:
 private:
     void shufflekeys();
 
-    void show_text(std::string text);
+    void show_text(const std::string &text);
 
     void clear_tooltip();
 

@@ -24,7 +24,7 @@ class Charset {
 public:
     enum Alignment { LEFT, CENTER, RIGHT };
 
-    Charset(nl::node source, Alignment alignment);
+    Charset(const nl::node &source, Alignment alignment);
 
     Charset();
 

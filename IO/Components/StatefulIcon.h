@@ -24,7 +24,7 @@ public:
 
     class Type : public Icon::Type {
     public:
-        virtual ~Type() {}
+        ~Type() override = default;
 
         virtual void set_state(State state) = 0;
     };

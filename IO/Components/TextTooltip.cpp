@@ -65,7 +65,7 @@ void TextTooltip::draw(Point<int16_t> pos) const {
     }
 }
 
-bool TextTooltip::set_text(std::string t) {
+bool TextTooltip::set_text(const std::string &t) {
     if (text_ == t) {
         return false;
     }

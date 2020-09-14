@@ -25,7 +25,7 @@ ScrollingNotice::ScrollingNotice() :
     xpos_.set(0.0);
 }
 
-void ScrollingNotice::set_notice(std::string n) {
+void ScrollingNotice::set_notice(const std::string &n) {
     notice_.change_text(n);
     xpos_.set(static_cast<double>(width_));
     active_ = !n.empty();

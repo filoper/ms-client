@@ -18,13 +18,14 @@
 #include "../../Util/Misc.h"
 
 namespace ms {
-SingleUseEffect::SingleUseEffect(nl::node src) : effect_(src["effect"]) {}
+SingleUseEffect::SingleUseEffect(const nl::node &src) :
+    effect_(src["effect"]) {}
 
 void SingleUseEffect::apply(Char &target) const {
     effect_.apply(target);
 }
 
-TwoHandedUseEffect::TwoHandedUseEffect(nl::node src) :
+TwoHandedUseEffect::TwoHandedUseEffect(const nl::node &src) :
     effects_(src["effect"]["0"], src["effect"]["1"]) {}
 
 void TwoHandedUseEffect::apply(Char &target) const {
@@ -32,7 +33,7 @@ void TwoHandedUseEffect::apply(Char &target) const {
     effects_[twohanded].apply(target);
 }
 
-MultiUseEffect::MultiUseEffect(nl::node src) {
+MultiUseEffect::MultiUseEffect(const nl::node &src) {
     int8_t no = -1;
     nl::node sub = src["effect"];
 
@@ -50,7 +51,7 @@ void MultiUseEffect::apply(Char &target) const {
     }
 }
 
-ByLevelUseEffect::ByLevelUseEffect(nl::node src) {
+ByLevelUseEffect::ByLevelUseEffect(const nl::node &src) {
     for (const auto &sub : src["CharLevel"]) {
         auto level = string_conversion::or_zero<uint16_t>(sub.name());
         effects_.emplace(level, sub["effect"]);

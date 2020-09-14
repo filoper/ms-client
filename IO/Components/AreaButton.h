@@ -23,17 +23,17 @@ class AreaButton : public Button {
 public:
     AreaButton(Point<int16_t> position, Point<int16_t> dimensions);
 
-    void draw(Point<int16_t>) const {}
+    void draw(Point<int16_t>) const override {}
 
-    void update() {}
+    void update() override {}
 
-    Rectangle<int16_t> bounds(Point<int16_t> parentpos) const;
+    Rectangle<int16_t> bounds(Point<int16_t> parentpos) const override;
 
-    int16_t width() const;
+    int16_t width() const override;
 
-    Point<int16_t> origin() const;
+    Point<int16_t> origin() const override;
 
-    Cursor::State send_cursor(bool, Point<int16_t>) {
+    Cursor::State send_cursor(bool, Point<int16_t>) override {
         return Cursor::State::IDLE;
     }
 

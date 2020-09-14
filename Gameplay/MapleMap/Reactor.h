@@ -29,7 +29,7 @@ public:
 
     void draw(double viewx, double viewy, float alpha) const override;
 
-    int8_t update(const Physics &physics);
+    int8_t update(const Physics &physics) override;
 
     void set_state(int8_t state);
 

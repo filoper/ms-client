@@ -66,7 +66,7 @@ DamageNumber::DamageNumber(Type t, int32_t damage, int16_t starty, int16_t x) {
     opacity_.set(1.5f);
 }
 
-DamageNumber::DamageNumber() {}
+DamageNumber::DamageNumber() = default;
 
 void DamageNumber::draw(double viewx, double viewy, float alpha) const {
     Point<int16_t> absolute = move_obj_.get_absolute(viewx, viewy, alpha);

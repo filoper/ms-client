@@ -15,7 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Color.h"
 
-#include "../Util/Lerp.h"
+#include <cmath>
 
 namespace ms {
 const float *Color::data() const {
@@ -33,11 +33,12 @@ Color::underlying_t::const_iterator Color::end() const {
 Color Color::blend(const Color &other, float alpha) const {
     underlying_t blended;
 
-    std::transform(begin(),
-                   end(),
-                   other.begin(),
-                   blended.begin(),
-                   [alpha](float f, float s) { return lerp(f, s, alpha); });
+    std::transform(
+        begin(),
+        end(),
+        other.begin(),
+        blended.begin(),
+        [alpha](float f, float s) { return std::lerp(f, s, alpha); });
 
     return blended;
 }

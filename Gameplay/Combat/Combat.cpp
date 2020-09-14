@@ -31,14 +31,14 @@ auto fn_use_skill = []<typename... T>(T && ... args) {
     UseSkillPacket(std::forward<T>(args)...).dispatch();
 };
 
-Combat::Combat(Player &in_player,
-               MapChars &in_chars,
-               MapMobs &in_mobs,
-               MapReactors &in_reactors) :
-    player_(in_player),
-    chars_(in_chars),
-    mobs_(in_mobs),
-    reactors_(in_reactors),
+Combat::Combat(Player &player,
+               MapChars &chars,
+               MapMobs &mobs,
+               MapReactors &reactors) :
+    player_(player),
+    chars_(chars),
+    mobs_(mobs),
+    reactors_(reactors),
     attack_results_([&](const AttackResult &attack) { apply_attack(attack); }),
     bullet_effects_(
         [&](const BulletEffect &effect) { apply_bullet_effect(effect); }),
@@ -46,12 +46,12 @@ Combat::Combat(Player &in_player,
         [&](const DamageEffect &effect) { apply_damage_effect(effect); }) {}
 
 void Combat::draw(double viewx, double viewy, float alpha) const {
-    for (const auto &be : bullets_) {
-        be.bullet.draw(viewx, viewy, alpha);
+    for (const auto &bullet_eff : bullets_) {
+        bullet_eff.bullet.draw(viewx, viewy, alpha);
     }
 
-    for (const auto &dn : damage_numbers_) {
-        dn.draw(viewx, viewy, alpha);
+    for (const auto &dmg_eff : damage_numbers_) {
+        dmg_eff.draw(viewx, viewy, alpha);
     }
 }
 
@@ -74,7 +74,6 @@ void Combat::update() {
             return apply;
         }
         return mb.bullet.update(mb.target);
-       
     });
 
     damage_numbers_.remove_if([](DamageNumber &dn) { return dn.update(); });
@@ -89,9 +88,10 @@ void Combat::use_move(int32_t move_id) {
     SpecialMove::ForbidReason reason = player_.can_use(move);
     Weapon::Type weapontype = player_.get_stats().get_weapontype();
 
-    switch (reason) {
-        case SpecialMove::ForbidReason::FBR_NONE: apply_move(move); break;
-        default: ForbidSkillMessage(reason, weapontype).drop(); break;
+    if (reason == SpecialMove::ForbidReason::FBR_NONE) {
+        apply_move(move);
+    } else {
+        ForbidSkillMessage(reason, weapontype).drop();
     }
 }
 
@@ -108,7 +108,7 @@ void Combat::apply_move(const SpecialMove &move) {
 
         Point<int16_t> origin = attack.origin;
         Rectangle<int16_t> range = attack.range;
-        int16_t hrange = static_cast<int16_t>(range.left() * attack.hrange);
+        auto hrange = static_cast<int16_t>(range.left() * attack.hrange);
 
         if (attack.toleft) {
             range = { origin.x() + hrange,
@@ -286,29 +286,26 @@ void Combat::apply_attack(const AttackResult &attack) {
 void Combat::extract_effects(const Char &user,
                              const SpecialMove &move,
                              const AttackResult &result) {
-    AttackUser attackuser = { user.get_skilllevel(move.get_id()),
-                              user.get_level(),
-                              user.is_twohanded(),
-                              !result.toleft };
+    AttackUser attack_user = { user.get_skilllevel(move.get_id()),
+                               user.get_level(),
+                               user.is_twohanded(),
+                               !result.toleft };
 
     if (result.bullet) {
         Bullet bullet { move.get_bullet(user, result.bullet),
                         user.get_position(),
                         result.toleft };
 
-        for (const auto &line : result.damage_lines) {
-            int32_t oid = line.first;
-
+        for (const auto &[oid, vec] : result.damage_lines) {
             if (mobs_.contains(oid)) {
-                std::vector<DamageNumber> numbers =
-                    place_numbers(oid, line.second);
+                std::vector<DamageNumber> numbers = place_numbers(oid, vec);
                 Point<int16_t> head = mobs_.get_mob_head_position(oid);
 
                 size_t i = 0;
 
                 for (auto &number : numbers) {
                     DamageEffect effect {
-                        attackuser,    number, line.second[i].first,
+                        attack_user,   number, vec[i].first,
                         result.toleft, oid,    move.get_id()
                     };
 
@@ -327,7 +324,7 @@ void Combat::extract_effects(const Char &user,
                 user.get_position() + Point<int16_t>(xshift, -26);
 
             for (uint8_t i = 0; i < result.hitcount; i++) {
-                DamageEffect effect { attackuser, {}, 0, false, 0, 0 };
+                DamageEffect effect { attack_user, {}, 0, false, 0, 0 };
                 bullet_effects_.emplace(user.get_attackdelay(i),
                                         std::move(effect),
                                         bullet,
@@ -335,20 +332,17 @@ void Combat::extract_effects(const Char &user,
             }
         }
     } else {
-        for (const auto &line : result.damage_lines) {
-            int32_t oid = line.first;
-
+        for (const auto &[oid, vec] : result.damage_lines) {
             if (mobs_.contains(oid)) {
-                std::vector<DamageNumber> numbers =
-                    place_numbers(oid, line.second);
+                std::vector<DamageNumber> numbers = place_numbers(oid, vec);
 
                 size_t i = 0;
 
                 for (auto &number : numbers) {
                     damage_effects_.emplace(user.get_attackdelay(i),
-                                            attackuser,
+                                            attack_user,
                                             number,
-                                            line.second[i].first,
+                                            vec[i].first,
                                             result.toleft,
                                             oid,
                                             move.get_id());
@@ -362,18 +356,16 @@ void Combat::extract_effects(const Char &user,
 
 std::vector<DamageNumber> Combat::place_numbers(
     int32_t oid,
-    const std::vector<std::pair<int32_t, bool>> &damagelines) {
+    const std::vector<std::pair<int32_t, bool>> &damage_lines) {
     std::vector<DamageNumber> numbers;
     int16_t head = mobs_.get_mob_head_position(oid).y();
 
-    for (const auto &line : damagelines) {
-        int32_t amount = line.first;
-        bool critical = line.second;
-        DamageNumber::Type type = critical ? DamageNumber::Type::CRITICAL
-                                           : DamageNumber::Type::NORMAL;
+    for (const auto &[amount, is_critical] : damage_lines) {
+        DamageNumber::Type type = is_critical ? DamageNumber::Type::CRITICAL
+                                              : DamageNumber::Type::NORMAL;
         numbers.emplace_back(type, amount, head);
 
-        head -= DamageNumber::rowheight(critical);
+        head -= DamageNumber::rowheight(is_critical);
     }
 
     return numbers;

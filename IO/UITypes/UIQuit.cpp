@@ -26,7 +26,7 @@
 #include "Timer.h"
 
 namespace ms {
-UIQuit::UIQuit(const CharStats &st) : screen_adj_(212, 114), stats_(st) {
+UIQuit::UIQuit(const CharStats &st) : stats_(st), screen_adj_(212, 114) {
     nl::node askReward = nl::nx::ui["UIWindow6.img"]["askReward"];
     nl::node userLog = askReward["userLog"];
     nl::node exp = userLog["exp"];

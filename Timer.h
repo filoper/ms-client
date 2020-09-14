@@ -26,7 +26,7 @@ class Timer : public Singleton<Timer> {
 public:
     Timer() { start(); }
 
-    ~Timer() = default;
+    ~Timer() override = default;
 
     // Start the timer by setting the last measurement to now.
     void start() { point = clock::now(); }
@@ -54,7 +54,7 @@ public:
 
     ContinuousTimer() { start(); }
 
-    ~ContinuousTimer() = default;
+    ~ContinuousTimer() override = default;
 
     // Return now from the clock to be used to calculate elapsed time later.
     point start() { return clock::now(); }

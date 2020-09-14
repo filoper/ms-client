@@ -664,7 +664,7 @@ const CharEntry &UICharSelect::get_character(int32_t id) {
     return null_character;
 }
 
-bool UICharSelect::update_character(int32_t id, StatsEntry stats) {
+bool UICharSelect::update_character(int32_t id, const StatsEntry &stats) {
     for (auto &character : characters_) {
         if (character.id == id) {
             character.stats = stats;
@@ -989,7 +989,7 @@ void UICharSelect::request_pic() {
         Point<int16_t>(24, 0));
 }
 
-void UICharSelect::check_pic(const std::string entered_pic) const {
+void UICharSelect::check_pic(const std::string &entered_pic) const {
     const char *pStr = entered_pic.c_str();
 
     if (pStr == nullptr) {

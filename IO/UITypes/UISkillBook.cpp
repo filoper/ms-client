@@ -107,8 +107,8 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     UIDragElement<PosSKILL>(),
     stats_(in_stats),
     skillbook_(in_skillbook),
-    grabbing_(false),
     tab_(0),
+    grabbing_(false),
     macro_enabled_(false),
     sp_enabled_(false) {
     nl::node Skill = nl::nx::ui["UIWindow2.img"]["Skill"];

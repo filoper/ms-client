@@ -49,8 +49,8 @@ auto fn_scroll_equip = []<typename... T>(T && ... args) {
 UIItemInventory::UIItemInventory(const Inventory &invent) :
     UIDragElement<PosINV>(),
     inventory_(invent),
-    ignore_tooltip_(false),
     tab_(InventoryType::Id::EQUIP),
+    ignore_tooltip_(false),
     sort_enabled_(false) {
     nl::node Item = nl::nx::ui["UIWindow2.img"]["Item"];
 

@@ -125,10 +125,10 @@ private:
 class CharSpawn {
 public:
     CharSpawn(int32_t cid,
-              const LookEntry &look,
+              LookEntry look,
               uint8_t level,
               int16_t job,
-              const std::string &name,
+              std::string name,
               int8_t stance,
               Point<int16_t> position);
 

@@ -50,7 +50,7 @@ private:
 
     void set_search(bool enable);
 
-    void update_world(std::string parent_map);
+    void update_world(const std::string &parent_map);
 
     enum Buttons {
         BT_CLOSE,

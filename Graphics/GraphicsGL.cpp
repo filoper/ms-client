@@ -110,28 +110,28 @@ Error GraphicsGL::init() {
 
     // Vertex Shader
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
 
     // Check for shader compile errors
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
     if (success != GL_TRUE) {
-        glGetShaderInfoLog(vertexShader, bufSize, NULL, infoLog);
+        glGetShaderInfoLog(vertexShader, bufSize, nullptr, infoLog);
 
         return Error(Error::Code::VERTEX_SHADER, infoLog);
     }
 
     // Fragment Shader
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
     glCompileShader(fragmentShader);
 
     // Check for shader compile errors
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 
     if (success != GL_TRUE) {
-        glGetShaderInfoLog(fragmentShader, bufSize, NULL, infoLog);
+        glGetShaderInfoLog(fragmentShader, bufSize, nullptr, infoLog);
 
         return Error(Error::Code::FRAGMENT_SHADER, infoLog);
     }
@@ -146,7 +146,7 @@ Error GraphicsGL::init() {
     glGetProgramiv(shader_program_, GL_LINK_STATUS, &success);
 
     if (success != GL_TRUE) {
-        glGetProgramInfoLog(shader_program_, bufSize, NULL, infoLog);
+        glGetProgramInfoLog(shader_program_, bufSize, nullptr, infoLog);
 
         return Error(Error::Code::SHADER_PROGRAM_LINK, infoLog);
     }
@@ -158,7 +158,7 @@ Error GraphicsGL::init() {
     glGetProgramiv(shader_program_, GL_VALIDATE_STATUS, &success);
 
     if (success != GL_TRUE) {
-        glGetProgramInfoLog(shader_program_, bufSize, NULL, infoLog);
+        glGetProgramInfoLog(shader_program_, bufSize, nullptr, infoLog);
 
         return Error(Error::Code::SHADER_PROGRAM_VALID, infoLog);
     }

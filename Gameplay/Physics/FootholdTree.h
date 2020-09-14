@@ -25,7 +25,7 @@ namespace ms {
 // Used for collision-detection
 class FootholdTree {
 public:
-    FootholdTree(nl::node source);
+    FootholdTree(const nl::node &source);
 
     FootholdTree();
 

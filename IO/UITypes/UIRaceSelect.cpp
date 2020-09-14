@@ -334,7 +334,7 @@ UIElement::Type UIRaceSelect::get_type() const {
     return TYPE;
 }
 
-bool UIRaceSelect::check_name(std::string name) const {
+bool UIRaceSelect::check_name(const std::string &name) const {
     nl::node ForbiddenName = nl::nx::etc["ForbiddenName.img"];
 
     for (const auto &forbiddenName : ForbiddenName) {

@@ -24,7 +24,7 @@ namespace ms {
 // Interface for active buffs which are applied to character stats
 class ActiveBuff {
 public:
-    virtual ~ActiveBuff() {}
+    virtual ~ActiveBuff() = default;
 
     virtual void apply_to(CharStats &stats, int16_t value) const = 0;
 };

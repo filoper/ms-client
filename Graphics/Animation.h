@@ -61,7 +61,7 @@ private:
 // Class which consists of multiple textures to make an Animation.
 class Animation {
 public:
-    Animation(nl::node source);
+    Animation(const nl::node &source);
 
     Animation();
 

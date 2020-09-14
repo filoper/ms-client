@@ -19,7 +19,7 @@ namespace ms {
 // Interface for skill sound.
 class SkillSound {
 public:
-    virtual ~SkillSound() {}
+    virtual ~SkillSound() = default;
 
     virtual void play_use() = 0;
 
@@ -37,7 +37,7 @@ public:
 // Plays one use and one hit sound.
 class SingleSkillSound : public SkillSound {
 public:
-    SingleSkillSound(std::string strid);
+    SingleSkillSound(const std::string &strid);
 
     void play_use() override;
 

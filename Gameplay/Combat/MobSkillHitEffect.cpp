@@ -19,18 +19,19 @@
 #include "../MapleMap/Mob.h"
 
 namespace ms {
-MobSingleHitEffect::MobSingleHitEffect(nl::node src) : effect_(src["mob"]) {}
+MobSingleHitEffect::MobSingleHitEffect(const nl::node &src) :
+    effect_(src["mob"]) {}
 
 void MobSingleHitEffect::apply(Mob &mob) const {
     const std::function<void(Animation, int8_t, int8_t, bool)> func =
-        [&mob](Animation a, int8_t b, int8_t c, bool d) {
+        [&mob](const Animation &a, int8_t b, int8_t c, bool d) {
             mob.show_effect(a, b, c, d);
         };
 
     effect_.apply(func);
 }
 
-MobBySkillLevelHitEffect::MobBySkillLevelHitEffect(nl::node src) {
+MobBySkillLevelHitEffect::MobBySkillLevelHitEffect(const nl::node &src) {
     // for (auto sub : src["level"]) {
     //     auto level = string_conversion::or_zero<int32_t>(sub.name());
     //     effects_.emplace(level, sub["hit"]["0"]);

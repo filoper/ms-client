@@ -36,6 +36,8 @@ public:
     void update(float target);
 
 private:
+    Type type_;
+
     Texture bar_front_;
     Texture bar_mid_;
     Texture bar_end_;
@@ -44,7 +46,5 @@ private:
     float percentage_;
     float target_;
     float step_;
-
-    Type type_;
 };
 }  // namespace ms

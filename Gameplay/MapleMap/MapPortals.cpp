@@ -21,7 +21,7 @@
 #include "../../Util/Misc.h"
 
 namespace ms {
-MapPortals::MapPortals(nl::node src, int32_t mapid) {
+MapPortals::MapPortals(const nl::node &src, int32_t mapid) {
     for (const auto &sub : src) {
         int8_t portal_id =
             string_conversion::or_default<int8_t>(sub.name(), -1);

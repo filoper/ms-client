@@ -28,7 +28,7 @@ Cryptography::Cryptography(const int8_t *handshake) {
 #endif
 }
 
-Cryptography::Cryptography() {}
+Cryptography::Cryptography() = default;
 
 void Cryptography::encrypt(int8_t *bytes, size_t length) {
 #ifdef USE_CRYPTO

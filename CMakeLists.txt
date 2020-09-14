@@ -262,7 +262,6 @@ add_executable(msclient
     Configuration.cpp
     MSClient.cpp
     Game.cpp
-    Audio/membuf.cpp 
 )
 
 IF (WIN32)

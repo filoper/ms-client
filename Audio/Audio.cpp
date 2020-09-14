@@ -30,13 +30,13 @@ Sound::Sound(Name name) {
 Sound::Sound(int32_t itemid) {
     auto fitemid = format_id(itemid);
 
-    if (itemids.contains(fitemid)) {
+    if (itemids.find(fitemid) != itemids.end()) {
         id = itemids.at(fitemid);
     } else {
         auto pid = (10000 * (itemid / 10000));
         auto fpid = format_id(pid);
 
-        if (itemids.contains(fpid)) {
+        if (itemids.find(fpid) != itemids.end()) {
             id = itemids.at(fpid);
         } else {
             id = itemids.at("02000000");

@@ -114,7 +114,7 @@ UIAranCreation::UIAranCreation() :
     namechar_.set_state(Textfield::DISABLED);
 
     namechar_.set_enter_callback(
-        [&](std::string) { button_pressed(Buttons::BT_CHARC_OK); });
+        [&](const std::string &) { button_pressed(Buttons::BT_CHARC_OK); });
 
     namechar_.set_key_callback(KeyAction::Id::ESCAPE, [&]() {
         button_pressed(Buttons::BT_CHARC_CANCEL);

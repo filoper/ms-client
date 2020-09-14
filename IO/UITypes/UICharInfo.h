@@ -44,8 +44,8 @@ public:
                       int16_t job_id,
                       uint8_t level,
                       int16_t fame,
-                      std::string guild,
-                      std::string alliance);
+                      const std::string &guild,
+                      const std::string &alliance);
 
 private:
     void show_bottom_window(uint16_t buttonid);

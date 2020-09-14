@@ -338,7 +338,7 @@ void Mob::update_movement(int16_t type,
                 Movement(phobj_, value_of(stance_, flip_)));
 }
 
-void Mob::give_buff(MobBuff buff) {
+void Mob::give_buff(const MobBuff &buff) {
     buffs_.push_back(buff);
 }
 

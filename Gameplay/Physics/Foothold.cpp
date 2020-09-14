@@ -16,15 +16,15 @@
 #include "Foothold.h"
 
 namespace ms {
-Foothold::Foothold(nl::node src, uint16_t id, uint8_t ly) :
+Foothold::Foothold(const nl::node &src, uint16_t id, uint8_t ly) :
+    m_id_(id),
     m_prev_(src["prev"]),
     m_next_(src["next"]),
+    m_layer_(ly),
     m_horizontal_(src["x1"], src["x2"]),
-    m_vertical_(src["y1"], src["y2"]),
-    m_id_(id),
-    m_layer_(ly) {}
+    m_vertical_(src["y1"], src["y2"]) {}
 
-Foothold::Foothold() : m_id_(0), m_layer_(0), m_next_(0), m_prev_(0) {}
+Foothold::Foothold() : m_id_(0), m_prev_(0), m_next_(0), m_layer_(0) {}
 
 uint16_t Foothold::id() const {
     return m_id_;

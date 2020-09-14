@@ -33,7 +33,7 @@ public:
 protected:
     class Effect {
     public:
-        Effect(nl::node src) {
+        Effect(const nl::node &src) {
             animation_ = src;
             z_ = src["z"];
         }
@@ -53,7 +53,7 @@ protected:
 // An effect which displays an animation over the mob's position
 class MobSingleUseEffect : public MobSkillUseEffect {
 public:
-    MobSingleUseEffect(nl::node src);
+    MobSingleUseEffect(const nl::node &src);
 
     void apply(Mob &mob) const override;
 
@@ -64,7 +64,7 @@ private:
 // An effect which displays multiple animations over the mob's position
 class MobMultiUseEffect : public MobSkillUseEffect {
 public:
-    MobMultiUseEffect(nl::node src, bool area_warning = false);
+    MobMultiUseEffect(const nl::node &src, bool area_warning = false);
 
     void apply(Mob &mob) const override;
 

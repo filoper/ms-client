@@ -939,7 +939,7 @@ void UIKeyConfig::draw(float inter) const {
         int32_t maplekey = iter.first;
         Keyboard::Mapping mapping = iter.second;
 
-        Icon *ficon = NULL;
+        Icon *ficon = nullptr;
 
         if (mapping.type == KeyType::Id::ITEM) {
             int32_t item_id = mapping.action;

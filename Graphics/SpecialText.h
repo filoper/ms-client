@@ -36,7 +36,7 @@ struct OutlinedText {
         b = Text(font, alignment, outerColor);
     }
 
-    OutlinedText() {}
+    OutlinedText() = default;
 
     void draw(Point<int16_t> parentpos) const {
         l.draw(parentpos + Point<int16_t>(-1, 0));
@@ -71,7 +71,7 @@ struct ShadowText {
         shadow = Text(font, alignment, shadowColor);
     }
 
-    ShadowText() {}
+    ShadowText() = default;
 
     void draw(Point<int16_t> parentpos) const {
         shadow.draw(parentpos + Point<int16_t>(1, 1));

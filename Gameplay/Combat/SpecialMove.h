@@ -33,7 +33,7 @@ public:
         FBR_OTHER
     };
 
-    virtual ~SpecialMove() {}
+    virtual ~SpecialMove() = default;
 
     virtual void apply_useeffects(Char &user) const = 0;
 

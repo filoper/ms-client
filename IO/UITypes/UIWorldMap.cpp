@@ -270,7 +270,7 @@ void UIWorldMap::set_search(bool enable) {
     }
 }
 
-void UIWorldMap::update_world(std::string map) {
+void UIWorldMap::update_world(const std::string &map) {
     nl::node WorldMap = nl::nx::map["WorldMap"][map + ".img"];
 
     if (!WorldMap) {

@@ -22,11 +22,11 @@ namespace ms {
 // A standard maplestory-button with 4 states and a texture for each state.
 class MapleButton : public Button {
 public:
-    MapleButton(nl::node src, Point<int16_t> position);
+    MapleButton(const nl::node &src, Point<int16_t> position);
 
-    MapleButton(nl::node src, int16_t x, int16_t y);
+    MapleButton(const nl::node &src, int16_t x, int16_t y);
 
-    MapleButton(nl::node src);
+    MapleButton(const nl::node &src);
 
     void draw(Point<int16_t> position) const override;
 

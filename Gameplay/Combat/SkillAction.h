@@ -21,7 +21,7 @@
 namespace ms {
 class SkillAction {
 public:
-    virtual ~SkillAction() {}
+    virtual ~SkillAction() = default;
 
     virtual void apply(Char &target, Attack::Type atype) const = 0;
 };
@@ -38,7 +38,7 @@ public:
 
 class SingleAction : public SkillAction {
 public:
-    SingleAction(nl::node src);
+    SingleAction(const nl::node &src);
 
     void apply(Char &target, Attack::Type atype) const override;
 
@@ -48,7 +48,7 @@ private:
 
 class TwoHandedAction : public SkillAction {
 public:
-    TwoHandedAction(nl::node src);
+    TwoHandedAction(const nl::node &src);
 
     void apply(Char &target, Attack::Type atype) const override;
 
@@ -58,7 +58,7 @@ private:
 
 class ByLevelAction : public SkillAction {
 public:
-    ByLevelAction(nl::node src, int32_t skillid);
+    ByLevelAction(const nl::node &src, int32_t skillid);
 
     void apply(Char &target, Attack::Type atype) const override;
 

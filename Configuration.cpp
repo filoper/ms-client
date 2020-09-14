@@ -16,6 +16,7 @@
 #include "Configuration.h"
 
 #include <fstream>
+#include <utility>
 
 namespace ms {
 Configuration::Configuration() {
@@ -115,7 +116,7 @@ bool Configuration::BoolEntry::load() const {
 }
 
 void Configuration::StringEntry::save(std::string str) {
-    value = str;
+    value = std::move(str);
 }
 
 std::string Configuration::StringEntry::load() const {
@@ -209,7 +210,8 @@ void Configuration::set_macs(std::string macs) {
     MACS = std::move(macs);
 }
 
-void Configuration::set_hwid(std::string hwid, std::string volumeSerialNumber) {
+void Configuration::set_hwid(const std::string &hwid,
+                             std::string volumeSerialNumber) {
     VolumeSerialNumber = std::move(volumeSerialNumber);
 
     std::string newHWID;

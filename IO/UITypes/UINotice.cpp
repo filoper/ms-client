@@ -16,13 +16,16 @@
 #include "UINotice.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../Audio/Audio.h"
 #include "../Components/MapleButton.h"
 #include "../UI.h"
 
 namespace ms {
-UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
+UINotice::UINotice(const std::string &message,
+                   NoticeType t,
+                   Text::Alignment a) :
     UIDragElement<PosNOTICE>(),
     type_(t),
     alignment_(a) {
@@ -74,7 +77,7 @@ UINotice::UINotice(std::string message, NoticeType t, Text::Alignment a) :
 }
 
 UINotice::UINotice(std::string message, NoticeType t) :
-    UINotice(message, t, Text::Alignment::CENTER) {}
+    UINotice(std::move(message), t, Text::Alignment::CENTER) {}
 
 void UINotice::draw(bool textfield) const {
     Point<int16_t> start = position_;
@@ -129,8 +132,8 @@ int16_t UINotice::box2offset(bool textfield) const {
 UIYesNo::UIYesNo(std::string message,
                  std::function<void(bool yes)> yh,
                  Text::Alignment alignment) :
-    UINotice(message, NoticeType::YESNO, alignment) {
-    yesno_handler_ = yh;
+    UINotice(std::move(message), NoticeType::YESNO, alignment) {
+    yesno_handler_ = std::move(yh);
 
     int16_t belowtext = box2offset(false);
 
@@ -146,7 +149,9 @@ UIYesNo::UIYesNo(std::string message,
 
 UIYesNo::UIYesNo(std::string message,
                  std::function<void(bool yes)> yesnohandler) :
-    UIYesNo(message, yesnohandler, Text::Alignment::CENTER) {}
+    UIYesNo(std::move(message),
+            std::move(yesnohandler),
+            Text::Alignment::CENTER) {}
 
 void UIYesNo::draw(float alpha) const {
     UINotice::draw(false);
@@ -182,8 +187,8 @@ UIEnterNumber::UIEnterNumber(std::string message,
                              std::function<void(int32_t)> nh,
                              int32_t m,
                              int32_t quantity) :
-    UINotice(message, NoticeType::ENTERNUMBER) {
-    numhandler = nh;
+    UINotice(std::move(message), NoticeType::ENTERNUMBER) {
+    numhandler = std::move(nh);
     max = m;
 
     int16_t belowtext = box2offset(true) - 21;
@@ -204,7 +209,7 @@ UIEnterNumber::UIEnterNumber(std::string message,
     numfield.change_text(std::to_string(quantity));
 
     numfield.set_enter_callback(
-        [&](std::string numstr) { handlestring(numstr); });
+        [&](std::string numstr) { handlestring(std::move(numstr)); });
 
     numfield.set_key_callback(KeyAction::Id::ESCAPE, [&]() { deactivate(); });
 
@@ -259,7 +264,7 @@ Button::State UIEnterNumber::button_pressed(uint16_t buttonid) {
     return Button::State::NORMAL;
 }
 
-void UIEnterNumber::handlestring(std::string numstr) {
+void UIEnterNumber::handlestring(const std::string &numstr) {
     int num = -1;
     bool has_only_digits =
         (numstr.find_first_not_of("0123456789") == std::string::npos);
@@ -298,8 +303,8 @@ void UIEnterNumber::handlestring(std::string numstr) {
 }
 
 UIOk::UIOk(std::string message, std::function<void(bool ok)> oh) :
-    UINotice(message, NoticeType::OK) {
-    okhandler_ = oh;
+    UINotice(std::move(message), NoticeType::OK) {
+    okhandler_ = std::move(oh);
 
     nl::node src = nl::nx::ui["Basic.img"];
 

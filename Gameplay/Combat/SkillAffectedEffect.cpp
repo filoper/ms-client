@@ -18,7 +18,7 @@
 #include "../../Util/Misc.h"
 
 namespace ms {
-SingleAffectedEffect::SingleAffectedEffect(nl::node src) :
+SingleAffectedEffect::SingleAffectedEffect(const nl::node &src) :
     effect_(src["affected"]) {}
 
 void SingleAffectedEffect::apply(Char &target) const {

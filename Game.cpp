@@ -48,7 +48,6 @@ Error Game::init() {
         return error;
     }
     std::cout << "Window init success." << std::endl;
-    // TODO: (rich) fix
     if (Error error = Music::init()) {
         return error;
     }

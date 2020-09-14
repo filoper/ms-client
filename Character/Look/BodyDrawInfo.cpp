@@ -192,7 +192,8 @@ uint16_t BodyDrawInfo::get_delay(Stance::Id stance, uint8_t frame) const {
     return iter->second;
 }
 
-uint16_t BodyDrawInfo::get_attackdelay(std::string action, size_t no) const {
+uint16_t BodyDrawInfo::get_attackdelay(const std::string &action,
+                                       size_t no) const {
     auto action_iter = attack_delays.find(action);
 
     if (action_iter != attack_delays.end()) {
@@ -204,7 +205,7 @@ uint16_t BodyDrawInfo::get_attackdelay(std::string action, size_t no) const {
     return 0;
 }
 
-uint8_t BodyDrawInfo::next_actionframe(std::string action,
+uint8_t BodyDrawInfo::next_actionframe(const std::string &action,
                                        uint8_t frame) const {
     auto action_iter = body_actions.find(action);
 
@@ -217,7 +218,7 @@ uint8_t BodyDrawInfo::next_actionframe(std::string action,
     return 0;
 }
 
-const BodyAction *BodyDrawInfo::get_action(std::string action,
+const BodyAction *BodyDrawInfo::get_action(const std::string &action,
                                            uint8_t frame) const {
     auto action_iter = body_actions.find(action);
 

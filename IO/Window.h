@@ -44,7 +44,7 @@ class Window : public Singleton<Window> {
 public:
     Window();
 
-    ~Window();
+    ~Window() override;
 
     Error init();
 

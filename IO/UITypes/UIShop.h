@@ -200,7 +200,7 @@ private:
 
         void show_item(int16_t slot);
 
-        void add(BuyItem item);
+        void add(const BuyItem &item);
 
         void buy() const;
 

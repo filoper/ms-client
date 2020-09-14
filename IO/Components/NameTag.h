@@ -22,7 +22,7 @@
 namespace ms {
 class NameTag {
 public:
-    NameTag(nl::node src, Text::Font font, std::string name);
+    NameTag(const nl::node &src, Text::Font font, const std::string &name);
 
     void draw(Point<int16_t> position) const;
 

@@ -26,7 +26,7 @@ public:
 
     void draw(Point<int16_t> position) const override;
 
-    bool set_text(std::string text);
+    bool set_text(const std::string &text);
 
 private:
     MapleFrame frame_;

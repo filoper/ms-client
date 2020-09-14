@@ -23,7 +23,7 @@ Animation RegularBullet::get(const Char &, int32_t bulletid) const {
     return BulletData::get(bulletid).get_animation();
 }
 
-SingleBullet::SingleBullet(nl::node src) {
+SingleBullet::SingleBullet(const nl::node &src) {
     ball_ = src["ball"];
 }
 
@@ -31,7 +31,7 @@ Animation SingleBullet::get(const Char &, int32_t) const {
     return ball_.animation;
 }
 
-BySkillLevelBullet::BySkillLevelBullet(nl::node src, int32_t id) {
+BySkillLevelBullet::BySkillLevelBullet(const nl::node &src, int32_t id) {
     skill_id_ = id;
 
     for (const auto &sub : src["level"]) {

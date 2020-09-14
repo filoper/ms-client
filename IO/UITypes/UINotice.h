@@ -28,7 +28,9 @@ public:
 protected:
     enum NoticeType : uint8_t { YESNO, ENTERNUMBER, OK };
 
-    UINotice(std::string message, NoticeType type, Text::Alignment alignment);
+    UINotice(const std::string &message,
+             NoticeType type,
+             Text::Alignment alignment);
 
     UINotice(std::string message, NoticeType type);
 
@@ -94,7 +96,7 @@ protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
 private:
-    void handlestring(std::string numstr);
+    void handlestring(const std::string &numstr);
 
     enum Buttons : int16_t { OK, CANCEL };
 

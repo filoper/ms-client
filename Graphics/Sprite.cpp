@@ -15,18 +15,20 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Sprite.h"
 
+#include <utility>
+
 namespace ms {
-Sprite::Sprite(const Animation &a, const DrawArgument &args) :
-    animation_(a),
+Sprite::Sprite(Animation a, const DrawArgument &args) :
+    animation_(std::move(a)),
     state_args_(args) {}
 
-Sprite::Sprite(nl::node src, const DrawArgument &args) :
+Sprite::Sprite(const nl::node &src, const DrawArgument &args) :
     animation_(src),
     state_args_(args) {}
 
-Sprite::Sprite(nl::node src) : Sprite(src, {}) {}
+Sprite::Sprite(const nl::node &src) : Sprite(src, {}) {}
 
-Sprite::Sprite() {}
+Sprite::Sprite() = default;
 
 void Sprite::draw(Point<int16_t> parentpos, float alpha) const {
     auto absargs = state_args_ + parentpos;

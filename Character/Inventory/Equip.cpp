@@ -15,10 +15,12 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Equip.h"
 
+#include <utility>
+
 namespace ms {
 Equip::Equip(int32_t item_id,
              int64_t expiration,
-             const std::string &owner,
+             std::string owner,
              int16_t flags,
              uint8_t slots,
              uint8_t level,
@@ -26,19 +28,18 @@ Equip::Equip(int32_t item_id,
              uint8_t item_level,
              int16_t item_exp,
              int32_t vicious) :
+    stats_(stats),
     item_id_(item_id),
     expiration_(expiration),
-    owner_(owner),
+    owner_(std::move(owner)),
     flags_(flags),
     slots_(slots),
     level_(level),
-    stats_(stats),
     item_level_(item_level),
     item_exp_(item_exp),
-    vicious_(vicious) {
-    potential_rank_ = Equip::Potential::POT_NONE;
-    quality_ = EquipQuality::check_quality(item_id, level > 0, stats);
-}
+    vicious_(vicious),
+    potential_rank_(Equip::Potential::POT_NONE),
+    quality_(EquipQuality::check_quality(item_id, level > 0, stats)) {}
 
 int32_t Equip::get_item_id() const {
     return item_id_;

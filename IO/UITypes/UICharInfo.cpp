@@ -385,8 +385,8 @@ void UICharInfo::update_stats(int32_t character_id,
                               int16_t job_id,
                               uint8_t lv,
                               int16_t f,
-                              std::string g,
-                              std::string a) {
+                              const std::string &g,
+                              const std::string &a) {
     int32_t player_id = Stage::get().get_player().get_oid();
 
     if (character_id == player_id) {

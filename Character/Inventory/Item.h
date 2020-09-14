@@ -21,10 +21,7 @@
 namespace ms {
 class Item {
 public:
-    Item(int32_t item_id,
-         int64_t expiration,
-         const std::string &owner,
-         int16_t flags);
+    Item(int32_t item_id, int64_t expiration, std::string owner, int16_t flags);
 
 private:
     int32_t item_id_;

@@ -23,7 +23,7 @@
 namespace ms {
 class SkillBullet {
 public:
-    virtual ~SkillBullet() {}
+    virtual ~SkillBullet() = default;
 
     virtual Animation get(const Char &user, int32_t bulletid) const = 0;
 
@@ -31,9 +31,9 @@ protected:
     struct Ball {
         Animation animation;
 
-        Ball(nl::node src) { animation = src; }
+        Ball(const nl::node &src) { animation = src; }
 
-        Ball() {}
+        Ball() = default;
     };
 };
 
@@ -44,7 +44,7 @@ public:
 
 class SingleBullet : public SkillBullet {
 public:
-    SingleBullet(nl::node src);
+    SingleBullet(const nl::node &src);
 
     Animation get(const Char &user, int32_t bulletid) const override;
 
@@ -54,7 +54,7 @@ private:
 
 class BySkillLevelBullet : public SkillBullet {
 public:
-    BySkillLevelBullet(nl::node src, int32_t skillid);
+    BySkillLevelBullet(const nl::node &src, int32_t skillid);
 
     Animation get(const Char &user, int32_t bulletid) const override;
 

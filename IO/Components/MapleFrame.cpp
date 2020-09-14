@@ -19,7 +19,7 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-MapleFrame::MapleFrame(nl::node src) {
+MapleFrame::MapleFrame(const nl::node &src) {
     center_ = src["c"];
     east_ = src["e"];
     north_east_ = src["ne"];
@@ -34,7 +34,7 @@ MapleFrame::MapleFrame(nl::node src) {
     ytile_ = std::max<int16_t>(west_.height(), 1);
 }
 
-MapleFrame::MapleFrame() {}
+MapleFrame::MapleFrame() = default;
 
 void MapleFrame::draw(Point<int16_t> position,
                       int16_t rwidth,

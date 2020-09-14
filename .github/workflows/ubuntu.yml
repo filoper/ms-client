@@ -57,23 +57,16 @@ jobs:
         sudo apt-get update
         sudo apt-get install clang-10
         
-    - name: Install Openal-soft
-      run: |
-        sudo apt-get update
-        sudo apt-get install libopenal-dev
-
-    - name: Install Alure
+    - name: Install Bass
       run: |
         mkdir thirdparty
         cd thirdparty
-        git clone https://github.com/kcat/alure
-        cd alure
-        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
-        cmake --build build --config $BUILD_TYPE
-        cmake --install build --config $BUILD_TYPE
+        git clone https://github.com/filoper/bass24.git
+        cp -r bass24/bass24-linux .
 
     - name: Install Glad
       run: |
+        sudo apt-get update
         cd thirdparty
         git clone https://github.com/Dav1dde/glad.git
         cd glad

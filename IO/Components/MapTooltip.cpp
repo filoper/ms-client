@@ -185,7 +185,9 @@ void MapTooltip::draw(Point<int16_t> pos) const {
     }
 }
 
-void MapTooltip::set_name(Tooltip::Parent p, std::string n, bool bolded) {
+void MapTooltip::set_name(Tooltip::Parent p,
+                          const std::string &n,
+                          bool bolded) {
     if (name_ == n || parent_ == p) {
         return;
     }
@@ -222,7 +224,7 @@ void MapTooltip::set_name(Tooltip::Parent p, std::string n, bool bolded) {
     }
 }
 
-void MapTooltip::set_desc(std::string d) {
+void MapTooltip::set_desc(const std::string &d) {
     if (description_ == d) {
         return;
     }

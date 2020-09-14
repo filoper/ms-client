@@ -262,7 +262,6 @@ add_executable(msclient
     Configuration.cpp
     MSClient.cpp
     Game.cpp
-    Audio/membuf.cpp 
 )
 
 IF (WIN32)
@@ -278,7 +277,7 @@ set_project_warnings(${PROJECT_NAME})
 add_clang_format_target()
 
 TARGET_INCLUDE_DIRECTORIES(msclient 
-  PUBLIC
+  SYSTEM PRIVATE
     ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx
     ${PROJECT_SOURCE_DIR}/thirdparty/asio/asio/include
     ${PROJECT_SOURCE_DIR}/thirdparty/stb
@@ -288,9 +287,8 @@ TARGET_INCLUDE_DIRECTORIES(msclient
 IF (UNIX)
     INCLUDE(FindFreetype)
     TARGET_INCLUDE_DIRECTORIES(msclient 
-      PUBLIC
+      SYSTEM PRIVATE
         ${FREETYPE_INCLUDE_DIRS}
-        ${PROJECT_SOURCE_DIR}/thirdparty/alure/include
     )
 
     TARGET_LINK_LIBRARIES(msclient 
@@ -302,21 +300,24 @@ ENDIF()
 
 IF (APPLE)
     TARGET_INCLUDE_DIRECTORIES(msclient 
-      PUBLIC
-        /usr/local/Cellar/openal-soft/1.20.1/include
+      SYSTEM PRIVATE
+        ${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx
         /usr/local/Cellar/glfw/3.3.2/include
     )
 
     TARGET_LINK_LIBRARIES(msclient 
-      ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.dylib
+      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx/libbass.dylib
       /usr/local/Cellar/lz4/1.9.2/lib/liblz4.a
-      /usr/local/Cellar/openal-soft/1.20.1/lib/libopenal.dylib
       /usr/local/Cellar/glfw/3.3.2/lib/libglfw.dylib
     )
 ELSEIF (UNIX AND NOT APPLE)
+    TARGET_INCLUDE_DIRECTORIES(msclient 
+      SYSTEM PRIVATE
+        ${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux
+    )
+
     TARGET_LINK_LIBRARIES(msclient 
-      ${PROJECT_SOURCE_DIR}/thirdparty/alure/build/libalure2.so
-      libopenal.so
+      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux/x64/libbass.so
       /usr/lib/x86_64-linux-gnu/libglfw.so
       /usr/lib/x86_64-linux-gnu/liblz4.a
       dl
@@ -324,7 +325,7 @@ ELSEIF (UNIX AND NOT APPLE)
     )
 ELSEIF (WIN32)
     TARGET_INCLUDE_DIRECTORIES(msclient 
-      PUBLIC
+      SYSTEM PRIVATE
         ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c
         ${PROJECT_SOURCE_DIR}/thirdparty/glfw/include
         ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/include

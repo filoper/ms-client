@@ -43,8 +43,8 @@ public:
             Point<int16_t> position;
         };
 
-        Layout(const std::vector<Line> &lines,
-               const std::vector<int16_t> &advances,
+        Layout(std::vector<Line> lines,
+               std::vector<int16_t> advances,
                int16_t width,
                int16_t height,
                int16_t endx,

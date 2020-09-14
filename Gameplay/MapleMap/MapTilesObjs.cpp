@@ -16,7 +16,7 @@
 #include "MapTilesObjs.h"
 
 namespace ms {
-TilesObjs::TilesObjs(nl::node src) {
+TilesObjs::TilesObjs(const nl::node &src) {
     auto tileset = src["info"]["tS"] + ".img";
 
     for (const auto &tilenode : src["tile"]) {
@@ -32,7 +32,7 @@ TilesObjs::TilesObjs(nl::node src) {
     }
 }
 
-TilesObjs::TilesObjs() {}
+TilesObjs::TilesObjs() = default;
 
 void TilesObjs::update() {
     for (auto &iter : objs_) {
@@ -50,13 +50,13 @@ void TilesObjs::draw(Point<int16_t> viewpos, float alpha) const {
     }
 }
 
-MapTilesObjs::MapTilesObjs(nl::node src) {
+MapTilesObjs::MapTilesObjs(const nl::node &src) {
     for (auto iter : layers_) {
         iter.second = src[iter.first];
     }
 }
 
-MapTilesObjs::MapTilesObjs() {}
+MapTilesObjs::MapTilesObjs() = default;
 
 void MapTilesObjs::draw(Layer::Id layer,
                         Point<int16_t> viewpos,

@@ -101,7 +101,7 @@ private:
 
     std::vector<DamageNumber> place_numbers(
         int32_t oid,
-        const std::vector<std::pair<int32_t, bool>> &damagelines);
+        const std::vector<std::pair<int32_t, bool>> &damage_lines);
 
     const SpecialMove &get_move(int32_t move_id);
 

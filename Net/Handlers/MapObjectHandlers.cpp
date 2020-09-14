@@ -461,8 +461,6 @@ void DropLootHandler::handle(InPacket &recv) const {
         dropfrom = recv.read_point();
 
         recv.skip(2);
-
-        Sound(Sound::Name::DROP).play();
     } else {
         dropfrom = dropto;
     }
@@ -472,6 +470,10 @@ void DropLootHandler::handle(InPacket &recv) const {
     }
 
     bool playerdrop = !recv.read_bool();
+
+    if (mode == 0 || (owner == Stage::get().is_player(owner) && !playerdrop)) {
+        Sound(Sound::Name::DROP).play();
+    }
 
     Stage::get().get_drops().spawn({ oid,
                                      itemid,

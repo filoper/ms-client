@@ -23,11 +23,11 @@
 namespace ms {
 Icon::Icon(std::unique_ptr<Type> t, Texture tx, int16_t c) :
     type_(std::move(t)),
+    show_count_(c > -1),
+    count_(c),
     texture_(tx),
-    count_(c) {
+    dragged_(false) {
     texture_.shift(Point<int16_t>(0, 32));
-    show_count_ = c > -1;
-    dragged_ = false;
 }
 
 Icon::Icon() : Icon(std::make_unique<NullType>(), {}, -1) {}

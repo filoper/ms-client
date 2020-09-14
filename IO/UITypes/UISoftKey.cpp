@@ -16,6 +16,7 @@
 #include "UISoftKey.h"
 
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../../Constants.h"
 #include "../Components/MapleButton.h"
@@ -26,8 +27,8 @@ UISoftKey::UISoftKey(OkCallback ok,
                      CancelCallback cancel,
                      std::string tooltip_text,
                      Point<int16_t> tooltip_pos) :
-    ok_callback_(ok),
-    cancel_callback_(cancel),
+    ok_callback_(std::move(ok)),
+    cancel_callback_(std::move(cancel)),
     tooltip_position_(tooltip_pos) {
     Point<int16_t> screen_adj = Point<int16_t>(-1, 0);
 
@@ -75,7 +76,7 @@ UISoftKey::UISoftKey(OkCallback ok,
     entry_.set_cryptchar('*');
 
     shufflekeys();
-    show_text(tooltip_text);
+    show_text(std::move(tooltip_text));
 
     position_ = Point<int16_t>(130, 160);
     dimension_ = Texture(backgrnd).get_dimensions();
@@ -84,16 +85,16 @@ UISoftKey::UISoftKey(OkCallback ok,
 UISoftKey::UISoftKey(OkCallback ok_callback,
                      CancelCallback cancel_callback,
                      std::string tooltip_text) :
-    UISoftKey(ok_callback,
-              cancel_callback,
-              tooltip_text,
+    UISoftKey(std::move(ok_callback),
+              std::move(cancel_callback),
+              std::move(tooltip_text),
               Point<int16_t>(0, 0)) {}
 
 UISoftKey::UISoftKey(OkCallback ok_callback, CancelCallback cancel_callback) :
-    UISoftKey(ok_callback, cancel_callback, "") {}
+    UISoftKey(std::move(ok_callback), std::move(cancel_callback), "") {}
 
 UISoftKey::UISoftKey(OkCallback ok_callback) :
-    UISoftKey(ok_callback, []() {}) {}
+    UISoftKey(std::move(ok_callback), []() {}) {}
 
 void UISoftKey::draw(float inter) const {
     UIElement::draw(inter);
@@ -182,7 +183,7 @@ void UISoftKey::shufflekeys() {
     }
 }
 
-void UISoftKey::show_text(std::string text) {
+void UISoftKey::show_text(const std::string &text) {
     tetooltip_.set_text(text);
 
     if (!text.empty()) {

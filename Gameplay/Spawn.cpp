@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Spawn.h"
 
+#include <utility>
+
 #include "../Character/OtherChar.h"
 #include "MapleMap/ItemDrop.h"
 #include "MapleMap/MesoDrop.h"
@@ -150,19 +152,19 @@ std::unique_ptr<MapObject> DropSpawn::instantiate(const Texture &icon) const {
 }
 
 CharSpawn::CharSpawn(int32_t c,
-                     const LookEntry &lk,
+                     LookEntry lk,
                      uint8_t l,
                      int16_t j,
-                     const std::string &nm,
+                     std::string nm,
                      int8_t st,
                      Point<int16_t> p) :
     cid_(c),
-    look_(lk),
     level_(l),
     job_(j),
-    name_(nm),
+    name_(std::move(nm)),
     stance_(st),
-    position_(p) {}
+    position_(p),
+    look_(std::move(lk)) {}
 
 int32_t CharSpawn::get_cid() const {
     return cid_;

@@ -21,7 +21,7 @@ namespace ms {
 // Base class for player states
 class PlayerState {
 public:
-    virtual ~PlayerState() {}
+    virtual ~PlayerState() = default;
 
     // Actions taken when transitioning into the state.
     virtual void initialize(Player &player) const = 0;

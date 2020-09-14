@@ -15,7 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../Util/Lerp.h"
+#include <cmath>
 
 namespace ms {
 template<typename T>
@@ -64,10 +64,14 @@ private:
 
 template<typename T>
 class Linear {
+    static_assert(
+        std::is_floating_point<T>::value,
+        "Template parameter 'T' for Linear must be a floating point type.");
+
 public:
     T get() const { return now_; }
 
-    T get(float alpha) const { return lerp<T>(before_, now_, alpha); }
+    T get(T alpha) const { return std::lerp(before_, now_, alpha); }
 
     T last() const { return before_; }
 

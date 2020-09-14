@@ -33,18 +33,12 @@ jobs:
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@v1
         
-    - name: Install Alure
+    - name: Install Bass
       run: |
         mkdir thirdparty
         cd thirdparty
-        git clone https://github.com/kcat/alure
-        cd alure
-        cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
-        cmake --build build --config $BUILD_TYPE
-        cmake --install build --config $BUILD_TYPE
-
-    - name: Install Openal-soft
-      run: brew install openal-soft
+        git clone https://github.com/filoper/bass24.git
+        cp -R bass24/bass24-osx .
 
     - name: Install Glad
       run: |

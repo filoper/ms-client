@@ -75,7 +75,7 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
             if (pressed) {
                 // TODO: Try finding dialog first
                 fn_talk_to_npc(npc->get_oid());
-                
+
                 return Cursor::State::IDLE;
             }
             return Cursor::State::CAN_CLICK;

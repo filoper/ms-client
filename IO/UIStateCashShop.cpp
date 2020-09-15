@@ -58,7 +58,6 @@ Cursor::State UIStateCashShop::send_cursor(Cursor::State cursorstate,
         focused_ = UIElement::NONE;
 
         return cursorstate;
-
     }
     if (auto *front = get_front()) {
         remove_cursor(front->get_type());

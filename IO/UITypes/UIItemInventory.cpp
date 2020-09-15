@@ -368,9 +368,7 @@ void UIItemInventory::doubleclick(Point<int16_t> cursorpos) {
                         fn_equip_item(slot, inventory_.find_equipslot(item_id));
                     }
                     break;
-                case InventoryType::Id::USE:
-                    fn_use_item(slot, item_id);
-                    break;
+                case InventoryType::Id::USE: fn_use_item(slot, item_id); break;
             }
         }
     }
@@ -444,7 +442,6 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
         ignore_tooltip_ = false;
 
         return Cursor::State::CAN_GRAB;
-
     }
     clear_tooltip();
 
@@ -898,9 +895,7 @@ void UIItemInventory::ItemIcon::drop_on_equips(EquipSlot::Id eqslot) const {
             Sound(Sound::Name::DRAG_END).play();
 
             break;
-        case InventoryType::Id::USE:
-            fn_scroll_equip(source_, eqslot);
-            break;
+        case InventoryType::Id::USE: fn_scroll_equip(source_, eqslot); break;
     }
 }
 

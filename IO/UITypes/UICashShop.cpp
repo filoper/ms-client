@@ -30,7 +30,7 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
-auto fn_change_map= []<typename... T>(T && ... args) {
+auto fn_change_map = []<typename... T>(T && ... args) {
     ChangeMapPacket(std::forward<T>(args)...).dispatch();
 };
 auto fn_player_login = []<typename... T>(T && ... args) {

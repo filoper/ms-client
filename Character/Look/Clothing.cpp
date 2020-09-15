@@ -38,7 +38,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
 
     constexpr Clothing::Layer layers[NON_WEAPON_TYPES] = {
         Clothing::Layer::CAP,     Clothing::Layer::FACE_ACC,
-        Clothing::Layer::EYE_ACC,  Clothing::Layer::EARRINGS,
+        Clothing::Layer::EYE_ACC, Clothing::Layer::EARRINGS,
         Clothing::Layer::TOP,     Clothing::Layer::MAIL,
         Clothing::Layer::PANTS,   Clothing::Layer::SHOES,
         Clothing::Layer::GLOVE,   Clothing::Layer::SHIELD,

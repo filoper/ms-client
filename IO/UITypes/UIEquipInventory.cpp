@@ -253,7 +253,6 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
         show_equip(slot);
 
         return Cursor::State::CAN_GRAB;
-
     }
     clear_tooltip();
 

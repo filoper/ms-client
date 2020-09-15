@@ -57,9 +57,7 @@ public:
                || error_code_ == Code::FONT_PATH;
     }
 
-    std::string_view get_message() const {
-        return msgs_[error_code_];
-    }
+    std::string_view get_message() const { return msgs_[error_code_]; }
 
     std::string_view get_details() const { return msg_details_; }
 

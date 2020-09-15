@@ -133,7 +133,8 @@ UIWorldSelect::UIWorldSelect() :
     buttons_[Buttons::BT_QUIT_GAME] =
         std::make_unique<MapleButton>(common["BtExit"], Point<int16_t>(0, 515));
 
-    for (size_t i = 0; i < Buttons::BT_ENTER_WORLD - Buttons::BT_CHANNEL0; i++) {
+    for (size_t i = 0; i < Buttons::BT_ENTER_WORLD - Buttons::BT_CHANNEL0;
+         i++) {
         std::string ch = std::to_string(i);
 
         buttons_[Buttons::BT_CHANNEL0 + i] = std::make_unique<TwoSpriteButton>(
@@ -433,7 +434,8 @@ void UIWorldSelect::add_recommended_world(RecommendedWorld world) {
         recommended_worlds_.emplace_back(std::move(world));
         recommended_world_count_++;
 
-        buttons_[Buttons::BT_VIEW_RECOMMENDED]->set_state(Button::State::NORMAL);
+        buttons_[Buttons::BT_VIEW_RECOMMENDED]->set_state(
+            Button::State::NORMAL);
     }
 }
 
@@ -680,7 +682,8 @@ void UIWorldSelect::clear_selected_world() {
 
     buttons_[Buttons::BT_CHANNEL0]->set_state(Button::State::PRESSED);
 
-    for (size_t i = 0; i < Buttons::BT_ENTER_WORLD - Buttons::BT_CHANNEL0; i++) {
+    for (size_t i = 0; i < Buttons::BT_ENTER_WORLD - Buttons::BT_CHANNEL0;
+         i++) {
         buttons_[Buttons::BT_CHANNEL0 + i]->set_active(false);
     }
 

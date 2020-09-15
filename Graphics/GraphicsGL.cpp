@@ -354,7 +354,7 @@ void GraphicsGL::reinit() {
                           GL_FLOAT,
                           GL_FALSE,
                           sizeof(Quad::Vertex),
-                          (const void*) offsetof(Quad::Vertex, color));
+                          (const void *)offsetof(Quad::Vertex, color));
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -258,20 +258,20 @@ void UI::send_key(int32_t keycode, bool pressed) {
                 types.emplace_back(UIElement::Type::RACE_SELECT);  // No tab
                 types.emplace_back(
                     UIElement::Type::CLASS_CREATION);  // No tab (No arrows, but
-                                                      // shouldn't send else
-                                                      // where)
+                                                       // shouldn't send else
+                                                       // where)
                 types.emplace_back(
                     UIElement::Type::LOGIN_NOTICE);  // No tab (No arrows, but
-                                                    // shouldn't send else
-                                                    // where)
+                                                     // shouldn't send else
+                                                     // where)
                 types.emplace_back(
                     UIElement::Type::LOGIN_NOTICE_CONFIRM);  // No tab (No
-                                                            // arrows, but
-                                                            // shouldn't send
-                                                            // else where)
+                                                             // arrows, but
+                                                             // shouldn't send
+                                                             // else where)
                 types.emplace_back(
                     UIElement::Type::LOGIN_WAIT);  // No tab (No arrows, but
-                                                  // shouldn't send else where)
+                                                   // shouldn't send else where)
             }
 
             if (escape) {

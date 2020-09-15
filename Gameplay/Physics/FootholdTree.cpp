@@ -98,7 +98,8 @@ void FootholdTree::limit_movement(PhysicsObject &phobj) const {
         bool collision = left ? crnt_x >= wall && next_x <= wall
                               : crnt_x <= wall && next_x >= wall;
 
-        if (!collision && phobj.is_flag_set(PhysicsObject::Flag::TURN_AT_EDGES)) {
+        if (!collision
+            && phobj.is_flag_set(PhysicsObject::Flag::TURN_AT_EDGES)) {
             wall = get_edge(phobj.fhid, left);
             collision = left ? crnt_x >= wall && next_x <= wall
                              : crnt_x <= wall && next_x >= wall;

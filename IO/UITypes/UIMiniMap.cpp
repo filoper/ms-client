@@ -266,7 +266,11 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
             std::string name = n->get_name();
             std::string func = n->get_func();
 
-            UI::get().show_map(Tooltip::Parent::MINI_MAP, name, func, {}, false);
+            UI::get().show_map(Tooltip::Parent::MINI_MAP,
+                               name,
+                               func,
+                               {},
+                               false);
             break;
         }
     }

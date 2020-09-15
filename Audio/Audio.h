@@ -59,7 +59,7 @@ public:
 
     Sound(Name name);
     Sound(int32_t itemid);
-    Sound(nl::node src);
+    Sound(const nl::node &src);
     Sound();
 
     void play() const;
@@ -73,9 +73,9 @@ private:
 
     static void play(size_t id);
 
-    static size_t add_sound(nl::node src);
-    static void add_sound(Name name, nl::node src);
-    static void add_sound(const std::string &itemid, nl::node src);
+    static size_t add_sound(const nl::node &src);
+    static void add_sound(Name name, const nl::node &src);
+    static void add_sound(const std::string &itemid, const nl::node &src);
 
     static std::string format_id(int32_t itemid);
 

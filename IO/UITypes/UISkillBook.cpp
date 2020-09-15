@@ -512,7 +512,6 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                         return Cursor::State::GRABBING;
                     }
                     return Cursor::State::IDLE;
-
                 }
                 skills_[i].get_icon()->set_state(
                     StatefulIcon::State::MOUSEOVER);

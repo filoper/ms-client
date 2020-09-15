@@ -65,7 +65,7 @@ EquipData::EquipData(int32_t id) : item_data_(ItemData::get(id)) {
 
         constexpr EquipSlot::Id equipslots[NON_WEAPON_TYPES] = {
             EquipSlot::Id::HAT,      EquipSlot::Id::FACE,
-            EquipSlot::Id::EYE_ACC,   EquipSlot::Id::EARACC,
+            EquipSlot::Id::EYE_ACC,  EquipSlot::Id::EARACC,
             EquipSlot::Id::TOP,      EquipSlot::Id::TOP,
             EquipSlot::Id::BOTTOM,   EquipSlot::Id::SHOES,
             EquipSlot::Id::GLOVES,   EquipSlot::Id::SHIELD,

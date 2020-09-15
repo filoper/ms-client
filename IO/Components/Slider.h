@@ -79,7 +79,7 @@ public:
         ARROWS_TORYBLUE,
         THIN_SLATEGRAY,
         /// Custom
-        CHATBAR
+        CHAT_BAR
     };
 
 private:

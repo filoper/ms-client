@@ -49,7 +49,7 @@ Drop::Drop(int32_t id,
             phobj_.type = PhysicsObject::Type::FIXATED;
             break;
         case 3:
-            state_ = Drop::State::PICKEDUP;
+            state_ = Drop::State::PICKED_UP;
             phobj_.vspeed = -5.0f;
             break;
     }
@@ -76,7 +76,7 @@ int8_t Drop::update(const Physics &physics) {
         moved_ = (moved_ < 360.0f) ? moved_ + 0.025f : 0.0f;
     }
 
-    if (state_ == Drop::State::PICKEDUP) {
+    if (state_ == Drop::State::PICKED_UP) {
         static const uint16_t PICKUPTIME = 48;
         static const float OPCSTEP = 1.0f / PICKUPTIME;
 
@@ -101,11 +101,11 @@ int8_t Drop::update(const Physics &physics) {
 
 void Drop::expire(int8_t type, const PhysicsObject *lt) {
     switch (type) {
-        case 0: state_ = Drop::State::PICKEDUP; break;
+        case 0: state_ = Drop::State::PICKED_UP; break;
         case 1: deactivate(); break;
         case 2:
             angle_.set(0.0f);
-            state_ = Drop::State::PICKEDUP;
+            state_ = Drop::State::PICKED_UP;
             looter_ = lt;
             phobj_.vspeed = -4.5f;
             phobj_.type = PhysicsObject::Type::NORMAL;

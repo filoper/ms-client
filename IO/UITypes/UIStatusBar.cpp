@@ -913,7 +913,7 @@ void UIStatusBar::toggle_menu() {
     if (menu_active_) {
         buttons_[Buttons::BT_MENU_QUEST]->set_state(Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -932,7 +932,7 @@ void UIStatusBar::toggle_setting() {
         buttons_[Buttons::BT_SETTING_CHANNEL]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -950,7 +950,7 @@ void UIStatusBar::toggle_community() {
         buttons_[Buttons::BT_COMMUNITY_FRIENDS]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -969,7 +969,7 @@ void UIStatusBar::toggle_character() {
         buttons_[Buttons::BT_CHARACTER_INFO]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -985,7 +985,7 @@ void UIStatusBar::toggle_event() {
         buttons_[Buttons::BT_EVENT_SCHEDULE]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 

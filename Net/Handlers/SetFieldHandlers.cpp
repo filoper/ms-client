@@ -128,7 +128,7 @@ void SetFieldHandler::set_field(InPacket &recv) const {
 
     transition(mapid, portalid);
 
-    Sound(Sound::Name::GAMESTART).play();
+    Sound(Sound::Name::GAME_START).play();
 
     UI::get().change_state(UI::State::GAME);
 }

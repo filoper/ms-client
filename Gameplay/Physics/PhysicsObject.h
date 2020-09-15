@@ -123,7 +123,7 @@ struct PhysicsObject : public MovingObject {
     // Determines which physics engine to use
     enum Type { NORMAL, ICE, SWIMMING, FLYING, FIXATED };
 
-    enum Flag { NOGRAVITY = 0x0001, TURNATEDGES = 0x0002, CHECKBELOW = 0x0004 };
+    enum Flag { NO_GRAVITY = 0x0001, TURN_AT_EDGES = 0x0002, CHECK_BELOW = 0x0004 };
 
     Type type = Type::NORMAL;
     int32_t flags = 0;

@@ -29,13 +29,13 @@ public:
         NONE,
         EQUIP_INVENTORY,
         ITEM_INVENTORY,
-        SKILLBOOK,
+        SKILL_BOOK,
         SHOP,
         EVENT,
         TEXT,
-        KEYCONFIG,
-        WORLDMAP,
-        MINIMAP
+        KEY_CONFIG,
+        WORLD_MAP,
+        MINI_MAP
     };
 
     virtual ~Tooltip() = default;

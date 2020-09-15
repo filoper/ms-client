@@ -211,12 +211,12 @@ Cursor::State UIClassConfirm::send_cursor(bool clicked,
         if (btit.second->is_active()
             && btit.second->bounds(position_).contains(cursorpos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
-                Sound(Sound::Name::BUTTONOVER).play();
+                Sound(Sound::Name::BUTTON_OVER).play();
 
                 btit.second->set_state(Button::State::MOUSEOVER);
             } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
-                    Sound(Sound::Name::BUTTONCLICK).play();
+                    Sound(Sound::Name::BUTTON_CLICK).play();
 
                     btit.second->set_state(button_pressed(btit.first));
                 }
@@ -337,7 +337,7 @@ void UIKeyConfirm::send_key(int32_t keycode, bool pressed, bool escape) {
         } else if (!login_ && escape) {
             deactivate();
 
-            UI::get().remove(UIElement::Type::LOGINNOTICE);
+            UI::get().remove(UIElement::Type::LOGIN_NOTICE);
         }
     }
 }
@@ -356,6 +356,6 @@ void UIKeyConfirm::confirm() {
     okhandler_();
     deactivate();
 
-    UI::get().remove(UIElement::Type::LOGINNOTICE);
+    UI::get().remove(UIElement::Type::LOGIN_NOTICE);
 }
 }  // namespace ms

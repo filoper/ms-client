@@ -74,7 +74,7 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
                 }
 
                 break;
-            case Inventory::Modification::CHANGECOUNT: {
+            case Inventory::Modification::CHANGE_COUNT: {
                 mod.arg = recv.read_short();
 
                 int16_t count_before =
@@ -94,7 +94,7 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
                 }
 
                 if (count_before < count_now) {
-                    mod.mode = Inventory::Modification::ADDCOUNT;
+                    mod.mode = Inventory::Modification::ADD_COUNT;
                 }
             } break;
             case Inventory::Modification::SWAP:

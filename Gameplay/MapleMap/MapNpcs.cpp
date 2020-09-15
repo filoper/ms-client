@@ -78,7 +78,7 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
                 
                 return Cursor::State::IDLE;
             }
-            return Cursor::State::CANCLICK;
+            return Cursor::State::CAN_CLICK;
         }
     }
 

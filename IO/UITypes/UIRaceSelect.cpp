@@ -145,7 +145,7 @@ UIRaceSelect::UIRaceSelect() :
 
     buttons_[Buttons::LEFT]->set_state(Button::State::DISABLED);
 
-    Sound(Sound::Name::RACESELECT).play();
+    Sound(Sound::Name::RACE_SELECT).play();
 }
 
 void UIRaceSelect::draw(float inter) const {
@@ -279,7 +279,7 @@ Cursor::State UIRaceSelect::send_cursor(bool clicked,
         if (btit.second->is_active()
             && btit.second->bounds(position_).contains(cursorpos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
-                Sound(Sound::Name::BUTTONOVER).play();
+                Sound(Sound::Name::BUTTON_OVER).play();
 
                 if (btit.first >= Buttons::CLASS0) {
                     mouseover_[btit.first - Buttons::CLASS0] = true;
@@ -288,7 +288,7 @@ Cursor::State UIRaceSelect::send_cursor(bool clicked,
                 btit.second->set_state(Button::State::MOUSEOVER);
             } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
-                    Sound(Sound::Name::BUTTONCLICK).play();
+                    Sound(Sound::Name::BUTTON_CLICK).play();
 
                     btit.second->set_state(button_pressed(btit.first));
                 } else {
@@ -376,7 +376,7 @@ Button::State UIRaceSelect::button_pressed(uint16_t buttonid) {
     if (buttonid == Buttons::MAKE) {
         auto okhandler = [&]() {
             if (!class_isdisabled_[selected_class_]) {
-                Sound(Sound::Name::SCROLLUP).play();
+                Sound(Sound::Name::SCROLL_UP).play();
 
                 deactivate();
 
@@ -469,7 +469,7 @@ void UIRaceSelect::select_class(uint8_t index) {
     selected_index_ = index;
 
     if (previous_index != selected_index_) {
-        Sound(Sound::Name::RACESELECT).play();
+        Sound(Sound::Name::RACE_SELECT).play();
 
         int size = sizeof(class_index_) / sizeof(class_index_[0]);
 
@@ -513,7 +513,7 @@ void UIRaceSelect::select_class(uint8_t index) {
 }
 
 void UIRaceSelect::show_charselect() {
-    Sound(Sound::Name::SCROLLUP).play();
+    Sound(Sound::Name::SCROLL_UP).play();
 
     deactivate();
 

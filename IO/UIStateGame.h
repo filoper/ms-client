@@ -119,10 +119,10 @@ private:
 
     std::map<Icon::IconType, UIElement::Type> icon_map_ = {
         { Icon::IconType::NONE, UIElement::Type::NONE },
-        { Icon::IconType::SKILL, UIElement::Type::SKILLBOOK },
-        { Icon::IconType::EQUIP, UIElement::Type::EQUIPINVENTORY },
-        { Icon::IconType::ITEM, UIElement::Type::ITEMINVENTORY },
-        { Icon::IconType::KEY, UIElement::Type::KEYCONFIG },
+        { Icon::IconType::SKILL, UIElement::Type::SKILL_BOOK },
+        { Icon::IconType::EQUIP, UIElement::Type::EQUIP_INVENTORY },
+        { Icon::IconType::ITEM, UIElement::Type::ITEM_INVENTORY },
+        { Icon::IconType::KEY, UIElement::Type::KEY_CONFIG },
         { Icon::IconType::NUM_TYPES, UIElement::Type::NUM_TYPES }
     };
 

@@ -22,7 +22,7 @@ namespace ms {
 class CharEquips {
 public:
     // Cap types (vslot)
-    enum CapType { NONE, HEADBAND, HAIRPIN, HALFCOVER, FULLCOVER };
+    enum CapType { NONE, HEADBAND, HAIRPIN, HALF_COVER, FULL_COVER };
 
     // Initialize pointers with zero
     CharEquips();

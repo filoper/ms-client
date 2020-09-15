@@ -28,31 +28,31 @@ public:
     // Preloaded sounds
     enum Name {
         /// UI
-        BUTTONCLICK,
-        BUTTONOVER,
-        CHARSELECT,
-        DLGNOTICE,
-        MENUDOWN,
-        MENUUP,
-        RACESELECT,
-        SCROLLUP,
-        SELECTMAP,
+        BUTTON_CLICK,
+        BUTTON_OVER,
+        CHAR_SELECT,
+        DLG_NOTICE,
+        MENU_DOWN,
+        MENU_UP,
+        RACE_SELECT,
+        SCROLL_UP,
+        SELECT_MAP,
         TAB,
-        WORLDSELECT,
-        DRAGSTART,
-        DRAGEND,
-        WORLDMAPOPEN,
-        WORLDMAPCLOSE,
+        WORLD_SELECT,
+        DRAG_START,
+        DRAG_END,
+        WORLD_MAP_OPEN,
+        WORLD_MAP_CLOSE,
 
         /// Login
-        GAMESTART,
+        GAME_START,
 
         /// Game
         JUMP,
         DROP,
         PICKUP,
         PORTAL,
-        LEVELUP,
+        LEVEL_UP,
         TOMBSTONE,
         LENGTH
     };
@@ -69,7 +69,7 @@ public:
     static bool set_sfxvolume(uint8_t volume);
 
 private:
-    size_t id;
+    size_t id_;
 
     static void play(size_t id);
 
@@ -79,9 +79,9 @@ private:
 
     static std::string format_id(int32_t itemid);
 
-    static std::unordered_map<size_t, uint64_t> samples;
-    static EnumMap<Name, size_t> soundids;
-    static std::unordered_map<std::string, size_t> itemids;
+    static std::unordered_map<size_t, uint64_t> samples_;
+    static EnumMap<Name, size_t> soundids_;
+    static std::unordered_map<std::string, size_t> itemids_;
 };
 
 class Music {
@@ -96,6 +96,6 @@ public:
     static void update_context();
 
 private:
-    std::string path;
+    std::string path_;
 };
 }  // namespace ms

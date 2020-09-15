@@ -28,7 +28,7 @@ public:
     using OkCallback = std::function<void(const std::string &entered)>;
     using CancelCallback = std::function<void()>;
 
-    static constexpr Type TYPE = UIElement::Type::SOFTKEYBOARD;
+    static constexpr Type TYPE = UIElement::Type::SOFT_KEYBOARD;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 

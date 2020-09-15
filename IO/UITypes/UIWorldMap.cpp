@@ -65,7 +65,7 @@ UIWorldMap::UIWorldMap() : UIDragElement<PosMAP>() {
     buttons_[Buttons::BT_SEARCH_CLOSE] = std::make_unique<MapleButton>(
         close,
         close_dimensions + Point<int16_t>(bg_search_dimensions_.x(), 0));
-    buttons_[Buttons::BT_ALLSEARCH] =
+    buttons_[Buttons::BT_ALL_SEARCH] =
         std::make_unique<MapleButton>(WorldMapSearch["BtAllsearch"],
                                       background_dimensions_);
 
@@ -188,7 +188,7 @@ void UIWorldMap::send_key(int32_t keycode, bool pressed, bool escape) {
 
                 update_world(user_map_);
             } else {
-                Sound(Sound::Name::SELECTMAP).play();
+                Sound(Sound::Name::SELECT_MAP).play();
 
                 update_world(parent_map_);
             }
@@ -220,7 +220,7 @@ Button::State UIWorldMap::button_pressed(uint16_t buttonid) {
 void UIWorldMap::remove_cursor() {
     UIDragElement::remove_cursor();
 
-    UI::get().clear_tooltip(Tooltip::Parent::WORLDMAP);
+    UI::get().clear_tooltip(Tooltip::Parent::WORLD_MAP);
 
     show_path_img_ = false;
 }
@@ -242,7 +242,7 @@ Cursor::State UIWorldMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
             path_img_ = path.second.path;
             show_path_img_ = path_img_.is_valid();
 
-            UI::get().show_map(Tooltip::Parent::WORLDMAP,
+            UI::get().show_map(Tooltip::Parent::WORLD_MAP,
                                path.second.title,
                                path.second.description,
                                path.second.map_ids[0],
@@ -258,7 +258,7 @@ void UIWorldMap::set_search(bool enable) {
     search_ = enable;
 
     buttons_[Buttons::BT_SEARCH_CLOSE]->set_active(enable);
-    buttons_[Buttons::BT_ALLSEARCH]->set_active(enable);
+    buttons_[Buttons::BT_ALL_SEARCH]->set_active(enable);
 
     if (enable) {
         search_text_.set_state(Textfield::State::NORMAL);

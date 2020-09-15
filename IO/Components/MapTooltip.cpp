@@ -44,7 +44,7 @@ void MapTooltip::draw(Point<int16_t> pos) const {
     int16_t max_width = Constants::Constants::get().get_viewwidth();
     int16_t max_height = Constants::Constants::get().get_viewheight();
 
-    if (parent_ == Tooltip::Parent::MINIMAP && mob_labels_->empty()
+    if (parent_ == Tooltip::Parent::MINI_MAP && mob_labels_->empty()
         && npc_labels_->empty()) {
         if (desc_label_.empty()) {
             int16_t new_width = name_simple_.width();
@@ -196,8 +196,8 @@ void MapTooltip::set_name(Tooltip::Parent p,
     parent_ = p;
 
     if (name_.empty()
-        || (parent_ != Tooltip::Parent::WORLDMAP
-            && parent_ != Tooltip::Parent::MINIMAP)) {
+        || (parent_ != Tooltip::Parent::WORLD_MAP
+            && parent_ != Tooltip::Parent::MINI_MAP)) {
         return;
     }
 
@@ -248,7 +248,7 @@ void MapTooltip::set_desc(const std::string &d) {
 
     fill_width_ += 17;
 
-    if (parent_ == Tooltip::Parent::MINIMAP) {
+    if (parent_ == Tooltip::Parent::MINI_MAP) {
         int16_t name_width = name_label_.width();
         int16_t desc_width = desc_simple_.width();
         int16_t new_width = (name_width > desc_width) ? name_width : desc_width;

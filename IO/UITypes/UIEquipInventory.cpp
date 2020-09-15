@@ -57,7 +57,7 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
     // Column 3
     icon_positions_[EquipSlot::Id::HAT] = Point<int16_t>(96, 50);
     icon_positions_[EquipSlot::Id::FACE] = Point<int16_t>(96, 91);
-    icon_positions_[EquipSlot::Id::EYEACC] = Point<int16_t>(96, 132);
+    icon_positions_[EquipSlot::Id::EYE_ACC] = Point<int16_t>(96, 132);
     icon_positions_[EquipSlot::Id::TOP] = Point<int16_t>(96, 173);
     icon_positions_[EquipSlot::Id::BOTTOM] = Point<int16_t>(96, 214);
     icon_positions_[EquipSlot::Id::SHOES] = Point<int16_t>(96, 255);
@@ -252,7 +252,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
         }
         show_equip(slot);
 
-        return Cursor::State::CANGRAB;
+        return Cursor::State::CAN_GRAB;
 
     }
     clear_tooltip();
@@ -394,12 +394,12 @@ UIEquipInventory::EquipIcon::EquipIcon(int16_t s) {
 }
 
 void UIEquipInventory::EquipIcon::drop_on_stage() const {
-    Sound(Sound::Name::DRAGEND).play();
+    Sound(Sound::Name::DRAG_END).play();
 }
 
 void UIEquipInventory::EquipIcon::drop_on_equips(EquipSlot::Id slot) const {
     if (source_ == slot) {
-        Sound(Sound::Name::DRAGEND).play();
+        Sound(Sound::Name::DRAG_END).play();
     }
 }
 

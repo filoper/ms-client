@@ -203,10 +203,10 @@ Cursor::State UIChannel::send_cursor(bool clicked, Point<int16_t> cursorpos) {
             && buttons_[i]->bounds(position_).contains(cursorpos)) {
             if (buttons_[i]->get_state() == Button::State::NORMAL) {
                 if (i < Buttons::CH) {
-                    Sound(Sound::Name::BUTTONOVER).play();
+                    Sound(Sound::Name::BUTTON_OVER).play();
 
                     buttons_[i]->set_state(Button::State::MOUSEOVER);
-                    ret = Cursor::State::CANCLICK;
+                    ret = Cursor::State::CAN_CLICK;
                 } else {
                     buttons_[i]->set_state(Button::State::MOUSEOVER);
                     ret = Cursor::State::IDLE;
@@ -214,7 +214,7 @@ Cursor::State UIChannel::send_cursor(bool clicked, Point<int16_t> cursorpos) {
             } else if (buttons_[i]->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
                     if (i < Buttons::CH) {
-                        Sound(Sound::Name::BUTTONCLICK).play();
+                        Sound(Sound::Name::BUTTON_CLICK).play();
                     }
 
                     buttons_[i]->set_state(button_pressed(i));
@@ -222,7 +222,7 @@ Cursor::State UIChannel::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                     ret = Cursor::State::IDLE;
                 } else {
                     if (i < Buttons::CH) {
-                        ret = Cursor::State::CANCLICK;
+                        ret = Cursor::State::CAN_CLICK;
                     } else {
                         ret = Cursor::State::IDLE;
                     }

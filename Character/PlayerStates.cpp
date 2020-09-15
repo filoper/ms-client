@@ -88,7 +88,7 @@ void PlayerStandState::send_action(Player &player,
 
 void PlayerStandState::update(Player &player) const {
     if (player.get_phobj().enablejd == false) {
-        player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::Flag::CHECK_BELOW);
     }
 }
 
@@ -137,7 +137,7 @@ void PlayerWalkState::update(Player &player) const {
     }
 
     if (player.get_phobj().enablejd == false) {
-        player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::Flag::CHECK_BELOW);
     }
 }
 
@@ -230,7 +230,7 @@ void PlayerProneState::send_action(Player &player,
 
 void PlayerProneState::update(Player &player) const {
     if (player.get_phobj().enablejd == false) {
-        player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::Flag::CHECK_BELOW);
     }
 }
 

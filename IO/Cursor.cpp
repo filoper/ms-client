@@ -45,9 +45,9 @@ void Cursor::update() {
     animations_[state_].update();
 
     switch (state_) {
-        case Cursor::State::CANCLICK:
-        case Cursor::State::CANCLICK2:
-        case Cursor::State::CANGRAB:
+        case Cursor::State::CAN_CLICK:
+        case Cursor::State::CAN_CLICK2:
+        case Cursor::State::CAN_GRAB:
         case Cursor::State::CLICKING:
         case Cursor::State::GRABBING: hide_counter_ = 0; break;
         default: hide_counter_++; break;

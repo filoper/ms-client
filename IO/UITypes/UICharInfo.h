@@ -24,7 +24,7 @@
 namespace ms {
 class UICharInfo : public UIDragElement<PosCHARINFO> {
 public:
-    static constexpr Type TYPE = UIElement::Type::CHARINFO;
+    static constexpr Type TYPE = UIElement::Type::CHAR_INFO;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 
@@ -52,24 +52,24 @@ private:
     void show_right_window(uint16_t buttonid);
 
     enum Buttons : uint16_t {
-        BtClose,
-        BtCollect,
-        BtDamage,
-        BtFamily,
-        BtItem,
-        BtParty,
-        BtPersonality,
-        BtPet,
-        BtPopDown,
-        BtPopUp,
-        BtRide,
-        BtTrad,
-        BtFriend,
-        BtVisit,
-        BtArrayGet,
-        BtArrayName,
-        BtFAQ,
-        BtRegist
+        BT_CLOSE,
+        BT_COLLECT,
+        BT_DAMAGE,
+        BT_FAMILY,
+        BT_ITEM,
+        BT_PARTY,
+        BT_PERSONALITY,
+        BT_PET,
+        BT_POP_DOWN,
+        BT_POP_UP,
+        BT_RIDE,
+        BT_TRADE,
+        BT_FRIEND,
+        BT_VISIT,
+        BT_ARRAY_GET,
+        BT_ARRAY_NAME,
+        BT_FAQ,
+        BT_REGIST
     };
 
     /// Main Window

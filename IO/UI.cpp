@@ -227,11 +227,11 @@ void UI::send_key(int32_t keycode, bool pressed) {
             statusbar->send_key(mapping.action, pressed, escape);
             sent = true;
         } else if (channel && channel->is_active()
-                   && mapping.action != KeyAction::Id::CHANGECHANNEL) {
+                   && mapping.action != KeyAction::Id::CHANGE_CHANNEL) {
             channel->send_key(mapping.action, pressed, escape);
             sent = true;
         } else if (worldmap && worldmap->is_active()
-                   && mapping.action != KeyAction::Id::WORLDMAP) {
+                   && mapping.action != KeyAction::Id::WORLD_MAP) {
             worldmap->send_key(mapping.action, pressed, escape);
             sent = true;
         } else if (optionmenu && optionmenu->is_active()) {
@@ -253,57 +253,57 @@ void UI::send_key(int32_t keycode, bool pressed) {
             // All
             if (escape || tab || enter || arrows) {
                 // Login
-                types.emplace_back(UIElement::Type::WORLDSELECT);
-                types.emplace_back(UIElement::Type::CHARSELECT);
-                types.emplace_back(UIElement::Type::RACESELECT);  // No tab
+                types.emplace_back(UIElement::Type::WORLD_SELECT);
+                types.emplace_back(UIElement::Type::CHAR_SELECT);
+                types.emplace_back(UIElement::Type::RACE_SELECT);  // No tab
                 types.emplace_back(
-                    UIElement::Type::CLASSCREATION);  // No tab (No arrows, but
+                    UIElement::Type::CLASS_CREATION);  // No tab (No arrows, but
                                                       // shouldn't send else
                                                       // where)
                 types.emplace_back(
-                    UIElement::Type::LOGINNOTICE);  // No tab (No arrows, but
+                    UIElement::Type::LOGIN_NOTICE);  // No tab (No arrows, but
                                                     // shouldn't send else
                                                     // where)
                 types.emplace_back(
-                    UIElement::Type::LOGINNOTICE_CONFIRM);  // No tab (No
+                    UIElement::Type::LOGIN_NOTICE_CONFIRM);  // No tab (No
                                                             // arrows, but
                                                             // shouldn't send
                                                             // else where)
                 types.emplace_back(
-                    UIElement::Type::LOGINWAIT);  // No tab (No arrows, but
+                    UIElement::Type::LOGIN_WAIT);  // No tab (No arrows, but
                                                   // shouldn't send else where)
             }
 
             if (escape) {
                 // Login
-                types.emplace_back(UIElement::Type::SOFTKEYBOARD);
+                types.emplace_back(UIElement::Type::SOFT_KEYBOARD);
 
                 // Game
                 types.emplace_back(UIElement::Type::NOTICE);
-                types.emplace_back(UIElement::Type::KEYCONFIG);
+                types.emplace_back(UIElement::Type::KEY_CONFIG);
                 types.emplace_back(UIElement::Type::CHAT);
                 types.emplace_back(UIElement::Type::EVENT);
-                types.emplace_back(UIElement::Type::STATSINFO);
-                types.emplace_back(UIElement::Type::ITEMINVENTORY);
-                types.emplace_back(UIElement::Type::EQUIPINVENTORY);
-                types.emplace_back(UIElement::Type::SKILLBOOK);
-                types.emplace_back(UIElement::Type::QUESTLOG);
-                types.emplace_back(UIElement::Type::USERLIST);
-                types.emplace_back(UIElement::Type::NPCTALK);
-                types.emplace_back(UIElement::Type::CHARINFO);
+                types.emplace_back(UIElement::Type::STATS_INFO);
+                types.emplace_back(UIElement::Type::ITEM_INVENTORY);
+                types.emplace_back(UIElement::Type::EQUIP_INVENTORY);
+                types.emplace_back(UIElement::Type::SKILL_BOOK);
+                types.emplace_back(UIElement::Type::QUEST_LOG);
+                types.emplace_back(UIElement::Type::USER_LIST);
+                types.emplace_back(UIElement::Type::NPC_TALK);
+                types.emplace_back(UIElement::Type::CHAR_INFO);
             } else if (enter) {
                 // Login
-                types.emplace_back(UIElement::Type::SOFTKEYBOARD);
+                types.emplace_back(UIElement::Type::SOFT_KEYBOARD);
 
                 // Game
                 types.emplace_back(UIElement::Type::NOTICE);
             } else if (tab) {
                 // Game
-                types.emplace_back(UIElement::Type::ITEMINVENTORY);
-                types.emplace_back(UIElement::Type::EQUIPINVENTORY);
-                types.emplace_back(UIElement::Type::SKILLBOOK);
-                types.emplace_back(UIElement::Type::QUESTLOG);
-                types.emplace_back(UIElement::Type::USERLIST);
+                types.emplace_back(UIElement::Type::ITEM_INVENTORY);
+                types.emplace_back(UIElement::Type::EQUIP_INVENTORY);
+                types.emplace_back(UIElement::Type::SKILL_BOOK);
+                types.emplace_back(UIElement::Type::QUEST_LOG);
+                types.emplace_back(UIElement::Type::USER_LIST);
             }
 
             if (!types.empty()) {

@@ -114,9 +114,9 @@ void CharLook::draw(const DrawArgument &args,
                              args);
                 hair_->draw(interstance, Hair::Layer::BACK, interframe, args);
                 break;
-            case CharEquips::CapType::HALFCOVER:
+            case CharEquips::CapType::HALF_COVER:
                 hair_->draw(interstance,
-                            Hair::Layer::BELOWCAP,
+                            Hair::Layer::BELOW_CAP,
                             interframe,
                             args);
                 equips_.draw(EquipSlot::Id::HAT,
@@ -125,7 +125,7 @@ void CharLook::draw(const DrawArgument &args,
                              interframe,
                              args);
                 break;
-            case CharEquips::CapType::FULLCOVER:
+            case CharEquips::CapType::FULL_COVER:
                 equips_.draw(EquipSlot::Id::HAT,
                              interstance,
                              Clothing::Layer::CAP,
@@ -136,16 +136,16 @@ void CharLook::draw(const DrawArgument &args,
 
         equips_.draw(EquipSlot::Id::SHIELD,
                      interstance,
-                     Clothing::Layer::BACKSHIELD,
+                     Clothing::Layer::BACK_SHIELD,
                      interframe,
                      args);
         equips_.draw(EquipSlot::Id::WEAPON,
                      interstance,
-                     Clothing::Layer::BACKWEAPON,
+                     Clothing::Layer::BACK_WEAPON,
                      interframe,
                      args);
     } else {
-        hair_->draw(interstance, Hair::Layer::BELOWBODY, interframe, args);
+        hair_->draw(interstance, Hair::Layer::BELOW_BODY, interframe, args);
         equips_.draw(EquipSlot::Id::CAPE,
                      interstance,
                      Clothing::Layer::CAPE,
@@ -223,12 +223,12 @@ void CharLook::draw(const DrawArgument &args,
         face_->draw(interexpression, interexpframe, faceargs);
         equips_.draw(EquipSlot::Id::FACE,
                      interstance,
-                     Clothing::Layer::FACEACC,
+                     Clothing::Layer::FACE_ACC,
                      0,
                      faceargs);
-        equips_.draw(EquipSlot::Id::EYEACC,
+        equips_.draw(EquipSlot::Id::EYE_ACC,
                      interstance,
-                     Clothing::Layer::EYEACC,
+                     Clothing::Layer::EYE_ACC,
                      interframe,
                      args);
         equips_.draw(EquipSlot::Id::SHIELD,
@@ -240,7 +240,7 @@ void CharLook::draw(const DrawArgument &args,
         switch (equips_.getcaptype()) {
             case CharEquips::CapType::NONE:
                 hair_->draw(interstance,
-                            Hair::Layer::OVERHEAD,
+                            Hair::Layer::OVER_HEAD,
                             interframe,
                             args);
                 break;
@@ -255,7 +255,7 @@ void CharLook::draw(const DrawArgument &args,
                             interframe,
                             args);
                 hair_->draw(interstance,
-                            Hair::Layer::OVERHEAD,
+                            Hair::Layer::OVER_HEAD,
                             interframe,
                             args);
                 equips_.draw(EquipSlot::Id::HAT,
@@ -264,7 +264,7 @@ void CharLook::draw(const DrawArgument &args,
                              interframe,
                              args);
                 break;
-            case CharEquips::CapType::HALFCOVER:
+            case CharEquips::CapType::HALF_COVER:
                 hair_->draw(interstance,
                             Hair::Layer::DEFAULT,
                             interframe,
@@ -275,7 +275,7 @@ void CharLook::draw(const DrawArgument &args,
                              interframe,
                              args);
                 break;
-            case CharEquips::CapType::FULLCOVER:
+            case CharEquips::CapType::FULL_COVER:
                 equips_.draw(EquipSlot::Id::HAT,
                              interstance,
                              Clothing::Layer::CAP,

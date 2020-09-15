@@ -23,7 +23,7 @@
 namespace ms {
 class UIQuestLog : public UIDragElement<PosQUEST> {
 public:
-    static constexpr Type TYPE = UIElement::Type::QUESTLOG;
+    static constexpr Type TYPE = UIElement::Type::QUEST_LOG;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

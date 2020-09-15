@@ -91,7 +91,7 @@ void UIStateGame::update() {
         VWIDTH = new_width;
         VHEIGHT = new_height;
 
-        UI::get().remove(UIElement::Type::STATUSBAR);
+        UI::get().remove(UIElement::Type::STATUS_BAR);
 
         const CharStats &stats = Stage::get().get_player().get_stats();
         emplace<UIStatusBar>(stats, channel_count_);
@@ -191,7 +191,7 @@ void UIStateGame::send_key(KeyType::Id type,
                         break;
                     case KeyAction::Id::FRIENDS:
                     case KeyAction::Id::PARTY:
-                    case KeyAction::Id::BOSSPARTY: {
+                    case KeyAction::Id::BOSS_PARTY: {
                         UIUserList::Tab tab;
 
                         switch (action) {
@@ -201,7 +201,7 @@ void UIStateGame::send_key(KeyType::Id type,
                             case KeyAction::Id::PARTY:
                                 tab = UIUserList::Tab::PARTY;
                                 break;
-                            case KeyAction::Id::BOSSPARTY:
+                            case KeyAction::Id::BOSS_PARTY:
                                 tab = UIUserList::Tab::BOSS;
                                 break;
                         }
@@ -220,21 +220,21 @@ void UIStateGame::send_key(KeyType::Id type,
                             }
                         }
                     } break;
-                    case KeyAction::Id::WORLDMAP: emplace<UIWorldMap>(); break;
-                    case KeyAction::Id::MAPLECHAT: {
+                    case KeyAction::Id::WORLD_MAP: emplace<UIWorldMap>(); break;
+                    case KeyAction::Id::MAPLE_CHAT: {
                         auto chat = UI::get().get_element<UIChat>();
 
                         if (!chat || !chat->is_active()) {
                             emplace<UIChat>();
                         }
                     } break;
-                    case KeyAction::Id::MINIMAP:
+                    case KeyAction::Id::MINI_MAP:
                         if (auto minimap = UI::get().get_element<UIMiniMap>()) {
                             minimap->send_key(action, pressed, escape);
                         }
 
                         break;
-                    case KeyAction::Id::QUESTLOG:
+                    case KeyAction::Id::QUEST_LOG:
                         emplace<UIQuestLog>(
                             Stage::get().get_player().get_quests());
                         break;
@@ -245,7 +245,7 @@ void UIStateGame::send_key(KeyType::Id type,
                         }
 
                         break;
-                    case KeyAction::Id::QUICKSLOTS:
+                    case KeyAction::Id::QUICK_SLOTS:
                         if (auto statusbar =
                                 UI::get().get_element<UIStatusBar>()) {
                             statusbar->toggle_qs();
@@ -253,7 +253,7 @@ void UIStateGame::send_key(KeyType::Id type,
 
                         break;
                     case KeyAction::Id::CASHSHOP: fn_enter_cashshop(); break;
-                    case KeyAction::Id::TOGGLECHAT:
+                    case KeyAction::Id::TOGGLE_CHAT:
                         if (auto chatbar = UI::get().get_element<UIChatBar>()) {
                             if (!chatbar->is_chatfieldopen()) {
                                 chatbar->toggle_chat();
@@ -261,7 +261,7 @@ void UIStateGame::send_key(KeyType::Id type,
                         }
 
                         break;
-                    case KeyAction::Id::KEYBINDINGS: {
+                    case KeyAction::Id::KEY_BINDINGS: {
                         auto keyconfig = UI::get().get_element<UIKeyConfig>();
 
                         if (!keyconfig || !keyconfig->is_active()) {
@@ -274,7 +274,7 @@ void UIStateGame::send_key(KeyType::Id type,
 
                         break;
                     }
-                    case KeyAction::Id::MAINMENU:
+                    case KeyAction::Id::MAIN_MENU:
                         if (auto statusbar =
                                 UI::get().get_element<UIStatusBar>()) {
                             statusbar->send_key(action, pressed, escape);
@@ -282,7 +282,7 @@ void UIStateGame::send_key(KeyType::Id type,
 
                         break;
                     case KeyAction::Id::EVENT: emplace<UIEvent>(); break;
-                    case KeyAction::Id::CHANGECHANNEL:
+                    case KeyAction::Id::CHANGE_CHANNEL:
                         emplace<UIChannel>(
                             Stage::get().get_player().get_world_id(),
                             Stage::get().get_player().get_channel_id(),
@@ -317,7 +317,7 @@ Cursor::State UIStateGame::send_cursor(Cursor::State cursorstate,
         return Cursor::State::GRABBING;
     }
     bool clicked = cursorstate == Cursor::State::CLICKING
-                   || cursorstate == Cursor::State::VSCROLLIDLE;
+                   || cursorstate == Cursor::State::VSCROLL_IDLE;
 
     if (auto *focusedelement = get(focused_)) {
         if (focusedelement->is_active()) {
@@ -470,20 +470,20 @@ void UIStateGame::emplace(Args &&... args) {
     if (auto iter = pre_add(T::TYPE, T::TOGGLED, T::FOCUSED)) {
         (*iter).second = std::make_unique<T>(std::forward<Args>(args)...);
 
-        auto silent_types = { UIElement::Type::STATUSMESSENGER,
-                              UIElement::Type::STATUSBAR,
-                              UIElement::Type::CHATBAR,
-                              UIElement::Type::MINIMAP,
-                              UIElement::Type::BUFFLIST,
-                              UIElement::Type::NPCTALK,
+        auto silent_types = { UIElement::Type::STATUS_MESSENGER,
+                              UIElement::Type::STATUS_BAR,
+                              UIElement::Type::CHAT_BAR,
+                              UIElement::Type::MINI_MAP,
+                              UIElement::Type::BUFF_LIST,
+                              UIElement::Type::NPC_TALK,
                               UIElement::Type::SHOP };
 
         if (std::find(silent_types.begin(), silent_types.end(), T::TYPE)
             == silent_types.end()) {
-            if (T::TYPE == UIElement::Type::WORLDMAP) {
-                Sound(Sound::Name::WORLDMAPOPEN).play();
+            if (T::TYPE == UIElement::Type::WORLD_MAP) {
+                Sound(Sound::Name::WORLD_MAP_OPEN).play();
             } else {
-                Sound(Sound::Name::MENUUP).play();
+                Sound(Sound::Name::MENU_UP).play();
             }
 
             UI::get().send_cursor(false);
@@ -506,18 +506,18 @@ UIState::Iterator UIStateGame::pre_add(UIElement::Type type,
 
         if (active != element->is_active()) {
             if (element->is_active()) {
-                if (type == UIElement::Type::WORLDMAP) {
-                    Sound(Sound::Name::WORLDMAPOPEN).play();
+                if (type == UIElement::Type::WORLD_MAP) {
+                    Sound(Sound::Name::WORLD_MAP_OPEN).play();
                 } else {
-                    Sound(Sound::Name::MENUUP).play();
+                    Sound(Sound::Name::MENU_UP).play();
                 }
 
                 UI::get().send_cursor(false);
             } else {
-                if (type == UIElement::Type::WORLDMAP) {
-                    Sound(Sound::Name::WORLDMAPCLOSE).play();
+                if (type == UIElement::Type::WORLD_MAP) {
+                    Sound(Sound::Name::WORLD_MAP_CLOSE).play();
                 } else {
-                    Sound(Sound::Name::MENUDOWN).play();
+                    Sound(Sound::Name::MENU_DOWN).play();
                 }
 
                 element->remove_cursor();

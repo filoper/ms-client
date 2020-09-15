@@ -439,11 +439,11 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
         if (!ignore_tooltip_) {
             show_item(slot);
 
-            return Cursor::State::CANGRAB;
+            return Cursor::State::CAN_GRAB;
         }
         ignore_tooltip_ = false;
 
-        return Cursor::State::CANGRAB;
+        return Cursor::State::CAN_GRAB;
 
     }
     clear_tooltip();
@@ -502,8 +502,8 @@ void UIItemInventory::modify(InventoryType::Id type,
                 new_tab_ = type;
                 new_slot_ = slot;
                 break;
-            case Inventory::Modification::CHANGECOUNT:
-            case Inventory::Modification::ADDCOUNT:
+            case Inventory::Modification::CHANGE_COUNT:
+            case Inventory::Modification::ADD_COUNT:
                 if (auto *icon = get_icon(slot)) {
                     icon->set_count(arg);
                 }
@@ -522,11 +522,11 @@ void UIItemInventory::modify(InventoryType::Id type,
 
     switch (mode) {
         case Inventory::Modification::ADD:
-        case Inventory::Modification::ADDCOUNT:
+        case Inventory::Modification::ADD_COUNT:
             new_tab_ = type;
             new_slot_ = slot;
             break;
-        case Inventory::Modification::CHANGECOUNT:
+        case Inventory::Modification::CHANGE_COUNT:
         case Inventory::Modification::SWAP:
         case Inventory::Modification::REMOVE:
             if (new_slot_ == slot && new_tab_ == type) {
@@ -895,7 +895,7 @@ void UIItemInventory::ItemIcon::drop_on_equips(EquipSlot::Id eqslot) const {
                 }
             }
 
-            Sound(Sound::Name::DRAGEND).play();
+            Sound(Sound::Name::DRAG_END).play();
 
             break;
         case InventoryType::Id::USE:

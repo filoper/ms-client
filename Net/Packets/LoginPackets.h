@@ -48,24 +48,24 @@ public:
     }
 };
 
-// Opcode: CHARLIST_REQUEST(5)
+// Opcode: CHAR_LIST_REQUEST(5)
 class CharlistRequestPacket : public OutPacket {
 public:
     // Requests the list of characters on a world
     CharlistRequestPacket(uint8_t world, uint8_t channel) :
-        OutPacket(OutPacket::Opcode::CHARLIST_REQUEST) {
+        OutPacket(OutPacket::Opcode::CHAR_LIST_REQUEST) {
         write_byte(0);
         write_byte(world);
         write_byte(channel);
     }
 };
 
-// Opcode: SERVERSTATUS_REQUEST(6)
+// Opcode: SERVER_STATUS_REQUEST(6)
 class ServerStatusRequestPacket : public OutPacket {
 public:
     // Requests the status of the server
     ServerStatusRequestPacket(int16_t world) :
-        OutPacket(OutPacket::Opcode::SERVERSTATUS_REQUEST) {
+        OutPacket(OutPacket::Opcode::SERVER_STATUS_REQUEST) {
         write_short(world);
     }
 };

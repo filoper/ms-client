@@ -24,11 +24,11 @@ public:
     enum Layer {
         NONE,
         DEFAULT,
-        BELOWBODY,
-        OVERHEAD,
+        BELOW_BODY,
+        OVER_HEAD,
         SHADE,
         BACK,
-        BELOWCAP,
+        BELOW_CAP,
         NUM_LAYERS
     };
 

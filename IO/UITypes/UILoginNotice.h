@@ -20,7 +20,7 @@
 namespace ms {
 class UIKeyConfirm : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::LOGINNOTICE_CONFIRM;
+    static constexpr Type TYPE = UIElement::Type::LOGIN_NOTICE_CONFIRM;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 
@@ -44,7 +44,7 @@ private:
 
 class UIKeySelect : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::LOGINNOTICE;
+    static constexpr Type TYPE = UIElement::Type::LOGIN_NOTICE;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 
@@ -66,7 +66,7 @@ private:
 
 class UIClassConfirm : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::LOGINNOTICE;
+    static constexpr Type TYPE = UIElement::Type::LOGIN_NOTICE;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 
@@ -121,7 +121,7 @@ private:
 
 class UIQuitConfirm : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::LOGINNOTICE;
+    static constexpr Type TYPE = UIElement::Type::LOGIN_NOTICE;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 
@@ -140,7 +140,7 @@ private:
 
 class UILoginNotice : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::LOGINNOTICE;
+    static constexpr Type TYPE = UIElement::Type::LOGIN_NOTICE;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 

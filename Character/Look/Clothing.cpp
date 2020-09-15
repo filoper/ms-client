@@ -37,8 +37,8 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
     constexpr size_t WEAPON_TYPES = 20;
 
     constexpr Clothing::Layer layers[NON_WEAPON_TYPES] = {
-        Clothing::Layer::CAP,     Clothing::Layer::FACEACC,
-        Clothing::Layer::EYEACC,  Clothing::Layer::EARRINGS,
+        Clothing::Layer::CAP,     Clothing::Layer::FACE_ACC,
+        Clothing::Layer::EYE_ACC,  Clothing::Layer::EARRINGS,
         Clothing::Layer::TOP,     Clothing::Layer::MAIL,
         Clothing::Layer::PANTS,   Clothing::Layer::SHOES,
         Clothing::Layer::GLOVE,   Clothing::Layer::SHIELD,
@@ -139,7 +139,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
                         break;
                     case EquipSlot::Id::HAT:
                     case EquipSlot::Id::EARACC:
-                    case EquipSlot::Id::EYEACC:
+                    case EquipSlot::Id::EYE_ACC:
                         shift = drawinfo.getfacepos(stance, frame) - parentpos;
                         break;
                     case EquipSlot::Id::SHIELD:
@@ -219,11 +219,11 @@ const std::unordered_map<std::string, Clothing::Layer>
         { "weaponOverBody", Clothing::Layer::WEAPON_OVER_BODY },
         { "weaponBelowArm", Clothing::Layer::WEAPON_BELOW_ARM },
         { "weaponBelowBody", Clothing::Layer::WEAPON_BELOW_BODY },
-        { "backWeaponOverShield", Clothing::Layer::BACKWEAPON },
+        { "backWeaponOverShield", Clothing::Layer::BACK_WEAPON },
         // SHIELD
         { "shieldOverHair", Clothing::Layer::SHIELD_OVER_HAIR },
         { "shieldBelowBody", Clothing::Layer::SHIELD_BELOW_BODY },
-        { "backShield", Clothing::Layer::BACKSHIELD },
+        { "backShield", Clothing::Layer::BACK_SHIELD },
         // GLOVE
         { "gloveWrist", Clothing::Layer::WRIST },
         { "gloveOverHair", Clothing::Layer::GLOVE_OVER_HAIR },

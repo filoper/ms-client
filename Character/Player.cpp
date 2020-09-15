@@ -309,7 +309,7 @@ void Player::rush(double targetx) {
     if (phobj_.onground) {
         uint16_t delay = get_attackdelay(1);
         phobj_.movexuntil(targetx, delay);
-        phobj_.set_flag(PhysicsObject::Flag::TURNATEDGES);
+        phobj_.set_flag(PhysicsObject::Flag::TURN_AT_EDGES);
     }
 }
 
@@ -388,7 +388,7 @@ void Player::change_level(uint16_t level) {
     uint16_t oldlevel = get_level();
 
     if (level > oldlevel) {
-        show_effect_id(CharEffect::Id::LEVELUP);
+        show_effect_id(CharEffect::Id::LEVEL_UP);
     }
 
     stats_.set_stat(MapleStat::Id::LEVEL, level);
@@ -411,7 +411,7 @@ uint8_t Player::get_channel_id() const {
 }
 
 void Player::change_job(uint16_t jobid) {
-    show_effect_id(CharEffect::Id::JOBCHANGE);
+    show_effect_id(CharEffect::Id::JOB_CHANGE);
     stats_.change_job(jobid);
 }
 

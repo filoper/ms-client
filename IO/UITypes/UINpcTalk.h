@@ -24,20 +24,20 @@ class UINpcTalk : public UIElement {
 public:
     enum TalkType : int8_t {
         NONE = -1,
-        SENDOK,
-        SENDYESNO,
+        SEND_OK,
+        SEND_YESNO,
 
         // TODO: Unconfirmed
-        SENDNEXT,
-        SENDNEXTPREV,
-        SENDACCEPTDECLINE,
-        SENDGETTEXT,
-        SENDGETNUMBER,
-        SENDSIMPLE,
+        SEND_NEXT,
+        SEND_NEXT_PREV,
+        SEND_ACCEPT_DECLINE,
+        SEND_GET_TEXT,
+        SEND_GET_NUMBER,
+        SEND_SIMPLE,
         LENGTH
     };
 
-    static constexpr Type TYPE = UIElement::Type::NPCTALK;
+    static constexpr Type TYPE = UIElement::Type::NPC_TALK;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 

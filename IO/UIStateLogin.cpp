@@ -82,7 +82,7 @@ void UIStateLogin::send_key(KeyType::Id type,
 Cursor::State UIStateLogin::send_cursor(Cursor::State cursorstate,
                                         Point<int16_t> cursorpos) {
     bool clicked = cursorstate == Cursor::State::CLICKING
-                   || cursorstate == Cursor::State::VSCROLLIDLE;
+                   || cursorstate == Cursor::State::VSCROLL_IDLE;
 
     if (auto *focusedelement = get(focused_)) {
         if (focusedelement->is_active()) {

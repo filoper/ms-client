@@ -215,7 +215,7 @@ void Inventory::modify(InventoryType::Id type,
     arg = (arg < 0) ? -arg : arg;
 
     switch (mode) {
-        case Modification::CHANGECOUNT: change_count(type, slot, arg); break;
+        case Modification::CHANGE_COUNT: change_count(type, slot, arg); break;
         case Modification::SWAP:
             switch (move) {
                 case Movement::MOVE_INTERNAL:

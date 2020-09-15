@@ -34,15 +34,15 @@ static const std::unordered_map<uint16_t, std::string_view> op_name_map {
     { 0, "LOGIN_STATUS" },
     { 1, "GUEST_ID_LOGIN" },
     { 2, "ACCOUNT_INFO" },
-    { 3, "SERVERSTATUS" },
+    { 3, "SERVER_STATUS" },
     { 4, "GENDER_DONE" },
     { 5, "CONFIRM_EULA_RESULT" },
     { 6, "CHECK_PINCODE" },
     { 7, "UPDATE_PINCODE" },
     { 8, "VIEW_ALL_CHAR" },
     { 9, "SELECT_CHARACTER_BY_VAC" },
-    { 10, "SERVERLIST" },
-    { 11, "CHARLIST" },
+    { 10, "SERVER_LIST" },
+    { 11, "CHAR_LIST" },
     { 12, "SERVER_IP" },
     { 13, "CHAR_NAME_RESPONSE" },
     { 14, "ADD_NEW_CHAR_ENTRY" },
@@ -343,9 +343,9 @@ static const std::unordered_map<uint16_t, std::string_view> op_name_map {
 enum Opcode : uint16_t {
     /// Login 1
     LOGIN_RESULT = 0,
-    SERVERSTATUS = 3,
-    SERVERLIST = 10,
-    CHARLIST = 11,
+    SERVER_STATUS = 3,
+    SERVER_LIST = 10,
+    CHAR_LIST = 11,
     SERVER_IP = 12,
     CHARNAME_RESPONSE = 13,
     ADD_NEWCHAR_ENTRY = 14,
@@ -446,9 +446,9 @@ PacketSwitch::PacketSwitch() {
 
     // Login handlers
     emplace<LOGIN_RESULT, LoginResultHandler>();
-    emplace<SERVERSTATUS, ServerStatusHandler>();
-    emplace<SERVERLIST, ServerlistHandler>();
-    emplace<CHARLIST, CharlistHandler>();
+    emplace<SERVER_STATUS, ServerStatusHandler>();
+    emplace<SERVER_LIST, ServerlistHandler>();
+    emplace<CHAR_LIST, CharlistHandler>();
     emplace<SERVER_IP, ServerIPHandler>();
     emplace<CHARNAME_RESPONSE, CharnameResponseHandler>();
     emplace<ADD_NEWCHAR_ENTRY, AddNewCharEntryHandler>();

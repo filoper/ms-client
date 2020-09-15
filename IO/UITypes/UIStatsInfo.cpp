@@ -80,25 +80,25 @@ UIStatsInfo::UIStatsInfo(const CharStats &st) :
         Point<int16_t>(0,
                        141));  // TODO: "BtLukUp" not working
     buttons_[Buttons::BT_AUTO] = std::make_unique<MapleButton>(main["BtAuto"]);
-    buttons_[Buttons::BT_HYPERSTATOPEN] =
+    buttons_[Buttons::BT_HYPER_STAT_OPEN] =
         std::make_unique<MapleButton>(main["BtHyperStatOpen"]);
-    buttons_[Buttons::BT_HYPERSTATCLOSE] =
+    buttons_[Buttons::BT_HYPER_STAT_CLOSE] =
         std::make_unique<MapleButton>(main["BtHyperStatClose"]);
-    buttons_[Buttons::BT_DETAILOPEN] =
+    buttons_[Buttons::BT_DETAIL_OPEN] =
         std::make_unique<MapleButton>(main["BtDetailOpen"]);
-    buttons_[Buttons::BT_DETAILCLOSE] =
+    buttons_[Buttons::BT_DETAIL_CLOSE] =
         std::make_unique<MapleButton>(main["BtDetailClose"]);
     buttons_[Buttons::BT_ABILITY] =
         std::make_unique<MapleButton>(detail["BtAbility"],
                                       Point<int16_t>(212, 0));
-    buttons_[Buttons::BT_DETAIL_DETAILCLOSE] =
+    buttons_[Buttons::BT_DETAIL_DETAIL_CLOSE] =
         std::make_unique<MapleButton>(detail["BtHpUp"], Point<int16_t>(212, 0));
 
-    buttons_[Buttons::BT_HYPERSTATOPEN]->set_active(false);
-    buttons_[Buttons::BT_DETAILCLOSE]->set_active(false);
+    buttons_[Buttons::BT_HYPER_STAT_OPEN]->set_active(false);
+    buttons_[Buttons::BT_DETAIL_CLOSE]->set_active(false);
     buttons_[Buttons::BT_ABILITY]->set_active(false);
     buttons_[Buttons::BT_ABILITY]->set_state(Button::State::DISABLED);
-    buttons_[Buttons::BT_DETAIL_DETAILCLOSE]->set_active(false);
+    buttons_[Buttons::BT_DETAIL_DETAIL_CLOSE]->set_active(false);
 
     update_ap();
 
@@ -367,17 +367,17 @@ Button::State UIStatsInfo::button_pressed(uint16_t id) {
                                        yesnohandler,
                                        Text::Alignment::LEFT);
         } break;
-        case Buttons::BT_HYPERSTATOPEN: break;
-        case Buttons::BT_HYPERSTATCLOSE: {
+        case Buttons::BT_HYPER_STAT_OPEN: break;
+        case Buttons::BT_HYPER_STAT_CLOSE: {
             if (player.get_level() < 140) {
                 UI::get().emplace<UIOk>(
                     "You can use the Hyper Stat at Lv. 140 and above.",
                     [](bool) {});
             }
         } break;
-        case Buttons::BT_DETAILOPEN: set_detail(true); break;
-        case Buttons::BT_DETAILCLOSE:
-        case Buttons::BT_DETAIL_DETAILCLOSE: set_detail(false); break;
+        case Buttons::BT_DETAIL_OPEN: set_detail(true); break;
+        case Buttons::BT_DETAIL_CLOSE:
+        case Buttons::BT_DETAIL_DETAIL_CLOSE: set_detail(false); break;
         case Buttons::BT_ABILITY: break;
         default: break;
     }
@@ -393,10 +393,10 @@ void UIStatsInfo::send_apup(MapleStat::Id stat) const {
 void UIStatsInfo::set_detail(bool enabled) {
     show_detail_ = enabled;
 
-    buttons_[Buttons::BT_DETAILOPEN]->set_active(!enabled);
-    buttons_[Buttons::BT_DETAILCLOSE]->set_active(enabled);
+    buttons_[Buttons::BT_DETAIL_OPEN]->set_active(!enabled);
+    buttons_[Buttons::BT_DETAIL_CLOSE]->set_active(enabled);
     buttons_[Buttons::BT_ABILITY]->set_active(enabled);
-    buttons_[Buttons::BT_DETAIL_DETAILCLOSE]->set_active(enabled);
+    buttons_[Buttons::BT_DETAIL_DETAIL_CLOSE]->set_active(enabled);
 }
 
 void UIStatsInfo::update_ap() {

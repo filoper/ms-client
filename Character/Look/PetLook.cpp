@@ -98,11 +98,11 @@ void PetLook::update(const Physics &physics, Point<int16_t> charpos) {
             }
 
             phobj_.type = PhysicsObject::Type::NORMAL;
-            phobj_.clear_flag(PhysicsObject::Flag::NOGRAVITY);
+            phobj_.clear_flag(PhysicsObject::Flag::NO_GRAVITY);
             break;
         case Stance::HANG:
             set_position(charpos.x(), charpos.y());
-            phobj_.set_flag(PhysicsObject::Flag::NOGRAVITY);
+            phobj_.set_flag(PhysicsObject::Flag::NO_GRAVITY);
             break;
         case Stance::FLY:
             if ((charpos - curpos).length() > 250) {
@@ -128,7 +128,7 @@ void PetLook::update(const Physics &physics, Point<int16_t> charpos) {
             }
 
             phobj_.type = PhysicsObject::Type::FLYING;
-            phobj_.clear_flag(PhysicsObject::Flag::NOGRAVITY);
+            phobj_.clear_flag(PhysicsObject::Flag::NO_GRAVITY);
             break;
     }
 

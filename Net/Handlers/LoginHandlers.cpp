@@ -39,8 +39,8 @@ void LoginResultHandler::handle(InPacket &recv) const {
 
     if (loginwait && loginwait->is_active()) {
         // Remove previous UIs
-        UI::get().remove(UIElement::Type::LOGINNOTICE);
-        UI::get().remove(UIElement::Type::LOGINWAIT);
+        UI::get().remove(UIElement::Type::LOGIN_NOTICE);
+        UI::get().remove(UIElement::Type::LOGIN_WAIT);
         UI::get().remove(UIElement::Type::TOS);
         UI::get().remove(UIElement::Type::GENDER);
 
@@ -164,8 +164,8 @@ void CharlistHandler::handle(InPacket &recv) const {
         int32_t slots = recv.read_int();
 
         // Remove previous UIs
-        UI::get().remove(UIElement::Type::LOGINNOTICE);
-        UI::get().remove(UIElement::Type::LOGINWAIT);
+        UI::get().remove(UIElement::Type::LOGIN_NOTICE);
+        UI::get().remove(UIElement::Type::LOGIN_WAIT);
 
         // Remove the world selection screen
         if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {

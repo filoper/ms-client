@@ -94,10 +94,10 @@ const std::string &Hair::getcolor() const {
 
 const std::unordered_map<std::string, Hair::Layer> Hair::layers_by_name_ = {
     { "hair", Hair::Layer::DEFAULT },
-    { "hairBelowBody", Hair::Layer::BELOWBODY },
-    { "hairOverHead", Hair::Layer::OVERHEAD },
+    { "hairBelowBody", Hair::Layer::BELOW_BODY },
+    { "hairOverHead", Hair::Layer::OVER_HEAD },
     { "hairShade", Hair::Layer::SHADE },
     { "backHair", Hair::Layer::BACK },
-    { "backHairBelowCap", Hair::Layer::BELOWCAP }
+    { "backHairBelowCap", Hair::Layer::BELOW_CAP }
 };
 }  // namespace ms

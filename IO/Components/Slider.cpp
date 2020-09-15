@@ -35,7 +35,7 @@ Slider::Slider(int32_t t,
     nl::node src;
     std::string base_str = "base";
 
-    if (type_ == Type::CHATBAR) {
+    if (type_ == Type::CHAT_BAR) {
         src = nl::nx::ui["StatusBar3.img"]["chat"]["common"]["scroll"];
         base_str += "_c";
     } else {
@@ -179,7 +179,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
                 onmoved_(true);
             }
 
-            return Cursor::State::VSCROLLIDLE;
+            return Cursor::State::VSCROLL_IDLE;
         }
 
         scrolling_ = false;
@@ -200,7 +200,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
             scrolling_ = true;
             thumb_.set_state(Button::State::PRESSED);
 
-            return Cursor::State::VSCROLLIDLE;
+            return Cursor::State::VSCROLL_IDLE;
         }
 
         thumb_.set_state(Button::State::NORMAL);
@@ -219,7 +219,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
 
             prev_.set_state(Button::State::PRESSED);
 
-            return Cursor::State::VSCROLLIDLE;
+            return Cursor::State::VSCROLL_IDLE;
         }
 
         prev_.set_state(Button::State::MOUSEOVER);
@@ -238,7 +238,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
 
             next_.set_state(Button::State::PRESSED);
 
-            return Cursor::State::VSCROLLIDLE;
+            return Cursor::State::VSCROLL_IDLE;
         }
 
         next_.set_state(Button::State::MOUSEOVER);
@@ -277,7 +277,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed) {
                 }
             }
 
-            return Cursor::State::VSCROLLIDLE;
+            return Cursor::State::VSCROLL_IDLE;
         }
     }
 

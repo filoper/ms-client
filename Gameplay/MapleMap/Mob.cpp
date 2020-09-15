@@ -106,7 +106,7 @@ Mob::Mob(int32_t oi,
     set_position(position);
     set_control(mode);
     phobj_.fhid = fh;
-    phobj_.set_flag(PhysicsObject::Flag::TURNATEDGES);
+    phobj_.set_flag(PhysicsObject::Flag::TURN_AT_EDGES);
 
     hp_percent_ = 0;
     dying_ = false;
@@ -206,9 +206,9 @@ int8_t Mob::update(const Physics &physics) {
 
     if (!dying_) {
         if (!can_fly_) {
-            if (phobj_.is_flag_not_set(PhysicsObject::Flag::TURNATEDGES)) {
+            if (phobj_.is_flag_not_set(PhysicsObject::Flag::TURN_AT_EDGES)) {
                 flip_ = !flip_;
-                phobj_.set_flag(PhysicsObject::Flag::TURNATEDGES);
+                phobj_.set_flag(PhysicsObject::Flag::TURN_AT_EDGES);
 
                 if (stance_ == Stance::HIT) {
                     set_stance(Stance::STAND);

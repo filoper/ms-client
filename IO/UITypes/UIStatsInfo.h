@@ -22,7 +22,7 @@
 namespace ms {
 class UIStatsInfo : public UIDragElement<PosSTATS> {
 public:
-    static constexpr Type TYPE = UIElement::Type::STATSINFO;
+    static constexpr Type TYPE = UIElement::Type::STATS_INFO;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 
@@ -99,12 +99,12 @@ private:
         BT_INT,
         BT_LUK,
         BT_AUTO,
-        BT_HYPERSTATOPEN,
-        BT_HYPERSTATCLOSE,
-        BT_DETAILOPEN,
-        BT_DETAILCLOSE,
+        BT_HYPER_STAT_OPEN,
+        BT_HYPER_STAT_CLOSE,
+        BT_DETAIL_OPEN,
+        BT_DETAIL_CLOSE,
         BT_ABILITY,
-        BT_DETAIL_DETAILCLOSE
+        BT_DETAIL_DETAIL_CLOSE
     };
 
     const CharStats &stats_;

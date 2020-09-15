@@ -21,7 +21,7 @@
 namespace ms {
 class UIOptionMenu : public UIDragElement<PosOPTIONMENU> {
 public:
-    static constexpr Type TYPE = UIElement::Type::OPTIONMENU;
+    static constexpr Type TYPE = UIElement::Type::OPTION_MENU;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 

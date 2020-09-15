@@ -204,7 +204,7 @@ Cursor::State Textfield::send_cursor(Point<int16_t> cursorpos, bool clicked) {
             }
             return Cursor::State::CLICKING;
         }
-        return Cursor::State::CANCLICK;
+        return Cursor::State::CAN_CLICK;
     }
 
     if (clicked && state_ == State::FOCUSED) {

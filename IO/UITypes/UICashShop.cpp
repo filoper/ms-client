@@ -69,20 +69,20 @@ UICashShop::UICashShop() :
     }
 
     for (size_t i = 0; i < 3; i++) {
-        buttons_[Buttons::BtPreview1 + i] = std::make_unique<TwoSpriteButton>(
+        buttons_[Buttons::BT_PREVIEW1 + i] = std::make_unique<TwoSpriteButton>(
             Base["Tab"]["Disable"][i],
             Base["Tab"]["Enable"][i],
             Point<int16_t>(957 + (i * 17), 46));
     }
 
-    buttons_[Buttons::BtPreview1]->set_state(Button::State::PRESSED);
+    buttons_[Buttons::BT_PREVIEW1]->set_state(Button::State::PRESSED);
 
-    buttons_[Buttons::BtExit] =
+    buttons_[Buttons::BT_EXIT] =
         std::make_unique<MapleButton>(CSTab["BtExit"], Point<int16_t>(5, 728));
-    buttons_[Buttons::BtChargeNX] =
+    buttons_[Buttons::BT_CHARGE_NX] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeNX"],
                                       Point<int16_t>(5, 554));
-    buttons_[Buttons::BtChargeRefresh] =
+    buttons_[Buttons::BT_CHARGE_REFRESH] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
                                       Point<int16_t>(92, 554));
 
@@ -90,19 +90,19 @@ UICashShop::UICashShop() :
         menu_tabs_[i] = CSTab["Tab"][i];
     }
 
-    buttons_[Buttons::BtChargeRefresh] =
+    buttons_[Buttons::BT_CHARGE_REFRESH] =
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
                                       Point<int16_t>(92, 554));
-    buttons_[Buttons::BtWish] =
+    buttons_[Buttons::BT_WISH] =
         std::make_unique<MapleButton>(CSStatus["BtWish"],
                                       Point<int16_t>(226, 6));
-    buttons_[Buttons::BtMileage] =
+    buttons_[Buttons::BT_MILEAGE] =
         std::make_unique<MapleButton>(CSStatus["BtMileage"],
                                       Point<int16_t>(869, 4));
-    buttons_[Buttons::BtHelp] =
+    buttons_[Buttons::BT_HELP] =
         std::make_unique<MapleButton>(CSStatus["BtHelp"],
                                       Point<int16_t>(997, 4));
-    buttons_[Buttons::BtCoupon] =
+    buttons_[Buttons::BT_COUPON] =
         std::make_unique<MapleButton>(CSStatus["BtCoupon"],
                                       Point<int16_t>(950, 4));
 
@@ -122,10 +122,10 @@ UICashShop::UICashShop() :
 
     promotion_sprites_.emplace_back(CSPromotionBanner["basic"]);
 
-    buttons_[Buttons::BtNext] =
+    buttons_[Buttons::BT_NEXT] =
         std::make_unique<MapleButton>(CSPromotionBanner["BtNext"],
                                       promotion_pos_);
-    buttons_[Buttons::BtPrev] =
+    buttons_[Buttons::BT_PREV] =
         std::make_unique<MapleButton>(CSPromotionBanner["BtPrev"],
                                       promotion_pos_);
 
@@ -134,13 +134,13 @@ UICashShop::UICashShop() :
     }
 
     mvp_pos_ = Point<int16_t>(63, 681);
-    buttons_[Buttons::BtDetailPackage] =
+    buttons_[Buttons::BT_DETAIL_PACKAGE] =
         std::make_unique<MapleButton>(CSMVPBanner["BtDetailPackage"], mvp_pos_);
-    buttons_[Buttons::BtNonGrade] =
+    buttons_[Buttons::BT_NON_GRADE] =
         std::make_unique<MapleButton>(CSMVPBanner["BtNonGrade"], mvp_pos_);
 
-    buttons_[Buttons::BtDetailPackage]->set_active(mvp_grade_);
-    buttons_[Buttons::BtNonGrade]->set_active(!mvp_grade_);
+    buttons_[Buttons::BT_DETAIL_PACKAGE]->set_active(mvp_grade_);
+    buttons_[Buttons::BT_NON_GRADE]->set_active(!mvp_grade_);
 
     mvp_gauge_ = Gauge(Gauge::Type::CASHSHOP,
                        CSMVPBanner["gage"][0],
@@ -154,19 +154,19 @@ UICashShop::UICashShop() :
     sprites_.emplace_back(CSItemSearch["search"],
                           search_pos + Point<int16_t>(35, 8));
 
-    buttons_[Buttons::BtBuyAvatar] =
+    buttons_[Buttons::BT_BUY_AVATAR] =
         std::make_unique<MapleButton>(CSChar["BtBuyAvatar"],
                                       Point<int16_t>(642, 305));
-    buttons_[Buttons::BtDefaultAvatar] =
+    buttons_[Buttons::BT_DEFAULT_AVATAR] =
         std::make_unique<MapleButton>(CSChar["BtDefaultAvatar"],
                                       Point<int16_t>(716, 305));
-    buttons_[Buttons::BtInventory] =
+    buttons_[Buttons::BT_INVENTORY] =
         std::make_unique<MapleButton>(CSChar["BtInventory"],
                                       Point<int16_t>(938, 305));
-    buttons_[Buttons::BtSaveAvatar] =
+    buttons_[Buttons::BT_SAVE_AVATAR] =
         std::make_unique<MapleButton>(CSChar["BtSaveAvatar"],
                                       Point<int16_t>(864, 305));
-    buttons_[Buttons::BtTakeoffAvatar] =
+    buttons_[Buttons::BT_TAKE_OFF_AVATAR] =
         std::make_unique<MapleButton>(CSChar["BtTakeoffAvatar"],
                                       Point<int16_t>(790, 305));
 
@@ -201,7 +201,7 @@ UICashShop::UICashShop() :
     for (size_t i = 0; i < MAX_ITEMS; i++) {
         div_t div = std::div(i, 7);
 
-        buttons_[Buttons::BtBuy + i] = std::make_unique<MapleButton>(
+        buttons_[Buttons::BT_BUY + i] = std::make_unique<MapleButton>(
             CSList["BtBuy"],
             Point<int16_t>(146, 523)
                 + Point<int16_t>(124 * div.rem, 205 * div.quot));
@@ -341,14 +341,14 @@ void UICashShop::update() {
 
 Button::State UICashShop::button_pressed(uint16_t buttonid) {
     switch (buttonid) {
-        case Buttons::BtPreview1:
-        case Buttons::BtPreview2:
-        case Buttons::BtPreview3:
+        case Buttons::BT_PREVIEW1:
+        case Buttons::BT_PREVIEW2:
+        case Buttons::BT_PREVIEW3:
             buttons_[preview_index_]->set_state(Button::State::NORMAL);
 
             preview_index_ = buttonid;
             return Button::State::PRESSED;
-        case Buttons::BtExit: {
+        case Buttons::BT_EXIT: {
             uint16_t width = Setting<Width>::get().load();
             uint16_t height = Setting<Height>::get().load();
 
@@ -368,7 +368,7 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 
             return Button::State::NORMAL;
         }
-        case Buttons::BtNext: {
+        case Buttons::BT_NEXT: {
             size_t size = promotion_sprites_.size() - 1;
 
             promotion_index_++;
@@ -379,7 +379,7 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 
             return Button::State::NORMAL;
         }
-        case Buttons::BtPrev: {
+        case Buttons::BT_PREV: {
             size_t size = promotion_sprites_.size() - 1;
 
             promotion_index_--;
@@ -390,7 +390,7 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
 
             return Button::State::NORMAL;
         }
-        case Buttons::BtChargeNX: {
+        case Buttons::BT_CHARGE_NX: {
             std::string url = Configuration::get().get_chargenx();
 
 // todo: open url on linux
@@ -403,8 +403,8 @@ Button::State UICashShop::button_pressed(uint16_t buttonid) {
         default: break;
     }
 
-    if (buttonid >= Buttons::BtBuy) {
-        int16_t index = buttonid - Buttons::BtBuy + list_offset_;
+    if (buttonid >= Buttons::BT_BUY) {
+        int16_t index = buttonid - Buttons::BT_BUY + list_offset_;
 
         Item item = items_[index];
 
@@ -460,7 +460,7 @@ void UICashShop::update_items() {
         int16_t index = i + list_offset_;
         bool found_item = index < items_.size();
 
-        buttons_[Buttons::BtBuy + i]->set_active(found_item);
+        buttons_[Buttons::BT_BUY + i]->set_active(found_item);
 
         std::string name = "";
         std::string price_text = "";

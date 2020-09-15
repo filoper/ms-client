@@ -79,7 +79,7 @@ void Physics::move_normal(PhysicsObject &phobj) const {
             phobj.hacc -=
                 (FRICTION + SLOPEFACTOR * (1.0 + slopef * -inertia)) * inertia;
         }
-    } else if (phobj.is_flag_not_set(PhysicsObject::Flag::NOGRAVITY)) {
+    } else if (phobj.is_flag_not_set(PhysicsObject::Flag::NO_GRAVITY)) {
         phobj.vacc += GRAVFORCE;
     }
 
@@ -120,7 +120,7 @@ void Physics::move_swimming(PhysicsObject &phobj) const {
     phobj.hacc -= SWIMFRICTION * phobj.hspeed;
     phobj.vacc -= SWIMFRICTION * phobj.vspeed;
 
-    if (phobj.is_flag_not_set(PhysicsObject::Flag::NOGRAVITY)) {
+    if (phobj.is_flag_not_set(PhysicsObject::Flag::NO_GRAVITY)) {
         phobj.vacc += SWIMGRAVFORCE;
     }
 

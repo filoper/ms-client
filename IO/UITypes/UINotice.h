@@ -26,7 +26,7 @@ public:
     static constexpr bool TOGGLED = false;
 
 protected:
-    enum NoticeType : uint8_t { YESNO, ENTERNUMBER, OK };
+    enum NoticeType : uint8_t { YESNO, ENTER_NUMBER, OK };
 
     UINotice(const std::string &message,
              NoticeType type,

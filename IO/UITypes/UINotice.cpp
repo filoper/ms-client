@@ -46,7 +46,7 @@ UINotice::UINotice(const std::string &message,
                          Color::Name::WHITE,
                          message,
                          200);
-    } else if (type_ == NoticeType::ENTERNUMBER) {
+    } else if (type_ == NoticeType::ENTER_NUMBER) {
         position_.shift_y(-16);
         question_ = Text(Text::Font::A12M,
                          Text::Alignment::LEFT,
@@ -71,8 +71,8 @@ UINotice::UINotice(const std::string &message,
                                position_.y() - dimension_.y() / 2);
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
-    if (type_ != NoticeType::ENTERNUMBER) {
-        Sound(Sound::Name::DLGNOTICE).play();
+    if (type_ != NoticeType::ENTER_NUMBER) {
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -187,7 +187,7 @@ UIEnterNumber::UIEnterNumber(std::string message,
                              std::function<void(int32_t)> nh,
                              int32_t m,
                              int32_t quantity) :
-    UINotice(std::move(message), NoticeType::ENTERNUMBER) {
+    UINotice(std::move(message), NoticeType::ENTER_NUMBER) {
     numhandler = std::move(nh);
     max = m;
 

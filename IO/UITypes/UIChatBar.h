@@ -23,7 +23,7 @@
 namespace ms {
 class UIChatBar : public UIDragElement<PosCHAT> {
 public:
-    static constexpr Type TYPE = UIElement::Type::CHATBAR;
+    static constexpr Type TYPE = UIElement::Type::CHAT_BAR;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 
@@ -80,8 +80,8 @@ private:
     static constexpr time_t MESSAGE_COOLDOWN_ = 1'000;
 
     enum Buttons : uint16_t {
-        BT_OPENCHAT,
-        BT_CLOSECHAT,
+        BT_OPEN_CHAT,
+        BT_CLOSE_CHAT,
         BT_CHAT,
         BT_HELP,
         BT_LINK,

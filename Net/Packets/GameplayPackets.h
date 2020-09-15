@@ -26,7 +26,7 @@ public:
                     int32_t targetid,
                     const std::string &targetp,
                     bool usewheel) :
-        OutPacket(OutPacket::Opcode::CHANGEMAP) {
+        OutPacket(OutPacket::Opcode::CHANGE_MAP) {
         write_byte(died);
         write_int(targetid);
         write_string(targetp);
@@ -35,7 +35,7 @@ public:
     }
 
     // Request the server to exit the cash shop
-    ChangeMapPacket() : OutPacket(OutPacket::Opcode::CHANGEMAP) {}
+    ChangeMapPacket() : OutPacket(OutPacket::Opcode::CHANGE_MAP) {}
 };
 
 // Opcode: CHANGE_CHANNEL(39)

@@ -124,14 +124,14 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
 
     buttons_[Buttons::BT_HYPER] =
         std::make_unique<MapleButton>(main["BtHyper"]);
-    buttons_[Buttons::BT_GUILDSKILL] =
+    buttons_[Buttons::BT_GUILD_SKILL] =
         std::make_unique<MapleButton>(main["BtGuildSkill"]);
     buttons_[Buttons::BT_RIDE] = std::make_unique<MapleButton>(main["BtRide"]);
     buttons_[Buttons::BT_MACRO] =
         std::make_unique<MapleButton>(main["BtMacro"]);
 
     buttons_[Buttons::BT_HYPER]->set_state(Button::State::DISABLED);
-    buttons_[Buttons::BT_GUILDSKILL]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_GUILD_SKILL]->set_state(Button::State::DISABLED);
     buttons_[Buttons::BT_RIDE]->set_state(Button::State::DISABLED);
 
     nl::node skillPoint = nl::nx::ui["UIWindow4.img"]["Skill"]["skillPoint"];
@@ -424,7 +424,7 @@ Button::State UISkillBook::button_pressed(uint16_t id) {
             send_spup(id - Buttons::BT_SPUP0 + offset_);
             break;
         case Buttons::BT_HYPER:
-        case Buttons::BT_GUILDSKILL:
+        case Buttons::BT_GUILD_SKILL:
         case Buttons::BT_RIDE:
         case Buttons::BT_MACRO_OK:
         default: break;
@@ -683,7 +683,7 @@ void UISkillBook::show_skill(int32_t id) {
     int32_t masterlevel = skillbook_.get_masterlevel(id);
     int64_t expiration = skillbook_.get_expiration(id);
 
-    UI::get().show_skill(Tooltip::Parent::SKILLBOOK,
+    UI::get().show_skill(Tooltip::Parent::SKILL_BOOK,
                          skill_id,
                          level,
                          masterlevel,
@@ -691,7 +691,7 @@ void UISkillBook::show_skill(int32_t id) {
 }
 
 void UISkillBook::clear_tooltip() {
-    UI::get().clear_tooltip(Tooltip::Parent::SKILLBOOK);
+    UI::get().clear_tooltip(Tooltip::Parent::SKILL_BOOK);
 }
 
 bool UISkillBook::can_raise(int32_t skill_id) const {

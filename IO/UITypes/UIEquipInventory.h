@@ -21,7 +21,7 @@ namespace ms {
 // The Equip inventory
 class UIEquipInventory : public UIDragElement<PosEQINV> {
 public:
-    static constexpr Type TYPE = UIElement::Type::EQUIPINVENTORY;
+    static constexpr Type TYPE = UIElement::Type::EQUIP_INVENTORY;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

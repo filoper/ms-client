@@ -179,10 +179,10 @@ void UIEquipInventory::draw(float alpha) const {
             disabled_.draw(position_ + icon_positions_[EquipSlot::Id::POCKET]);
         }
 
-        for (auto iter : icons_) {
-            if (iter.second) {
-                iter.second->draw(position_ + icon_positions_[iter.first]
-                                  + Point<int16_t>(4, 4));
+        for (auto [eq_slot, icon] : icons_) {
+            if (icon) {
+                icon->draw(position_ + icon_positions_[eq_slot]
+                           + Point<int16_t>(4, 4));
             }
         }
     } else if (tab_ == Buttons::BT_TAB2) {
@@ -343,13 +343,13 @@ EquipSlot::Id UIEquipInventory::slot_by_position(
         return EquipSlot::Id::NONE;
     }
 
-    for (auto iter : icon_positions_) {
-        Rectangle<int16_t> iconrect = Rectangle<int16_t>(
-            position_ + iter.second,
-            position_ + iter.second + Point<int16_t>(32, 32));
+    for (auto [eq_slot, icon_pos] : icon_positions_) {
+        Rectangle<int16_t> iconrect =
+            Rectangle<int16_t>(position_ + icon_pos,
+                               position_ + icon_pos + Point<int16_t>(32, 32));
 
         if (iconrect.contains(cursorpos)) {
-            return iter.first;
+            return eq_slot;
         }
     }
 

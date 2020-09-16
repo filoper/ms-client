@@ -425,34 +425,34 @@ Cursor::State UICharSelect::send_cursor(bool clicked,
 
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
-    for (auto &btit : buttons_) {
-        if (btit.second->is_active()
-            && btit.second->bounds(position_).contains(cursorpos)) {
-            if (btit.second->get_state() == Button::State::NORMAL) {
+    for (auto &[btnid, button] : buttons_) {
+        if (button->is_active()
+            && button->bounds(position_).contains(cursorpos)) {
+            if (button->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTON_OVER).play();
 
-                btit.second->set_state(Button::State::MOUSEOVER);
+                button->set_state(Button::State::MOUSEOVER);
                 ret = Cursor::State::CAN_CLICK;
-            } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
+            } else if (button->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
                     Sound(Sound::Name::BUTTON_CLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(btnid));
 
-                    if (tab_active_ && btit.first == tab_map_[tab_index_]) {
-                        btit.second->set_state(Button::State::MOUSEOVER);
+                    if (tab_active_ && btnid == tab_map_[tab_index_]) {
+                        button->set_state(Button::State::MOUSEOVER);
                     }
 
                     ret = Cursor::State::IDLE;
                 } else {
-                    if (!tab_active_ || btit.first != tab_map_[tab_index_]) {
+                    if (!tab_active_ || btnid != tab_map_[tab_index_]) {
                         ret = Cursor::State::CAN_CLICK;
                     }
                 }
             }
-        } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
-            if (!tab_active_ || btit.first != tab_map_[tab_index_]) {
-                btit.second->set_state(Button::State::NORMAL);
+        } else if (button->get_state() == Button::State::MOUSEOVER) {
+            if (!tab_active_ || btnid != tab_map_[tab_index_]) {
+                button->set_state(Button::State::NORMAL);
             }
         }
     }

@@ -275,34 +275,34 @@ void UIRaceSelect::update() {
 
 Cursor::State UIRaceSelect::send_cursor(bool clicked,
                                         Point<int16_t> cursorpos) {
-    for (auto &btit : buttons_) {
-        if (btit.second->is_active()
-            && btit.second->bounds(position_).contains(cursorpos)) {
-            if (btit.second->get_state() == Button::State::NORMAL) {
+    for (auto &[btnid, button] : buttons_) {
+        if (button->is_active()
+            && button->bounds(position_).contains(cursorpos)) {
+            if (button->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTON_OVER).play();
 
-                if (btit.first >= Buttons::CLASS0) {
-                    mouseover_[btit.first - Buttons::CLASS0] = true;
+                if (btnid >= Buttons::CLASS0) {
+                    mouseover_[btnid - Buttons::CLASS0] = true;
                 }
 
-                btit.second->set_state(Button::State::MOUSEOVER);
-            } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
+                button->set_state(Button::State::MOUSEOVER);
+            } else if (button->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
                     Sound(Sound::Name::BUTTON_CLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(btnid));
                 } else {
-                    if (btit.first >= Buttons::CLASS0) {
-                        mouseover_[btit.first - Buttons::CLASS0] = true;
+                    if (btnid >= Buttons::CLASS0) {
+                        mouseover_[btnid - Buttons::CLASS0] = true;
                     }
                 }
             }
-        } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
-            if (btit.first >= Buttons::CLASS0) {
-                mouseover_[btit.first - Buttons::CLASS0] = false;
+        } else if (button->get_state() == Button::State::MOUSEOVER) {
+            if (btnid >= Buttons::CLASS0) {
+                mouseover_[btnid - Buttons::CLASS0] = false;
             }
 
-            btit.second->set_state(Button::State::NORMAL);
+            button->set_state(Button::State::NORMAL);
         }
     }
 

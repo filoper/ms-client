@@ -104,10 +104,7 @@ void Player::recalc_stats(bool equipchanged) {
 
     auto passive_skills = skill_book_.collect_passives();
 
-    for (auto &passive : passive_skills) {
-        int32_t skill_id = passive.first;
-        int32_t skill_level = passive.second;
-
+    for (auto &[skill_id, skill_level] : passive_skills) {
         passive_buffs_.apply_buff(stats_, skill_id, skill_level);
     }
 

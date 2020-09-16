@@ -207,22 +207,22 @@ UIClassConfirm::UIClassConfirm(uint8_t selected_class,
 
 Cursor::State UIClassConfirm::send_cursor(bool clicked,
                                           Point<int16_t> cursorpos) {
-    for (auto &btit : buttons_) {
-        if (btit.second->is_active()
-            && btit.second->bounds(position_).contains(cursorpos)) {
-            if (btit.second->get_state() == Button::State::NORMAL) {
+    for (auto &[btnid, button] : buttons_) {
+        if (button->is_active()
+            && button->bounds(position_).contains(cursorpos)) {
+            if (button->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTON_OVER).play();
 
-                btit.second->set_state(Button::State::MOUSEOVER);
-            } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
+                button->set_state(Button::State::MOUSEOVER);
+            } else if (button->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
                     Sound(Sound::Name::BUTTON_CLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(btnid));
                 }
             }
-        } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
-            btit.second->set_state(Button::State::NORMAL);
+        } else if (button->get_state() == Button::State::MOUSEOVER) {
+            button->set_state(Button::State::NORMAL);
         }
     }
 

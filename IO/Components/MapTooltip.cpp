@@ -267,20 +267,20 @@ void MapTooltip::set_mapid(int32_t mapid) {
     auto life = NxHelper::Map::get_life_on_map(mapid);
 
     for (const auto &l : life) {
-        auto life_object = l.second;
+        auto [life_type, life_info] = l.second;
 
-        if (life_object.first == "m" && m < MAX_LIFE) {
+        if (life_type == "m" && m < MAX_LIFE) {
             mob_labels_[m] = Text(Text::Font::A12M,
                                   Text::Alignment::LEFT,
                                   Color::Name::CHARTREUSE,
-                                  life_object.second);
+                                  life_info);
             fill_height_ += mob_labels_->height() + 2;
             m++;
-        } else if (life_object.first == "n" && n < MAX_LIFE) {
+        } else if (life_type == "n" && n < MAX_LIFE) {
             npc_labels_[n] = Text(Text::Font::A12M,
                                   Text::Alignment::LEFT,
                                   Color::Name::MALIBU,
-                                  life_object.second);
+                                  life_info);
             fill_height_ += npc_labels_->height() + 2;
             n++;
         }

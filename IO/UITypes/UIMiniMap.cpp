@@ -276,16 +276,16 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
     }
 
     if (!found) {
-        for (const auto &sprite : static_marker_info_) {
+        for (const auto &[sprite_name, sprite_pos] : static_marker_info_) {
             Rectangle<int16_t> marker_spot =
-                Rectangle<int16_t>(sprite.second, sprite.second + 8);
+                Rectangle<int16_t>(sprite_pos, sprite_pos + 8);
 
             if (type_ == Type::MAX) {
                 marker_spot.shift(Point<int16_t>(0, MAX_ADJ_));
             }
 
             if (marker_spot.contains(cursor_relative)) {
-                nl::node portal_tm = map_["portal"][sprite.first]["tm"];
+                nl::node portal_tm = map_["portal"][sprite_name]["tm"];
                 std::string portal_cat =
                     NxHelper::Map::get_map_category(portal_tm);
                 nl::node portal_name =

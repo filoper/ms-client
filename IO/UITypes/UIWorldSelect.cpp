@@ -216,37 +216,37 @@ Cursor::State UIWorldSelect::send_cursor(bool clicked,
 
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
-    for (auto &btit : buttons_) {
-        if (btit.second->is_active()
-            && btit.second->bounds(position_).contains(cursorpos)) {
-            if (btit.second->get_state() == Button::State::NORMAL) {
+    for (auto &[btnid, button] : buttons_) {
+        if (button->is_active()
+            && button->bounds(position_).contains(cursorpos)) {
+            if (button->get_state() == Button::State::NORMAL) {
                 Sound(Sound::Name::BUTTON_OVER).play();
 
-                btit.second->set_state(Button::State::MOUSEOVER);
+                button->set_state(Button::State::MOUSEOVER);
                 ret = Cursor::State::CAN_CLICK;
-            } else if (btit.second->get_state() == Button::State::PRESSED) {
+            } else if (button->get_state() == Button::State::PRESSED) {
                 if (clicked) {
                     Sound(Sound::Name::BUTTON_CLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(btnid));
 
                     ret = Cursor::State::IDLE;
                 } else {
                     ret = Cursor::State::CAN_CLICK;
                 }
-            } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
+            } else if (button->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
                     Sound(Sound::Name::BUTTON_CLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(btnid));
 
                     ret = Cursor::State::IDLE;
                 } else {
                     ret = Cursor::State::CAN_CLICK;
                 }
             }
-        } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
-            btit.second->set_state(Button::State::NORMAL);
+        } else if (button->get_state() == Button::State::MOUSEOVER) {
+            button->set_state(Button::State::NORMAL);
         }
     }
 

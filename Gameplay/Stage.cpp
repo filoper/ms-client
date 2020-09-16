@@ -234,10 +234,10 @@ void Stage::check_ladders(bool up) {
 
 void Stage::check_drops() {
     Point<int16_t> playerpos = player_.get_position();
-    MapDrops::Loot loot = drops_.find_loot_at(playerpos);
+    auto [drop_oid, drop_pos] = drops_.find_loot_at(playerpos);
 
-    if (loot.first) {
-        fn_pickup_item(loot.first, loot.second);
+    if (drop_oid) {
+        fn_pickup_item(drop_oid, drop_pos);
     }
 }
 

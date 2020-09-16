@@ -61,9 +61,9 @@ void ChangeStatsHandler::handle(InPacket &recv) const {
 
     bool recalculate = false;
 
-    for (auto iter : MapleStat::codes) {
-        if (updatemask & iter.second) {
-            recalculate |= handle_stat(iter.first, recv);
+    for (auto [stat_id, stat_mask] : MapleStat::codes) {
+        if (updatemask & stat_mask) {
+            recalculate |= handle_stat(stat_id, recv);
         }
     }
 

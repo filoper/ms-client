@@ -38,13 +38,13 @@ void LoginResultHandler::handle(InPacket &recv) const {
     auto loginwait = UI::get().get_element<UILoginWait>();
 
     if (loginwait && loginwait->is_active()) {
+        std::function<void()> okhandler = loginwait->get_handler();
+
         // Remove previous UIs
         UI::get().remove(UIElement::Type::LOGIN_NOTICE);
         UI::get().remove(UIElement::Type::LOGIN_WAIT);
         UI::get().remove(UIElement::Type::TOS);
         UI::get().remove(UIElement::Type::GENDER);
-
-        std::function<void()> okhandler = loginwait->get_handler();
 
         // The packet should contain a 'reason' integer which can signify
         // various things

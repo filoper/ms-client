@@ -935,10 +935,7 @@ void UIKeyConfig::load_skill_icons() {
 void UIKeyConfig::draw(float inter) const {
     UIElement::draw(inter);
 
-    for (auto const &iter : staged_mappings_) {
-        int32_t maplekey = iter.first;
-        Keyboard::Mapping mapping = iter.second;
-
+    for (auto const &[maplekey, mapping] : staged_mappings_) {
         Icon *ficon = nullptr;
 
         if (mapping.type == KeyType::Id::ITEM) {
@@ -951,9 +948,9 @@ void UIKeyConfig::draw(float inter) const {
             KeyAction::Id action = KeyAction::get_action_by_id(mapping.action);
 
             if (action) {
-                for (auto const &it : action_icons_) {
-                    if (it.first == action) {
-                        ficon = it.second.get();
+                for (auto const &[key_actionid, action_icon] : action_icons_) {
+                    if (key_actionid == action) {
+                        ficon = action_icon.get();
                         break;
                     }
                 }
@@ -1004,22 +1001,19 @@ void UIKeyConfig::draw(float inter) const {
         }
     }
 
-    for (auto ubicon : action_icons_) {
-        if (ubicon.second) {
+    for (auto [key_actionid, ubaction_icon] : action_icons_) {
+        if (ubaction_icon) {
             if (std::find(bound_actions_.begin(),
                           bound_actions_.end(),
-                          ubicon.first)
+                          key_actionid)
                 == bound_actions_.end()) {
-                ubicon.second->draw(position_
-                                    + unbound_actions_pos_[ubicon.first]);
+                ubaction_icon->draw(position_
+                                    + unbound_actions_pos_[key_actionid]);
             }
         }
     }
 
-    for (auto fkey : key_textures_) {
-        KeyConfig::Key key = fkey.first;
-        Texture tx = fkey.second;
-
+    for (auto [key, tx] : key_textures_) {
         tx.draw(position_ + keys_pos_[key]);
     }
 }
@@ -1246,24 +1240,22 @@ void UIKeyConfig::stage_mapping(Point<int16_t> cursorposition,
         }
     }
 
-    for (auto const &it : staged_mappings_) {
-        Keyboard::Mapping staged_mapping = it.second;
-
+    for (auto const &[mkey, staged_mapping] : staged_mappings_) {
         if (staged_mapping == mapping) {
-            if (it.first == KeyConfig::Key::LEFT_CONTROL
-                || it.first == KeyConfig::Key::RIGHT_CONTROL) {
+            if (mkey == KeyConfig::Key::LEFT_CONTROL
+                || mkey == KeyConfig::Key::RIGHT_CONTROL) {
                 staged_mappings_.erase(KeyConfig::Key::LEFT_CONTROL);
                 staged_mappings_.erase(KeyConfig::Key::RIGHT_CONTROL);
-            } else if (it.first == KeyConfig::Key::LEFT_ALT
-                       || it.first == KeyConfig::Key::RIGHT_ALT) {
+            } else if (mkey == KeyConfig::Key::LEFT_ALT
+                       || mkey == KeyConfig::Key::RIGHT_ALT) {
                 staged_mappings_.erase(KeyConfig::Key::LEFT_ALT);
                 staged_mappings_.erase(KeyConfig::Key::RIGHT_ALT);
-            } else if (it.first == KeyConfig::Key::LEFT_SHIFT
-                       || it.first == KeyConfig::Key::RIGHT_SHIFT) {
+            } else if (mkey == KeyConfig::Key::LEFT_SHIFT
+                       || mkey == KeyConfig::Key::RIGHT_SHIFT) {
                 staged_mappings_.erase(KeyConfig::Key::LEFT_SHIFT);
                 staged_mappings_.erase(KeyConfig::Key::RIGHT_SHIFT);
             } else {
-                staged_mappings_.erase(it.first);
+                staged_mappings_.erase(mkey);
             }
 
             break;
@@ -1323,24 +1315,22 @@ void UIKeyConfig::unstage_mapping(Keyboard::Mapping mapping) {
         }
     }
 
-    for (auto const &it : staged_mappings_) {
-        Keyboard::Mapping staged_mapping = it.second;
-
+    for (auto const &[mkey, staged_mapping] : staged_mappings_) {
         if (staged_mapping == mapping) {
-            if (it.first == KeyConfig::Key::LEFT_CONTROL
-                || it.first == KeyConfig::Key::RIGHT_CONTROL) {
+            if (mkey == KeyConfig::Key::LEFT_CONTROL
+                || mkey == KeyConfig::Key::RIGHT_CONTROL) {
                 staged_mappings_.erase(KeyConfig::Key::LEFT_CONTROL);
                 staged_mappings_.erase(KeyConfig::Key::RIGHT_CONTROL);
-            } else if (it.first == KeyConfig::Key::LEFT_ALT
-                       || it.first == KeyConfig::Key::RIGHT_ALT) {
+            } else if (mkey == KeyConfig::Key::LEFT_ALT
+                       || mkey == KeyConfig::Key::RIGHT_ALT) {
                 staged_mappings_.erase(KeyConfig::Key::LEFT_ALT);
                 staged_mappings_.erase(KeyConfig::Key::RIGHT_ALT);
-            } else if (it.first == KeyConfig::Key::LEFT_SHIFT
-                       || it.first == KeyConfig::Key::RIGHT_SHIFT) {
+            } else if (mkey == KeyConfig::Key::LEFT_SHIFT
+                       || mkey == KeyConfig::Key::RIGHT_SHIFT) {
                 staged_mappings_.erase(KeyConfig::Key::LEFT_SHIFT);
                 staged_mappings_.erase(KeyConfig::Key::RIGHT_SHIFT);
             } else {
-                staged_mappings_.erase(it.first);
+                staged_mappings_.erase(mkey);
             }
 
             if (staged_mapping.type == KeyType::Id::ITEM) {
@@ -1362,21 +1352,17 @@ void UIKeyConfig::save_staged_mappings() {
     std::vector<std::tuple<KeyConfig::Key, KeyType::Id, int32_t>>
         updated_actions;
 
-    for (auto key : staged_mappings_) {
-        KeyConfig::Key k = KeyConfig::actionbyid(key.first);
-        Keyboard::Mapping mapping = key.second;
-        Keyboard::Mapping saved_mapping =
-            keyboard_->get_maple_mapping(key.first);
+    for (auto [key, staged_mapping] : staged_mappings_) {
+        KeyConfig::Key k = KeyConfig::actionbyid(key);
+        Keyboard::Mapping saved_mapping = keyboard_->get_maple_mapping(key);
 
-        if (mapping != saved_mapping) {
+        if (staged_mapping != saved_mapping) {
             updated_actions.emplace_back(
-                std::make_tuple(k, mapping.type, mapping.action));
+                std::make_tuple(k, staged_mapping.type, staged_mapping.action));
         }
     }
 
-    auto maplekeys = keyboard_->get_maplekeys();
-
-    for (auto key : maplekeys) {
+    for (auto key : keyboard_->get_maplekeys()) {
         bool keyFound = false;
         KeyConfig::Key keyConfig = KeyConfig::actionbyid(key.first);
 
@@ -1459,13 +1445,13 @@ Texture UIKeyConfig::get_skill_texture(int32_t skill_id) const {
 }
 
 KeyConfig::Key UIKeyConfig::key_by_position(Point<int16_t> cursorpos) const {
-    for (auto iter : keys_pos_) {
-        Rectangle<int16_t> icon_rect = Rectangle<int16_t>(
-            position_ + iter.second,
-            position_ + iter.second + Point<int16_t>(32, 32));
+    for (auto [key, key_pos] : keys_pos_) {
+        Rectangle<int16_t> icon_rect =
+            Rectangle<int16_t>(position_ + key_pos,
+                               position_ + key_pos + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos)) {
-            return iter.first;
+            return key;
         }
     }
 
@@ -1474,18 +1460,20 @@ KeyConfig::Key UIKeyConfig::key_by_position(Point<int16_t> cursorpos) const {
 
 KeyAction::Id UIKeyConfig::unbound_action_by_position(
     Point<int16_t> cursorpos) const {
-    for (auto iter : unbound_actions_pos_) {
-        if (std::find(bound_actions_.begin(), bound_actions_.end(), iter.first)
+    for (auto [key_ubaction, ubaction_pos] : unbound_actions_pos_) {
+        if (std::find(bound_actions_.begin(),
+                      bound_actions_.end(),
+                      key_ubaction)
             != bound_actions_.end()) {
             continue;
         }
 
         Rectangle<int16_t> icon_rect = Rectangle<int16_t>(
-            position_ + iter.second,
-            position_ + iter.second + Point<int16_t>(32, 32));
+            position_ + ubaction_pos,
+            position_ + ubaction_pos + Point<int16_t>(32, 32));
 
         if (icon_rect.contains(cursorpos)) {
-            return iter.first;
+            return key_ubaction;
         }
     }
 

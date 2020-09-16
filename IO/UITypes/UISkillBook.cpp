@@ -832,11 +832,10 @@ bool UISkillBook::check_required(int32_t id) const {
         required = SkillData::get(id).get_reqskills();
     }
 
-    for (auto reqskill : required) {
-        int32_t reqskill_level = skillbook_.get_level(reqskill.first);
-        int32_t req_level = reqskill.second;
+    for (auto [req_skill_id, req_level] : required) {
+        int32_t req_skill_level = skillbook_.get_level(req_skill_id);
 
-        if (reqskill_level < req_level) {
+        if (req_skill_level < req_level) {
             return false;
         }
     }

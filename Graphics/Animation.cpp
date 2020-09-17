@@ -60,11 +60,7 @@ Frame::Frame(const nl::node &src) {
     }
 }
 
-Frame::Frame() {
-    delay_ = 0;
-    opacities_ = { 0, 0 };
-    scales_ = { 0, 0 };
-}
+Frame::Frame() : delay_(0), opacities_({ 0, 0 }), scales_({ 0, 0 }) {}
 
 void Frame::draw(const DrawArgument &args) const {
     texture_.draw(args);

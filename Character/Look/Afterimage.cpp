@@ -42,7 +42,7 @@ Afterimage::Afterimage(int32_t skill_id,
     displayed_ = false;
 
     for (const nl::node &sub : src) {
-        uint8_t frame = string_conversion::or_default<uint8_t>(sub.name(), 255);
+        auto frame = string_conversion::or_default<uint8_t>(sub.name(), 255);
 
         if (frame < 255) {
             animation_ = sub;

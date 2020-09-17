@@ -18,9 +18,7 @@
 #include "../Configuration.h"
 
 namespace ms {
-GraphicsGL::GraphicsGL() {
-    locked_ = false;
-
+GraphicsGL::GraphicsGL() : locked_(false) {
     VWIDTH = Constants::Constants::get().get_viewwidth();
     VHEIGHT = Constants::Constants::get().get_viewheight();
     SCREEN = Rectangle<int16_t>(0, VWIDTH, 0, VHEIGHT);

@@ -20,11 +20,11 @@
 namespace ms {
 void CharacterParser::parse_inventory(InPacket &recv, Inventory &invent) {
     invent.set_meso(recv.read_int());
-    invent.set_slotmax(InventoryType::EQUIP, recv.read_byte());
-    invent.set_slotmax(InventoryType::USE, recv.read_byte());
-    invent.set_slotmax(InventoryType::SETUP, recv.read_byte());
-    invent.set_slotmax(InventoryType::ETC, recv.read_byte());
-    invent.set_slotmax(InventoryType::CASH, recv.read_byte());
+    invent.set_slotmax(InventoryType::EQUIP, recv.read_ubyte());
+    invent.set_slotmax(InventoryType::USE, recv.read_ubyte());
+    invent.set_slotmax(InventoryType::SETUP, recv.read_ubyte());
+    invent.set_slotmax(InventoryType::ETC, recv.read_ubyte());
+    invent.set_slotmax(InventoryType::CASH, recv.read_ubyte());
 
     recv.skip(8);
 
@@ -47,8 +47,7 @@ void CharacterParser::parse_inventory(InPacket &recv, Inventory &invent) {
                                      InventoryType::ETC,
                                      InventoryType::CASH };
 
-    for (size_t i = 0; i < 4; i++) {
-        InventoryType::Id inv = toparse[i];
+    for (auto inv : toparse) {
         int8_t pos = recv.read_byte();
 
         while (pos != 0) {

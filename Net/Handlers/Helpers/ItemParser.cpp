@@ -89,8 +89,8 @@ void add_equip(InPacket &recv,
     }
 
     int64_t expire = recv.read_long();
-    uint8_t slots = recv.read_byte();
-    uint8_t level = recv.read_byte();
+    uint8_t slots = recv.read_ubyte();
+    uint8_t level = recv.read_ubyte();
 
     // Read equip stats
     EnumMap<EquipStat::Id, uint16_t> stats;
@@ -111,9 +111,9 @@ void add_equip(InPacket &recv,
         recv.skip(10);
     } else {
         recv.read_byte();
-        itemlevel = recv.read_byte();
+        itemlevel = recv.read_ubyte();
         recv.read_short();
-        itemexp = recv.read_short();
+        itemexp = recv.read_ushort();
         vicious = recv.read_int();
         recv.read_long();
     }

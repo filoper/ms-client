@@ -28,7 +28,7 @@ void SpawnCharHandler::handle(InPacket &recv) const {
         return;
     }
 
-    uint8_t level = recv.read_byte();
+    uint8_t level = recv.read_ubyte();
     std::string name = recv.read_string();
 
     recv.read_string();  // guildname
@@ -116,7 +116,7 @@ void SpawnPetHandler::handle(InPacket &recv) const {
         return;
     }
 
-    uint8_t petindex = recv.read_byte();
+    uint8_t petindex = recv.read_ubyte();
     int8_t mode = recv.read_byte();
 
     if (mode == 1) {
@@ -129,7 +129,7 @@ void SpawnPetHandler::handle(InPacket &recv) const {
         recv.skip(4);
 
         Point<int16_t> pos = recv.read_point();
-        uint8_t stance = recv.read_byte();
+        uint8_t stance = recv.read_ubyte();
         int32_t fhid = recv.read_int();
 
         character->add_pet(petindex, itemid, name, uniqueid, pos, stance, fhid);
@@ -333,11 +333,11 @@ void MobMovedHandler::handle(InPacket &recv) const {
 
     recv.read_byte();  // ?
 
-    bool use_skills = recv.read_bool();      // useskill
-    int8_t action = recv.read_byte();        // action
-    uint8_t skillid = recv.read_byte();      // skill id
-    uint8_t skill_level = recv.read_byte();  // skill level
-    int8_t option = recv.read_short();       // option
+    bool use_skills = recv.read_bool();       // useskill
+    int8_t action = recv.read_byte();         // action
+    uint8_t skillid = recv.read_ubyte();      // skill id
+    uint8_t skill_level = recv.read_ubyte();  // skill level
+    auto option = recv.read_short();          // option
 
     Point<int16_t> position = recv.read_point();
     std::vector<Movement> movements = MovementParser::parse_movements(recv);
@@ -351,8 +351,8 @@ void MobMoveResponseHandler::handle(InPacket &recv) const {
     int16_t moveid = recv.read_short();
     bool use_skills = recv.read_bool();
     uint16_t curr_mp = recv.read_ushort();
-    uint8_t skillid = recv.read_byte();
-    uint8_t skill_level = recv.read_byte();
+    uint8_t skillid = recv.read_ubyte();
+    uint8_t skill_level = recv.read_ubyte();
 
     if (skillid == 0) {
         // Stage::get().get_mob_combat().use_some_attack(oid);
@@ -416,7 +416,7 @@ void SpawnNpcHandler::handle(InPacket &recv) const {
     int32_t id = recv.read_int();
     Point<int16_t> position = recv.read_point();
     bool flip = recv.read_bool();
-    uint16_t fh = recv.read_short();
+    uint16_t fh = recv.read_ushort();
 
     recv.read_short();  // 'rx'
     recv.read_short();  // 'ry'
@@ -434,7 +434,7 @@ void SpawnNpcControllerHandler::handle(InPacket &recv) const {
         int32_t id = recv.read_int();
         Point<int16_t> position = recv.read_point();
         bool flip = recv.read_bool();
-        uint16_t fh = recv.read_short();
+        uint16_t fh = recv.read_ushort();
 
         recv.read_short();  // 'rx'
         recv.read_short();  // 'ry'

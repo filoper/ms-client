@@ -87,8 +87,10 @@ bool ChangeStatsHandler::handle_stat(MapleStat::Id stat, InPacket &recv) const {
         case MapleStat::Id::HAIR:
             player.change_look(stat, recv.read_int());
             break;
-        case MapleStat::Id::LEVEL: player.change_level(recv.read_byte()); break;
-        case MapleStat::Id::JOB: player.change_job(recv.read_short()); break;
+        case MapleStat::Id::LEVEL:
+            player.change_level(recv.read_ubyte());
+            break;
+        case MapleStat::Id::JOB: player.change_job(recv.read_ushort()); break;
         case MapleStat::Id::EXP:
             player.get_stats().set_exp(recv.read_int());
             break;
@@ -222,7 +224,7 @@ void UpdateSkillHandler::handle(InPacket &recv) const {
 }
 
 void SkillMacrosHandler::handle(InPacket &recv) const {
-    uint8_t size = recv.read_byte();
+    uint8_t size = recv.read_ubyte();
 
     for (uint8_t i = 0; i < size; i++) {
         recv.read_string();  // name
@@ -244,7 +246,7 @@ void KeymapHandler::handle(InPacket &recv) const {
     recv.skip(1);
 
     for (uint8_t i = 0; i < 90; i++) {
-        uint8_t type = recv.read_byte();
+        uint8_t type = recv.read_ubyte();
         int32_t action = recv.read_int();
 
         UI::get().add_keymapping(i, type, action);

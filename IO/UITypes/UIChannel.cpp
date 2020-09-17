@@ -262,10 +262,10 @@ Button::State UIChannel::button_pressed(uint16_t buttonid) {
 void UIChannel::cancel() {
     deactivate();
 
-    current_channel_ = old_state_.current_channel_;
-    selected_channel_ = old_state_.current_channel_;
-    selected_channel_x_ = old_state_.current_channel_x_;
-    selected_channel_y_ = old_state_.current_channel_y_;
+    current_channel_ = old_state_.current_channel;
+    selected_channel_ = old_state_.current_channel;
+    selected_channel_x_ = old_state_.current_channel_x;
+    selected_channel_y_ = old_state_.current_channel_y;
 }
 
 void UIChannel::change_channel() {
@@ -279,10 +279,10 @@ void UIChannel::change_channel() {
     current_channel_x_ = selected_channel_x_;
     current_channel_y_ = selected_channel_y_;
 
-    old_state_.current_channel_ = selected_channel_;
-    old_state_.current_channel_ = selected_channel_;
-    old_state_.current_channel_x_ = selected_channel_x_;
-    old_state_.current_channel_y_ = selected_channel_y_;
+    old_state_.current_channel = selected_channel_;
+    old_state_.current_channel = selected_channel_;
+    old_state_.current_channel_x = selected_channel_x_;
+    old_state_.current_channel_y = selected_channel_y_;
 }
 
 void UIChannel::update_selected_channel_position() {

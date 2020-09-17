@@ -141,13 +141,13 @@ void Game::start() {
 
         if (can_retry) {
             std::cout << "Enter 'retry' to try again." << std::endl;
-        }
 
-        std::string command;
-        std::cin >> command;
+            std::string command;
+            std::cin >> command;
 
-        if (can_retry && command == "retry") {
-            start();
+            if (command == "retry") {
+                start();
+            }
         }
     } else {
         game_loop();

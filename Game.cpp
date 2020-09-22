@@ -17,13 +17,15 @@
 
 #include <iostream>
 
+#include "Audio/Audio.h"
 #include "Character/Char.h"
+#include "Configuration.h"
 #include "Constants.h"
 #include "Gameplay/Combat/DamageNumber.h"
 #include "Gameplay/Stage.h"
 #include "IO/UI.h"
 #include "IO/Window.h"
-#include "Net/Session.h"
+#include "Net/PacketProcessor.h"
 #include "Timer.h"
 #include "Util/HardwareInfo.h"
 #include "Util/NxFiles.h"
@@ -36,7 +38,7 @@ Game::Game() {
 }
 
 Error Game::init() {
-    if (Error error = Session::get().init()) {
+    if (Error error = PacketProcessor::get().init()) {
         return error;
     }
     std::cout << "Session init success." << std::endl;
@@ -71,7 +73,7 @@ void Game::update() {
     Window::get().update();
     Stage::get().update();
     UI::get().update();
-    Session::get().read();
+    PacketProcessor::get().process();
     Music::update_context();
 }
 
@@ -83,7 +85,7 @@ void Game::draw(float alpha) {
 }
 
 bool Game::is_running() {
-    return Session::get().is_connected() && UI::get().not_quitted()
+    return PacketProcessor::get().is_connected() && UI::get().not_quitted()
            && Window::get().not_closed();
 }
 

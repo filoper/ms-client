@@ -15,7 +15,11 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UIStateGame.h"
 
+#include <functional>
+#include <optional>
+
 #include "../Net/Packets/GameplayPackets.h"
+#include "OptionalCreator.h"
 #include "UI.h"
 #include "UITypes/UIBuffList.h"
 #include "UITypes/UIChannel.h"
@@ -73,11 +77,11 @@ void UIStateGame::draw(float inter, Point<int16_t> cursor) const {
     }
 
     if (tooltip_) {
-        tooltip_->draw(cursor + Point<int16_t>(0, 22));
+        tooltip_->get().draw(cursor + Point<int16_t>(0, 22));
     }
 
     if (dragged_icon_) {
-        dragged_icon_->dragdraw(cursor);
+        dragged_icon_->get().dragdraw(cursor);
     }
 }
 
@@ -120,7 +124,7 @@ bool UIStateGame::drop_icon(const Icon &icon, Point<int16_t> pos) {
 }
 
 void UIStateGame::remove_icon() {
-    dragged_icon_->reset();
+    dragged_icon_->get().reset();
     dragged_icon_ = {};
 }
 
@@ -208,15 +212,15 @@ void UIStateGame::send_key(KeyType::Id type,
 
                         auto userlist = UI::get().get_element<UIUserList>();
 
-                        if (userlist && userlist->get_tab() != tab
-                            && userlist->is_active()) {
-                            userlist->change_tab(tab);
+                        if (userlist && userlist->get().get_tab() != tab
+                            && userlist->get().is_active()) {
+                            userlist->get().change_tab(tab);
                         } else {
                             emplace<UIUserList>(tab);
 
-                            if (userlist && userlist->get_tab() != tab
-                                && userlist->is_active()) {
-                                userlist->change_tab(tab);
+                            if (userlist && userlist->get().get_tab() != tab
+                                && userlist->get().is_active()) {
+                                userlist->get().change_tab(tab);
                             }
                         }
                     } break;
@@ -224,13 +228,13 @@ void UIStateGame::send_key(KeyType::Id type,
                     case KeyAction::Id::MAPLE_CHAT: {
                         auto chat = UI::get().get_element<UIChat>();
 
-                        if (!chat || !chat->is_active()) {
+                        if (!chat || !chat->get().is_active()) {
                             emplace<UIChat>();
                         }
                     } break;
                     case KeyAction::Id::MINI_MAP:
                         if (auto minimap = UI::get().get_element<UIMiniMap>()) {
-                            minimap->send_key(action, pressed, escape);
+                            minimap->get().send_key(action, pressed, escape);
                         }
 
                         break;
@@ -241,22 +245,22 @@ void UIStateGame::send_key(KeyType::Id type,
                     case KeyAction::Id::MENU:
                         if (auto statusbar =
                                 UI::get().get_element<UIStatusBar>()) {
-                            statusbar->toggle_menu();
+                            statusbar->get().toggle_menu();
                         }
 
                         break;
                     case KeyAction::Id::QUICK_SLOTS:
                         if (auto statusbar =
                                 UI::get().get_element<UIStatusBar>()) {
-                            statusbar->toggle_qs();
+                            statusbar->get().toggle_qs();
                         }
 
                         break;
                     case KeyAction::Id::CASHSHOP: fn_enter_cashshop(); break;
                     case KeyAction::Id::TOGGLE_CHAT:
                         if (auto chatbar = UI::get().get_element<UIChatBar>()) {
-                            if (!chatbar->is_chatfieldopen()) {
-                                chatbar->toggle_chat();
+                            if (!chatbar->get().is_chatfieldopen()) {
+                                chatbar->get().toggle_chat();
                             }
                         }
 
@@ -264,12 +268,12 @@ void UIStateGame::send_key(KeyType::Id type,
                     case KeyAction::Id::KEY_BINDINGS: {
                         auto keyconfig = UI::get().get_element<UIKeyConfig>();
 
-                        if (!keyconfig || !keyconfig->is_active()) {
+                        if (!keyconfig || !keyconfig->get().is_active()) {
                             emplace<UIKeyConfig>(
                                 Stage::get().get_player().get_inventory(),
                                 Stage::get().get_player().get_skills());
-                        } else if (keyconfig && keyconfig->is_active()) {
-                            keyconfig->close();
+                        } else if (keyconfig && keyconfig->get().is_active()) {
+                            keyconfig->get().close();
                         }
 
                         break;
@@ -277,7 +281,7 @@ void UIStateGame::send_key(KeyType::Id type,
                     case KeyAction::Id::MAIN_MENU:
                         if (auto statusbar =
                                 UI::get().get_element<UIStatusBar>()) {
-                            statusbar->send_key(action, pressed, escape);
+                            statusbar->get().send_key(action, pressed, escape);
                         }
 
                         break;
@@ -396,7 +400,7 @@ void UIStateGame::send_close() {
 }
 
 void UIStateGame::drag_icon(Icon *drgic) {
-    dragged_icon_ = drgic;
+    dragged_icon_ = create_optional<Icon>(drgic);
 }
 
 void UIStateGame::clear_tooltip(Tooltip::Parent parent) {
@@ -524,7 +528,7 @@ UIState::Iterator UIStateGame::pre_add(UIElement::Type type,
 
                 if (dragged_icon_) {
                     if (element->get_type()
-                        == icon_map_[dragged_icon_->get_type()]) {
+                        == icon_map_[dragged_icon_->get().get_type()]) {
                         remove_icon();
                     }
                 }

@@ -21,8 +21,10 @@ if(${PROJECT_NAME}_ENABLE_DOXYGEN)
         ${PROJECT_SOURCE_DIR}/Configuration.h
         ${PROJECT_SOURCE_DIR}/Constants.h
         ${PROJECT_SOURCE_DIR}/Error.h
-        ${PROJECT_SOURCE_DIR}/MapleStory.h
+        ${PROJECT_SOURCE_DIR}/MSClient.h
         ${PROJECT_SOURCE_DIR}/resource.h
         ${PROJECT_SOURCE_DIR}/Timer.h
-        ${PROJECT_SOURCE_DIR}/MapleStory.cpp)
+        ${PROJECT_SOURCE_DIR}/MSClient.cpp
+        ${PROJECT_SOURCE_DIR}/Game.cpp
+        ${PROJECT_SOURCE_DIR}/Game.h)
 endif()

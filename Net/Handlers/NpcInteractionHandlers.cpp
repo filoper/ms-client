@@ -39,7 +39,7 @@ void NpcDialogueHandler::handle(InPacket &recv) const {
     UI::get().enable();
 
     if (auto npctalk = UI::get().get_element<UINpcTalk>()) {
-        npctalk->change_text(npcid, msgtype, style, speaker, text);
+        npctalk->get().change_text(npcid, msgtype, style, speaker, text);
     }
 }
 

@@ -15,11 +15,12 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <memory>
+
 #include "../Error.h"
 #include "../MSClient.h"
-#include "../Template/Singleton.h"
 #include "Cryptography.h"
-#include "PacketSwitch.h"
+#include "Forwarder.h"
 
 #ifdef USE_ASIO
 #include "SocketAsio.h"
@@ -28,10 +29,10 @@
 #endif
 
 namespace ms {
-class Session : public Singleton<Session> {
+class Session {
 public:
-    Session();
-    ~Session() override;
+    Session(std::unique_ptr<Forwarder> packet_forwarder);
+    ~Session();
 
     // Connect using host and port from the configuration file
     Error init();
@@ -52,7 +53,7 @@ private:
     void process(const int8_t *bytes, size_t available);
 
     Cryptography cryptography_;
-    PacketSwitch packet_switch_;
+    std::unique_ptr<Forwarder> packet_forwarder_;
 
     int8_t buffer_[MAX_PACKET_LENGTH];
     size_t length_;

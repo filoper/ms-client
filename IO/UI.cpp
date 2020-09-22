@@ -15,9 +15,13 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "UI.h"
 
+#include <optional>
 #include <utility>
 
 #include "../Gameplay/Stage.h"
+#include "Audio/Audio.h"
+#include "Configuration.h"
+#include "OptionalCreator.h"
 #include "UIStateCashShop.h"
 #include "UIStateGame.h"
 #include "UIStateLogin.h"
@@ -72,8 +76,11 @@ void UI::change_state(State id) {
         case State::GAME:
             state_ = std::make_unique<UIStateGame>(
                 UI::get().get_element<UIWorldSelect>()
-                    ? UI::get().get_element<UIWorldSelect>()->get_channel_count(
-                        Stage::get().get_player().get_world_id())
+                    ? UI::get()
+                          .get_element<UIWorldSelect>()
+                          ->get()
+                          .get_channel_count(
+                              Stage::get().get_player().get_world_id())
                     : 20);
             break;
         case State::CASHSHOP:
@@ -127,7 +134,7 @@ void UI::send_cursor(bool pressed) {
 
     if (focused_text_field_ && pressed) {
         Cursor::State tstate =
-            focused_text_field_->send_cursor(cursorpos, pressed);
+            focused_text_field_->get().send_cursor(cursorpos, pressed);
 
         switch (tstate) {
             case Cursor::State::IDLE: focused_text_field_ = {}; break;
@@ -177,10 +184,10 @@ void UI::send_key(int32_t keycode, bool pressed) {
                 switch (action) {
                     case KeyAction::Id::COPY:
                         Window::get().set_clipboard(
-                            focused_text_field_->get_text());
+                            focused_text_field_->get().get_text());
                         break;
                     case KeyAction::Id::PASTE:
-                        focused_text_field_->add_string(
+                        focused_text_field_->get().add_string(
                             Window::get().get_clipboard());
                         break;
                 }
@@ -191,9 +198,9 @@ void UI::send_key(int32_t keycode, bool pressed) {
                          || caps_lock_enabled_;
             Keyboard::Mapping mapping =
                 keyboard_.get_text_mapping(keycode, shift);
-            focused_text_field_->send_key(mapping.type,
-                                          mapping.action,
-                                          pressed);
+            focused_text_field_->get().send_key(mapping.type,
+                                                mapping.action,
+                                                pressed);
         }
     } else {
         Keyboard::Mapping mapping = keyboard_.get_mapping(keycode);
@@ -220,34 +227,34 @@ void UI::send_key(int32_t keycode, bool pressed) {
         // auto report = UI::get().get_element<UIReport>();
         // auto whisper = UI::get().get_element<UIWhisper>();
 
-        if (npctalk && npctalk->is_active()) {
-            npctalk->send_key(mapping.action, pressed, escape);
+        if (npctalk && npctalk->get().is_active()) {
+            npctalk->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (statusbar && statusbar->is_menu_active()) {
-            statusbar->send_key(mapping.action, pressed, escape);
+        } else if (statusbar && statusbar->get().is_menu_active()) {
+            statusbar->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (channel && channel->is_active()
+        } else if (channel && channel->get().is_active()
                    && mapping.action != KeyAction::Id::CHANGE_CHANNEL) {
-            channel->send_key(mapping.action, pressed, escape);
+            channel->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (worldmap && worldmap->is_active()
+        } else if (worldmap && worldmap->get().is_active()
                    && mapping.action != KeyAction::Id::WORLD_MAP) {
-            worldmap->send_key(mapping.action, pressed, escape);
+            worldmap->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (optionmenu && optionmenu->is_active()) {
-            optionmenu->send_key(mapping.action, pressed, escape);
+        } else if (optionmenu && optionmenu->get().is_active()) {
+            optionmenu->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (shop && shop->is_active()) {
-            shop->send_key(mapping.action, pressed, escape);
+        } else if (shop && shop->get().is_active()) {
+            shop->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (joypad && joypad->is_active()) {
-            joypad->send_key(mapping.action, pressed, escape);
+        } else if (joypad && joypad->get().is_active()) {
+            joypad->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (rank && rank->is_active()) {
-            rank->send_key(mapping.action, pressed, escape);
+        } else if (rank && rank->get().is_active()) {
+            rank->get().send_key(mapping.action, pressed, escape);
             sent = true;
-        } else if (quit && quit->is_active()) {
-            quit->send_key(mapping.action, pressed, escape);
+        } else if (quit && quit->get().is_active()) {
+            quit->get().send_key(mapping.action, pressed, escape);
             sent = true;
         } else {
             // All
@@ -257,21 +264,25 @@ void UI::send_key(int32_t keycode, bool pressed) {
                 types.emplace_back(UIElement::Type::CHAR_SELECT);
                 types.emplace_back(UIElement::Type::RACE_SELECT);  // No tab
                 types.emplace_back(
-                    UIElement::Type::CLASS_CREATION);  // No tab (No arrows, but
+                    UIElement::Type::CLASS_CREATION);  // No tab (No arrows,
+                                                       // but
                                                        // shouldn't send else
                                                        // where)
                 types.emplace_back(
-                    UIElement::Type::LOGIN_NOTICE);  // No tab (No arrows, but
+                    UIElement::Type::LOGIN_NOTICE);  // No tab (No arrows,
+                                                     // but
                                                      // shouldn't send else
                                                      // where)
                 types.emplace_back(
                     UIElement::Type::LOGIN_NOTICE_CONFIRM);  // No tab (No
                                                              // arrows, but
-                                                             // shouldn't send
+                                                             // shouldn't
+                                                             //  send
                                                              // else where)
                 types.emplace_back(
                     UIElement::Type::LOGIN_WAIT);  // No tab (No arrows, but
-                                                   // shouldn't send else where)
+                                                   // shouldn't send else
+                                                   //    where)
             }
 
             if (escape) {
@@ -321,8 +332,8 @@ void UI::send_key(int32_t keycode, bool pressed) {
             auto chatbar = UI::get().get_element<UIChatBar>();
 
             if (escape) {
-                if (chatbar && chatbar->is_chatopen()) {
-                    chatbar->send_key(mapping.action, pressed, escape);
+                if (chatbar && chatbar->get().is_chatopen()) {
+                    chatbar->get().send_key(mapping.action, pressed, escape);
                 } else {
                     state_->send_key(mapping.type,
                                      mapping.action,
@@ -331,7 +342,7 @@ void UI::send_key(int32_t keycode, bool pressed) {
                 }
             } else if (enter) {
                 if (chatbar) {
-                    chatbar->send_key(mapping.action, pressed, escape);
+                    chatbar->get().send_key(mapping.action, pressed, escape);
                 } else {
                     state_->send_key(mapping.type,
                                      mapping.action,
@@ -353,15 +364,19 @@ void UI::set_scrollnotice(const std::string &notice) {
 
 void UI::focus_textfield(Textfield *tofocus) {
     if (focused_text_field_) {
-        focused_text_field_->set_state(Textfield::State::NORMAL);
+        focused_text_field_->get().set_state(Textfield::State::NORMAL);
     }
 
-    focused_text_field_ = tofocus;
+    if (tofocus) {
+        focused_text_field_ = *tofocus;
+    } else {
+        focused_text_field_ = {};
+    }
 }
 
 void UI::remove_textfield() {
     if (focused_text_field_) {
-        focused_text_field_->set_state(Textfield::State::NORMAL);
+        focused_text_field_->get().set_state(Textfield::State::NORMAL);
     }
 
     focused_text_field_ = {};

@@ -19,6 +19,7 @@
 
 #include "../Configuration.h"
 #include "../Util/Randomizer.h"
+#include "PacketProcessor.h"
 #include "Session.h"
 
 namespace ms {
@@ -27,7 +28,7 @@ OutPacket::OutPacket(int16_t opc) : opcode_(opc) {
 }
 
 void OutPacket::dispatch() {
-    Session::get().write(bytes_.data(), bytes_.size());
+    PacketProcessor::get().process(bytes_.data(), bytes_.size());
 
     if (Configuration::get().get_show_packets()) {
         if (opcode_ == Opcode::PONG) {

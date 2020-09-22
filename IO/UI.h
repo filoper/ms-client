@@ -15,9 +15,17 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../Template/Optional.h"
+#include <cstdint>
+#include <functional>
+#include <iostream>
+#include <optional>
+#include <unordered_map>
+
 #include "Components/ScrollingNotice.h"
 #include "Components/Textfield.h"
+#include "Point.h"
+#include "Singleton.h"
+#include "Template/OptionalCreator.h"
 #include "UIState.h"
 
 namespace ms {
@@ -100,10 +108,10 @@ public:
     int64_t get_upexp();
 
     template<class T, typename... Args>
-    Optional<T> emplace(Args &&... args);
+    std::optional<std::reference_wrapper<T>> emplace(Args &&... args);
 
     template<class T>
-    Optional<T> get_element();
+    std::optional<std::reference_wrapper<T>> get_element();
 
     void remove(UIElement::Type type);
 
@@ -113,28 +121,32 @@ private:
     Cursor cursor_;
     ScrollingNotice scrolling_notice_;
 
-    Optional<Textfield> focused_text_field_;
+    std::optional<std::reference_wrapper<Textfield>> focused_text_field_;
     std::unordered_map<int32_t, bool> is_key_down_;
 
     bool enabled_;
     bool quitted_;
     bool caps_lock_enabled_;
+
+    std::function<void()> fn_toggle_full_screen_;
+    std::function<void()> fn_set_clipboard_;
+    std::function<std::string()> fn_get_clipboard_;
 };
 
 template<class T, typename... Args>
-Optional<T> UI::emplace(Args &&... args) {
+std::optional<std::reference_wrapper<T>> UI::emplace(Args &&... args) {
     if (auto iter = state_->pre_add(T::TYPE, T::TOGGLED, T::FOCUSED)) {
         (*iter).second = std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-    return state_->get(T::TYPE);
+    return create_optional<T>(state_->get(T::TYPE));
 }
 
 template<class T>
-Optional<T> UI::get_element() {
+std::optional<std::reference_wrapper<T>> UI::get_element() {
     UIElement::Type type = T::TYPE;
     UIElement *element = state_->get(type);
 
-    return static_cast<T *>(element);
+    return create_optional<T>(element);
 }
 }  // namespace ms

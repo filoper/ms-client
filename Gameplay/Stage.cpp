@@ -184,7 +184,7 @@ void Stage::update() {
 
 void Stage::show_character_effect(int32_t cid, CharEffect::Id effect) {
     if (auto character = get_character(cid)) {
-        character->show_effect_id(effect);
+        character->get().show_effect_id(effect);
     }
 }
 
@@ -218,7 +218,7 @@ void Stage::check_seats() {
         return;
     }
 
-    Optional<const Seat> seat = map_info_.findseat(player_.get_position());
+    auto seat = map_info_.findseat(player_.get_position());
     player_.set_seat(seat);
 }
 
@@ -227,8 +227,7 @@ void Stage::check_ladders(bool up) {
         return;
     }
 
-    Optional<const Ladder> ladder =
-        map_info_.findladder(player_.get_position(), up);
+    auto ladder = map_info_.findladder(player_.get_position(), up);
     player_.set_ladder(ladder);
 }
 
@@ -261,7 +260,8 @@ void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
                 }
             }
 
-            playable_->send_action(KeyAction::get_action_by_id(action), down);
+            playable_->get().send_action(KeyAction::get_action_by_id(action),
+                                         down);
             break;
         case KeyType::Id::SKILL: combat_.use_move(action); break;
         case KeyType::Id::ITEM: player_.use_item(action); break;
@@ -272,13 +272,13 @@ void Stage::send_key(KeyType::Id type, int32_t action, bool down) {
 Cursor::State Stage::send_cursor(bool pressed, Point<int16_t> position) {
     auto statusbar = UI::get().get_element<UIStatusBar>();
 
-    if (statusbar && statusbar->is_menu_active()) {
+    if (statusbar && statusbar->get().is_menu_active()) {
         if (pressed) {
-            statusbar->remove_menus();
+            statusbar->get().remove_menus();
         }
 
-        if (statusbar->is_in_range(position)) {
-            return statusbar->send_cursor(pressed, position);
+        if (statusbar->get().is_in_range(position)) {
+            return statusbar->get().send_cursor(pressed, position);
         }
     }
 
@@ -321,11 +321,11 @@ MobCombat &Stage::get_mob_combat() {
     return mob_combat_;
 }
 
-Optional<Char> Stage::get_character(int32_t cid) {
+std::optional<std::reference_wrapper<Char>> Stage::get_character(int32_t cid) {
     if (is_player(cid)) {
-        return player_;
+        return create_optional<Char>(&player_);
     }
-    return chars_.get_char(cid);
+    return create_optional<Char>(chars_.get_char(cid));
 }
 
 int Stage::get_mapid() {

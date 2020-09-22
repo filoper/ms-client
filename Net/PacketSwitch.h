@@ -18,17 +18,18 @@
 #include <memory>
 #include <string_view>
 
+#include "Forwarder.h"
 #include "PacketHandler.h"
 
 namespace ms {
 // Class which contains the array of handler classes to use
-class PacketSwitch {
+class PacketSwitch : public Forwarder {
 public:
     // Register all handlers
     PacketSwitch();
 
     // Forward a packet to the correct handler
-    void forward(int8_t *bytes, size_t length) const;
+    void forward(int8_t *bytes, size_t length) const override;
 
 private:
     // Print a warning

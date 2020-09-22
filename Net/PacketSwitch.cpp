@@ -458,7 +458,7 @@ PacketSwitch::PacketSwitch() {
     // SetField handlers
     emplace<SET_FIELD, SetFieldHandler>();
 
-    // MapObject handlers
+    // // MapObject handlers
     emplace<SPAWN_CHAR, SpawnCharHandler>();
     emplace<CHAR_MOVED, CharMovedHandler>();
     emplace<UPDATE_CHARLOOK, UpdateCharLookHandler>();

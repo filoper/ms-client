@@ -920,9 +920,9 @@ void UIItemInventory::ItemIcon::drop_on_bindings(Point<int16_t> cursorposition,
         Keyboard::Mapping mapping = Keyboard::Mapping(KeyType::ITEM, item_id_);
 
         if (remove) {
-            keyconfig->unstage_mapping(mapping);
+            keyconfig->get().unstage_mapping(mapping);
         } else {
-            keyconfig->stage_mapping(cursorposition, mapping);
+            keyconfig->get().stage_mapping(cursorposition, mapping);
         }
     }
 }

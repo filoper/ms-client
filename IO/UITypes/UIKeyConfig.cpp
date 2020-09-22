@@ -23,7 +23,7 @@
 #include "../../Net/Packets/PlayerPackets.h"
 #include "../Components/MapleButton.h"
 #include "../UI.h"
-#include "../UITypes/UILoginNotice.h"
+#include "../UITypes/Login/UILoginNotice.h"
 #include "../UITypes/UINotice.h"
 
 namespace ms {
@@ -1603,7 +1603,7 @@ void UIKeyConfig::MappingIcon::drop_on_stage() const {
     if (mapping_.type == KeyType::Id::ITEM
         || mapping_.type == KeyType::Id::SKILL) {
         auto keyconfig = UI::get().get_element<UIKeyConfig>();
-        keyconfig->unstage_mapping(mapping_);
+        keyconfig->get().unstage_mapping(mapping_);
     }
 }
 
@@ -1612,9 +1612,9 @@ void UIKeyConfig::MappingIcon::drop_on_bindings(Point<int16_t> cursorposition,
     auto keyconfig = UI::get().get_element<UIKeyConfig>();
 
     if (remove) {
-        keyconfig->unstage_mapping(mapping_);
+        keyconfig->get().unstage_mapping(mapping_);
     } else {
-        keyconfig->stage_mapping(cursorposition, mapping_);
+        keyconfig->get().stage_mapping(cursorposition, mapping_);
     }
 }
 

@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <memory>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
@@ -210,6 +211,8 @@ public:
     OutPacket(int16_t opcode);
 
     void dispatch();
+
+    std::vector<int8_t> build() { return std::move(bytes_); }
 
     // Opcodes for OutPackets associated with version 83 of the game
     enum Opcode : uint16_t {

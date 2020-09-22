@@ -45,7 +45,7 @@ void ChangeChannelHandler::handle(InPacket &recv) const {
     auto cashshop = UI::get().get_element<UICashShop>();
 
     if (cashshop) {
-        cashshop->exit_cashshop();
+        cashshop->get().exit_cashshop();
     } else {
         Player &player = Stage::get().get_player();
         int32_t mapid = player.get_stats().get_mapid();
@@ -107,7 +107,7 @@ bool ChangeStatsHandler::handle_stat(MapleStat::Id stat, InPacket &recv) const {
 
     if (update_statsinfo && !recalculate) {
         if (auto statsinfo = UI::get().get_element<UIStatsInfo>()) {
-            statsinfo->update_stat(stat);
+            statsinfo->get().update_stat(stat);
         }
     }
 
@@ -117,7 +117,7 @@ bool ChangeStatsHandler::handle_stat(MapleStat::Id stat, InPacket &recv) const {
         int16_t value = player.get_stats().get_stat(stat);
 
         if (auto skillbook = UI::get().get_element<UISkillBook>()) {
-            skillbook->update_stat(stat, value);
+            skillbook->get().update_stat(stat, value);
         }
     }
 
@@ -193,7 +193,7 @@ void ApplyBuffHandler::handle_buff(InPacket &recv, Buffstat::Id bs) const {
         Stage::get().get_player().give_buff({ bs, value, skillid, duration });
 
         if (auto bufflist = UI::get().get_element<UIBuffList>()) {
-            bufflist->add_buff(skillid, duration);
+            bufflist->get().add_buff(skillid, duration);
         }
     }
 }
@@ -217,7 +217,7 @@ void UpdateSkillHandler::handle(InPacket &recv) const {
     Stage::get().get_player().change_skill(skillid, level, masterlevel, expire);
 
     if (auto skillbook = UI::get().get_element<UISkillBook>()) {
-        skillbook->update_skills(skillid);
+        skillbook->get().update_skills(skillid);
     }
 
     UI::get().enable();

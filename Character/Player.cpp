@@ -73,7 +73,7 @@ void Player::respawn(Point<int16_t> pos, bool uw) {
     underwater_ = uw;
     keys_down_.clear();
     attacking_ = false;
-    ladder_ = nullptr;
+    ladder_ = {};
     nullstate.update_state(*this);
 }
 
@@ -115,7 +115,7 @@ void Player::recalc_stats(bool equipchanged) {
     stats_.close_totalstats();
 
     if (auto statsinfo = UI::get().get_element<UIStatsInfo>()) {
-        statsinfo->update_all_stats();
+        statsinfo->get().update_all_stats();
     }
 }
 
@@ -412,22 +412,24 @@ void Player::change_job(uint16_t jobid) {
     stats_.change_job(jobid);
 }
 
-void Player::set_seat(Optional<const Seat> seat) {
+void Player::set_seat(std::optional<std::reference_wrapper<const Seat>> seat) {
     if (seat) {
-        set_position(seat->getpos());
+        set_position(seat->get().getpos());
         set_state(Char::State::SIT);
     }
 }
 
-void Player::set_ladder(Optional<const Ladder> ldr) {
+void Player::set_ladder(
+    std::optional<std::reference_wrapper<const Ladder>> ldr) {
     ladder_ = ldr;
 
     if (ladder_) {
-        phobj_.set_x(ldr->get_x());
+        phobj_.set_x(ldr->get().get_x());
         phobj_.hspeed = 0.0;
         phobj_.vspeed = 0.0;
         phobj_.fhlayer = 7;
-        set_state(ldr->is_ladder() ? Char::State::LADDER : Char::State::ROPE);
+        set_state(ldr->get().is_ladder() ? Char::State::LADDER
+                                         : Char::State::ROPE);
     }
 }
 
@@ -491,7 +493,7 @@ MonsterBook &Player::get_monsterbook() {
     return monster_book_;
 }
 
-Optional<const Ladder> Player::get_ladder() const {
+std::optional<std::reference_wrapper<const Ladder>> Player::get_ladder() const {
     return ladder_;
 }
 }  // namespace ms

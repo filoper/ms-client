@@ -20,6 +20,7 @@
 #include <map>
 
 #include "Mob.h"
+#include "OptionalCreator.h"
 
 namespace ms {
 void MapMobs::draw(Layer::Id layer,
@@ -33,14 +34,14 @@ void MapMobs::update(const Physics &physics) {
     for (; !spawns_.empty(); spawns_.pop()) {
         const MobSpawn &spawn = spawns_.front();
 
-        if (Optional<Mob> mob = mobs_.get(spawn.get_oid())) {
+        if (auto mob = mobs_.get<Mob>(spawn.get_oid())) {
             int8_t mode = spawn.get_mode();
 
             if (mode > 0) {
-                mob->set_control(mode);
+                mob->get().set_control(mode);
             }
 
-            mob->makeactive();
+            mob->get().makeactive();
         } else {
             mobs_.add(spawn.instantiate());
         }
@@ -54,8 +55,8 @@ void MapMobs::spawn(MobSpawn &&spawn) {
 }
 
 void MapMobs::remove(int32_t oid, int8_t animation) {
-    if (Optional<Mob> mob = mobs_.get(oid)) {
-        mob->kill(animation);
+    if (auto mob = mobs_.get<Mob>(oid)) {
+        mob->get().kill(animation);
     }
 
     if (animation == 0) {
@@ -70,22 +71,22 @@ void MapMobs::clear() {
 void MapMobs::set_control(int32_t oid, bool control) {
     int8_t mode = control ? 1 : 0;
 
-    if (Optional<Mob> mob = mobs_.get(oid)) {
-        mob->set_control(mode);
+    if (auto mob = mobs_.get<Mob>(oid)) {
+        mob->get().set_control(mode);
     }
 }
 
 void MapMobs::send_mobhp(int32_t oid, int8_t percent, uint16_t playerlevel) {
-    if (Optional<Mob> mob = mobs_.get(oid)) {
-        mob->show_hp(percent, playerlevel);
+    if (auto mob = mobs_.get<Mob>(oid)) {
+        mob->get().show_hp(percent, playerlevel);
     }
 }
 
 void MapMobs::send_movement(int32_t oid,
                             Point<int16_t> start,
                             std::vector<Movement> &&movements) {
-    if (Optional<Mob> mob = mobs_.get(oid)) {
-        mob->send_movement(start, std::move(movements));
+    if (auto mob = mobs_.get<Mob>(oid)) {
+        mob->get().send_movement(start, std::move(movements));
     }
 }
 
@@ -94,8 +95,8 @@ void MapMobs::send_attack(AttackResult &result,
                           const std::vector<int32_t> &targets,
                           uint8_t mobcount) {
     for (const auto &target : targets) {
-        if (Optional<Mob> mob = mobs_.get(target)) {
-            result.damage_lines[target] = mob->calculate_damage(attack);
+        if (auto mob = mobs_.get<Mob>(target)) {
+            result.damage_lines[target] = mob->get().calculate_damage(attack);
             result.mobcount++;
 
             if (result.mobcount == 1) {
@@ -114,8 +115,8 @@ void MapMobs::apply_damage(int32_t oid,
                            bool toleft,
                            const AttackUser &user,
                            const SpecialMove &move) {
-    if (Optional<Mob> mob = mobs_.get(oid)) {
-        mob->apply_damage(damage, toleft);
+    if (auto mob = mobs_.get<Mob>(oid)) {
+        mob->get().apply_damage(damage, toleft);
 
         // TODO: Maybe move this into the method above too?
         move.apply_hiteffects(user, *mob);
@@ -139,8 +140,9 @@ int32_t MapMobs::find_colliding(const MovingObject &moveobj) const {
 
     auto iter =
         std::find_if(mobs_.begin(), mobs_.end(), [&player_rect](auto &mmo) {
-            Optional<Mob> mob = mmo.second.get();
-            return mob && mob->is_alive() && mob->is_in_range(player_rect);
+            auto mob = create_optional<Mob>(mmo.second.get());
+            return mob && mob->get().is_alive()
+                   && mob->get().is_in_range(player_rect);
         });
 
     if (iter == mobs_.end()) {
@@ -151,22 +153,22 @@ int32_t MapMobs::find_colliding(const MovingObject &moveobj) const {
 }
 
 MobAttack MapMobs::create_attack(int32_t oid) const {
-    if (Optional<const Mob> mob = mobs_.get(oid)) {
-        return mob->create_touch_attack();
+    if (auto mob = mobs_.get<const Mob>(oid)) {
+        return mob->get().create_touch_attack();
     }
     return {};
 }
 
 Point<int16_t> MapMobs::get_mob_position(int32_t oid) const {
-    if (auto mob = mobs_.get(oid)) {
-        return mob->get_position();
+    if (auto mob = mobs_.get<MapObject>(oid)) {
+        return mob->get().get_position();
     }
     return Point<int16_t>(0, 0);
 }
 
 Point<int16_t> MapMobs::get_mob_head_position(int32_t oid) const {
-    if (Optional<const Mob> mob = mobs_.get(oid)) {
-        return mob->get_head_position();
+    if (auto mob = mobs_.get<const Mob>(oid)) {
+        return mob->get().get_head_position();
     }
     return Point<int16_t>(0, 0);
 }

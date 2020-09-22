@@ -21,6 +21,7 @@
 #include "../Audio/Audio.h"
 #include "../Components/MapleButton.h"
 #include "../UI.h"
+#include "KeyAction.h"
 
 namespace ms {
 UILoginNotice::UILoginNotice(uint16_t message,

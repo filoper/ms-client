@@ -15,17 +15,14 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include <utility>
+#include <cstddef>
+#include <cstdint>
 
-#include "../../InPacket.h"
-#include "../../Login.h"
+namespace ms {
+class Forwarder {
+public:
+    virtual ~Forwarder() = default;
 
-namespace ms::LoginParser {
-Account parse_account(InPacket &recv);
-World parse_world(InPacket &recv);
-RecommendedWorld parse_recommended_world(InPacket &recv);
-CharEntry parse_charentry(InPacket &recv);
-StatsEntry parse_stats(InPacket &recv);
-LookEntry parse_look(InPacket &recv);
-std::pair<std::string, std::string> parse_login(InPacket &recv);
-}  // namespace ms::LoginParser
+    virtual void forward(int8_t *bytes, size_t length) const = 0;
+};
+}  // namespace ms

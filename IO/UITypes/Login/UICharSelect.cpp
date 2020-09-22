@@ -117,7 +117,7 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
     uint8_t channel_id = Configuration::get().get_channelid();
 
     if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
-        world = worldselect->get_worldbyid(world_id);
+        world = worldselect->get().get_worldbyid(world_id);
     }
 
     world_sprites_.emplace_back(selectWorld, world_pos_);
@@ -806,7 +806,7 @@ Button::State UICharSelect::button_pressed(uint16_t buttonid) {
             Sound(Sound::Name::SCROLL_UP).play();
 
             if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
-                worldselect->makeactive();
+                worldselect->get().makeactive();
             }
 
             break;

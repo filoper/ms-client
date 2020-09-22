@@ -77,12 +77,12 @@ void CharInfoHandler::handle(InPacket &recv) const {
 
     // Update the character information window
     if (auto charinfo = UI::get().get_element<UICharInfo>()) {
-        charinfo->update_stats(character_id,
-                               character_job_id,
-                               character_level,
-                               character_fame,
-                               guild_name,
-                               alliance_name);
+        charinfo->get().update_stats(character_id,
+                                     character_job_id,
+                                     character_level,
+                                     character_fame,
+                                     guild_name,
+                                     alliance_name);
     }
 }
 }  // namespace ms

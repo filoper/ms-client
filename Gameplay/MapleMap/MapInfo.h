@@ -15,9 +15,10 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <functional>
+#include <optional>
 #include <vector>
 
-#include "../../Template/Optional.h"
 #include "../../Template/Point.h"
 #include "../../Template/Range.h"
 
@@ -68,11 +69,13 @@ public:
     Range<int16_t> get_borders() const;
 
     // Find a seat the player's position
-    Optional<const Seat> findseat(Point<int16_t> position) const;
+    std::optional<std::reference_wrapper<const Seat>> findseat(
+        Point<int16_t> position) const;
     // Find a ladder at the player's position
     // !upwards - implies downwards
-    Optional<const Ladder> findladder(Point<int16_t> position,
-                                      bool upwards) const;
+    std::optional<std::reference_wrapper<const Ladder>> findladder(
+        Point<int16_t> position,
+        bool upwards) const;
 
 private:
     int32_t field_limit_;

@@ -37,12 +37,12 @@ void MobCombat::use_move(int oid, int move_id, int skill_id, uint8_t level) {
     int at = (move_id - 24);
     int action_id = at % 2 == 0 ? at / 2 : (at + 1) / 2;
 
-    if (Optional<Mob> mob = mobs_.get_mobs()->get(oid)) {
+    if (auto mob = mobs_.get_mobs()->get<Mob>(oid)) {
         if (0 < action_id && action_id < 7) {
-            const auto &move = mob->get_move(action_id);
+            const auto &move = mob->get().get_move(action_id);
             apply_move(move, *mob);
         } else if (skill_id != 0) {
-            const auto &move = mob->get_move(skill_id, level);
+            const auto &move = mob->get().get_move(skill_id, level);
             apply_move(move, *mob);
         }
     }
@@ -66,8 +66,8 @@ void MobCombat::apply_move(const MobSpecialAttack &move, Mob &mob) {
 }
 
 void MobCombat::use_some_attack(int oid) {
-    if (Optional<Mob> mob = mobs_.get_mobs()->get(oid)) {
-        mob->use_some_attack();
+    if (auto mob = mobs_.get_mobs()->get<Mob>(oid)) {
+        mob->get().use_some_attack();
     }
 }
 

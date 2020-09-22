@@ -29,7 +29,7 @@ void Geometry::draw(int16_t x,
     const float *color = Color::colors[cid];
 
     GraphicsGL::get()
-        .drawrectangle(x, y, w, h, color[0], color[1], color[2], opacity);
+        .draw_rectangle(x, y, w, h, color[0], color[1], color[2], opacity);
 }
 
 ColorBox::ColorBox(int16_t w, int16_t h, Color::Name c, float o) :

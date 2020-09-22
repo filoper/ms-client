@@ -25,6 +25,8 @@ if(${PROJECT_NAME}_ENABLE_CLANG_TIDY)
          ${PROJECT_SOURCE_DIR}/IO/*.cpp
          ${PROJECT_SOURCE_DIR}/IO/*/*.h
          ${PROJECT_SOURCE_DIR}/IO/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/IO/*/*/*.h
+         ${PROJECT_SOURCE_DIR}/IO/*/*/*.cpp
          ${PROJECT_SOURCE_DIR}/Net/*.h
          ${PROJECT_SOURCE_DIR}/Net/*.cpp
          ${PROJECT_SOURCE_DIR}/Net/*/*.h

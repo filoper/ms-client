@@ -16,13 +16,14 @@
 #include "LoginHandlers.h"
 
 #include "../../IO/UI.h"
-#include "../../IO/UITypes/UICharSelect.h"
-#include "../../IO/UITypes/UIGender.h"
-#include "../../IO/UITypes/UILoginNotice.h"
-#include "../../IO/UITypes/UILoginWait.h"
-#include "../../IO/UITypes/UIRaceSelect.h"
-#include "../../IO/UITypes/UITermsOfService.h"
-#include "../../IO/UITypes/UIWorldSelect.h"
+#include "../../IO/UITypes/Login/UICharSelect.h"
+#include "../../IO/UITypes/Login/UIGender.h"
+#include "../../IO/UITypes/Login/UILoginNotice.h"
+#include "../../IO/UITypes/Login/UILoginWait.h"
+#include "../../IO/UITypes/Login/UIRaceSelect.h"
+#include "../../IO/UITypes/Login/UITermsOfService.h"
+#include "../../IO/UITypes/Login/UIWorldSelect.h"
+#include "../PacketProcessor.h"
 #include "../Packets/LoginPackets.h"
 #include "Helpers/LoginParser.h"
 
@@ -37,8 +38,8 @@ auto fn_player_login = []<typename... T>(T && ... args) {
 void LoginResultHandler::handle(InPacket &recv) const {
     auto loginwait = UI::get().get_element<UILoginWait>();
 
-    if (loginwait && loginwait->is_active()) {
-        std::function<void()> okhandler = loginwait->get_handler();
+    if (loginwait && loginwait->get().is_active()) {
+        std::function<void()> okhandler = loginwait->get().get_handler();
 
         // Remove previous UIs
         UI::get().remove(UIElement::Type::LOGIN_NOTICE);
@@ -132,13 +133,13 @@ void ServerlistHandler::handle(InPacket &recv) const {
         World world = LoginParser::parse_world(recv);
 
         if (world.wid != -1) {
-            worldselect->add_world(world);
+            worldselect->get().add_world(world);
         } else {
             // Remove previous UIs
             UI::get().remove(UIElement::Type::LOGIN);
 
             // Add the world selection screen to the UI
-            worldselect->draw_world();
+            worldselect->get().draw_world();
 
             // End of packet
             return;
@@ -149,7 +150,7 @@ void ServerlistHandler::handle(InPacket &recv) const {
 void CharlistHandler::handle(InPacket &recv) const {
     auto loginwait = UI::get().get_element<UILoginWait>();
 
-    if (loginwait && loginwait->is_active()) {
+    if (loginwait && loginwait->get().is_active()) {
         uint8_t channel_id = recv.read_ubyte();
 
         // Parse all characters
@@ -169,7 +170,7 @@ void CharlistHandler::handle(InPacket &recv) const {
 
         // Remove the world selection screen
         if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
-            worldselect->remove_selected();
+            worldselect->get().remove_selected();
         }
 
         // Add the character selection screen
@@ -180,7 +181,9 @@ void CharlistHandler::handle(InPacket &recv) const {
 void ServerIPHandler::handle(InPacket &recv) const {
     recv.skip_byte();
 
-    LoginParser::parse_login(recv);
+    auto [ip, port] = LoginParser::parse_login(recv);
+    // Attempt to reconnect to the server
+    PacketProcessor::get().reconnect(ip, port);
 
     int32_t cid = recv.read_int();
     fn_player_login(cid);
@@ -193,7 +196,7 @@ void CharnameResponseHandler::handle(InPacket &recv) const {
 
     // Notify the character creation screen
     if (auto raceselect = UI::get().get_element<UIRaceSelect>()) {
-        raceselect->send_naming_result(used);
+        raceselect->get().send_naming_result(used);
     }
 }
 
@@ -205,7 +208,7 @@ void AddNewCharEntryHandler::handle(InPacket &recv) const {
 
     // Read the updated character selection
     if (auto charselect = UI::get().get_element<UICharSelect>()) {
-        charselect->add_character(std::move(character));
+        charselect->get().add_character(std::move(character));
     }
 }
 
@@ -229,7 +232,7 @@ void DeleteCharResponseHandler::handle(InPacket &recv) const {
         UI::get().emplace<UILoginNotice>(message);
     } else {
         if (auto charselect = UI::get().get_element<UICharSelect>()) {
-            charselect->remove_character(cid);
+            charselect->get().remove_character(cid);
         }
     }
 }
@@ -242,7 +245,7 @@ void RecommendedWorldsHandler::handle(InPacket &recv) const {
             RecommendedWorld world = LoginParser::parse_recommended_world(recv);
 
             if (world.wid != -1 && !world.message.empty()) {
-                worldselect->add_recommended_world(world);
+                worldselect->get().add_recommended_world(world);
             }
         }
     }

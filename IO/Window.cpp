@@ -234,7 +234,7 @@ void Window::check_events() {
 }
 
 void Window::begin() const {
-    GraphicsGL::get().clearscene();
+    GraphicsGL::get().clear_scene();
 }
 
 void Window::end() const {

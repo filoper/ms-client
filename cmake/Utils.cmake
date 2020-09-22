@@ -35,6 +35,8 @@ function(add_clang_format_target)
         ${CMAKE_CURRENT_LIST_DIR}/IO/*.h
         ${CMAKE_CURRENT_LIST_DIR}/IO/*/*.cpp 
         ${CMAKE_CURRENT_LIST_DIR}/IO/*/*.h
+        ${CMAKE_CURRENT_LIST_DIR}/IO/*/*/*.cpp 
+        ${CMAKE_CURRENT_LIST_DIR}/IO/*/*/*.h
         ${CMAKE_CURRENT_LIST_DIR}/Net/*.cpp 
         ${CMAKE_CURRENT_LIST_DIR}/Net/*.h
         ${CMAKE_CURRENT_LIST_DIR}/Net/*/*.cpp 

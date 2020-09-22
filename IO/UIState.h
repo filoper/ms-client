@@ -18,6 +18,7 @@
 #include <list>
 #include <memory>
 
+#include "../Components/Icon.h"
 #include "../Template/EnumMap.h"
 #include "Components/Tooltip.h"
 #include "Keyboard.h"

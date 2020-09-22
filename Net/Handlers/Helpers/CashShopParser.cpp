@@ -75,7 +75,7 @@ StatsEntry parseCharStats(InPacket &recv) {
 
     statsentry.stats[MapleStat::Id::LEVEL] =
         recv.read_ubyte();  // TODO: Change to recv.read_short(); to increase
-                           // level cap
+                            // level cap
 
     auto job = recv.read_ushort();
 

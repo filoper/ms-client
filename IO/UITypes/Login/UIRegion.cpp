@@ -85,7 +85,7 @@ Button::State UIRegion::button_pressed(uint16_t buttonid) {
                 UI::get().remove(UIElement::Type::REGION);
 
                 // worldselect->set_region(region);
-                worldselect->makeactive();
+                worldselect->get().makeactive();
             }
 
             break;

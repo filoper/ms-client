@@ -164,7 +164,7 @@ UIWorldSelect::UIWorldSelect() :
         UI::get().emplace<UILoginWait>();
         auto loginwait = UI::get().get_element<UILoginWait>();
 
-        if (loginwait && loginwait->is_active()) {
+        if (loginwait && loginwait->get().is_active()) {
             fn_charlist_req(world, channel);
         }
     }
@@ -363,7 +363,7 @@ void UIWorldSelect::send_key(int32_t keycode, bool pressed, bool escape) {
             } else if (escape) {
                 auto quitconfirm = UI::get().get_element<UIQuitConfirm>();
 
-                if (quitconfirm && quitconfirm->is_active()) {
+                if (quitconfirm && quitconfirm->get().is_active()) {
                     return UI::get().send_key(keycode, pressed);
                 }
 
@@ -371,7 +371,7 @@ void UIWorldSelect::send_key(int32_t keycode, bool pressed, bool escape) {
             } else if (keycode == KeyAction::Id::RETURN) {
                 auto quitconfirm = UI::get().get_element<UIQuitConfirm>();
 
-                if (quitconfirm && quitconfirm->is_active()) {
+                if (quitconfirm && quitconfirm->get().is_active()) {
                     return UI::get().send_key(keycode, pressed);
                 }
 
@@ -635,7 +635,7 @@ void UIWorldSelect::enter_world() {
     UI::get().emplace<UILoginWait>();
     auto loginwait = UI::get().get_element<UILoginWait>();
 
-    if (loginwait && loginwait->is_active()) {
+    if (loginwait && loginwait->get().is_active()) {
         fn_charlist_req(worldid_, channelid_);
     }
 }

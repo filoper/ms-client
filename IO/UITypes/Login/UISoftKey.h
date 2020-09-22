@@ -15,7 +15,9 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../../Template/Optional.h"
+#include <functional>
+#include <optional>
+
 #include "../../Util/Randomizer.h"
 #include "../Components/TextTooltip.h"
 #include "../Components/Textfield.h"
@@ -94,7 +96,7 @@ private:
     Textfield entry_;
     Randomizer random_;
     TextTooltip tetooltip_;
-    Optional<Tooltip> tooltip_;
+    std::optional<std::reference_wrapper<Tooltip>> tooltip_;
     Point<int16_t> tooltip_position_;
     int16_t timestamp_;
 };

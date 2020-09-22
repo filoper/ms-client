@@ -408,8 +408,8 @@ bool UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
                                                 bool equip) const {
     if (tab != InventoryType::Id::EQUIP) {
         if (auto iteminventory = UI::get().get_element<UIItemInventory>()) {
-            if (iteminventory->is_active()) {
-                iteminventory->change_tab(InventoryType::Id::EQUIP);
+            if (iteminventory->get().is_active()) {
+                iteminventory->get().change_tab(InventoryType::Id::EQUIP);
                 return false;
             }
         }

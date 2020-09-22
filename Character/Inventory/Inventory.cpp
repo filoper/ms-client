@@ -354,8 +354,9 @@ int32_t Inventory::get_item_id(InventoryType::Id type, int16_t slot) const {
     return 0;
 }
 
-Optional<const Equip> Inventory::get_equip(InventoryType::Id type,
-                                           int16_t slot) const {
+std::optional<std::reference_wrapper<const Equip>> Inventory::get_equip(
+    InventoryType::Id type,
+    int16_t slot) const {
     if (type != InventoryType::Id::EQUIPPED
         && type != InventoryType::Id::EQUIP) {
         return {};

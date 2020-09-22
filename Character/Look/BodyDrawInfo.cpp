@@ -36,10 +36,10 @@ void BodyDrawInfo::init() {
 
             if (isaction) {
                 BodyAction action = framenode;
-                body_actions[ststr][frame] = action;
+                body_actions_[ststr][frame] = action;
 
                 if (action.isattackframe()) {
-                    attack_delays[ststr].push_back(attackdelay);
+                    attack_delays_[ststr].push_back(attackdelay);
                 }
 
                 attackdelay += action.get_delay();
@@ -51,7 +51,7 @@ void BodyDrawInfo::init() {
                     delay = 100;
                 }
 
-                stance_delays[stance][frame] = delay;
+                stance_delays_[stance][frame] = delay;
 
                 std::unordered_map<
                     Body::Layer,
@@ -78,10 +78,10 @@ void BodyDrawInfo::init() {
                                                             mapnode);
                 }
 
-                body_positions[stance][frame] =
+                body_positions_[stance][frame] =
                     bodyshiftmap[Body::Layer::BODY]["navel"];
 
-                arm_positions[stance][frame] =
+                arm_positions_[stance][frame] =
                     bodyshiftmap.count(Body::Layer::ARM)
                         ? (bodyshiftmap[Body::Layer::ARM]["hand"]
                            - bodyshiftmap[Body::Layer::ARM]["navel"]
@@ -90,16 +90,16 @@ void BodyDrawInfo::init() {
                            - bodyshiftmap[Body::Layer::ARM_OVER_HAIR]["navel"]
                            + bodyshiftmap[Body::Layer::BODY]["navel"]);
 
-                hand_positions[stance][frame] =
+                hand_positions_[stance][frame] =
                     bodyshiftmap[Body::Layer::HAND_BELOW_WEAPON]["handMove"];
-                head_positions[stance][frame] =
+                head_positions_[stance][frame] =
                     bodyshiftmap[Body::Layer::BODY]["neck"]
                     - bodyshiftmap[Body::Layer::HEAD]["neck"];
-                face_positions[stance][frame] =
+                face_positions_[stance][frame] =
                     bodyshiftmap[Body::Layer::BODY]["neck"]
                     - bodyshiftmap[Body::Layer::HEAD]["neck"]
                     + bodyshiftmap[Body::Layer::HEAD]["brow"];
-                hair_positions[stance][frame] =
+                hair_positions_[stance][frame] =
                     bodyshiftmap[Body::Layer::HEAD]["brow"]
                     - bodyshiftmap[Body::Layer::HEAD]["neck"]
                     + bodyshiftmap[Body::Layer::BODY]["neck"];
@@ -110,9 +110,9 @@ void BodyDrawInfo::init() {
 
 Point<int16_t> BodyDrawInfo::get_body_position(Stance::Id stance,
                                                uint8_t frame) const {
-    auto iter = body_positions[stance].find(frame);
+    auto iter = body_positions_[stance].find(frame);
 
-    if (iter == body_positions[stance].end()) {
+    if (iter == body_positions_[stance].end()) {
         return {};
     }
 
@@ -121,9 +121,9 @@ Point<int16_t> BodyDrawInfo::get_body_position(Stance::Id stance,
 
 Point<int16_t> BodyDrawInfo::get_arm_position(Stance::Id stance,
                                               uint8_t frame) const {
-    auto iter = arm_positions[stance].find(frame);
+    auto iter = arm_positions_[stance].find(frame);
 
-    if (iter == arm_positions[stance].end()) {
+    if (iter == arm_positions_[stance].end()) {
         return {};
     }
 
@@ -132,9 +132,9 @@ Point<int16_t> BodyDrawInfo::get_arm_position(Stance::Id stance,
 
 Point<int16_t> BodyDrawInfo::get_hand_position(Stance::Id stance,
                                                uint8_t frame) const {
-    auto iter = hand_positions[stance].find(frame);
+    auto iter = hand_positions_[stance].find(frame);
 
-    if (iter == hand_positions[stance].end()) {
+    if (iter == hand_positions_[stance].end()) {
         return {};
     }
 
@@ -143,9 +143,9 @@ Point<int16_t> BodyDrawInfo::get_hand_position(Stance::Id stance,
 
 Point<int16_t> BodyDrawInfo::get_head_position(Stance::Id stance,
                                                uint8_t frame) const {
-    auto iter = head_positions[stance].find(frame);
+    auto iter = head_positions_[stance].find(frame);
 
-    if (iter == head_positions[stance].end()) {
+    if (iter == head_positions_[stance].end()) {
         return {};
     }
 
@@ -154,9 +154,9 @@ Point<int16_t> BodyDrawInfo::get_head_position(Stance::Id stance,
 
 Point<int16_t> BodyDrawInfo::gethairpos(Stance::Id stance,
                                         uint8_t frame) const {
-    auto iter = hair_positions[stance].find(frame);
+    auto iter = hair_positions_[stance].find(frame);
 
-    if (iter == hair_positions[stance].end()) {
+    if (iter == hair_positions_[stance].end()) {
         return {};
     }
 
@@ -165,9 +165,9 @@ Point<int16_t> BodyDrawInfo::gethairpos(Stance::Id stance,
 
 Point<int16_t> BodyDrawInfo::getfacepos(Stance::Id stance,
                                         uint8_t frame) const {
-    auto iter = face_positions[stance].find(frame);
+    auto iter = face_positions_[stance].find(frame);
 
-    if (iter == face_positions[stance].end()) {
+    if (iter == face_positions_[stance].end()) {
         return {};
     }
 
@@ -175,7 +175,7 @@ Point<int16_t> BodyDrawInfo::getfacepos(Stance::Id stance,
 }
 
 uint8_t BodyDrawInfo::nextframe(Stance::Id stance, uint8_t frame) const {
-    if (stance_delays[stance].count(frame + 1)) {
+    if (stance_delays_[stance].count(frame + 1)) {
         return frame + 1;
     }
 
@@ -183,9 +183,9 @@ uint8_t BodyDrawInfo::nextframe(Stance::Id stance, uint8_t frame) const {
 }
 
 uint16_t BodyDrawInfo::get_delay(Stance::Id stance, uint8_t frame) const {
-    auto iter = stance_delays[stance].find(frame);
+    auto iter = stance_delays_[stance].find(frame);
 
-    if (iter == stance_delays[stance].end()) {
+    if (iter == stance_delays_[stance].end()) {
         return 100;
     }
 
@@ -194,9 +194,9 @@ uint16_t BodyDrawInfo::get_delay(Stance::Id stance, uint8_t frame) const {
 
 uint16_t BodyDrawInfo::get_attackdelay(const std::string &action,
                                        size_t no) const {
-    auto action_iter = attack_delays.find(action);
+    auto action_iter = attack_delays_.find(action);
 
-    if (action_iter != attack_delays.end()) {
+    if (action_iter != attack_delays_.end()) {
         if (no < action_iter->second.size()) {
             return action_iter->second[no];
         }
@@ -207,9 +207,9 @@ uint16_t BodyDrawInfo::get_attackdelay(const std::string &action,
 
 uint8_t BodyDrawInfo::next_actionframe(const std::string &action,
                                        uint8_t frame) const {
-    auto action_iter = body_actions.find(action);
+    auto action_iter = body_actions_.find(action);
 
-    if (action_iter != body_actions.end()) {
+    if (action_iter != body_actions_.end()) {
         if (action_iter->second.count(frame + 1)) {
             return frame + 1;
         }
@@ -220,9 +220,9 @@ uint8_t BodyDrawInfo::next_actionframe(const std::string &action,
 
 const BodyAction *BodyDrawInfo::get_action(const std::string &action,
                                            uint8_t frame) const {
-    auto action_iter = body_actions.find(action);
+    auto action_iter = body_actions_.find(action);
 
-    if (action_iter != body_actions.end()) {
+    if (action_iter != body_actions_.end()) {
         auto frame_iter = action_iter->second.find(frame);
 
         if (frame_iter != action_iter->second.end()) {

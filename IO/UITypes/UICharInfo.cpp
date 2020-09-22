@@ -191,7 +191,7 @@ UICharInfo::UICharInfo(int32_t cid) :
     dimension_ = backgrnd_dim;
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
-    target_character_ = Stage::get().get_character(cid).get();
+    target_character_ = &Stage::get().get_character(cid)->get();
 
     fn_char_info_request(cid);
 }

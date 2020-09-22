@@ -54,12 +54,12 @@ void Text::reset_layout() {
         return;
     }
 
-    layout_ = GraphicsGL::get().createlayout(text_,
-                                             font_,
-                                             alignment_,
-                                             max_width_,
-                                             formatted_,
-                                             line_adj_);
+    layout_ = GraphicsGL::get().create_layout(text_,
+                                              font_,
+                                              alignment_,
+                                              max_width_,
+                                              formatted_,
+                                              line_adj_);
 }
 
 void Text::change_text(const std::string &t) {
@@ -93,7 +93,7 @@ void Text::draw(const DrawArgument &args) const {
 void Text::draw(const DrawArgument &args,
                 const Range<int16_t> &vertical) const {
     GraphicsGL::get()
-        .drawtext(args, vertical, text_, layout_, font_, color_, background_);
+        .draw_text(args, vertical, text_, layout_, font_, color_, background_);
 }
 
 uint16_t Text::advance(size_t pos) const {

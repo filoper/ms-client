@@ -16,10 +16,10 @@
 #pragma once
 
 #include <chrono>
+#include <optional>
 
 #include "../Character/CharStats.h"
 #include "../Template/EnumMap.h"
-#include "../Template/Optional.h"
 #include "Components/EquipTooltip.h"
 #include "Components/ItemTooltip.h"
 #include "Components/MapTooltip.h"
@@ -109,10 +109,10 @@ private:
     SkillTooltip sk_tooltip_;
     TextTooltip te_tooltip_;
     MapTooltip ma_tooltip_;
-    Optional<Tooltip> tooltip_;
+    std::optional<std::reference_wrapper<Tooltip>> tooltip_;
     Tooltip::Parent tooltip_parent_;
 
-    Optional<Icon> dragged_icon_;
+    std::optional<std::reference_wrapper<Icon>> dragged_icon_;
     std::chrono::time_point<std::chrono::steady_clock> time_rel_grabbed =
         std::chrono::steady_clock::now();
     static constexpr std::chrono::microseconds MIN_DELAY_NEXT_GRAB_ { 10 };

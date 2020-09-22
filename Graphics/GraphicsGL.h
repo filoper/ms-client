@@ -42,7 +42,7 @@ public:
     void clear();
 
     // Add a bitmap to the available resources.
-    void addbitmap(const nl::bitmap &bmp);
+    void add_bitmap(const nl::bitmap &bmp);
 
     // Draw the bitmap with the given parameters.
     void draw(const nl::bitmap &bmp,
@@ -51,34 +51,34 @@ public:
               float angle);
 
     // Create a layout for the text with the parameters specified.
-    Text::Layout createlayout(const std::string &text,
-                              Text::Font font,
-                              Text::Alignment alignment,
-                              int16_t maxwidth,
-                              bool formatted,
-                              int16_t line_adj);
+    Text::Layout create_layout(const std::string &text,
+                               Text::Font font,
+                               Text::Alignment alignment,
+                               int16_t maxwidth,
+                               bool formatted,
+                               int16_t line_adj);
 
     // Draw a text with the given parameters.
-    void drawtext(const DrawArgument &args,
-                  const Range<int16_t> &vertical,
-                  const std::string &text,
-                  const Text::Layout &layout,
-                  Text::Font font,
-                  Color::Name color,
-                  Text::Background back);
+    void draw_text(const DrawArgument &args,
+                   const Range<int16_t> &vertical,
+                   const std::string &text,
+                   const Text::Layout &layout,
+                   Text::Font font,
+                   Color::Name color,
+                   Text::Background back);
 
     // Draw a rectangle filled with the specified color.
-    void drawrectangle(int16_t x,
-                       int16_t y,
-                       int16_t width,
-                       int16_t height,
-                       float red,
-                       float green,
-                       float blue,
-                       float alpha);
+    void draw_rectangle(int16_t x,
+                        int16_t y,
+                        int16_t width,
+                        int16_t height,
+                        float red,
+                        float green,
+                        float blue,
+                        float alpha);
 
     // Fill the screen with the specified color.
-    void drawscreenfill(float red, float green, float blue, float alpha);
+    void draw_screen_fill(float red, float green, float blue, float alpha);
 
     // Lock the current scene
     void lock();
@@ -90,15 +90,15 @@ public:
     void flush(float opacity);
 
     // Clear the buffer contents.
-    void clearscene();
+    void clear_scene();
 
 private:
-    void clearinternal();
+    void clear_internal();
 
-    bool addfont(const char *name,
-                 Text::Font id,
-                 FT_UInt width,
-                 FT_UInt height);
+    bool add_font(const char *name,
+                  Text::Font id,
+                  FT_UInt width,
+                  FT_UInt height);
 
     struct Offset {
         GLshort left;
@@ -106,23 +106,17 @@ private:
         GLshort top;
         GLshort bottom;
 
-        Offset(GLshort x, GLshort y, GLshort width, GLshort height) {
-            left = x;
-            right = x + width;
-            top = y;
-            bottom = y + height;
-        }
+        Offset(GLshort x, GLshort y, GLshort width, GLshort height) :
+            left(x),
+            right(x + width),
+            top(y),
+            bottom(y + height) {}
 
-        Offset() {
-            left = 0;
-            right = 0;
-            top = 0;
-            bottom = 0;
-        }
+        Offset() : left(0), right(0), top(0), bottom(0) {}
     };
 
     // Add a bitmap to the available resources.
-    const Offset &getoffset(const nl::bitmap &bmp);
+    const Offset &get_offset(const nl::bitmap &bmp);
 
     struct Leftover {
         GLshort left;
@@ -214,15 +208,9 @@ private:
         GLshort height;
         Char chars[128];
 
-        Font(GLshort w, GLshort h) {
-            width = w;
-            height = h;
-        }
+        Font(GLshort w, GLshort h) : width(w), height(h) {}
 
-        Font() {
-            width = 0;
-            height = 0;
-        }
+        Font() : width(0), height(0) {}
 
         int16_t linespace() const {
             return static_cast<int16_t>(height * 1.35 + 1);

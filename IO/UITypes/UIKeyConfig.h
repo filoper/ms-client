@@ -20,6 +20,7 @@
 #include "../KeyType.h"
 #include "../Keyboard.h"
 #include "../UIDragElement.h"
+#include "Inventory.h"
 
 namespace ms {
 class UIKeyConfig : public UIDragElement<PosKEYCONFIG> {

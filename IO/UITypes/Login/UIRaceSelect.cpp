@@ -353,15 +353,15 @@ void UIRaceSelect::send_naming_result(bool nameused) {
     if (selected_class_ == Classes::EXPLORER) {
         if (auto explorercreation =
                 UI::get().get_element<UIExplorerCreation>()) {
-            explorercreation->send_naming_result(nameused);
+            explorercreation->get().send_naming_result(nameused);
         }
     } else if (selected_class_ == Classes::CYGNUSKNIGHTS) {
         if (auto cygnuscreation = UI::get().get_element<UICygnusCreation>()) {
-            cygnuscreation->send_naming_result(nameused);
+            cygnuscreation->get().send_naming_result(nameused);
         }
     } else if (selected_class_ == Classes::ARAN) {
         if (auto arancreation = UI::get().get_element<UIAranCreation>()) {
-            arancreation->send_naming_result(nameused);
+            arancreation->get().send_naming_result(nameused);
         }
     }
 }
@@ -518,7 +518,7 @@ void UIRaceSelect::show_charselect() {
     deactivate();
 
     if (auto charselect = UI::get().get_element<UICharSelect>()) {
-        charselect->makeactive();
+        charselect->get().makeactive();
     }
 }
 

@@ -140,7 +140,7 @@ void ShowStatusInfoHandler::handle(InPacket &recv) const {
 void ShowStatusInfoHandler::show_status(Color::Name color,
                                         const std::string &message) const {
     if (auto messenger = UI::get().get_element<UIStatusMessenger>()) {
-        messenger->show_status(color, message);
+        messenger->get().show_status(color, message);
     }
 }
 
@@ -175,9 +175,9 @@ void WeekEventMessageHandler::handle(InPacket &recv) const {
         message = "[Notice] " + message;
     }
 
-    UI::get().get_element<UIChatBar>()->send_chatline(
-        message,
-        UIChatBar::LineType::YELLOW);
+    if (auto chatbar = UI::get().get_element<UIChatBar>()) {
+        chatbar->get().send_chatline(message, UIChatBar::LineType::YELLOW);
+    }
 }
 
 void ChatReceivedHandler::handle(InPacket &recv) const {
@@ -189,14 +189,14 @@ void ChatReceivedHandler::handle(InPacket &recv) const {
     int8_t type = recv.read_byte();
 
     if (auto character = Stage::get().get_character(charid)) {
-        message = character->get_name() + ": " + message;
-        character->speak(message);
+        message = character->get().get_name() + ": " + message;
+        character->get().speak(message);
     }
 
     auto linetype = static_cast<UIChatBar::LineType>(type);
 
     if (auto chatbar = UI::get().get_element<UIChatBar>()) {
-        chatbar->send_chatline(message, linetype);
+        chatbar->get().send_chatline(message, linetype);
     }
 }
 
@@ -227,7 +227,7 @@ void ScrollResultHandler::handle(InPacket &recv) const {
 
     if (Stage::get().is_player(cid)) {
         if (auto chatbar = UI::get().get_element<UIChatBar>()) {
-            chatbar->display_message(message, UIChatBar::LineType::RED);
+            chatbar->get().display_message(message, UIChatBar::LineType::RED);
         }
 
         UI::get().enable();
@@ -257,7 +257,8 @@ void ShowItemGainInChatHandler::handle(InPacket &recv) const {
                                   + std::to_string(qty) + ")";
 
             if (auto chatbar = UI::get().get_element<UIChatBar>()) {
-                chatbar->send_chatline(message, UIChatBar::LineType::BLUE);
+                chatbar->get().send_chatline(message,
+                                             UIChatBar::LineType::BLUE);
             }
         }
     } else if (mode1 == 13)  // card effect

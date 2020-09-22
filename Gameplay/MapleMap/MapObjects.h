@@ -16,11 +16,12 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <unordered_set>
 
-#include "../../Template/Optional.h"
 #include "Layer.h"
 #include "MapObject.h"
+#include "OptionalCreator.h"
 
 namespace ms {
 // A collection of generic MapObjects
@@ -46,10 +47,17 @@ public:
     bool contains(int32_t oid) const;
 
     // Obtains a pointer to the mapobject with the given oid.
-    Optional<MapObject> get(int32_t oid);
+    // std::optional<std::reference_wrapper<MapObject>> get(int32_t oid);
 
     // Obtains a const pointer to the mapobject with the given oid.
-    Optional<const MapObject> get(int32_t oid) const;
+    // std::optional<std::reference_wrapper<const MapObject>> get(int32_t oid)
+    // const;
+
+    template<typename T>
+    std::optional<std::reference_wrapper<T>> get(int32_t oid);
+
+    template<typename T>
+    std::optional<std::reference_wrapper<const T>> get(int32_t oid) const;
 
     using underlying_t =
         typename std::unordered_map<int32_t, std::unique_ptr<MapObject>>;
@@ -73,4 +81,27 @@ private:
     std::unordered_map<int32_t, std::unique_ptr<MapObject>> objects_;
     std::array<std::unordered_set<int32_t>, Layer::Id::LENGTH> layers_;
 };
+
+template<typename T>
+std::optional<std::reference_wrapper<T>> MapObjects::get(int32_t oid) {
+    auto iter = objects_.find(oid);
+
+    if (iter != objects_.end()) {
+        return create_optional<T>(iter->second.get());
+    }
+
+    return {};
+}
+
+template<typename T>
+std::optional<std::reference_wrapper<const T>> MapObjects::get(
+    int32_t oid) const {
+    auto iter = objects_.find(oid);
+
+    if (iter != objects_.end()) {
+        return create_optional<const T>(iter->second.get());
+    }
+
+    return {};
+}
 }  // namespace ms

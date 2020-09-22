@@ -16,11 +16,11 @@
 #include "UIStateLogin.h"
 
 #include "../Configuration.h"
-#include "UITypes/UICharSelect.h"
-#include "UITypes/UILogin.h"
-#include "UITypes/UILoginNotice.h"
-#include "UITypes/UILogo.h"
-#include "UITypes/UIRegion.h"
+#include "UITypes/Login/UICharSelect.h"
+#include "UITypes/Login/UILogin.h"
+#include "UITypes/Login/UILoginNotice.h"
+#include "UITypes/Login/UILogo.h"
+#include "UITypes/Login/UIRegion.h"
 
 namespace ms {
 UIStateLogin::UIStateLogin() {
@@ -45,11 +45,15 @@ void UIStateLogin::draw(float inter, Point<int16_t> cursor) const {
     }
 
     if (tooltip_) {
-        tooltip_->draw(cursor + Point<int16_t>(0, 22));
+        tooltip_->get().draw(cursor + Point<int16_t>(0, 22));
     }
 }
 
 void UIStateLogin::update() {
+    for (auto &elem : uis_to_remove_) {
+        elem.reset(nullptr);
+    }
+
     for (auto iter : elements_) {
         UIElement *element = iter.second.get();
 
@@ -61,7 +65,7 @@ void UIStateLogin::update() {
 
 void UIStateLogin::doubleclick(Point<int16_t> pos) {
     if (auto charselect = UI::get().get_element<UICharSelect>()) {
-        charselect->doubleclick(pos);
+        charselect->get().doubleclick(pos);
     }
 }
 
@@ -107,8 +111,8 @@ void UIStateLogin::send_close() {
     auto login = UI::get().get_element<UILogin>();
     auto region = UI::get().get_element<UIRegion>();
 
-    if (logo && logo->is_active() || login && login->is_active()
-        || region && region->is_active()) {
+    if (logo && logo->get().is_active() || login && login->get().is_active()
+        || region && region->get().is_active()) {
         UI::get().quit();
     } else {
         UI::get().emplace<UIQuitConfirm>();
@@ -158,7 +162,7 @@ void UIStateLogin::remove(UIElement::Type type) {
 
     if (auto &element = elements_[type]) {
         element->deactivate();
-        element.release();
+        uis_to_remove_.emplace_back(std::move(element));
     }
 }
 

@@ -16,6 +16,7 @@
 #pragma once
 
 #include "../UIDragElement.h"
+#include "Inventory.h"
 
 namespace ms {
 // The Equip inventory

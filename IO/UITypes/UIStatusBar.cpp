@@ -681,21 +681,21 @@ Button::State UIStatusBar::button_pressed(uint16_t id) {
             if (!userlist) {
                 UI::get().emplace<UIUserList>(tab);
             } else {
-                auto cur_tab = userlist->get_tab();
-                auto is_active = userlist->is_active();
+                auto cur_tab = userlist->get().get_tab();
+                auto is_active = userlist->get().is_active();
 
                 if (cur_tab == tab) {
                     if (is_active) {
-                        userlist->deactivate();
+                        userlist->get().deactivate();
                     } else {
-                        userlist->makeactive();
+                        userlist->get().makeactive();
                     }
                 } else {
                     if (!is_active) {
-                        userlist->makeactive();
+                        userlist->get().makeactive();
                     }
 
-                    userlist->change_tab(tab);
+                    userlist->get().change_tab(tab);
                 }
             }
 

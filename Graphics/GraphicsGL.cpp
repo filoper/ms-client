@@ -248,10 +248,12 @@ bool GraphicsGL::add_font(const char *name,
     FT_Face face;
 
     if (FT_New_Face(ft_library_, name, 0, &face)) {
+        std::cerr << "Error: Failed to create new fsce." << std::endl;
         return false;
     }
 
     if (FT_Set_Pixel_Sizes(face, pixelw, pixelh)) {
+        std::cerr << "Error: Failed to set pixel sizes." << std::endl;
         return false;
     }
 
@@ -262,11 +264,14 @@ bool GraphicsGL::add_font(const char *name,
 
     for (uint16_t c = 32; c < 128; c++) {
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+            std::cerr << "Error: Failed to load a glyph into the glyph slot of "
+                         "a face object."
+                      << std::endl;
             continue;
         }
 
-        GLshort w = static_cast<GLshort>(g->bitmap.width);
-        GLshort h = static_cast<GLshort>(g->bitmap.rows);
+        auto w = static_cast<GLshort>(g->bitmap.width);
+        auto h = static_cast<GLshort>(g->bitmap.rows);
 
         width += w;
 
@@ -297,15 +302,18 @@ bool GraphicsGL::add_font(const char *name,
 
     for (uint16_t c = 32; c < 128; c++) {
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+            std::cerr << "Error: Failed to load a glyph into the glyph slot of "
+                         "a face object."
+                      << std::endl;
             continue;
         }
 
-        GLshort ax = static_cast<GLshort>(g->advance.x >> 6);
-        GLshort ay = static_cast<GLshort>(g->advance.y >> 6);
-        GLshort l = static_cast<GLshort>(g->bitmap_left);
-        GLshort t = static_cast<GLshort>(g->bitmap_top);
-        GLshort w = static_cast<GLshort>(g->bitmap.width);
-        GLshort h = static_cast<GLshort>(g->bitmap.rows);
+        auto ax = static_cast<GLshort>(g->advance.x >> 6);
+        auto ay = static_cast<GLshort>(g->advance.y >> 6);
+        auto l = static_cast<GLshort>(g->bitmap_left);
+        auto t = static_cast<GLshort>(g->bitmap_top);
+        auto w = static_cast<GLshort>(g->bitmap.width);
+        auto h = static_cast<GLshort>(g->bitmap.rows);
 
         glTexSubImage2D(GL_TEXTURE_2D,
                         0,

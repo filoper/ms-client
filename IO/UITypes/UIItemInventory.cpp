@@ -45,6 +45,9 @@ auto fn_move_item = []<typename... T>(T && ... args) {
 auto fn_scroll_equip = []<typename... T>(T && ... args) {
     ScrollEquipPacket(std::forward<T>(args)...).dispatch();
 };
+auto fn_drop_mesos = []<typename... T>(T && ... args) {
+    DropMesosPacket(std::forward<T>(args)...).dispatch();
+};
 
 UIItemInventory::UIItemInventory(const Inventory &invent) :
     UIDragElement<PosINV>(),
@@ -324,7 +327,15 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
         case Buttons::BT_SMALL_SM:
             set_full(false);
             return Button::State::NORMAL;
-        case Buttons::BT_COIN:
+        case Buttons::BT_COIN: {
+            const std::string question = "How many do you want to drop?";
+            auto onenter = [](auto amount) {
+                fn_drop_mesos(amount);
+            };
+
+            UI::get().emplace<UIEnterNumber>(question, onenter, 50000, 10);
+        }
+            break;
         case Buttons::BT_COIN_SM:
         case Buttons::BT_POINT:
         case Buttons::BT_POINT_SM:

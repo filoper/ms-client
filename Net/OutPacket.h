@@ -260,6 +260,7 @@ public:
         MOVE_ITEM = 71,
         USE_ITEM = 72,
         SCROLL_EQUIP = 86,
+        DROP_MESOS = 94,
 
         /// Player
         SPEND_AP = 87,

@@ -165,7 +165,7 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
                     break;
             }
         } else if (type == KeyType::Id::TEXT) {
-            std::vector<uint32_t> vec = { key };
+            std::vector<uint32_t> vec = { static_cast<uint32_t>(key) };
             add_string(vec);
         }
     }

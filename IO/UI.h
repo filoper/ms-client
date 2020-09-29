@@ -69,6 +69,8 @@ public:
 
     void send_key(int32_t keycode, bool pressed);
 
+    void send_key(uint32_t unicode);
+
     void set_scrollnotice(const std::string &notice);
 
     void focus_textfield(Textfield *textfield);

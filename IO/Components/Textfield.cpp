@@ -18,6 +18,7 @@
 #include <sstream>
 #include <utility>
 
+#include "../../Util/StringHandling.h"
 #include "../UI.h"
 
 namespace ms {
@@ -54,7 +55,7 @@ void Textfield::draw(Point<int16_t> posiiton) const {
 
     Point<int16_t> absp = bounds_.get_left_top() + posiiton;
 
-    if (!text_.empty()) {
+    if (!text_as_values_.empty()) {
         text_label_.draw(absp);
     }
 
@@ -117,18 +118,19 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
 
                     break;
                 case KeyAction::Id::RIGHT:
-                    if (marker_pos_ < text_.size()) {
+                    if (marker_pos_ < text_as_values_.size()) {
                         marker_pos_++;
                     }
 
                     break;
                 case KeyAction::Id::BACK:
-                    if (!text_.empty() && marker_pos_ > 0) {
-                        text_.erase(marker_pos_ - 1, 1);
+                    if (!text_as_values_.empty() && marker_pos_ > 0) {
+                        text_as_values_.erase(text_as_values_.begin()
+                                              + marker_pos_ - 1);
 
                         marker_pos_--;
 
-                        modify_text(text_);
+                        modify_text(text_as_values_);
                     }
 
                     break;
@@ -138,14 +140,20 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
                     }
 
                     break;
-                case KeyAction::Id::SPACE: add_string(" "); break;
+                case KeyAction::Id::SPACE:
+                    // add_string(" ");
+                    break;
                 case KeyAction::Id::HOME: marker_pos_ = 0; break;
-                case KeyAction::Id::END: marker_pos_ = text_.size(); break;
+                case KeyAction::Id::END:
+                    marker_pos_ = text_as_values_.size();
+                    break;
                 case KeyAction::Id::DELETE:
-                    if (!text_.empty() && marker_pos_ < text_.size()) {
-                        text_.erase(marker_pos_, 1);
+                    if (!text_as_values_.empty()
+                        && marker_pos_ < text_as_values_.size()) {
+                        text_as_values_.erase(text_as_values_.begin()
+                                              + marker_pos_);
 
-                        modify_text(text_);
+                        modify_text(text_as_values_);
                     }
 
                     break;
@@ -157,39 +165,47 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
                     break;
             }
         } else if (type == KeyType::Id::TEXT) {
-            std::stringstream ss;
-            char a = static_cast<int8_t>(key);
-
-            ss << a;
-
-            add_string(ss.str());
+            std::vector<uint32_t> vec = { key };
+            add_string(vec);
         }
     }
 }
 
 void Textfield::add_string(const std::string &str) {
-    for (char c : str) {
+    add_string(to_utf8_vector(str));
+}
+
+void Textfield::add_string(const std::vector<uint32_t> &str) {
+    for (auto val : str) {
         if (below_limit()) {
-            text_.insert(marker_pos_, 1, c);
+            auto it = text_as_values_.begin() + marker_pos_;
+            text_as_values_.insert(it, val);
 
             marker_pos_++;
 
-            modify_text(text_);
+            modify_text(text_as_values_);
         }
     }
 }
 
-void Textfield::modify_text(const std::string &t) {
+void Textfield::modify_text(const std::vector<uint32_t> &str) {
+    text_.clear();
+    for (auto val : str) {
+        for (auto c : to_utf8_string(val)) {
+            text_.push_back(c);
+        }
+    }
+
     if (crypt_ > 0) {
         std::string crypted;
-        crypted.insert(0, t.size(), crypt_);
+        crypted.insert(0, str.size(), crypt_);
 
         text_label_.change_text(crypted);
     } else {
-        text_label_.change_text(t);
+        text_label_.change_text(str);
     }
 
-    text_ = t;
+    text_as_values_ = str;
 }
 
 Cursor::State Textfield::send_cursor(Point<int16_t> cursorpos, bool clicked) {
@@ -215,9 +231,8 @@ Cursor::State Textfield::send_cursor(Point<int16_t> cursorpos, bool clicked) {
 }
 
 void Textfield::change_text(const std::string &t) {
-    modify_text(t);
-
-    marker_pos_ = text_.size();
+    modify_text(to_utf8_vector(t));
+    marker_pos_ = text_as_values_.size();
 }
 
 void Textfield::set_cryptchar(int8_t character) {
@@ -226,10 +241,10 @@ void Textfield::set_cryptchar(int8_t character) {
 
 bool Textfield::below_limit() const {
     if (limit_ > 0) {
-        return text_.size() < limit_;
+        return text_as_values_.size() < limit_;
     }
 
-    uint16_t advance = text_label_.advance(text_.size());
+    uint16_t advance = text_label_.advance(text_as_values_.size());
 
     return (advance + 50) < bounds_.get_horizontal().length();
 }
@@ -239,7 +254,7 @@ const std::string &Textfield::get_text() const {
 }
 
 bool Textfield::empty() const {
-    return text_.empty();
+    return text_as_values_.empty();
 }
 
 Textfield::State Textfield::get_state() const {

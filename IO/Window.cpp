@@ -54,6 +54,10 @@ void key_callback(GLFWwindow *, int key, int, int action, int) {
     UI::get().send_key(key, action != GLFW_RELEASE);
 }
 
+void char_callback(GLFWwindow *, unsigned int key) {
+    UI::get().send_key(key);
+}
+
 std::chrono::time_point<std::chrono::steady_clock> start =
     ContinuousTimer::get().start();
 
@@ -160,6 +164,7 @@ Error Window::init_window() {
 
     glfwSetInputMode(glwnd_, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetKeyCallback(glwnd_, key_callback);
+    glfwSetCharCallback(glwnd_, char_callback);
     glfwSetMouseButtonCallback(glwnd_, mousekey_callback);
     glfwSetCursorPosCallback(glwnd_, cursor_callback);
     glfwSetWindowFocusCallback(glwnd_, focus_callback);

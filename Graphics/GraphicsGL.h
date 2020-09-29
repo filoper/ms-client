@@ -51,21 +51,36 @@ public:
               float angle);
 
     // Create a layout for the text with the parameters specified.
-    Text::Layout create_layout(const std::string &text,
-                               Text::Font font,
+    // Text::Layout create_layout(const std::string &text,
+    //                            Text::Font font,
+    //                            Text::Alignment alignment,
+    //                            int16_t maxwidth,
+    //                            bool formatted,
+    //                            int16_t line_adj);
+
+    Text::Layout create_layout(const std::vector<uint32_t> &text_as_values,
+                               Text::Font id,
                                Text::Alignment alignment,
                                int16_t maxwidth,
                                bool formatted,
                                int16_t line_adj);
 
     // Draw a text with the given parameters.
+    // void draw_text(const DrawArgument &args,
+    //                const Range<int16_t> &vertical,
+    //                const std::string &text,
+    //                const Text::Layout &layout,
+    //                Text::Font font,
+    //                Color::Name color,
+    //                Text::Background back);
+
     void draw_text(const DrawArgument &args,
                    const Range<int16_t> &vertical,
-                   const std::string &text,
+                   const std::vector<uint32_t> &text,
                    const Text::Layout &layout,
-                   Text::Font font,
-                   Color::Name color,
-                   Text::Background back);
+                   Text::Font id,
+                   Color::Name colorid,
+                   Text::Background background);
 
     // Draw a rectangle filled with the specified color.
     void draw_rectangle(int16_t x,
@@ -206,7 +221,7 @@ private:
 
         GLshort width;
         GLshort height;
-        Char chars[128];
+        Char chars[256];
 
         Font(GLshort w, GLshort h) : width(w), height(h) {}
 
@@ -225,7 +240,12 @@ private:
                       bool formatted,
                       int16_t line_adj);
 
-        size_t add(const char *text, size_t prev, size_t first, size_t last);
+        // size_t add(const char *text, size_t prev, size_t first, size_t last);
+
+        size_t add(const unsigned int *text,
+                   size_t prev,
+                   size_t first,
+                   size_t last);
 
         Text::Layout finish(size_t first, size_t last);
 

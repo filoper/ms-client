@@ -198,9 +198,11 @@ void UI::send_key(int32_t keycode, bool pressed) {
                          || caps_lock_enabled_;
             Keyboard::Mapping mapping =
                 keyboard_.get_text_mapping(keycode, shift);
-            focused_text_field_->get().send_key(mapping.type,
-                                                mapping.action,
-                                                pressed);
+            if (mapping.type != KeyType::Id::TEXT) {
+                focused_text_field_->get().send_key(mapping.type,
+                                                    mapping.action,
+                                                    pressed);
+            }
         }
     } else {
         Keyboard::Mapping mapping = keyboard_.get_mapping(keycode);
@@ -356,6 +358,14 @@ void UI::send_key(int32_t keycode, bool pressed) {
     }
 
     is_key_down_[keycode] = pressed;
+}
+
+void UI::send_key(uint32_t unicode) {
+    if (focused_text_field_) {
+        focused_text_field_->get().send_key(KeyType::Id::TEXT, unicode, true);
+    }
+
+    is_key_down_[unicode] = true; // maybe remove
 }
 
 void UI::set_scrollnotice(const std::string &notice) {

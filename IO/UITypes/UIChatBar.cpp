@@ -415,14 +415,7 @@ bool UIChatBar::indragrange(Point<int16_t> cursorpos) const {
     return bounds.contains(cursorpos);
 }
 
-void UIChatBar::send_chatline(const std::string &line, LineType type) {
-    // temp fix to keep long lines inside textbox
-    bool is_long_line = line.length() > 55;
-    if (is_long_line) {
-            send_chatline(line.substr(0, 55),
-                                         type);
-    }
-    
+void UIChatBar::send_chatline(const std::string &line, LineType type) {    
     row_max_++;
     row_pos_ = row_max_;
 
@@ -442,7 +435,7 @@ void UIChatBar::send_chatline(const std::string &line, LineType type) {
                        std::forward_as_tuple(Text::Font::A11M,
                                              Text::Alignment::LEFT,
                                              color,
-                                             is_long_line ? line.substr(55, line.size()) : line,
+                                             line,
                                              480));
 }
 

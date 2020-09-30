@@ -63,6 +63,71 @@ void CharLook::draw(const DrawArgument &args,
     DrawArgument faceargs =
         args + DrawArgument { faceshift, false, Point<int16_t> {} };
 
+    if (Stance::Id::DEAD == interstance) {
+        Point<int16_t> faceshift = draw_info_.getfacepos(Stance::Id::STAND1, 1);
+        DrawArgument faceargs =
+            args + DrawArgument { faceshift, false, Point<int16_t> {} };
+
+        hair_->draw(interstance, Hair::Layer::BELOW_BODY, interframe, args);
+        equips_.draw(EquipSlot::Id::HAT,
+                     interstance,
+                     Clothing::Layer::CAP_BELOW_BODY,
+                     interframe,
+                     args);
+        body_->draw(interstance, Body::Layer::BODY, interframe, args);
+        hair_->draw(interstance, Hair::Layer::DEFAULT, interframe, args);
+        body_->draw(Stance::Id::STAND1, Body::Layer::HEAD, 1, args);
+        hair_->draw(interstance, Hair::Layer::SHADE, interframe, args);
+
+        hair_->draw(interstance, Hair::Layer::DEFAULT, interframe, args);
+        body_->draw(interstance, Body::Layer::HEAD, interframe, args);
+        hair_->draw(interstance, Hair::Layer::SHADE, interframe, args);
+        face_->draw(interexpression, interexpframe, faceargs);
+
+        switch (equips_.getcaptype()) {
+            case CharEquips::CapType::NONE:
+                hair_->draw(interstance,
+                            Hair::Layer::OVER_HEAD,
+                            interframe,
+                            args);
+                break;
+            case CharEquips::CapType::HEADBAND:
+                equips_.draw(EquipSlot::Id::HAT,
+                             Stance::Id::STAND1,
+                             Clothing::Layer::CAP,
+                             1,
+                             args);
+                hair_->draw(Stance::Id::STAND1, Hair::Layer::DEFAULT, 1, args);
+                hair_->draw(Stance::Id::STAND1,
+                            Hair::Layer::OVER_HEAD,
+                            1,
+                            args);
+                equips_.draw(EquipSlot::Id::HAT,
+                             Stance::Id::STAND1,
+                             Clothing::Layer::CAP_OVER_HAIR,
+                             1,
+                             args);
+                break;
+            case CharEquips::CapType::HALF_COVER:
+                hair_->draw(Stance::Id::STAND1, Hair::Layer::DEFAULT, 1, args);
+                equips_.draw(EquipSlot::Id::HAT,
+                             Stance::Id::STAND1,
+                             Clothing::Layer::CAP,
+                             1,
+                             args);
+                break;
+            case CharEquips::CapType::FULL_COVER:
+                equips_.draw(EquipSlot::Id::HAT,
+                             Stance::Id::STAND1,
+                             Clothing::Layer::CAP,
+                             1,
+                             args);
+                break;
+        }
+
+        return;
+    }
+
     if (Stance::is_climbing(interstance)) {
         body_->draw(interstance, Body::Layer::BODY, interframe, args);
         equips_.draw(EquipSlot::Id::GLOVES,

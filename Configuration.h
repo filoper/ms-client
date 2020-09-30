@@ -241,7 +241,7 @@ private:
 
     const char *FILENAME = "Settings";
     const char *TITLE = "msclient";
-    const char *VERSION = "0.2.0";
+    const char *VERSION = "0.3.0";
     const char *JOINLINK = "https://www.nexon.com/account/en/create";
     const char *WEBSITE = "http://maplestory.nexon.net/";
     const char *FINDID = "https://www.nexon.com/account/en/login";

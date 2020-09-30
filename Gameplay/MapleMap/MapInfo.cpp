@@ -69,25 +69,27 @@ Range<int16_t> MapInfo::get_borders() const {
     return map_borders_;
 }
 
-Optional<const Seat> MapInfo::findseat(Point<int16_t> position) const {
+std::optional<std::reference_wrapper<const Seat>> MapInfo::findseat(
+    Point<int16_t> position) const {
     for (const auto &seat : seats_) {
         if (seat.inrange(position)) {
             return seat;
         }
     }
 
-    return nullptr;
+    return {};
 }
 
-Optional<const Ladder> MapInfo::findladder(Point<int16_t> position,
-                                           bool upwards) const {
+std::optional<std::reference_wrapper<const Ladder>> MapInfo::findladder(
+    Point<int16_t> position,
+    bool upwards) const {
     for (const auto &ladder : ladders_) {
         if (ladder.inrange(position, upwards)) {
             return ladder;
         }
     }
 
-    return nullptr;
+    return {};
 }
 
 Seat::Seat(const nl::node &src) {

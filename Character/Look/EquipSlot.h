@@ -23,7 +23,7 @@ enum Id : int16_t {
     NONE = 0,
     HAT = 1,
     FACE = 2,
-    EYEACC = 3,
+    EYE_ACC = 3,
     EARACC = 4,
     TOP = 5,
     BOTTOM = 6,

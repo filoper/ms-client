@@ -74,21 +74,21 @@ StatsEntry parseCharStats(InPacket &recv) {
     }
 
     statsentry.stats[MapleStat::Id::LEVEL] =
-        recv.read_byte();  // TODO: Change to recv.read_short(); to increase
-                           // level cap
+        recv.read_ubyte();  // TODO: Change to recv.read_short(); to increase
+                            // level cap
 
-    auto job = recv.read_short();
+    auto job = recv.read_ushort();
 
     statsentry.stats[MapleStat::Id::JOB] = job;
-    statsentry.stats[MapleStat::Id::STR] = recv.read_short();
-    statsentry.stats[MapleStat::Id::DEX] = recv.read_short();
-    statsentry.stats[MapleStat::Id::INT] = recv.read_short();
-    statsentry.stats[MapleStat::Id::LUK] = recv.read_short();
-    statsentry.stats[MapleStat::Id::HP] = recv.read_short();
-    statsentry.stats[MapleStat::Id::MAXHP] = recv.read_short();
-    statsentry.stats[MapleStat::Id::MP] = recv.read_short();
-    statsentry.stats[MapleStat::Id::MAXMP] = recv.read_short();
-    statsentry.stats[MapleStat::Id::AP] = recv.read_short();
+    statsentry.stats[MapleStat::Id::STR] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::DEX] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::INT] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::LUK] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::HP] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::MAXHP] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::MP] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::MAXMP] = recv.read_ushort();
+    statsentry.stats[MapleStat::Id::AP] = recv.read_ushort();
 
     if (hasSPTable(job)) {
         parseRemainingSkillInfo(recv);
@@ -102,7 +102,7 @@ StatsEntry parseCharStats(InPacket &recv) {
     recv.skip(4);  // gachaexp
 
     statsentry.mapid = recv.read_int();
-    statsentry.portal = recv.read_byte();
+    statsentry.portal = recv.read_ubyte();
 
     recv.skip(4);  // timestamp
 
@@ -127,7 +127,7 @@ bool hasSPTable(int16_t job) {
 }
 
 void parseRemainingSkillInfo(InPacket &recv) {
-    int count = recv.read_byte();
+    auto count = recv.read_byte();
 
     for (int i = 0; i < count; i++) {
         recv.read_byte();  // Remaining SP index for job

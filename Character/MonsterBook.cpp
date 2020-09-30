@@ -16,9 +16,7 @@
 #include "MonsterBook.h"
 
 namespace ms {
-MonsterBook::MonsterBook() {
-    cover_ = 0;
-}
+MonsterBook::MonsterBook() : cover_(0) {}
 
 void MonsterBook::set_cover(int32_t cov) {
     cover_ = cov;

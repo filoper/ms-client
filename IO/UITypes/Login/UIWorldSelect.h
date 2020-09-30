@@ -22,7 +22,7 @@
 namespace ms {
 class UIWorldSelect : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::WORLDSELECT;
+    static constexpr Type TYPE = UIElement::Type::WORLD_SELECT;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 
@@ -90,15 +90,15 @@ private:
         BT_CHANNEL17,
         BT_CHANNEL18,
         BT_CHANNEL19,
-        BT_ENTERWORLD,
-        BT_VIEWALL,
-        BT_VIEWRECOMMENDED,
-        BT_VIEWRECOMMENDED_SELECT,
-        BT_VIEWRECOMMENDED_CANCEL,
-        BT_VIEWRECOMMENDED_PREV,
-        BT_VIEWRECOMMENDED_NEXT,
-        BT_CHANGEREGION,
-        BT_QUITGAME
+        BT_ENTER_WORLD,
+        BT_VIEW_ALL,
+        BT_VIEW_RECOMMENDED,
+        BT_VIEW_RECOMMENDED_SELECT,
+        BT_VIEW_RECOMMENDED_CANCEL,
+        BT_VIEW_RECOMMENDED_PREV,
+        BT_VIEW_RECOMMENDED_NEXT,
+        BT_CHANGE_REGION,
+        BT_QUIT_GAME
     };
 
     enum Worlds : uint16_t {

@@ -98,7 +98,7 @@ public:
     int32_t get_mapid();
 
     // Return a pointer to a character, possibly the player.
-    Optional<Char> get_character(int32_t cid);
+    std::optional<std::reference_wrapper<Char>> get_character(int32_t cid);
 
     // Set a map effect
     void add_effect(std::string path);
@@ -134,7 +134,7 @@ private:
     Physics physics_;
     Player player_;
 
-    Optional<Playable> playable_;
+    std::optional<std::reference_wrapper<Playable>> playable_;
     State state_;
     int32_t map_id_;
 

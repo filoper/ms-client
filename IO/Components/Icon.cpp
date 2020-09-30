@@ -69,7 +69,7 @@ bool Icon::drop_on_items(InventoryType::Id tab,
     bool remove_icon = type_->drop_on_items(tab, eqslot, slot, equip);
 
     if (remove_icon) {
-        Sound(Sound::Name::DRAGEND).play();
+        Sound(Sound::Name::DRAG_END).play();
     }
 
     return remove_icon;
@@ -83,7 +83,7 @@ void Icon::start_drag(Point<int16_t> offset) {
     cursor_offset_ = offset;
     dragged_ = true;
 
-    Sound(Sound::Name::DRAGSTART).play();
+    Sound(Sound::Name::DRAG_START).play();
 }
 
 void Icon::reset() {

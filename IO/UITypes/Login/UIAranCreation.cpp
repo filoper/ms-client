@@ -347,15 +347,15 @@ void UIAranCreation::send_naming_result(bool nameused) {
                            female_);
 
             auto onok = [&](bool alternate) {
-                Sound(Sound::Name::SCROLLUP).play();
+                Sound(Sound::Name::SCROLL_UP).play();
 
-                UI::get().remove(UIElement::Type::LOGINNOTICE_CONFIRM);
-                UI::get().remove(UIElement::Type::LOGINNOTICE);
-                UI::get().remove(UIElement::Type::CLASSCREATION);
-                UI::get().remove(UIElement::Type::RACESELECT);
+                UI::get().remove(UIElement::Type::LOGIN_NOTICE_CONFIRM);
+                UI::get().remove(UIElement::Type::LOGIN_NOTICE);
+                UI::get().remove(UIElement::Type::CLASS_CREATION);
+                UI::get().remove(UIElement::Type::RACE_SELECT);
 
                 if (auto charselect = UI::get().get_element<UICharSelect>()) {
-                    charselect->post_add_character();
+                    charselect->get().post_add_character();
                 }
             };
 
@@ -429,7 +429,7 @@ Button::State UIAranCreation::button_pressed(uint16_t buttonid) {
 
                         if (auto raceselect =
                                 UI::get().get_element<UIRaceSelect>()) {
-                            if (raceselect->check_name(name)) {
+                            if (raceselect->get().check_name(name)) {
                                 fn_name_char(name);
 
                                 return Button::State::IDENTITY;
@@ -478,9 +478,9 @@ Button::State UIAranCreation::button_pressed(uint16_t buttonid) {
                 return Button::State::NORMAL;
             }
         case BT_BACK:
-            Sound(Sound::Name::SCROLLUP).play();
+            Sound(Sound::Name::SCROLL_UP).play();
 
-            UI::get().remove(UIElement::Type::CLASSCREATION);
+            UI::get().remove(UIElement::Type::CLASS_CREATION);
             UI::get().emplace<UIRaceSelect>();
 
             return Button::State::NORMAL;

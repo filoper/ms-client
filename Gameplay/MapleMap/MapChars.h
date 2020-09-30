@@ -50,7 +50,7 @@ public:
     // Update a characters look.
     void update_look(int32_t cid, const LookEntry &look);
 
-    Optional<OtherChar> get_char(int32_t cid);
+    std::optional<std::reference_wrapper<OtherChar>> get_char(int32_t cid);
 
 private:
     MapObjects chars_;

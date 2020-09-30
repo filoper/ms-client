@@ -20,8 +20,8 @@
 namespace ms::CharEffect {
 // Character effects from Effect.wz
 enum Id {
-    LEVELUP,
-    JOBCHANGE,
+    LEVEL_UP,
+    JOB_CHANGE,
     SCROLL_SUCCESS,
     SCROLL_FAILURE,
     MONSTER_CARD,

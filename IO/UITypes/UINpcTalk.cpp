@@ -152,8 +152,8 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
     deactivate();
 
     switch (type_) {
-        case TalkType::SENDNEXT:
-        case TalkType::SENDOK:
+        case TalkType::SEND_NEXT:
+        case TalkType::SEND_OK:
             // Type = 0
             switch (buttonid) {
                 case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
@@ -161,7 +161,7 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
                 case Buttons::OK: fn_npc_talk_more(type_, 1); break;
             }
             break;
-        case TalkType::SENDNEXTPREV:
+        case TalkType::SEND_NEXT_PREV:
             // Type = 0
             switch (buttonid) {
                 case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
@@ -169,7 +169,7 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
                 case Buttons::PREV: fn_npc_talk_more(type_, 0); break;
             }
             break;
-        case TalkType::SENDYESNO:
+        case TalkType::SEND_YESNO:
             // Type = 1
             switch (buttonid) {
                 case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
@@ -177,7 +177,7 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
                 case Buttons::YES: fn_npc_talk_more(type_, 1); break;
             }
             break;
-        case TalkType::SENDACCEPTDECLINE:
+        case TalkType::SEND_ACCEPT_DECLINE:
             // Type = 1
             switch (buttonid) {
                 case Buttons::CLOSE: fn_npc_talk_more(type_, -1); break;
@@ -185,17 +185,17 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid) {
                 case Buttons::QYES: fn_npc_talk_more(type_, 1); break;
             }
             break;
-        case TalkType::SENDGETTEXT:
+        case TalkType::SEND_GET_TEXT:
             // TODO: What is this?
             break;
-        case TalkType::SENDGETNUMBER:
+        case TalkType::SEND_GET_NUMBER:
             // Type = 3
             switch (buttonid) {
                 case Buttons::CLOSE: fn_npc_talk_more(type_, 0); break;
                 case Buttons::OK: fn_npc_talk_more(type_, 1); break;
             }
             break;
-        case TalkType::SENDSIMPLE:
+        case TalkType::SEND_SIMPLE:
             // Type = 4
             switch (buttonid) {
                 case Buttons::CLOSE: fn_npc_talk_more(type_, 0); break;
@@ -242,8 +242,29 @@ UIElement::Type UINpcTalk::get_type() const {
     return TYPE;
 }
 
-UINpcTalk::TalkType UINpcTalk::get_by_value(int8_t value) {
+UINpcTalk::TalkType UINpcTalk::get_by_value(int8_t value,
+                                            uint8_t style_b0,
+                                            uint8_t style_b1) {
     if (value > TalkType::NONE && value < TalkType::LENGTH) {
+        if (value == 0) {
+            bool is_send_ok = (style_b0 == 0) && (style_b1 == 0);
+            bool is_next_prev = (style_b0 == 1) && (style_b1 == 1);
+            bool is_next = (style_b0 == 0) && (style_b1 == 1);
+            bool is_prev = (style_b0 == 1) && (style_b1 == 0);
+
+            if (is_send_ok) {
+                return TalkType::SEND_OK;
+            }
+            if (is_next_prev) {
+                return TalkType::SEND_NEXT_PREV;
+            }
+            if (is_next) {
+                return TalkType::SEND_NEXT;
+            }
+            if (is_prev) {
+                return TalkType::SEND_PREV;
+            }
+        }
         return static_cast<TalkType>(value);
     }
 
@@ -297,10 +318,11 @@ std::string UINpcTalk::format_text(const std::string &tx,
 
 void UINpcTalk::change_text(int32_t npcid,
                             int8_t msgtype,
-                            int16_t,
+                            uint8_t style_b0,
+                            uint8_t style_b1,
                             int8_t speakerbyte,
                             const std::string &tx) {
-    type_ = get_by_value(msgtype);
+    type_ = get_by_value(msgtype, style_b0, style_b1);
 
     timestep_ = 0;
     draw_text_ = true;
@@ -365,27 +387,45 @@ void UINpcTalk::change_text(int32_t npcid,
     buttons_[Buttons::CLOSE]->set_active(true);
 
     switch (type_) {
-        case TalkType::SENDOK:
-            buttons_[Buttons::OK]->set_position(Point<int16_t>(471, y_cord));
+        case TalkType::SEND_OK:
+            buttons_[Buttons::OK]->set_position(Point<int16_t>(469, y_cord));
             buttons_[Buttons::OK]->set_active(true);
             break;
-        case TalkType::SENDYESNO: {
+        case TalkType::SEND_YESNO: {
             Point<int16_t> yes_position = Point<int16_t>(389, y_cord);
 
             buttons_[Buttons::YES]->set_position(yes_position);
-            buttons_[Buttons::YES]->set_active(true);
-
             buttons_[Buttons::NO]->set_position(yes_position
                                                 + Point<int16_t>(65, 0));
+            buttons_[Buttons::YES]->set_active(true);
             buttons_[Buttons::NO]->set_active(true);
             break;
         }
-        case TalkType::SENDNEXT:
-        case TalkType::SENDNEXTPREV:
-        case TalkType::SENDACCEPTDECLINE:
-        case TalkType::SENDGETTEXT:
-        case TalkType::SENDGETNUMBER:
-        case TalkType::SENDSIMPLE:
+        case TalkType::SEND_NEXT:
+            buttons_[Buttons::NEXT]->set_position(
+                Point<int16_t>(461, y_cord - 30));
+            buttons_[Buttons::NEXT]->set_active(true);
+            break;
+        case TalkType::SEND_PREV:
+            buttons_[Buttons::PREV]->set_position(Point<int16_t>(367, y_cord));
+            buttons_[Buttons::PREV]->set_active(true);
+            break;
+        case TalkType::SEND_NEXT_PREV:
+            buttons_[Buttons::NEXT]->set_position(
+                Point<int16_t>(461, y_cord - 30));
+            buttons_[Buttons::PREV]->set_position(Point<int16_t>(367, y_cord));
+            buttons_[Buttons::NEXT]->set_active(true);
+            buttons_[Buttons::PREV]->set_active(true);
+            break;
+        case TalkType::SEND_ACCEPT_DECLINE:
+            buttons_[Buttons::QYES]->set_position(Point<int16_t>(386, y_cord));
+            buttons_[Buttons::QNO]->set_position(Point<int16_t>(451, y_cord));
+            buttons_[Buttons::QYES]->set_active(true);
+            buttons_[Buttons::QNO]->set_active(true);
+            break;
+        case TalkType::SEND_GET_TEXT:
+        case TalkType::SEND_GET_NUMBER:
+        case TalkType::SEND_SIMPLE:
         default: break;
     }
 

@@ -44,7 +44,7 @@ void MapTooltip::draw(Point<int16_t> pos) const {
     int16_t max_width = Constants::Constants::get().get_viewwidth();
     int16_t max_height = Constants::Constants::get().get_viewheight();
 
-    if (parent_ == Tooltip::Parent::MINIMAP && mob_labels_->empty()
+    if (parent_ == Tooltip::Parent::MINI_MAP && mob_labels_->empty()
         && npc_labels_->empty()) {
         if (desc_label_.empty()) {
             int16_t new_width = name_simple_.width();
@@ -196,8 +196,8 @@ void MapTooltip::set_name(Tooltip::Parent p,
     parent_ = p;
 
     if (name_.empty()
-        || (parent_ != Tooltip::Parent::WORLDMAP
-            && parent_ != Tooltip::Parent::MINIMAP)) {
+        || (parent_ != Tooltip::Parent::WORLD_MAP
+            && parent_ != Tooltip::Parent::MINI_MAP)) {
         return;
     }
 
@@ -248,7 +248,7 @@ void MapTooltip::set_desc(const std::string &d) {
 
     fill_width_ += 17;
 
-    if (parent_ == Tooltip::Parent::MINIMAP) {
+    if (parent_ == Tooltip::Parent::MINI_MAP) {
         int16_t name_width = name_label_.width();
         int16_t desc_width = desc_simple_.width();
         int16_t new_width = (name_width > desc_width) ? name_width : desc_width;
@@ -267,20 +267,20 @@ void MapTooltip::set_mapid(int32_t mapid) {
     auto life = NxHelper::Map::get_life_on_map(mapid);
 
     for (const auto &l : life) {
-        auto life_object = l.second;
+        auto [life_type, life_info] = l.second;
 
-        if (life_object.first == "m" && m < MAX_LIFE) {
+        if (life_type == "m" && m < MAX_LIFE) {
             mob_labels_[m] = Text(Text::Font::A12M,
                                   Text::Alignment::LEFT,
                                   Color::Name::CHARTREUSE,
-                                  life_object.second);
+                                  life_info);
             fill_height_ += mob_labels_->height() + 2;
             m++;
-        } else if (life_object.first == "n" && n < MAX_LIFE) {
+        } else if (life_type == "n" && n < MAX_LIFE) {
             npc_labels_[n] = Text(Text::Font::A12M,
                                   Text::Alignment::LEFT,
                                   Color::Name::MALIBU,
-                                  life_object.second);
+                                  life_info);
             fill_height_ += npc_labels_->height() + 2;
             n++;
         }

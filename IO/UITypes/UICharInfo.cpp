@@ -47,29 +47,29 @@ UICharInfo::UICharInfo(int32_t cid) :
     Point<int16_t> backgrnd_dim = Texture(backgrnd).get_dimensions();
     Point<int16_t> close_dimensions = Point<int16_t>(backgrnd_dim.x() - 21, 6);
 
-    buttons_[Buttons::BtClose] =
+    buttons_[Buttons::BT_CLOSE] =
         std::make_unique<MapleButton>(close, close_dimensions);
-    buttons_[Buttons::BtCollect] =
+    buttons_[Buttons::BT_COLLECT] =
         std::make_unique<MapleButton>(character["BtCollect"]);
-    buttons_[Buttons::BtDamage] =
+    buttons_[Buttons::BT_DAMAGE] =
         std::make_unique<MapleButton>(character["BtDamage"]);
-    buttons_[Buttons::BtFamily] =
+    buttons_[Buttons::BT_FAMILY] =
         std::make_unique<MapleButton>(character["BtFamily"]);
-    buttons_[Buttons::BtItem] =
+    buttons_[Buttons::BT_ITEM] =
         std::make_unique<MapleButton>(character["BtItem"]);
-    buttons_[Buttons::BtParty] =
+    buttons_[Buttons::BT_PARTY] =
         std::make_unique<MapleButton>(character["BtParty"]);
-    buttons_[Buttons::BtPersonality] =
+    buttons_[Buttons::BT_PERSONALITY] =
         std::make_unique<MapleButton>(character["BtPersonality"]);
-    buttons_[Buttons::BtPet] =
+    buttons_[Buttons::BT_PET] =
         std::make_unique<MapleButton>(character["BtPet"]);
-    buttons_[Buttons::BtPopDown] =
+    buttons_[Buttons::BT_POP_DOWN] =
         std::make_unique<MapleButton>(character["BtPopDown"]);
-    buttons_[Buttons::BtPopUp] =
+    buttons_[Buttons::BT_POP_UP] =
         std::make_unique<MapleButton>(character["BtPopUp"]);
-    buttons_[Buttons::BtRide] =
+    buttons_[Buttons::BT_RIDE] =
         std::make_unique<MapleButton>(character["BtRide"]);
-    buttons_[Buttons::BtTrad] =
+    buttons_[Buttons::BT_TRADE] =
         std::make_unique<MapleButton>(character["BtTrad"]);
 
     name_ = Text(Text::Font::A12M, Text::Alignment::CENTER, Color::Name::WHITE);
@@ -83,8 +83,8 @@ UICharInfo::UICharInfo(int32_t cid) :
         Text(Text::Font::A11M, Text::Alignment::LEFT, Color::Name::EMPEROR);
 
     // TODO: Check if player has a mount or pet, disable if they don't
-    buttons_[Buttons::BtPet]->set_state(Button::State::DISABLED);
-    buttons_[Buttons::BtRide]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_PET]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_RIDE]->set_state(Button::State::DISABLED);
 
     /// Farm
     nl::node farm = UserInfo["farm"];
@@ -100,9 +100,9 @@ UICharInfo::UICharInfo(int32_t cid) :
     sprites_.emplace_back(farm["default"], farm_adj_);
     sprites_.emplace_back(farm["cover"], farm_adj_);
 
-    buttons_[Buttons::BtFriend] =
+    buttons_[Buttons::BT_FRIEND] =
         std::make_unique<MapleButton>(farm["btFriend"], farm_adj_);
-    buttons_[Buttons::BtVisit] =
+    buttons_[Buttons::BT_VISIT] =
         std::make_unique<MapleButton>(farm["btVisit"], farm_adj_);
 
     farm_name_ =
@@ -141,10 +141,10 @@ UICharInfo::UICharInfo(int32_t cid) :
 
     default_medal_ = collect["icon1"];
 
-    buttons_[Buttons::BtArrayGet] =
+    buttons_[Buttons::BT_ARRAY_GET] =
         std::make_unique<MapleButton>(collect["BtArrayGet"],
                                       bottom_window_adj_);
-    buttons_[Buttons::BtArrayName] =
+    buttons_[Buttons::BT_ARRAY_NAME] =
         std::make_unique<MapleButton>(collect["BtArrayName"],
                                       bottom_window_adj_);
 
@@ -167,9 +167,9 @@ UICharInfo::UICharInfo(int32_t cid) :
     damage_sprites_.emplace_back(damage["backgrnd2"], bottom_window_adj_);
     damage_sprites_.emplace_back(damage["backgrnd3"], bottom_window_adj_);
 
-    buttons_[Buttons::BtFAQ] =
+    buttons_[Buttons::BT_FAQ] =
         std::make_unique<MapleButton>(damage["BtFAQ"], bottom_window_adj_);
-    buttons_[Buttons::BtRegist] =
+    buttons_[Buttons::BT_REGIST] =
         std::make_unique<MapleButton>(damage["BtRegist"], bottom_window_adj_);
 
     damage_dimensions_ = Texture(damage_backgrnd).get_dimensions();
@@ -191,7 +191,7 @@ UICharInfo::UICharInfo(int32_t cid) :
     dimension_ = backgrnd_dim;
     drag_area_ = Point<int16_t>(dimension_.x(), 20);
 
-    target_character_ = Stage::get().get_character(cid).get();
+    target_character_ = &Stage::get().get_character(cid)->get();
 
     fn_char_info_request(cid);
 }
@@ -199,7 +199,7 @@ UICharInfo::UICharInfo(int32_t cid) :
 void UICharInfo::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
-    for (size_t i = 0; i < Buttons::BtArrayGet; i++) {
+    for (size_t i = 0; i < Buttons::BT_ARRAY_GET; i++) {
         if (auto *const button = buttons_.at(i).get()) {
             button->draw(position_);
         }
@@ -257,7 +257,7 @@ void UICharInfo::draw(float inter) const {
                 inter);
         }
 
-        for (size_t i = Buttons::BtArrayGet; i < Buttons::BtFAQ; i++) {
+        for (size_t i = Buttons::BT_ARRAY_GET; i < Buttons::BT_FAQ; i++) {
             if (auto *const button = buttons_.at(i).get()) {
                 button->draw(position_);
             }
@@ -276,7 +276,7 @@ void UICharInfo::draw(float inter) const {
             sprite.draw(position_, inter);
         }
 
-        for (size_t i = Buttons::BtFAQ; i < buttons_.size(); i++) {
+        for (size_t i = Buttons::BT_FAQ; i < buttons_.size(); i++) {
             if (auto *const button = buttons_.at(i).get()) {
                 button->draw(position_);
             }
@@ -302,24 +302,24 @@ void UICharInfo::update() {
 
 Button::State UICharInfo::button_pressed(uint16_t buttonid) {
     switch (buttonid) {
-        case Buttons::BtClose: deactivate(); return Button::State::NORMAL;
-        case Buttons::BtFamily:
-        case Buttons::BtParty: break;
-        case Buttons::BtItem:
+        case Buttons::BT_CLOSE: deactivate(); return Button::State::NORMAL;
+        case Buttons::BT_FAMILY:
+        case Buttons::BT_PARTY: break;
+        case Buttons::BT_ITEM:
             show_right_window(buttonid);
             return Button::State::NORMAL;
-        case Buttons::BtCollect:
-        case Buttons::BtPersonality:
-        case Buttons::BtRide:
-        case Buttons::BtPet:
-        case Buttons::BtDamage:
+        case Buttons::BT_COLLECT:
+        case Buttons::BT_PERSONALITY:
+        case Buttons::BT_RIDE:
+        case Buttons::BT_PET:
+        case Buttons::BT_DAMAGE:
             show_bottom_window(buttonid);
             return Button::State::NORMAL;
-        case Buttons::BtPopDown:
-        case Buttons::BtPopUp:
-        case Buttons::BtTrad:
-        case Buttons::BtFriend:
-        case Buttons::BtVisit:
+        case Buttons::BT_POP_DOWN:
+        case Buttons::BT_POP_UP:
+        case Buttons::BT_TRADE:
+        case Buttons::BT_FRIEND:
+        case Buttons::BT_VISIT:
         default: break;
     }
 
@@ -390,10 +390,10 @@ void UICharInfo::update_stats(int32_t character_id,
     int32_t player_id = Stage::get().get_player().get_oid();
 
     if (character_id == player_id) {
-        buttons_[Buttons::BtParty]->set_state(Button::State::DISABLED);
-        buttons_[Buttons::BtPopDown]->set_state(Button::State::DISABLED);
-        buttons_[Buttons::BtPopUp]->set_state(Button::State::DISABLED);
-        buttons_[Buttons::BtFriend]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_PARTY]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_POP_DOWN]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_POP_UP]->set_state(Button::State::DISABLED);
+        buttons_[Buttons::BT_FRIEND]->set_state(Button::State::DISABLED);
     }
 
     Job character_job = Job(job_id);
@@ -415,9 +415,9 @@ void UICharInfo::show_bottom_window(uint16_t buttonid) {
     damage_enabled_ = false;
 
     switch (buttonid) {
-        case Buttons::BtPersonality: personality_enabled_ = true; break;
-        case Buttons::BtCollect: collect_enabled_ = true; break;
-        case Buttons::BtDamage: damage_enabled_ = true; break;
+        case Buttons::BT_PERSONALITY: personality_enabled_ = true; break;
+        case Buttons::BT_COLLECT: collect_enabled_ = true; break;
+        case Buttons::BT_DAMAGE: damage_enabled_ = true; break;
     }
 }
 
@@ -425,7 +425,7 @@ void UICharInfo::show_right_window(uint16_t buttonid) {
     item_enabled_ = false;
 
     switch (buttonid) {
-        case Buttons::BtItem: item_enabled_ = true; break;
+        case Buttons::BT_ITEM: item_enabled_ = true; break;
     }
 }
 }  // namespace ms

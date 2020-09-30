@@ -50,9 +50,9 @@ private:
     enum Buttons : uint16_t { CANCEL, CHANGE, CH };
 
     struct OldState {
-        uint8_t current_channel_;
-        int16_t current_channel_x_;
-        int16_t current_channel_y_;
+        uint8_t current_channel;
+        int16_t current_channel_x;
+        int16_t current_channel_y;
     };
 
     OldState old_state_;

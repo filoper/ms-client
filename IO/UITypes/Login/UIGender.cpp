@@ -22,7 +22,7 @@
 #include "../Components/MapleButton.h"
 #include "../Components/MapleComboBox.h"
 #include "../UI.h"
-#include "../UITypes/UILoginWait.h"
+#include "UILoginWait.h"
 
 namespace ms {
 auto fn_gender = []<typename... T>(T && ... args) {

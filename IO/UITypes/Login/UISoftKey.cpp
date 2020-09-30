@@ -102,7 +102,8 @@ void UISoftKey::draw(float inter) const {
     entry_.draw(position_ + Point<int16_t>(210, 65));
 
     if (tooltip_) {
-        tooltip_->draw(position_ + Point<int16_t>(200, 30) + tooltip_position_);
+        tooltip_->get().draw(position_ + Point<int16_t>(200, 30)
+                             + tooltip_position_);
     }
 }
 
@@ -195,7 +196,7 @@ void UISoftKey::show_text(const std::string &text) {
 void UISoftKey::clear_tooltip() {
     tooltip_position_ = Point<int16_t>(0, 0);
     tetooltip_.set_text("");
-    tooltip_ = Optional<Tooltip>();
+    tooltip_ = {};
 }
 
 Point<int16_t> UISoftKey::keypos(uint8_t num) const {

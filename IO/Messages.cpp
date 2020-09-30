@@ -44,7 +44,7 @@ void InChatMessage::drop() const {
     }
 
     if (auto chatbar = UI::get().get_element<UIChatBar>()) {
-        chatbar->display_message(type, UIChatBar::RED);
+        chatbar->get().display_message(type, UIChatBar::RED);
     }
 }
 

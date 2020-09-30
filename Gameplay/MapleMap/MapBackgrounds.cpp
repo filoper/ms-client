@@ -169,7 +169,7 @@ void MapBackgrounds::drawbackgrounds(double viewx,
                                      double viewy,
                                      float alpha) const {
     if (black_) {
-        GraphicsGL::get().drawscreenfill(0.0f, 0.0f, 0.0f, 1.0f);
+        GraphicsGL::get().draw_screen_fill(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     for (const auto &background : backgrounds_) {

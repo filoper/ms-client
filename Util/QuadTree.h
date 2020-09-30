@@ -138,7 +138,6 @@ private:
             }
 
             return start;
-
         }
         if (dir == UP) {
             K top = findfrom(nodes_[start].top, value, predicate);
@@ -156,7 +155,6 @@ private:
             }
 
             return start;
-
         }
         K left = findfrom(nodes_[start].left, value, predicate);
 
@@ -245,10 +243,9 @@ private:
             }
         }
 
-        K addornext(
-            K key,
-            V val,
-            std::function<Direction(const V &, const V &)> comparator) {
+        K addornext(K key,
+                    V val,
+                    std::function<Direction(const V &, const V &)> comparator) {
             Direction dir = comparator(val, value);
             K dirkey = leaf(dir);
 

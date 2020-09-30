@@ -95,11 +95,11 @@ CharEquips::CapType CharEquips::getcaptype() const {
     if (const Clothing *cap = clothes_[EquipSlot::Id::HAT]) {
         const std::string &vslot = cap->get_vslot();
         if (vslot == "CpH1H5") {
-            return CharEquips::CapType::HALFCOVER;
+            return CharEquips::CapType::HALF_COVER;
         }
 
         if (vslot == "CpH1H5AyAs") {
-            return CharEquips::CapType::FULLCOVER;
+            return CharEquips::CapType::FULL_COVER;
         }
 
         if (vslot == "CpH5") {

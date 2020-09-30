@@ -16,9 +16,9 @@
 #pragma once
 
 #include <map>
+#include <optional>
 #include <unordered_map>
 
-#include "../../Template/Optional.h"
 #include "../Look/EquipSlot.h"
 #include "Equip.h"
 #include "InventoryType.h"
@@ -37,7 +37,7 @@ public:
         MOVE_EQUIP = 2
     };
 
-    enum Modification : int8_t { ADD, CHANGECOUNT, SWAP, REMOVE, ADDCOUNT };
+    enum Modification : int8_t { ADD, CHANGE_COUNT, SWAP, REMOVE, ADD_COUNT };
 
     // Return the move type by value
     static Movement movementbyvalue(int8_t value);
@@ -140,7 +140,9 @@ public:
     int32_t get_item_id(InventoryType::Id type, int16_t slot) const;
 
     // Return a pointer to an equip
-    Optional<const Equip> get_equip(InventoryType::Id type, int16_t slot) const;
+    std::optional<std::reference_wrapper<const Equip>> get_equip(
+        InventoryType::Id type,
+        int16_t slot) const;
 
 private:
     // Add an inventory slot and return the unique_id

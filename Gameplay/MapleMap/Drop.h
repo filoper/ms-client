@@ -41,7 +41,7 @@ protected:
     Linear<float> angle_;
 
 private:
-    enum State { DROPPED, FLOATING, PICKEDUP };
+    enum State { DROPPED, FLOATING, PICKED_UP };
 
     int32_t owner_;
     int8_t pickup_type_;

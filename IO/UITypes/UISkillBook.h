@@ -25,7 +25,7 @@
 namespace ms {
 class UISkillBook : public UIDragElement<PosSKILL> {
 public:
-    static constexpr Type TYPE = UIElement::Type::SKILLBOOK;
+    static constexpr Type TYPE = UIElement::Type::SKILL_BOOK;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 
@@ -134,7 +134,7 @@ private:
     enum Buttons : uint16_t {
         BT_CLOSE,
         BT_HYPER,
-        BT_GUILDSKILL,
+        BT_GUILD_SKILL,
         BT_RIDE,
         BT_MACRO,
         BT_MACRO_OK,

@@ -23,7 +23,7 @@
 namespace ms {
 class UIAranCreation : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::CLASSCREATION;
+    static constexpr Type TYPE = UIElement::Type::CLASS_CREATION;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 

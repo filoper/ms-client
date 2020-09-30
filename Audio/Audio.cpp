@@ -19,42 +19,43 @@
 
 #include <nlnx/audio.hpp>
 #include <nlnx/nx.hpp>
+#include <utility>
 
 #include "../Configuration.h"
 
 namespace ms {
 Sound::Sound(Name name) {
-    id = soundids[name];
+    id_ = soundids_[name];
 }
 
 Sound::Sound(int32_t itemid) {
     auto fitemid = format_id(itemid);
 
-    if (itemids.find(fitemid) != itemids.end()) {
-        id = itemids.at(fitemid);
+    if (itemids_.find(fitemid) != itemids_.end()) {
+        id_ = itemids_.at(fitemid);
     } else {
         auto pid = (10000 * (itemid / 10000));
         auto fpid = format_id(pid);
 
-        if (itemids.find(fpid) != itemids.end()) {
-            id = itemids.at(fpid);
+        if (itemids_.find(fpid) != itemids_.end()) {
+            id_ = itemids_.at(fpid);
         } else {
-            id = itemids.at("02000000");
+            id_ = itemids_.at("02000000");
         }
     }
 }
 
-Sound::Sound(nl::node src) {
-    id = add_sound(src);
+Sound::Sound(const nl::node &src) {
+    id_ = add_sound(src);
 }
 
 Sound::Sound() {
-    id = 0;
+    id_ = 0;
 }
 
 void Sound::play() const {
-    if (id > 0) {
-        play(id);
+    if (id_ > 0) {
+        play(id_);
     }
 }
 
@@ -65,30 +66,30 @@ Error Sound::init() {
 
     nl::node uisrc = nl::nx::sound["UI.img"];
 
-    add_sound(Sound::Name::BUTTONCLICK, uisrc["BtMouseClick"]);
-    add_sound(Sound::Name::BUTTONOVER, uisrc["BtMouseOver"]);
-    add_sound(Sound::Name::CHARSELECT, uisrc["CharSelect"]);
-    add_sound(Sound::Name::DLGNOTICE, uisrc["DlgNotice"]);
-    add_sound(Sound::Name::MENUDOWN, uisrc["MenuDown"]);
-    add_sound(Sound::Name::MENUUP, uisrc["MenuUp"]);
-    add_sound(Sound::Name::RACESELECT, uisrc["RaceSelect"]);
-    add_sound(Sound::Name::SCROLLUP, uisrc["ScrollUp"]);
-    add_sound(Sound::Name::SELECTMAP, uisrc["SelectMap"]);
+    add_sound(Sound::Name::BUTTON_CLICK, uisrc["BtMouseClick"]);
+    add_sound(Sound::Name::BUTTON_OVER, uisrc["BtMouseOver"]);
+    add_sound(Sound::Name::CHAR_SELECT, uisrc["CharSelect"]);
+    add_sound(Sound::Name::DLG_NOTICE, uisrc["DlgNotice"]);
+    add_sound(Sound::Name::MENU_DOWN, uisrc["MenuDown"]);
+    add_sound(Sound::Name::MENU_UP, uisrc["MenuUp"]);
+    add_sound(Sound::Name::RACE_SELECT, uisrc["RaceSelect"]);
+    add_sound(Sound::Name::SCROLL_UP, uisrc["ScrollUp"]);
+    add_sound(Sound::Name::SELECT_MAP, uisrc["SelectMap"]);
     add_sound(Sound::Name::TAB, uisrc["Tab"]);
-    add_sound(Sound::Name::WORLDSELECT, uisrc["WorldSelect"]);
-    add_sound(Sound::Name::DRAGSTART, uisrc["DragStart"]);
-    add_sound(Sound::Name::DRAGEND, uisrc["DragEnd"]);
-    add_sound(Sound::Name::WORLDMAPOPEN, uisrc["WorldmapOpen"]);
-    add_sound(Sound::Name::WORLDMAPCLOSE, uisrc["WorldmapClose"]);
+    add_sound(Sound::Name::WORLD_SELECT, uisrc["WorldSelect"]);
+    add_sound(Sound::Name::DRAG_START, uisrc["DragStart"]);
+    add_sound(Sound::Name::DRAG_END, uisrc["DragEnd"]);
+    add_sound(Sound::Name::WORLD_MAP_OPEN, uisrc["WorldmapOpen"]);
+    add_sound(Sound::Name::WORLD_MAP_CLOSE, uisrc["WorldmapClose"]);
 
     nl::node gamesrc = nl::nx::sound["Game.img"];
 
-    add_sound(Sound::Name::GAMESTART, gamesrc["GameIn"]);
+    add_sound(Sound::Name::GAME_START, gamesrc["GameIn"]);
     add_sound(Sound::Name::JUMP, gamesrc["Jump"]);
     add_sound(Sound::Name::DROP, gamesrc["DropItem"]);
     add_sound(Sound::Name::PICKUP, gamesrc["PickUpItem"]);
     add_sound(Sound::Name::PORTAL, gamesrc["Portal"]);
-    add_sound(Sound::Name::LEVELUP, gamesrc["LevelUp"]);
+    add_sound(Sound::Name::LEVEL_UP, gamesrc["LevelUp"]);
     add_sound(Sound::Name::TOMBSTONE, gamesrc["Tombstone"]);
 
     nl::node itemsrc = nl::nx::sound["Item.img"];
@@ -115,16 +116,16 @@ bool Sound::set_sfxvolume(uint8_t vol) {
 }
 
 void Sound::play(size_t id) {
-    if (!samples.count(id)) {
+    if (!samples_.count(id)) {
         return;
     }
 
     auto channel =
-        BASS_SampleGetChannel(static_cast<HSAMPLE>(samples.at(id)), false);
+        BASS_SampleGetChannel(static_cast<HSAMPLE>(samples_.at(id)), false);
     BASS_ChannelPlay(channel, true);
 }
 
-size_t Sound::add_sound(nl::node src) {
+size_t Sound::add_sound(const nl::node &src) {
     nl::audio ad = src;
 
     const auto *data = reinterpret_cast<const void *>(ad.data());
@@ -140,7 +141,7 @@ size_t Sound::add_sound(nl::node src) {
                                 4,
                                 BASS_SAMPLE_OVER_POS);
             sample != 0) {
-            samples[id] = sample;
+            samples_[id] = sample;
         } else {
             const auto *data2 = reinterpret_cast<const char *>(ad.data());
             auto sample2 =
@@ -154,7 +155,7 @@ size_t Sound::add_sound(nl::node src) {
             if (sample2 == 0) {
                 auto ec = BASS_ErrorGetCode();
             } else {
-                samples[id] = sample2;
+                samples_[id] = sample2;
             }
         }
 
@@ -164,19 +165,19 @@ size_t Sound::add_sound(nl::node src) {
     return 0;
 }
 
-void Sound::add_sound(Name name, nl::node src) {
+void Sound::add_sound(Name name, const nl::node &src) {
     size_t id = add_sound(src);
 
     if (id) {
-        soundids[name] = id;
+        soundids_[name] = id;
     }
 }
 
-void Sound::add_sound(const std::string &itemid, nl::node src) {
+void Sound::add_sound(const std::string &itemid, const nl::node &src) {
     size_t id = add_sound(src);
 
     if (id) {
-        itemids[itemid] = id;
+        itemids_[itemid] = id;
     }
 }
 
@@ -187,23 +188,23 @@ std::string Sound::format_id(int32_t itemid) {
     return strid;
 }
 
-std::unordered_map<size_t, uint64_t> Sound::samples;
-EnumMap<Sound::Name, size_t> Sound::soundids;
-std::unordered_map<std::string, size_t> Sound::itemids;
+std::unordered_map<size_t, uint64_t> Sound::samples_;
+EnumMap<Sound::Name, size_t> Sound::soundids_;
+std::unordered_map<std::string, size_t> Sound::itemids_;
 
 Music::Music(std::string p) {
-    path = p;
+    path_ = std::move(p);
 }
 
 void Music::play() const {
     static HSTREAM stream = 0;
     static std::string bgmpath = "";
 
-    if (path == bgmpath) {
+    if (path_ == bgmpath) {
         return;
     }
 
-    nl::audio ad = nl::nx::sound.resolve(path);
+    nl::audio ad = nl::nx::sound.resolve(path_);
     const auto *data = reinterpret_cast<const void *>(ad.data());
 
     if (data) {
@@ -219,7 +220,7 @@ void Music::play() const {
                                        BASS_SAMPLE_FLOAT | BASS_SAMPLE_LOOP);
         BASS_ChannelPlay(stream, true);
 
-        bgmpath = path;
+        bgmpath = path_;
     }
 }
 
@@ -227,11 +228,11 @@ void Music::play_once() const {
     static HSTREAM stream = 0;
     static std::string bgmpath = "";
 
-    if (path == bgmpath) {
+    if (path_ == bgmpath) {
         return;
     }
 
-    nl::audio ad = nl::nx::sound.resolve(path);
+    nl::audio ad = nl::nx::sound.resolve(path_);
     const auto *data = reinterpret_cast<const void *>(ad.data());
 
     if (data) {
@@ -247,7 +248,7 @@ void Music::play_once() const {
                                        BASS_SAMPLE_FLOAT);
         BASS_ChannelPlay(stream, true);
 
-        bgmpath = path;
+        bgmpath = path_;
     }
 }
 

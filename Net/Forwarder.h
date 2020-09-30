@@ -15,31 +15,14 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../UIElement.h"
+#include <cstddef>
+#include <cstdint>
 
 namespace ms {
-class UILoginWait : public UIElement {
+class Forwarder {
 public:
-    static constexpr Type TYPE = UIElement::Type::LOGINWAIT;
-    static constexpr bool FOCUSED = true;
-    static constexpr bool TOGGLED = false;
+    virtual ~Forwarder() = default;
 
-    UILoginWait();
-
-    UILoginWait(std::function<void()> okhandler);
-
-    UIElement::Type get_type() const override;
-
-    void close();
-
-    std::function<void()> get_handler();
-
-protected:
-    Button::State button_pressed(uint16_t id) override;
-
-private:
-    enum Buttons : uint16_t { CANCEL };
-
-    std::function<void()> okhandler_;
+    virtual void forward(int8_t *bytes, size_t length) const = 0;
 };
 }  // namespace ms

@@ -18,6 +18,7 @@
 #include <utility>
 
 #include "GraphicsGL.h"
+#include "../Util/StringHandling.h"
 
 namespace ms {
 Text::Text(Font f,
@@ -50,24 +51,33 @@ Text::Text(Font f,
 Text::Text() : Text(Font::A11M, Alignment::LEFT, Color::BLACK) {}
 
 void Text::reset_layout() {
-    if (text_.empty()) {
+    if (text_as_values_.empty()) {
         return;
     }
 
-    layout_ = GraphicsGL::get().createlayout(text_,
-                                             font_,
-                                             alignment_,
-                                             max_width_,
-                                             formatted_,
-                                             line_adj_);
+    layout_ = GraphicsGL::get().create_layout(text_as_values_,
+                                              font_,
+                                              alignment_,
+                                              max_width_,
+                                              formatted_,
+                                              line_adj_);
 }
 
 void Text::change_text(const std::string &t) {
-    if (text_ == t) {
+    change_text(to_utf8_vector(t));
+    text_ = t;
+}
+
+void Text::change_text(const std::vector<uint32_t> &t) {
+    if (text_as_values_ == t) {
         return;
     }
 
-    text_ = t;
+    if (text_.empty()) {
+        text_ = "testing";
+    }
+
+    text_as_values_ = t;
 
     reset_layout();
 }
@@ -92,8 +102,13 @@ void Text::draw(const DrawArgument &args) const {
 
 void Text::draw(const DrawArgument &args,
                 const Range<int16_t> &vertical) const {
-    GraphicsGL::get()
-        .drawtext(args, vertical, text_, layout_, font_, color_, background_);
+    GraphicsGL::get().draw_text(args,
+                                vertical,
+                                text_as_values_,
+                                layout_,
+                                font_,
+                                color_,
+                                background_);
 }
 
 uint16_t Text::advance(size_t pos) const {

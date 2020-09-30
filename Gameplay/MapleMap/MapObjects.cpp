@@ -21,10 +21,10 @@ void MapObjects::draw(Layer::Id layer,
                       double viewy,
                       float alpha) const {
     for (const auto &oid : layers_[layer]) {
-        auto mmo = get(oid);
+        auto mmo = get<MapObject>(oid);
 
-        if (mmo && mmo->is_active()) {
-            mmo->draw(viewx, viewy, alpha);
+        if (mmo && mmo->get().is_active()) {
+            mmo->get().draw(viewx, viewy, alpha);
         }
     }
 }
@@ -86,17 +86,27 @@ void MapObjects::remove(int32_t oid) {
     }
 }
 
-Optional<MapObject> MapObjects::get(int32_t oid) {
-    auto iter = objects_.find(oid);
+// std::optional<std::reference_wrapper<MapObject>> MapObjects::get(int32_t oid)
+// {
+//     auto iter = objects_.find(oid);
 
-    return iter != objects_.end() ? iter->second.get() : nullptr;
-}
+//     if (iter != objects_.end()) {
+//         return create_optional<MapObject>(iter->second.get());
+//     }
 
-Optional<const MapObject> MapObjects::get(int32_t oid) const {
-    auto iter = objects_.find(oid);
+//     return {};
+// }
 
-    return iter != objects_.end() ? iter->second.get() : nullptr;
-}
+// std::optional<std::reference_wrapper<const MapObject>> MapObjects::get(
+//     int32_t oid) const {
+//     auto iter = objects_.find(oid);
+
+//     if (iter != objects_.end()) {
+//         return create_optional<const MapObject>(iter->second.get());
+//     }
+
+//     return {};
+// }
 
 MapObjects::underlying_t::iterator MapObjects::begin() {
     return objects_.begin();

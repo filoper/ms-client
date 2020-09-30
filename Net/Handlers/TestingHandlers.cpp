@@ -17,7 +17,7 @@
 
 #include "../../Gameplay/Stage.h"
 #include "../../IO/UI.h"
-#include "../../IO/UITypes/UILoginNotice.h"
+#include "../../IO/UITypes/Login/UILoginNotice.h"
 #include "IO/UITypes/UIGaugeBoss.h"
 
 namespace ms {
@@ -53,9 +53,8 @@ void FieldEffectHandler::handle(InPacket &recv) const {
         if (curr_hp == -1) {
             UI::get().remove(UIElement::Type::GAUGE_BOSS);
         } else {
-            if (Optional<UIGaugeBoss> elem =
-                    UI::get().get_element<UIGaugeBoss>()) {
-                elem->update(percent);
+            if (auto elem = UI::get().get_element<UIGaugeBoss>()) {
+                elem->get().update(percent);
             } else {
                 UI::get().emplace<UIGaugeBoss>(800,
                                                tag_color,

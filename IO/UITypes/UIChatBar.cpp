@@ -48,9 +48,9 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
     int16_t chattop_y = getchattop(true) - 33;
     closechat_ = Point<int16_t>(387, 21);
 
-    buttons_[Buttons::BT_OPENCHAT] =
+    buttons_[Buttons::BT_OPEN_CHAT] =
         std::make_unique<MapleButton>(view["btMax"], Point<int16_t>(391, -7));
-    buttons_[Buttons::BT_CLOSECHAT] = std::make_unique<MapleButton>(
+    buttons_[Buttons::BT_CLOSE_CHAT] = std::make_unique<MapleButton>(
         view["btMin"],
         closechat_ + Point<int16_t>(0, chattop_y));
     buttons_[Buttons::BT_CHAT] =
@@ -63,7 +63,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
         std::make_unique<MapleButton>(input["button:help"],
                                       Point<int16_t>(386, -8));
 
-    buttons_[chatopen_ ? Buttons::BT_OPENCHAT : Buttons::BT_CLOSECHAT]
+    buttons_[chatopen_ ? Buttons::BT_OPEN_CHAT : Buttons::BT_CLOSE_CHAT]
         ->set_active(false);
     buttons_[Buttons::BT_CHAT]->set_active(chatopen_ ? true : false);
     buttons_[Buttons::BT_LINK]->set_active(chatopen_ ? true : false);
@@ -153,7 +153,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
     // int16_t slider_height = slider_y + 56;
     // int16_t slider_unitrows = chat_rows_;
     // int16_t slider_rowmax = 1;
-    // slider_ = Slider(Slider::Type::CHATBAR, Range<int16_t>(slider_y,
+    // slider_ = Slider(Slider::Type::CHAT_BAR, Range<int16_t>(slider_y,
     // slider_height), slider_x, slider_unitrows, slider_rowmax, [&](bool
     // upwards) {});
 
@@ -265,7 +265,7 @@ void UIChatBar::update() {
         Point<int16_t>(chattab_x_ + (ChatTab::NUM_CHATTAB * chattab_span_),
                        chattab_y_)
         + pos_adj);
-    buttons_[Buttons::BT_CLOSECHAT]->set_position(
+    buttons_[Buttons::BT_CLOSE_CHAT]->set_position(
         closechat_ + Point<int16_t>(0, chattab_y_) + pos_adj);
 
     chatfield_.update(position_);
@@ -371,7 +371,7 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
 
             return Cursor::State::CLICKING;
         }
-        return Cursor::State::CHATBARVDRAG;
+        return Cursor::State::CHAT_BAR_VDRAG;
 
     } else if (in_chattopleft) {
         if (clicking) {
@@ -379,7 +379,7 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
 
             return Cursor::State::CLICKING;
         }
-        return Cursor::State::CHATBARBRTLDRAG;
+        return Cursor::State::CHAT_BAR_BRTLDRAG;
 
     } else if (in_chattopright) {
         if (clicking) {
@@ -387,7 +387,7 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
 
             return Cursor::State::CLICKING;
         }
-        return Cursor::State::CHATBARBLTRDRAG;
+        return Cursor::State::CHAT_BAR_BLTRDRAG;
 
     } else if (in_chatleft) {
         if (clicking) {
@@ -395,7 +395,7 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
 
             return Cursor::State::CLICKING;
         }
-        return Cursor::State::CHATBARHDRAG;
+        return Cursor::State::CHAT_BAR_HDRAG;
 
     } else if (in_chatright) {
         if (clicking) {
@@ -403,7 +403,7 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
 
             return Cursor::State::CLICKING;
         }
-        return Cursor::State::CHATBARHDRAG;
+        return Cursor::State::CHAT_BAR_HDRAG;
     }
 
     return UIDragElement::send_cursor(clicking, cursorpos);
@@ -415,7 +415,7 @@ bool UIChatBar::indragrange(Point<int16_t> cursorpos) const {
     return bounds.contains(cursorpos);
 }
 
-void UIChatBar::send_chatline(const std::string &line, LineType type) {
+void UIChatBar::send_chatline(const std::string &line, LineType type) {    
     row_max_++;
     row_pos_ = row_max_;
 
@@ -466,8 +466,8 @@ void UIChatBar::toggle_chat(bool chat_open) {
         toggle_chatfield();
     }
 
-    buttons_[Buttons::BT_OPENCHAT]->set_active(!chat_open);
-    buttons_[Buttons::BT_CLOSECHAT]->set_active(chat_open);
+    buttons_[Buttons::BT_OPEN_CHAT]->set_active(!chat_open);
+    buttons_[Buttons::BT_CLOSE_CHAT]->set_active(chat_open);
 
     for (size_t i = 0; i < ChatTab::NUM_CHATTAB; i++) {
         buttons_[Buttons::BT_TAB_0 + i]->set_active(chat_open);
@@ -518,8 +518,8 @@ bool UIChatBar::is_chatfieldopen() {
 
 Button::State UIChatBar::button_pressed(uint16_t buttonid) {
     switch (buttonid) {
-        case Buttons::BT_OPENCHAT:
-        case Buttons::BT_CLOSECHAT: toggle_chat(); break;
+        case Buttons::BT_OPEN_CHAT:
+        case Buttons::BT_CLOSE_CHAT: toggle_chat(); break;
         case Buttons::BT_TAB_0:
         case Buttons::BT_TAB_1:
         case Buttons::BT_TAB_2:

@@ -38,11 +38,11 @@ void PlayerNullState::update_state(Player &player) const {
             state = Char::State::STAND;
         }
     } else {
-        Optional<const Ladder> ladder = player.get_ladder();
+        auto ladder = player.get_ladder();
 
         if (ladder) {
-            state =
-                ladder->is_ladder() ? Char::State::LADDER : Char::State::ROPE;
+            state = ladder->get().is_ladder() ? Char::State::LADDER
+                                              : Char::State::ROPE;
         } else {
             state = Char::State::FALL;
         }
@@ -88,7 +88,7 @@ void PlayerStandState::send_action(Player &player,
 
 void PlayerStandState::update(Player &player) const {
     if (player.get_phobj().enablejd == false) {
-        player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::Flag::CHECK_BELOW);
     }
 }
 
@@ -137,7 +137,7 @@ void PlayerWalkState::update(Player &player) const {
     }
 
     if (player.get_phobj().enablejd == false) {
-        player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::Flag::CHECK_BELOW);
     }
 }
 
@@ -230,7 +230,7 @@ void PlayerProneState::send_action(Player &player,
 
 void PlayerProneState::update(Player &player) const {
     if (player.get_phobj().enablejd == false) {
-        player.get_phobj().set_flag(PhysicsObject::Flag::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::Flag::CHECK_BELOW);
     }
 }
 
@@ -358,13 +358,13 @@ void PlayerClimbState::update_state(Player &player) const {
     bool downwards = player.is_key_down(KeyAction::Id::DOWN);
     auto ladder = player.get_ladder();
 
-    if (ladder && ladder->felloff(y, downwards)) {
+    if (ladder && ladder->get().felloff(y, downwards)) {
         cancel_ladder(player);
     }
 }
 
 void PlayerClimbState::cancel_ladder(Player &player) const {
     player.set_state(Char::State::FALL);
-    player.set_ladder(nullptr);
+    player.set_ladder({});
 }
 }  // namespace ms

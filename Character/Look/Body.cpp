@@ -56,6 +56,10 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
                             break;
                         default:
                             shift = drawinfo.get_body_position(stance, frame);
+                            if (Stance::Id::DEAD == stance) {
+                                shift -= Point<int16_t>(5, 4);
+                            }
+
                             shift -= partnode["map"]["navel"];
                             break;
                     }

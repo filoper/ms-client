@@ -53,7 +53,7 @@ Texture::Texture(nl::node src) {
         bitmap_ = src;
         dimensions_ = Point<int16_t>(bitmap_.width(), bitmap_.height());
 
-        GraphicsGL::get().addbitmap(bitmap_);
+        GraphicsGL::get().add_bitmap(bitmap_);
     }
 }
 

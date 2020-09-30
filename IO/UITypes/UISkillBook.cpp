@@ -38,9 +38,9 @@ void UISkillBook::SkillIcon::drop_on_bindings(Point<int16_t> cursorposition,
     Keyboard::Mapping mapping = Keyboard::Mapping(KeyType::SKILL, skill_id_);
 
     if (remove) {
-        keyconfig->unstage_mapping(mapping);
+        keyconfig->get().unstage_mapping(mapping);
     } else {
-        keyconfig->stage_mapping(cursorposition, mapping);
+        keyconfig->get().stage_mapping(cursorposition, mapping);
     }
 }
 
@@ -124,14 +124,14 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
 
     buttons_[Buttons::BT_HYPER] =
         std::make_unique<MapleButton>(main["BtHyper"]);
-    buttons_[Buttons::BT_GUILDSKILL] =
+    buttons_[Buttons::BT_GUILD_SKILL] =
         std::make_unique<MapleButton>(main["BtGuildSkill"]);
     buttons_[Buttons::BT_RIDE] = std::make_unique<MapleButton>(main["BtRide"]);
     buttons_[Buttons::BT_MACRO] =
         std::make_unique<MapleButton>(main["BtMacro"]);
 
     buttons_[Buttons::BT_HYPER]->set_state(Button::State::DISABLED);
-    buttons_[Buttons::BT_GUILDSKILL]->set_state(Button::State::DISABLED);
+    buttons_[Buttons::BT_GUILD_SKILL]->set_state(Button::State::DISABLED);
     buttons_[Buttons::BT_RIDE]->set_state(Button::State::DISABLED);
 
     nl::node skillPoint = nl::nx::ui["UIWindow4.img"]["Skill"]["skillPoint"];
@@ -424,7 +424,7 @@ Button::State UISkillBook::button_pressed(uint16_t id) {
             send_spup(id - Buttons::BT_SPUP0 + offset_);
             break;
         case Buttons::BT_HYPER:
-        case Buttons::BT_GUILDSKILL:
+        case Buttons::BT_GUILD_SKILL:
         case Buttons::BT_RIDE:
         case Buttons::BT_MACRO_OK:
         default: break;
@@ -512,7 +512,6 @@ Cursor::State UISkillBook::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                         return Cursor::State::GRABBING;
                     }
                     return Cursor::State::IDLE;
-
                 }
                 skills_[i].get_icon()->set_state(
                     StatefulIcon::State::MOUSEOVER);
@@ -683,7 +682,7 @@ void UISkillBook::show_skill(int32_t id) {
     int32_t masterlevel = skillbook_.get_masterlevel(id);
     int64_t expiration = skillbook_.get_expiration(id);
 
-    UI::get().show_skill(Tooltip::Parent::SKILLBOOK,
+    UI::get().show_skill(Tooltip::Parent::SKILL_BOOK,
                          skill_id,
                          level,
                          masterlevel,
@@ -691,7 +690,7 @@ void UISkillBook::show_skill(int32_t id) {
 }
 
 void UISkillBook::clear_tooltip() {
-    UI::get().clear_tooltip(Tooltip::Parent::SKILLBOOK);
+    UI::get().clear_tooltip(Tooltip::Parent::SKILL_BOOK);
 }
 
 bool UISkillBook::can_raise(int32_t skill_id) const {
@@ -833,11 +832,10 @@ bool UISkillBook::check_required(int32_t id) const {
         required = SkillData::get(id).get_reqskills();
     }
 
-    for (auto reqskill : required) {
-        int32_t reqskill_level = skillbook_.get_level(reqskill.first);
-        int32_t req_level = reqskill.second;
+    for (auto [req_skill_id, req_level] : required) {
+        int32_t req_skill_level = skillbook_.get_level(req_skill_id);
 
-        if (reqskill_level < req_level) {
+        if (req_skill_level < req_level) {
             return false;
         }
     }

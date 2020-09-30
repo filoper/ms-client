@@ -98,7 +98,8 @@ void FootholdTree::limit_movement(PhysicsObject &phobj) const {
         bool collision = left ? crnt_x >= wall && next_x <= wall
                               : crnt_x <= wall && next_x >= wall;
 
-        if (!collision && phobj.is_flag_set(PhysicsObject::Flag::TURNATEDGES)) {
+        if (!collision
+            && phobj.is_flag_set(PhysicsObject::Flag::TURN_AT_EDGES)) {
             wall = get_edge(phobj.fhid, left);
             collision = left ? crnt_x >= wall && next_x <= wall
                              : crnt_x <= wall && next_x >= wall;
@@ -106,7 +107,7 @@ void FootholdTree::limit_movement(PhysicsObject &phobj) const {
 
         if (collision) {
             phobj.limitx(wall);
-            phobj.clear_flag(PhysicsObject::Flag::TURNATEDGES);
+            phobj.clear_flag(PhysicsObject::Flag::TURN_AT_EDGES);
         }
     }
 
@@ -191,7 +192,7 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
 
     phobj.onground = phobj.y == ground;
 
-    if (phobj.enablejd || phobj.is_flag_set(PhysicsObject::Flag::CHECKBELOW)) {
+    if (phobj.enablejd || phobj.is_flag_set(PhysicsObject::Flag::CHECK_BELOW)) {
         uint16_t belowid = get_fhid_below(x, nextfh.ground_below(x) + 1.0);
 
         if (belowid > 0) {
@@ -202,7 +203,7 @@ void FootholdTree::update_fh(PhysicsObject &phobj) const {
             phobj.enablejd = false;
         }
 
-        phobj.clear_flag(PhysicsObject::Flag::CHECKBELOW);
+        phobj.clear_flag(PhysicsObject::Flag::CHECK_BELOW);
     }
 
     if (phobj.fhlayer == 0 || phobj.onground) {

@@ -21,7 +21,7 @@
 namespace ms {
 void CharInfoHandler::handle(InPacket &recv) const {
     int32_t character_id = recv.read_int();
-    int8_t character_level = recv.read_byte();
+    uint8_t character_level = recv.read_ubyte();
     int16_t character_job_id = recv.read_short();
     int16_t character_fame = recv.read_short();
     recv.skip_byte();  // character_marriage_ring
@@ -77,12 +77,12 @@ void CharInfoHandler::handle(InPacket &recv) const {
 
     // Update the character information window
     if (auto charinfo = UI::get().get_element<UICharInfo>()) {
-        charinfo->update_stats(character_id,
-                               character_job_id,
-                               character_level,
-                               character_fame,
-                               guild_name,
-                               alliance_name);
+        charinfo->get().update_stats(character_id,
+                                     character_job_id,
+                                     character_level,
+                                     character_fame,
+                                     guild_name,
+                                     alliance_name);
     }
 }
 }  // namespace ms

@@ -57,7 +57,7 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
     // Column 3
     icon_positions_[EquipSlot::Id::HAT] = Point<int16_t>(96, 50);
     icon_positions_[EquipSlot::Id::FACE] = Point<int16_t>(96, 91);
-    icon_positions_[EquipSlot::Id::EYEACC] = Point<int16_t>(96, 132);
+    icon_positions_[EquipSlot::Id::EYE_ACC] = Point<int16_t>(96, 132);
     icon_positions_[EquipSlot::Id::TOP] = Point<int16_t>(96, 173);
     icon_positions_[EquipSlot::Id::BOTTOM] = Point<int16_t>(96, 214);
     icon_positions_[EquipSlot::Id::SHOES] = Point<int16_t>(96, 255);
@@ -179,10 +179,10 @@ void UIEquipInventory::draw(float alpha) const {
             disabled_.draw(position_ + icon_positions_[EquipSlot::Id::POCKET]);
         }
 
-        for (auto iter : icons_) {
-            if (iter.second) {
-                iter.second->draw(position_ + icon_positions_[iter.first]
-                                  + Point<int16_t>(4, 4));
+        for (auto [eq_slot, icon] : icons_) {
+            if (icon) {
+                icon->draw(position_ + icon_positions_[eq_slot]
+                           + Point<int16_t>(4, 4));
             }
         }
     } else if (tab_ == Buttons::BT_TAB2) {
@@ -252,8 +252,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
         }
         show_equip(slot);
 
-        return Cursor::State::CANGRAB;
-
+        return Cursor::State::CAN_GRAB;
     }
     clear_tooltip();
 
@@ -344,13 +343,13 @@ EquipSlot::Id UIEquipInventory::slot_by_position(
         return EquipSlot::Id::NONE;
     }
 
-    for (auto iter : icon_positions_) {
-        Rectangle<int16_t> iconrect = Rectangle<int16_t>(
-            position_ + iter.second,
-            position_ + iter.second + Point<int16_t>(32, 32));
+    for (auto [eq_slot, icon_pos] : icon_positions_) {
+        Rectangle<int16_t> iconrect =
+            Rectangle<int16_t>(position_ + icon_pos,
+                               position_ + icon_pos + Point<int16_t>(32, 32));
 
         if (iconrect.contains(cursorpos)) {
-            return iter.first;
+            return eq_slot;
         }
     }
 
@@ -394,12 +393,12 @@ UIEquipInventory::EquipIcon::EquipIcon(int16_t s) {
 }
 
 void UIEquipInventory::EquipIcon::drop_on_stage() const {
-    Sound(Sound::Name::DRAGEND).play();
+    Sound(Sound::Name::DRAG_END).play();
 }
 
 void UIEquipInventory::EquipIcon::drop_on_equips(EquipSlot::Id slot) const {
     if (source_ == slot) {
-        Sound(Sound::Name::DRAGEND).play();
+        Sound(Sound::Name::DRAG_END).play();
     }
 }
 
@@ -409,8 +408,8 @@ bool UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
                                                 bool equip) const {
     if (tab != InventoryType::Id::EQUIP) {
         if (auto iteminventory = UI::get().get_element<UIItemInventory>()) {
-            if (iteminventory->is_active()) {
-                iteminventory->change_tab(InventoryType::Id::EQUIP);
+            if (iteminventory->get().is_active()) {
+                iteminventory->get().change_tab(InventoryType::Id::EQUIP);
                 return false;
             }
         }

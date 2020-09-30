@@ -28,14 +28,14 @@
 namespace ms {
 void GatherResultHandler::handle(InPacket &) const {
     if (auto iteminventory = UI::get().get_element<UIItemInventory>()) {
-        iteminventory->set_sort(true);
+        iteminventory->get().set_sort(true);
     }
 }
 
 void SortResultHandler::handle(InPacket &) const {
     if (auto iteminventory = UI::get().get_element<UIItemInventory>()) {
-        iteminventory->set_sort(false);
-        iteminventory->clear_new();
+        iteminventory->get().set_sort(false);
+        iteminventory->get().clear_new();
     }
 }
 
@@ -70,11 +70,13 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
                 if (auto keyconfig = UI::get().get_element<UIKeyConfig>()) {
                     int16_t count_now =
                         inventory.get_item_count(mod.type, mod.pos);
-                    keyconfig->update_item_count(mod.type, mod.pos, count_now);
+                    keyconfig->get().update_item_count(mod.type,
+                                                       mod.pos,
+                                                       count_now);
                 }
 
                 break;
-            case Inventory::Modification::CHANGECOUNT: {
+            case Inventory::Modification::CHANGE_COUNT: {
                 mod.arg = recv.read_short();
 
                 int16_t count_before =
@@ -88,13 +90,14 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
                                  Inventory::Movement::MOVE_NONE);
 
                 if (auto keyconfig = UI::get().get_element<UIKeyConfig>()) {
-                    keyconfig->update_item_count(mod.type,
-                                                 mod.pos,
-                                                 count_now - count_before);
+                    keyconfig->get().update_item_count(
+                        mod.type,
+                        mod.pos,
+                        count_now - count_before);
                 }
 
                 if (count_before < count_now) {
-                    mod.mode = Inventory::Modification::ADDCOUNT;
+                    mod.mode = Inventory::Modification::ADD_COUNT;
                 }
             } break;
             case Inventory::Modification::SWAP:
@@ -104,9 +107,9 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
                 if (auto keyconfig = UI::get().get_element<UIKeyConfig>()) {
                     int16_t count_before =
                         inventory.get_item_count(mod.type, mod.pos);
-                    keyconfig->update_item_count(mod.type,
-                                                 mod.pos,
-                                                 -1 * count_before);
+                    keyconfig->get().update_item_count(mod.type,
+                                                       mod.pos,
+                                                       -1 * count_before);
                 }
 
                 inventory.modify(mod.type,
@@ -130,7 +133,7 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
         }
 
         if (auto shop = UI::get().get_element<UIShop>()) {
-            shop->modify(mod.type);
+            shop->get().modify(mod.type);
         }
 
         auto eqinvent = UI::get().get_element<UIEquipInventory>();
@@ -141,7 +144,7 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
                 switch (mod.type) {
                     case InventoryType::Id::EQUIPPED:
                         if (eqinvent) {
-                            eqinvent->modify(mod.pos, mod.mode, mod.arg);
+                            eqinvent->get().modify(mod.pos, mod.mode, mod.arg);
                         }
 
                         Stage::get().get_player().change_equip(-mod.pos);
@@ -153,10 +156,10 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
                     case InventoryType::Id::ETC:
                     case InventoryType::Id::CASH:
                         if (itinvent) {
-                            itinvent->modify(mod.type,
-                                             mod.pos,
-                                             mod.mode,
-                                             mod.arg);
+                            itinvent->get().modify(mod.type,
+                                                   mod.pos,
+                                                   mod.mode,
+                                                   mod.arg);
                         }
 
                         break;
@@ -167,27 +170,27 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
             case Inventory::Movement::MOVE_UNEQUIP:
                 if (mod.pos < 0) {
                     if (eqinvent) {
-                        eqinvent->modify(-mod.pos, 3, 0);
+                        eqinvent->get().modify(-mod.pos, 3, 0);
                     }
 
                     if (itinvent) {
-                        itinvent->modify(InventoryType::Id::EQUIP,
-                                         mod.arg,
-                                         mod.mode,
-                                         0);
+                        itinvent->get().modify(InventoryType::Id::EQUIP,
+                                               mod.arg,
+                                               mod.mode,
+                                               0);
                     }
 
                     Stage::get().get_player().change_equip(-mod.pos);
                 } else if (mod.arg < 0) {
                     if (eqinvent) {
-                        eqinvent->modify(-mod.arg, 0, 0);
+                        eqinvent->get().modify(-mod.arg, 0, 0);
                     }
 
                     if (itinvent) {
-                        itinvent->modify(InventoryType::Id::EQUIP,
-                                         mod.pos,
-                                         Inventory::Modification::REMOVE,
-                                         0);
+                        itinvent->get().modify(InventoryType::Id::EQUIP,
+                                               mod.pos,
+                                               Inventory::Modification::REMOVE,
+                                               0);
                     }
 
                     Stage::get().get_player().change_equip(-mod.arg);

@@ -22,7 +22,7 @@
 namespace ms {
 class UIWorldMap : public UIDragElement<PosMAP> {
 public:
-    static constexpr Type TYPE = UIElement::Type::WORLDMAP;
+    static constexpr Type TYPE = UIElement::Type::WORLD_MAP;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 
@@ -57,7 +57,7 @@ private:
         BT_SEARCH,
         BT_AUTOFLY,
         BT_NAVIREG,
-        BT_ALLSEARCH,
+        BT_ALL_SEARCH,
         BT_SEARCH_CLOSE,
         BT_LINK0,
         BT_LINK1,

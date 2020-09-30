@@ -102,19 +102,19 @@ Cursor::State UIElement::send_cursor(bool down, Point<int16_t> pos) {
         if (btit.second->is_active()
             && btit.second->bounds(position_).contains(pos)) {
             if (btit.second->get_state() == Button::State::NORMAL) {
-                Sound(Sound::Name::BUTTONOVER).play();
+                Sound(Sound::Name::BUTTON_OVER).play();
 
                 btit.second->set_state(Button::State::MOUSEOVER);
-                ret = Cursor::State::CANCLICK;
+                ret = Cursor::State::CAN_CLICK;
             } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
                 if (down) {
-                    Sound(Sound::Name::BUTTONCLICK).play();
+                    Sound(Sound::Name::BUTTON_CLICK).play();
 
                     btit.second->set_state(button_pressed(btit.first));
 
                     ret = Cursor::State::IDLE;
                 } else {
-                    ret = Cursor::State::CANCLICK;
+                    ret = Cursor::State::CAN_CLICK;
                 }
             }
         } else if (btit.second->get_state() == Button::State::MOUSEOVER) {

@@ -144,9 +144,9 @@ void Combat::apply_move(const SpecialMove &move) {
         fn_attack(result);
 
         if (!reactor_targets.empty()) {
-            if (Optional<Reactor> reactor =
-                    reactor_objs->get(reactor_targets.at(0))) {
-                fn_damage_reactor(reactor->get_oid(),
+            if (auto reactor =
+                    reactor_objs->get<Reactor>(reactor_targets.at(0))) {
+                fn_damage_reactor(reactor->get().get_oid(),
                                   player_.get_position(),
                                   0,
                                   0);
@@ -263,7 +263,7 @@ void Combat::push_attack(const AttackResult &attack) {
 }
 
 void Combat::apply_attack(const AttackResult &attack) {
-    if (Optional<OtherChar> ouser = chars_.get_char(attack.attacker)) {
+    if (auto ouser = chars_.get_char(attack.attacker)) {
         OtherChar &user = *ouser;
         user.update_skill(attack.skill, attack.level);
         user.update_speed(attack.speed);
@@ -372,7 +372,7 @@ std::vector<DamageNumber> Combat::place_numbers(
 }
 
 void Combat::show_buff(int32_t cid, int32_t skillid, int8_t level) {
-    if (Optional<OtherChar> ouser = chars_.get_char(cid)) {
+    if (auto ouser = chars_.get_char(cid)) {
         OtherChar &user = *ouser;
         user.update_skill(skillid, level);
 
@@ -387,7 +387,7 @@ void Combat::show_player_buff(int32_t skillid) {
 }
 
 void Combat::show_affected_by_buff(int32_t cid, int32_t skillid, int8_t level) {
-    if (Optional<OtherChar> ouser = chars_.get_char(cid)) {
+    if (auto ouser = chars_.get_char(cid)) {
         OtherChar &user = *ouser;
         user.update_skill(skillid, level);
 
@@ -401,7 +401,7 @@ void Combat::show_player_affected_by_buff(int32_t skillid) {
 }
 
 void Combat::give_foreign_buff(int32_t cid, int32_t skillid, int8_t level) {
-    if (Optional<OtherChar> ouser = chars_.get_char(cid)) {
+    if (auto ouser = chars_.get_char(cid)) {
         OtherChar &user = *ouser;
         user.update_skill(skillid, level);
 

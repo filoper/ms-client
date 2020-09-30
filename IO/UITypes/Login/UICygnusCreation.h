@@ -21,20 +21,18 @@
 #include "../UIElement.h"
 
 namespace ms {
-class UIExplorerCreation : public UIElement {
+class UICygnusCreation : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::CLASSCREATION;
+    static constexpr Type TYPE = UIElement::Type::CLASS_CREATION;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 
-    UIExplorerCreation();
+    UICygnusCreation();
 
     void draw(float inter) const override;
-
     void update() override;
 
     Cursor::State send_cursor(bool clicked, Point<int16_t> cursorpos) override;
-
     void send_key(int32_t keycode, bool pressed, bool escape) override;
 
     UIElement::Type get_type() const override;
@@ -46,25 +44,14 @@ protected:
 
 private:
     void randomize_look();
-
     const std::string &get_equipname(EquipSlot::Id slot) const;
 
     enum Buttons : uint16_t {
         BT_BACK,
         BT_CHARC_OK,
         BT_CHARC_CANCEL,
-        BT_CHARC_FACEL,
-        BT_CHARC_FACER,
-        BT_CHARC_HAIRL,
-        BT_CHARC_HAIRR,
         BT_CHARC_SKINL,
         BT_CHARC_SKINR,
-        BT_CHARC_TOPL,
-        BT_CHARC_TOPR,
-        BT_CHARC_BOTL,
-        BT_CHARC_BOTR,
-        BT_CHARC_SHOESL,
-        BT_CHARC_SHOESR,
         BT_CHARC_WEPL,
         BT_CHARC_WEPR,
         BT_CHARC_GENDER_M,
@@ -123,6 +110,7 @@ private:
     Text hairname_;
     Text bodyname_;
     Text topname_;
+    Text botname_;
     Text shoename_;
     Text wepname_;
     Text version_;

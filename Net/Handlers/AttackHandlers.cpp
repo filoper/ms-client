@@ -28,7 +28,7 @@ AttackHandler::AttackHandler(Attack::Type t) {
 
 void AttackHandler::handle(InPacket &recv) const {
     int32_t cid = recv.read_int();
-    uint8_t count = recv.read_byte();
+    uint8_t count = recv.read_ubyte();
 
     recv.skip(1);
 
@@ -36,13 +36,13 @@ void AttackHandler::handle(InPacket &recv) const {
     attack.type = type_;
     attack.attacker = cid;
 
-    attack.level = recv.read_byte();
+    attack.level = recv.read_ubyte();
     attack.skill = (attack.level > 0) ? recv.read_int() : 0;
 
-    attack.display = recv.read_byte();
+    attack.display = recv.read_ubyte();
     attack.toleft = recv.read_bool();
-    attack.stance = recv.read_byte();
-    attack.speed = recv.read_byte();
+    attack.stance = recv.read_ubyte();
+    attack.speed = recv.read_ubyte();
 
     recv.skip(1);
 
@@ -57,7 +57,7 @@ void AttackHandler::handle(InPacket &recv) const {
         recv.skip(1);
 
         uint8_t length = (attack.skill == SkillId::Id::MESO_EXPLOSION)
-                             ? recv.read_byte()
+                             ? recv.read_ubyte()
                              : attack.hitcount;
 
         for (uint8_t j = 0; j < length; j++) {

@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <utility>
+
 #include "../../InPacket.h"
 #include "../../Login.h"
 
@@ -25,5 +27,5 @@ RecommendedWorld parse_recommended_world(InPacket &recv);
 CharEntry parse_charentry(InPacket &recv);
 StatsEntry parse_stats(InPacket &recv);
 LookEntry parse_look(InPacket &recv);
-void parse_login(InPacket &recv);
+std::pair<std::string, std::string> parse_login(InPacket &recv);
 }  // namespace ms::LoginParser

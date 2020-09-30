@@ -21,10 +21,7 @@
 #include "../../Data/EquipData.h"
 
 namespace ms {
-Inventory::Inventory() {
-    bullet_slot_ = 0;
-    meso_ = 0;
-    running_uid_ = 0;
+Inventory::Inventory() : running_uid_(0), meso_(0), bullet_slot_(0) {
     slot_maxima_[InventoryType::Id::EQUIPPED] = EquipSlot::Id::LENGTH;
 }
 
@@ -43,7 +40,7 @@ void Inventory::recalc_stats(Weapon::Type type) {
         }
     }
 
-    int32_t prefix;
+    int32_t prefix = 0;
 
     switch (type) {
         case Weapon::Type::BOW: prefix = 2060; break;
@@ -215,7 +212,7 @@ void Inventory::modify(InventoryType::Id type,
     arg = (arg < 0) ? -arg : arg;
 
     switch (mode) {
-        case Modification::CHANGECOUNT: change_count(type, slot, arg); break;
+        case Modification::CHANGE_COUNT: change_count(type, slot, arg); break;
         case Modification::SWAP:
             switch (move) {
                 case Movement::MOVE_INTERNAL:
@@ -357,8 +354,9 @@ int32_t Inventory::get_item_id(InventoryType::Id type, int16_t slot) const {
     return 0;
 }
 
-Optional<const Equip> Inventory::get_equip(InventoryType::Id type,
-                                           int16_t slot) const {
+std::optional<std::reference_wrapper<const Equip>> Inventory::get_equip(
+    InventoryType::Id type,
+    int16_t slot) const {
     if (type != InventoryType::Id::EQUIPPED
         && type != InventoryType::Id::EQUIP) {
         return {};

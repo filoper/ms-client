@@ -45,6 +45,9 @@ auto fn_move_item = []<typename... T>(T && ... args) {
 auto fn_scroll_equip = []<typename... T>(T && ... args) {
     ScrollEquipPacket(std::forward<T>(args)...).dispatch();
 };
+auto fn_drop_mesos = []<typename... T>(T && ... args) {
+    DropMesosPacket(std::forward<T>(args)...).dispatch();
+};
 
 UIItemInventory::UIItemInventory(const Inventory &invent) :
     UIDragElement<PosINV>(),
@@ -324,7 +327,15 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
         case Buttons::BT_SMALL_SM:
             set_full(false);
             return Button::State::NORMAL;
-        case Buttons::BT_COIN:
+        case Buttons::BT_COIN: {
+            const std::string question = "How many do you want to drop?";
+            auto onenter = [](auto amount) {
+                fn_drop_mesos(amount);
+            };
+
+            UI::get().emplace<UIEnterNumber>(question, onenter, 50000, 10);
+        }
+            break;
         case Buttons::BT_COIN_SM:
         case Buttons::BT_POINT:
         case Buttons::BT_POINT_SM:
@@ -368,9 +379,7 @@ void UIItemInventory::doubleclick(Point<int16_t> cursorpos) {
                         fn_equip_item(slot, inventory_.find_equipslot(item_id));
                     }
                     break;
-                case InventoryType::Id::USE:
-                    fn_use_item(slot, item_id);
-                    break;
+                case InventoryType::Id::USE: fn_use_item(slot, item_id); break;
             }
         }
     }
@@ -439,12 +448,11 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
         if (!ignore_tooltip_) {
             show_item(slot);
 
-            return Cursor::State::CANGRAB;
+            return Cursor::State::CAN_GRAB;
         }
         ignore_tooltip_ = false;
 
-        return Cursor::State::CANGRAB;
-
+        return Cursor::State::CAN_GRAB;
     }
     clear_tooltip();
 
@@ -502,8 +510,8 @@ void UIItemInventory::modify(InventoryType::Id type,
                 new_tab_ = type;
                 new_slot_ = slot;
                 break;
-            case Inventory::Modification::CHANGECOUNT:
-            case Inventory::Modification::ADDCOUNT:
+            case Inventory::Modification::CHANGE_COUNT:
+            case Inventory::Modification::ADD_COUNT:
                 if (auto *icon = get_icon(slot)) {
                     icon->set_count(arg);
                 }
@@ -522,11 +530,11 @@ void UIItemInventory::modify(InventoryType::Id type,
 
     switch (mode) {
         case Inventory::Modification::ADD:
-        case Inventory::Modification::ADDCOUNT:
+        case Inventory::Modification::ADD_COUNT:
             new_tab_ = type;
             new_slot_ = slot;
             break;
-        case Inventory::Modification::CHANGECOUNT:
+        case Inventory::Modification::CHANGE_COUNT:
         case Inventory::Modification::SWAP:
         case Inventory::Modification::REMOVE:
             if (new_slot_ == slot && new_tab_ == type) {
@@ -895,12 +903,10 @@ void UIItemInventory::ItemIcon::drop_on_equips(EquipSlot::Id eqslot) const {
                 }
             }
 
-            Sound(Sound::Name::DRAGEND).play();
+            Sound(Sound::Name::DRAG_END).play();
 
             break;
-        case InventoryType::Id::USE:
-            fn_scroll_equip(source_, eqslot);
-            break;
+        case InventoryType::Id::USE: fn_scroll_equip(source_, eqslot); break;
     }
 }
 
@@ -925,9 +931,9 @@ void UIItemInventory::ItemIcon::drop_on_bindings(Point<int16_t> cursorposition,
         Keyboard::Mapping mapping = Keyboard::Mapping(KeyType::ITEM, item_id_);
 
         if (remove) {
-            keyconfig->unstage_mapping(mapping);
+            keyconfig->get().unstage_mapping(mapping);
         } else {
-            keyconfig->stage_mapping(cursorposition, mapping);
+            keyconfig->get().stage_mapping(cursorposition, mapping);
         }
     }
 }

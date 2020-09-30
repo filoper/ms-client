@@ -95,21 +95,21 @@ public:
 
 private:
     std::unordered_map<uint8_t, Point<int16_t>>
-        body_positions[Stance::Id::LENGTH];
+        body_positions_[Stance::Id::LENGTH];
     std::unordered_map<uint8_t, Point<int16_t>>
-        arm_positions[Stance::Id::LENGTH];
+        arm_positions_[Stance::Id::LENGTH];
     std::unordered_map<uint8_t, Point<int16_t>>
-        hand_positions[Stance::Id::LENGTH];
+        hand_positions_[Stance::Id::LENGTH];
     std::unordered_map<uint8_t, Point<int16_t>>
-        head_positions[Stance::Id::LENGTH];
+        head_positions_[Stance::Id::LENGTH];
     std::unordered_map<uint8_t, Point<int16_t>>
-        hair_positions[Stance::Id::LENGTH];
+        hair_positions_[Stance::Id::LENGTH];
     std::unordered_map<uint8_t, Point<int16_t>>
-        face_positions[Stance::Id::LENGTH];
-    std::unordered_map<uint8_t, uint16_t> stance_delays[Stance::Id::LENGTH];
+        face_positions_[Stance::Id::LENGTH];
+    std::unordered_map<uint8_t, uint16_t> stance_delays_[Stance::Id::LENGTH];
 
     std::unordered_map<std::string, std::unordered_map<uint8_t, BodyAction>>
-        body_actions;
-    std::unordered_map<std::string, std::vector<uint16_t>> attack_delays;
+        body_actions_;
+    std::unordered_map<std::string, std::vector<uint16_t>> attack_delays_;
 };
 }  // namespace ms

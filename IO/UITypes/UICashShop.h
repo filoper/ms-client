@@ -97,26 +97,26 @@ private:
     };
 
     enum Buttons : uint16_t {
-        BtPreview1,
-        BtPreview2,
-        BtPreview3,
-        BtExit,
-        BtChargeNX,
-        BtChargeRefresh,
-        BtWish,
-        BtMileage,
-        BtHelp,
-        BtCoupon,
-        BtNext,
-        BtPrev,
-        BtDetailPackage,
-        BtNonGrade,
-        BtBuyAvatar,
-        BtDefaultAvatar,
-        BtInventory,
-        BtSaveAvatar,
-        BtTakeoffAvatar,
-        BtBuy
+        BT_PREVIEW1,
+        BT_PREVIEW2,
+        BT_PREVIEW3,
+        BT_EXIT,
+        BT_CHARGE_NX,
+        BT_CHARGE_REFRESH,
+        BT_WISH,
+        BT_MILEAGE,
+        BT_HELP,
+        BT_COUPON,
+        BT_NEXT,
+        BT_PREV,
+        BT_DETAIL_PACKAGE,
+        BT_NON_GRADE,
+        BT_BUY_AVATAR,
+        BT_DEFAULT_AVATAR,
+        BT_INVENTORY,
+        BT_SAVE_AVATAR,
+        BT_TAKE_OFF_AVATAR,
+        BT_BUY
     };
 
     Point<int16_t> best_new_dim_;

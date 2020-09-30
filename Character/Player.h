@@ -146,15 +146,15 @@ public:
     bool is_key_down(KeyAction::Id action) const;
 
     // Return a pointer to the ladder the player is on.
-    Optional<const Ladder> get_ladder() const;
+    std::optional<std::reference_wrapper<const Ladder>> get_ladder() const;
 
     // Change players position to the seat's position and stance to
     // Char::State::SIT
-    void set_seat(Optional<const Seat> seat);
+    void set_seat(std::optional<std::reference_wrapper<const Seat>> seat);
 
     // Change players x-pos to the ladder x and change stance to Char::LADDER or
     // Char::ROPE.
-    void set_ladder(Optional<const Ladder> ladder);
+    void set_ladder(std::optional<std::reference_wrapper<const Ladder>> ladder);
 
     void set_channel_id(uint8_t ch);
 
@@ -202,7 +202,7 @@ private:
 
     Randomizer randomizer_;
 
-    Optional<const Ladder> ladder_;
+    std::optional<std::reference_wrapper<const Ladder>> ladder_;
 
     bool underwater_;
 

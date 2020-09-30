@@ -1,17 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-if (UNIX AND NOT APPLE)
-  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "-stdlib=libc++")
-    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libc++")
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "-stdlib=libstdc++")
-    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libstdc++")
-  else()
-    message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
-  endif()
-endif()
-
 project(msclient)
 
 # Set project options
@@ -23,13 +11,13 @@ include(cmake/StaticAnalyzers.cmake)
 
 if (APPLE)
   if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
-    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -framework OpenGL -mlinker-version=505")
+    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
     set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
   elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -framework OpenGL -mlinker-version=505")
-    set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
+    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -mlinker-version=450")
+    set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=450")
   elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "-framework OpenGL -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/x86_64-apple-darwin18 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/backward -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include-fixed -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks")
+    set(CMAKE_CXX_FLAGS "-isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/x86_64-apple-darwin18 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/backward -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include-fixed -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks")
   else()
     message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
   endif()
@@ -57,6 +45,7 @@ include_directories(Graphics)
 include_directories(IO)
 include_directories(IO/Components)
 include_directories(IO/UITypes)
+include_directories(IO/UITypes/Login)
 include_directories(Net)
 include_directories(Net/Handlers)
 include_directories(Net/Handlers/Helpers)
@@ -185,45 +174,45 @@ add_executable(msclient
     IO/Components/Textfield.cpp
     IO/Components/TextTooltip.cpp
     IO/Components/TwoSpriteButton.cpp
-    IO/UITypes/UIAranCreation.cpp
     IO/UITypes/UIBuffList.cpp
     IO/UITypes/UICashShop.cpp
     IO/UITypes/UIChannel.cpp
     IO/UITypes/UICharInfo.cpp
-    IO/UITypes/UICharSelect.cpp
     IO/UITypes/UIChat.cpp
     IO/UITypes/UIChatBar.cpp
-    IO/UITypes/UICygnusCreation.cpp
     IO/UITypes/UIEquipInventory.cpp
     IO/UITypes/UIEvent.cpp
-    IO/UITypes/UIExplorerCreation.cpp
-    IO/UITypes/UIGender.cpp
     IO/UITypes/UIItemInventory.cpp
     IO/UITypes/UIJoypad.cpp
     IO/UITypes/UIKeyConfig.cpp
-    IO/UITypes/UILogin.cpp
-    IO/UITypes/UILoginNotice.cpp
-    IO/UITypes/UILoginWait.cpp
-    IO/UITypes/UILogo.cpp
     IO/UITypes/UIMiniMap.cpp
     IO/UITypes/UINotice.cpp
     IO/UITypes/UINpcTalk.cpp
     IO/UITypes/UIOptionMenu.cpp
     IO/UITypes/UIQuestLog.cpp
     IO/UITypes/UIQuit.cpp
-    IO/UITypes/UIRaceSelect.cpp
-    IO/UITypes/UIRegion.cpp
     IO/UITypes/UIShop.cpp
     IO/UITypes/UISkillBook.cpp
-    IO/UITypes/UISoftKey.cpp
     IO/UITypes/UIStatsInfo.cpp
     IO/UITypes/UIStatusBar.cpp
     IO/UITypes/UIStatusMessenger.cpp
-    IO/UITypes/UITermsOfService.cpp
     IO/UITypes/UIUserList.cpp
     IO/UITypes/UIWorldMap.cpp
-    IO/UITypes/UIWorldSelect.cpp
     IO/UITypes/UIGaugeBoss.cpp
+    IO/UITypes/Login/UILogo.cpp
+    IO/UITypes/Login/UILogin.cpp
+    IO/UITypes/Login/UILoginWait.cpp
+    IO/UITypes/Login/UILoginNotice.cpp
+    IO/UITypes/Login/UICharSelect.cpp
+    IO/UITypes/Login/UIGender.cpp
+    IO/UITypes/Login/UIRaceSelect.cpp
+    IO/UITypes/Login/UITermsOfService.cpp
+    IO/UITypes/Login/UIWorldSelect.cpp
+    IO/UITypes/Login/UIAranCreation.cpp
+    IO/UITypes/Login/UICygnusCreation.cpp
+    IO/UITypes/Login/UIExplorerCreation.cpp
+    IO/UITypes/Login/UIRegion.cpp
+    IO/UITypes/Login/UISoftKey.cpp
     IO/Cursor.cpp
     IO/Keyboard.cpp
     IO/Messages.cpp

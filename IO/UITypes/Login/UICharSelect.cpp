@@ -117,7 +117,7 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
     uint8_t channel_id = Configuration::get().get_channelid();
 
     if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
-        world = worldselect->get_worldbyid(world_id);
+        world = worldselect->get().get_worldbyid(world_id);
     }
 
     world_sprites_.emplace_back(selectWorld, world_pos_);
@@ -162,19 +162,19 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
     buttons_[Buttons::CHARACTER_DELETE] =
         std::make_unique<MapleButton>(CharSelect["BtDelete"],
                                       character_del_pos);
-    buttons_[Buttons::PAGELEFT] =
+    buttons_[Buttons::PAGE_LEFT] =
         std::make_unique<MapleButton>(CharSelect["pageL"],
                                       Point<int16_t>(98, 491));
-    buttons_[Buttons::PAGERIGHT] =
+    buttons_[Buttons::PAGE_RIGHT] =
         std::make_unique<MapleButton>(CharSelect["pageR"],
                                       Point<int16_t>(485, 491));
-    buttons_[Buttons::CHANGEPIC] =
+    buttons_[Buttons::CHANGE_PIC] =
         std::make_unique<MapleButton>(Common["BtChangePIC"],
                                       Point<int16_t>(0, 45));
-    buttons_[Buttons::RESETPIC] =
+    buttons_[Buttons::RESET_PIC] =
         std::make_unique<MapleButton>(Login["WorldSelect"]["BtResetPIC"],
                                       Point<int16_t>(0, 85));
-    buttons_[Buttons::EDITCHARLIST] =
+    buttons_[Buttons::EDIT_CHAR_LIST] =
         std::make_unique<MapleButton>(CharSelect["EditCharList"]["BtCharacter"],
                                       Point<int16_t>(-1, 118));
     buttons_[Buttons::BACK] =
@@ -188,8 +188,8 @@ UICharSelect::UICharSelect(std::vector<CharEntry> c,
     }
 
     if (require_pic_ == 0) {
-        buttons_[Buttons::CHANGEPIC]->set_active(false);
-        buttons_[Buttons::RESETPIC]->set_active(false);
+        buttons_[Buttons::CHANGE_PIC]->set_active(false);
+        buttons_[Buttons::RESET_PIC]->set_active(false);
     }
 
     level_set_ = Charset(CharSelect["lv"], Charset::Alignment::CENTER);
@@ -425,34 +425,34 @@ Cursor::State UICharSelect::send_cursor(bool clicked,
 
     Cursor::State ret = clicked ? Cursor::State::CLICKING : Cursor::State::IDLE;
 
-    for (auto &btit : buttons_) {
-        if (btit.second->is_active()
-            && btit.second->bounds(position_).contains(cursorpos)) {
-            if (btit.second->get_state() == Button::State::NORMAL) {
-                Sound(Sound::Name::BUTTONOVER).play();
+    for (auto &[btnid, button] : buttons_) {
+        if (button->is_active()
+            && button->bounds(position_).contains(cursorpos)) {
+            if (button->get_state() == Button::State::NORMAL) {
+                Sound(Sound::Name::BUTTON_OVER).play();
 
-                btit.second->set_state(Button::State::MOUSEOVER);
-                ret = Cursor::State::CANCLICK;
-            } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
+                button->set_state(Button::State::MOUSEOVER);
+                ret = Cursor::State::CAN_CLICK;
+            } else if (button->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
-                    Sound(Sound::Name::BUTTONCLICK).play();
+                    Sound(Sound::Name::BUTTON_CLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(btnid));
 
-                    if (tab_active_ && btit.first == tab_map_[tab_index_]) {
-                        btit.second->set_state(Button::State::MOUSEOVER);
+                    if (tab_active_ && btnid == tab_map_[tab_index_]) {
+                        button->set_state(Button::State::MOUSEOVER);
                     }
 
                     ret = Cursor::State::IDLE;
                 } else {
-                    if (!tab_active_ || btit.first != tab_map_[tab_index_]) {
-                        ret = Cursor::State::CANCLICK;
+                    if (!tab_active_ || btnid != tab_map_[tab_index_]) {
+                        ret = Cursor::State::CAN_CLICK;
                     }
                 }
             }
-        } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
-            if (!tab_active_ || btit.first != tab_map_[tab_index_]) {
-                btit.second->set_state(Button::State::NORMAL);
+        } else if (button->get_state() == Button::State::MOUSEOVER) {
+            if (!tab_active_ || btnid != tab_map_[tab_index_]) {
+                button->set_state(Button::State::NORMAL);
             }
         }
     }
@@ -532,7 +532,7 @@ void UICharSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                         button_pressed(selected_index
                                        + Buttons::CHARACTER_SLOT0);
                     } else {
-                        button_pressed(Buttons::PAGELEFT);
+                        button_pressed(Buttons::PAGE_LEFT);
                     }
                 }
             } else if (keycode == KeyAction::Id::RIGHT) {
@@ -543,7 +543,7 @@ void UICharSelect::send_key(int32_t keycode, bool pressed, bool escape) {
                         button_pressed(selected_index
                                        + Buttons::CHARACTER_SLOT0);
                     } else {
-                        button_pressed(Buttons::PAGERIGHT);
+                        button_pressed(Buttons::PAGE_RIGHT);
                     }
                 }
             } else if (keycode == KeyAction::Id::TAB) {
@@ -603,7 +603,7 @@ void UICharSelect::post_add_character() {
     bool page_matches = (characters_count_ - 1) / PAGESIZE_ == selected_page;
 
     if (!page_matches) {
-        button_pressed(Buttons::PAGERIGHT);
+        button_pressed(Buttons::PAGE_RIGHT);
     }
 
     update_buttons();
@@ -633,7 +633,7 @@ void UICharSelect::remove_character(int32_t id) {
                     (characters_count_ - 1) / PAGESIZE_ == selected_page;
 
                 if (!page_matches) {
-                    button_pressed(Buttons::PAGELEFT);
+                    button_pressed(Buttons::PAGE_LEFT);
                 }
             }
 
@@ -701,7 +701,7 @@ Button::State UICharSelect::button_pressed(uint16_t buttonid) {
             }
         } break;
         case Buttons::CHARACTER_NEW:
-            Sound(Sound::Name::SCROLLUP).play();
+            Sound(Sound::Name::SCROLL_UP).play();
 
             deactivate();
 
@@ -761,7 +761,7 @@ Button::State UICharSelect::button_pressed(uint16_t buttonid) {
                     break;
             }
         } break;
-        case Buttons::PAGELEFT: {
+        case Buttons::PAGE_LEFT: {
             uint8_t previous_page = selected_page;
 
             if (selected_page > 0) {
@@ -776,7 +776,7 @@ Button::State UICharSelect::button_pressed(uint16_t buttonid) {
 
             select_last_slot();
         } break;
-        case Buttons::PAGERIGHT: {
+        case Buttons::PAGE_RIGHT: {
             uint8_t previous_page = selected_page;
 
             if (selected_page < page_count_ - 1) {
@@ -791,22 +791,22 @@ Button::State UICharSelect::button_pressed(uint16_t buttonid) {
                 button_pressed(Buttons::CHARACTER_SLOT0);
             }
         } break;
-        case Buttons::CHANGEPIC: break;
-        case Buttons::RESETPIC: {
+        case Buttons::CHANGE_PIC: break;
+        case Buttons::RESET_PIC: {
             std::string url = Configuration::get().get_resetpic();
 
             // TODO: (rich) fix
             // ShellExecute(NULL, "open", url.c_str(), NULL, NULL,
             // SW_SHOWNORMAL);
         } break;
-        case Buttons::EDITCHARLIST: break;
+        case Buttons::EDIT_CHAR_LIST: break;
         case Buttons::BACK:
             deactivate();
 
-            Sound(Sound::Name::SCROLLUP).play();
+            Sound(Sound::Name::SCROLL_UP).play();
 
             if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
-                worldselect->makeactive();
+                worldselect->get().makeactive();
             }
 
             break;
@@ -872,7 +872,7 @@ void UICharSelect::update_buttons() {
 }
 
 void UICharSelect::update_selected_character() {
-    Sound(Sound::Name::CHARSELECT).play();
+    Sound(Sound::Name::CHAR_SELECT).play();
 
     char_looks_[selected_character_].set_stance(Stance::Id::WALK1);
     nametags_[selected_character_].set_selected(true);

@@ -106,4 +106,15 @@ public:
     ScrollEquipPacket(int16_t source, EquipSlot::Id target) :
         ScrollEquipPacket(source, target, 0) {}
 };
+
+// Packet which requests that mesos are dropped
+// Opcode: DROP_MESOS(94)
+class DropMesosPacket : public OutPacket {
+public:
+    DropMesosPacket(int32_t amount) : OutPacket(OutPacket::Opcode::DROP_MESOS) {
+        Sound(Sound::Name::DROP).play();
+        write_int(0);
+        write_int(amount);
+    }
+};
 }  // namespace ms

@@ -196,7 +196,7 @@ void UIMiniMap::remove_cursor() {
 
     list_npc_slider_.remove_cursor();
 
-    UI::get().clear_tooltip(Tooltip::Parent::MINIMAP);
+    UI::get().clear_tooltip(Tooltip::Parent::MINI_MAP);
 }
 
 Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
@@ -237,7 +237,7 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
             if (clicked) {
                 select_npclist(in_list ? list_index : -1);
             } else if (in_list) {
-                UI::get().show_text(Tooltip::Parent::MINIMAP,
+                UI::get().show_text(Tooltip::Parent::MINI_MAP,
                                     list_npc_full_names_[list_index]);
             }
 
@@ -266,22 +266,26 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
             std::string name = n->get_name();
             std::string func = n->get_func();
 
-            UI::get().show_map(Tooltip::Parent::MINIMAP, name, func, {}, false);
+            UI::get().show_map(Tooltip::Parent::MINI_MAP,
+                               name,
+                               func,
+                               {},
+                               false);
             break;
         }
     }
 
     if (!found) {
-        for (const auto &sprite : static_marker_info_) {
+        for (const auto &[sprite_name, sprite_pos] : static_marker_info_) {
             Rectangle<int16_t> marker_spot =
-                Rectangle<int16_t>(sprite.second, sprite.second + 8);
+                Rectangle<int16_t>(sprite_pos, sprite_pos + 8);
 
             if (type_ == Type::MAX) {
                 marker_spot.shift(Point<int16_t>(0, MAX_ADJ_));
             }
 
             if (marker_spot.contains(cursor_relative)) {
-                nl::node portal_tm = map_["portal"][sprite.first]["tm"];
+                nl::node portal_tm = map_["portal"][sprite_name]["tm"];
                 std::string portal_cat =
                     NxHelper::Map::get_map_category(portal_tm);
                 nl::node portal_name =
@@ -290,7 +294,7 @@ Cursor::State UIMiniMap::send_cursor(bool clicked, Point<int16_t> cursorpos) {
                 if (portal_name) {
                     found = true;
 
-                    UI::get().show_map(Tooltip::Parent::MINIMAP,
+                    UI::get().show_map(Tooltip::Parent::MINI_MAP,
                                        portal_name,
                                        "",
                                        portal_tm,

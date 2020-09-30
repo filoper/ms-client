@@ -18,7 +18,7 @@
 #include "../../Configuration.h"
 #include "../../Gameplay/Stage.h"
 #include "../../IO/UI.h"
-#include "../../IO/UITypes/UICharSelect.h"
+#include "../../IO/UITypes/Login/UICharSelect.h"
 #include "../../IO/Window.h"
 #include "../Packets/GameplayPackets.h"
 #include "Helpers/CharacterParser.h"
@@ -84,7 +84,7 @@ void SetFieldHandler::set_field(InPacket &recv) const {
         return;
     }
 
-    const CharEntry &playerentry = charselect->get_character(cid);
+    const CharEntry &playerentry = charselect->get().get_character(cid);
 
     if (playerentry.id != cid) {
         return;
@@ -92,7 +92,7 @@ void SetFieldHandler::set_field(InPacket &recv) const {
 
     // update with stats that was loaded on server side after character
     // selection. hp, mp, maxhp, maxmp, mapid...
-    charselect->update_character(cid, LoginParser::parse_stats(recv));
+    charselect->get().update_character(cid, LoginParser::parse_stats(recv));
 
     Stage::get().loadplayer(playerentry,
                             Configuration::get().get_worldid(),
@@ -128,7 +128,7 @@ void SetFieldHandler::set_field(InPacket &recv) const {
 
     transition(mapid, portalid);
 
-    Sound(Sound::Name::GAMESTART).play();
+    Sound(Sound::Name::GAME_START).play();
 
     UI::get().change_state(UI::State::GAME);
 }

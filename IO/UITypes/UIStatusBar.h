@@ -24,7 +24,7 @@
 namespace ms {
 class UIStatusBar : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::STATUSBAR;
+    static constexpr Type TYPE = UIElement::Type::STATUS_BAR;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

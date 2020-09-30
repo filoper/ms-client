@@ -137,7 +137,7 @@ UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
 
         auto loginwait = UI::get().get_element<UILoginWait>();
 
-        if (loginwait && loginwait->is_active()) {
+        if (loginwait && loginwait->get().is_active()) {
             fn_login(Configuration::get().get_auto_acc(),
                      Configuration::get().get_auto_pass());
         }
@@ -204,7 +204,7 @@ void UILogin::login() {
 
     auto loginwait = UI::get().get_element<UILoginWait>();
 
-    if (loginwait && loginwait->is_active()) {
+    if (loginwait && loginwait->get().is_active()) {
         fn_login(account_text, password_text);
     }
 }

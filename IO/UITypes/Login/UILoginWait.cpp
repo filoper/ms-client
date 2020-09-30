@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 #include <utility>
 
-#include "../../Net/Session.h"
+#include "../../Net/PacketProcessor.h"
 #include "../Components/MapleButton.h"
 
 namespace ms {
@@ -54,7 +54,7 @@ std::function<void()> UILoginWait::get_handler() {
 }
 
 Button::State UILoginWait::button_pressed(uint16_t id) {
-    Session::get().reconnect();
+    PacketProcessor::get().reconnect();
 
     close();
 

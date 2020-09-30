@@ -681,21 +681,21 @@ Button::State UIStatusBar::button_pressed(uint16_t id) {
             if (!userlist) {
                 UI::get().emplace<UIUserList>(tab);
             } else {
-                auto cur_tab = userlist->get_tab();
-                auto is_active = userlist->is_active();
+                auto cur_tab = userlist->get().get_tab();
+                auto is_active = userlist->get().is_active();
 
                 if (cur_tab == tab) {
                     if (is_active) {
-                        userlist->deactivate();
+                        userlist->get().deactivate();
                     } else {
-                        userlist->makeactive();
+                        userlist->get().makeactive();
                     }
                 } else {
                     if (!is_active) {
-                        userlist->makeactive();
+                        userlist->get().makeactive();
                     }
 
-                    userlist->change_tab(tab);
+                    userlist->get().change_tab(tab);
                 }
             }
 
@@ -913,7 +913,7 @@ void UIStatusBar::toggle_menu() {
     if (menu_active_) {
         buttons_[Buttons::BT_MENU_QUEST]->set_state(Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -932,7 +932,7 @@ void UIStatusBar::toggle_setting() {
         buttons_[Buttons::BT_SETTING_CHANNEL]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -950,7 +950,7 @@ void UIStatusBar::toggle_community() {
         buttons_[Buttons::BT_COMMUNITY_FRIENDS]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -969,7 +969,7 @@ void UIStatusBar::toggle_character() {
         buttons_[Buttons::BT_CHARACTER_INFO]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 
@@ -985,7 +985,7 @@ void UIStatusBar::toggle_event() {
         buttons_[Buttons::BT_EVENT_SCHEDULE]->set_state(
             Button::State::MOUSEOVER);
 
-        Sound(Sound::Name::DLGNOTICE).play();
+        Sound(Sound::Name::DLG_NOTICE).play();
     }
 }
 

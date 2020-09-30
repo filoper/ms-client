@@ -23,6 +23,7 @@
 #include "../Components/MapleButton.h"
 #include "../UI.h"
 #include "../Window.h"
+#include "PacketProcessor.h"
 #include "Timer.h"
 
 namespace ms {
@@ -197,7 +198,7 @@ Button::State UIQuit::button_pressed(uint16_t buttonid) {
 
                 UI::get().change_state(UI::State::LOGIN);
                 UI::get().set_scrollnotice("");
-                Session::get().reconnect();
+                PacketProcessor::get().reconnect();
 
                 UI::get().enable();
                 Timer::get().start();

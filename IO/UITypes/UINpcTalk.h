@@ -24,20 +24,21 @@ class UINpcTalk : public UIElement {
 public:
     enum TalkType : int8_t {
         NONE = -1,
-        SENDOK,
-        SENDYESNO,
-
-        // TODO: Unconfirmed
-        SENDNEXT,
-        SENDNEXTPREV,
-        SENDACCEPTDECLINE,
-        SENDGETTEXT,
-        SENDGETNUMBER,
-        SENDSIMPLE,
+        SEND_TEXT_ONLY,
+        SEND_YESNO,
+        SEND_SIMPLE = 4,
+        SEND_ACCEPT_DECLINE = 12,
+        // below are determined by 2 style bytes when msgtype = 0
+        SEND_OK,
+        SEND_NEXT,
+        SEND_NEXT_PREV,
+        SEND_PREV,
+        SEND_GET_TEXT,
+        SEND_GET_NUMBER,
         LENGTH
     };
 
-    static constexpr Type TYPE = UIElement::Type::NPCTALK;
+    static constexpr Type TYPE = UIElement::Type::NPC_TALK;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 
@@ -55,7 +56,8 @@ public:
 
     void change_text(int32_t npcid,
                      int8_t msgtype,
-                     int16_t style,
+                     uint8_t style_b0,
+                     uint8_t style_b1,
                      int8_t speaker,
                      const std::string &text);
 
@@ -63,7 +65,7 @@ protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
 private:
-    TalkType get_by_value(int8_t value);
+    TalkType get_by_value(int8_t value, uint8_t style_b0, uint8_t style_b1);
 
     std::string format_text(const std::string &tx, const int32_t &npcid);
 

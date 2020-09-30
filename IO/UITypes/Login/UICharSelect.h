@@ -26,7 +26,7 @@ namespace ms {
 // The character selection screen
 class UICharSelect : public UIElement {
 public:
-    static constexpr Type TYPE = UIElement::Type::CHARSELECT;
+    static constexpr Type TYPE = UIElement::Type::CHAR_SELECT;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 
@@ -89,11 +89,11 @@ private:
         CHARACTER_SELECT,
         CHARACTER_NEW,
         CHARACTER_DELETE,
-        PAGELEFT,
-        PAGERIGHT,
-        CHANGEPIC,
-        RESETPIC,
-        EDITCHARLIST,
+        PAGE_LEFT,
+        PAGE_RIGHT,
+        CHANGE_PIC,
+        RESET_PIC,
+        EDIT_CHAR_LIST,
         BACK,
         CHARACTER_SLOT0
     };

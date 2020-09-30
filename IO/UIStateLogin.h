@@ -19,7 +19,6 @@
 #include <memory>
 
 #include "../Template/EnumMap.h"
-#include "../Template/Optional.h"
 #include "Components/TextTooltip.h"
 #include "UIState.h"
 
@@ -92,7 +91,9 @@ private:
     UIElement::Type focused_;
 
     TextTooltip te_tooltip_;
-    Optional<Tooltip> tooltip_;
+    std::optional<std::reference_wrapper<Tooltip>> tooltip_;
     Tooltip::Parent tooltip_parent_;
+
+    std::list<UIElement::UPtr> uis_to_remove_;
 };
 }  // namespace ms

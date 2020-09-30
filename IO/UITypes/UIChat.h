@@ -54,7 +54,7 @@ private:
 
 class UIRank : public UIDragElement<PosMAPLECHAT> {
 public:
-    static constexpr Type TYPE = UIElement::Type::CHATRANK;
+    static constexpr Type TYPE = UIElement::Type::CHAT_RANK;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

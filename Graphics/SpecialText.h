@@ -28,13 +28,12 @@ struct OutlinedText {
     OutlinedText(Text::Font font,
                  Text::Alignment alignment,
                  Color::Name innerColor,
-                 Color::Name outerColor) {
-        inner = Text(font, alignment, innerColor);
-        l = Text(font, alignment, outerColor);
-        r = Text(font, alignment, outerColor);
-        t = Text(font, alignment, outerColor);
-        b = Text(font, alignment, outerColor);
-    }
+                 Color::Name outerColor) :
+        inner(Text(font, alignment, innerColor)),
+        l(Text(font, alignment, outerColor)),
+        r(Text(font, alignment, outerColor)),
+        t(Text(font, alignment, outerColor)),
+        b(Text(font, alignment, outerColor)) {}
 
     OutlinedText() = default;
 
@@ -66,10 +65,9 @@ struct ShadowText {
     ShadowText(Text::Font font,
                Text::Alignment alignment,
                Color::Name topColor,
-               Color::Name shadowColor) {
-        top = Text(font, alignment, topColor);
-        shadow = Text(font, alignment, shadowColor);
-    }
+               Color::Name shadowColor) :
+        top(Text(font, alignment, topColor)),
+        shadow(Text(font, alignment, shadowColor)) {}
 
     ShadowText() = default;
 

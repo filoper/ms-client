@@ -16,6 +16,7 @@
 #pragma once
 
 #include <functional>
+#include <vector>
 
 #include "../../Graphics/Text.h"
 #include "../Cursor.h"
@@ -42,6 +43,8 @@ public:
 
     void add_string(const std::string &str);
 
+    void add_string(const std::vector<uint32_t> &str);
+
     void set_state(State state);
 
     void change_text(const std::string &text);
@@ -63,12 +66,13 @@ public:
     const std::string &get_text() const;
 
 private:
-    void modify_text(const std::string &);
+    void modify_text(const std::vector<uint32_t> &str);
 
     bool below_limit() const;
 
     Text text_label_;
     std::string text_;
+    std::vector<uint32_t> text_as_values_;
     Text marker_;
     bool show_marker_;
     uint16_t elapsed_;

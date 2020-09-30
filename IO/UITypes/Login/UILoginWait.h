@@ -15,40 +15,31 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "../../Graphics/Texture.h"
-#include "BodyDrawInfo.h"
+#include "../UIElement.h"
 
 namespace ms {
-class Hair {
+class UILoginWait : public UIElement {
 public:
-    enum Layer {
-        NONE,
-        DEFAULT,
-        BELOW_BODY,
-        OVER_HEAD,
-        SHADE,
-        BACK,
-        BELOW_CAP,
-        NUM_LAYERS
-    };
+    static constexpr Type TYPE = UIElement::Type::LOGIN_WAIT;
+    static constexpr bool FOCUSED = true;
+    static constexpr bool TOGGLED = false;
 
-    Hair(int32_t hairid, const BodyDrawInfo &drawinfo);
+    UILoginWait();
 
-    void draw(Stance::Id stance,
-              Layer layer,
-              uint8_t frame,
-              const DrawArgument &args) const;
+    UILoginWait(std::function<void()> okhandler);
 
-    const std::string &get_name() const;
+    UIElement::Type get_type() const override;
 
-    const std::string &getcolor() const;
+    void close();
+
+    std::function<void()> get_handler();
+
+protected:
+    Button::State button_pressed(uint16_t id) override;
 
 private:
-    std::unordered_map<uint8_t, Texture> stances_[Stance::Id::LENGTH]
-                                                 [Layer::NUM_LAYERS];
-    std::string name_;
-    std::string color_;
+    enum Buttons : uint16_t { CANCEL };
 
-    static const std::unordered_map<std::string, Layer> layers_by_name_;
+    std::function<void()> okhandler_;
 };
 }  // namespace ms

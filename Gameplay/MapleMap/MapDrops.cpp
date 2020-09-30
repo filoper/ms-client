@@ -23,6 +23,7 @@
 #include "Drop.h"
 #include "ItemDrop.h"
 #include "MesoDrop.h"
+#include "OptionalCreator.h"
 
 namespace ms {
 MapDrops::MapDrops() {
@@ -51,8 +52,8 @@ void MapDrops::update(const Physics &physics) {
 
         int32_t oid = spawn.get_oid();
 
-        if (Optional<MapObject> drop = drops_.get(oid)) {
-            drop->makeactive();
+        if (auto drop = drops_.get<MapObject>(oid)) {
+            drop->get().makeactive();
         } else {
             int32_t itemid = spawn.get_itemid();
             bool meso = spawn.is_meso();
@@ -87,8 +88,8 @@ void MapDrops::spawn(DropSpawn &&spawn) {
 }
 
 void MapDrops::remove(int32_t oid, int8_t mode, const PhysicsObject *looter) {
-    if (Optional<Drop> drop = drops_.get(oid)) {
-        drop->expire(mode, looter);
+    if (auto drop = drops_.get<Drop>(oid)) {
+        drop->get().expire(mode, looter);
     }
 }
 
@@ -102,13 +103,14 @@ MapDrops::Loot MapDrops::find_loot_at(Point<int16_t> playerpos) {
     }
 
     for (auto &mmo : drops_) {
-        Optional<const Drop> drop = mmo.second.get();
+        // auto drop = mmo.second.get();
+        auto drop = create_optional<const Drop>(mmo.second.get());
 
-        if (drop && drop->bounds().contains(playerpos)) {
+        if (drop && drop->get().bounds().contains(playerpos)) {
             loot_enabled_ = false;
 
             int32_t oid = mmo.first;
-            Point<int16_t> position = drop->get_position();
+            Point<int16_t> position = drop->get().get_position();
 
             return { oid, position };
         }

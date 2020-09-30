@@ -15,8 +15,6 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "LoginParser.h"
 
-#include "../../Session.h"
-
 namespace ms {
 Account LoginParser::parse_account(InPacket &recv) {
     Account account;
@@ -188,7 +186,7 @@ LookEntry LoginParser::parse_look(InPacket &recv) {
     return look;
 }
 
-void LoginParser::parse_login(InPacket &recv) {
+std::pair<std::string, std::string> LoginParser::parse_login(InPacket &recv) {
     recv.skip_byte();
 
     // Read the IPv4 address in a string
@@ -206,7 +204,6 @@ void LoginParser::parse_login(InPacket &recv) {
     // Read the port address in a string
     std::string portstr = std::to_string(recv.read_short());
 
-    // Attempt to reconnect to the server
-    Session::get().reconnect(addrstr.c_str(), portstr.c_str());
+    return { addrstr.c_str(), portstr.c_str() };
 }
 }  // namespace ms

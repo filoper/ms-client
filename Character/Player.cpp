@@ -73,7 +73,7 @@ void Player::respawn(Point<int16_t> pos, bool uw) {
     underwater_ = uw;
     keys_down_.clear();
     attacking_ = false;
-    ladder_ = nullptr;
+    ladder_ = {};
     nullstate.update_state(*this);
 }
 
@@ -104,10 +104,7 @@ void Player::recalc_stats(bool equipchanged) {
 
     auto passive_skills = skill_book_.collect_passives();
 
-    for (auto &passive : passive_skills) {
-        int32_t skill_id = passive.first;
-        int32_t skill_level = passive.second;
-
+    for (auto &[skill_id, skill_level] : passive_skills) {
         passive_buffs_.apply_buff(stats_, skill_id, skill_level);
     }
 
@@ -118,7 +115,7 @@ void Player::recalc_stats(bool equipchanged) {
     stats_.close_totalstats();
 
     if (auto statsinfo = UI::get().get_element<UIStatsInfo>()) {
-        statsinfo->update_all_stats();
+        statsinfo->get().update_all_stats();
     }
 }
 
@@ -309,7 +306,7 @@ void Player::rush(double targetx) {
     if (phobj_.onground) {
         uint16_t delay = get_attackdelay(1);
         phobj_.movexuntil(targetx, delay);
-        phobj_.set_flag(PhysicsObject::Flag::TURNATEDGES);
+        phobj_.set_flag(PhysicsObject::Flag::TURN_AT_EDGES);
     }
 }
 
@@ -388,7 +385,7 @@ void Player::change_level(uint16_t level) {
     uint16_t oldlevel = get_level();
 
     if (level > oldlevel) {
-        show_effect_id(CharEffect::Id::LEVELUP);
+        show_effect_id(CharEffect::Id::LEVEL_UP);
     }
 
     stats_.set_stat(MapleStat::Id::LEVEL, level);
@@ -411,26 +408,28 @@ uint8_t Player::get_channel_id() const {
 }
 
 void Player::change_job(uint16_t jobid) {
-    show_effect_id(CharEffect::Id::JOBCHANGE);
+    show_effect_id(CharEffect::Id::JOB_CHANGE);
     stats_.change_job(jobid);
 }
 
-void Player::set_seat(Optional<const Seat> seat) {
+void Player::set_seat(std::optional<std::reference_wrapper<const Seat>> seat) {
     if (seat) {
-        set_position(seat->getpos());
+        set_position(seat->get().getpos());
         set_state(Char::State::SIT);
     }
 }
 
-void Player::set_ladder(Optional<const Ladder> ldr) {
+void Player::set_ladder(
+    std::optional<std::reference_wrapper<const Ladder>> ldr) {
     ladder_ = ldr;
 
     if (ladder_) {
-        phobj_.set_x(ldr->get_x());
+        phobj_.set_x(ldr->get().get_x());
         phobj_.hspeed = 0.0;
         phobj_.vspeed = 0.0;
         phobj_.fhlayer = 7;
-        set_state(ldr->is_ladder() ? Char::State::LADDER : Char::State::ROPE);
+        set_state(ldr->get().is_ladder() ? Char::State::LADDER
+                                         : Char::State::ROPE);
     }
 }
 
@@ -494,7 +493,7 @@ MonsterBook &Player::get_monsterbook() {
     return monster_book_;
 }
 
-Optional<const Ladder> Player::get_ladder() const {
+std::optional<std::reference_wrapper<const Ladder>> Player::get_ladder() const {
     return ladder_;
 }
 }  // namespace ms

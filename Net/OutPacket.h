@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <memory>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
@@ -27,8 +28,8 @@ static const std::unordered_map<uint16_t, std::string_view> send_op_name_map {
     { 1, "LOGIN_PASSWORD" },
     { 2, "GUEST_LOGIN" },
     { 4, "SERVERLIST_REREQUEST" },
-    { 5, "CHARLIST_REQUEST" },
-    { 6, "SERVERSTATUS_REQUEST" },
+    { 5, "CHAR_LIST_REQUEST" },
+    { 6, "SERVER_STATUS_REQUEST" },
     { 7, "ACCEPT_TOS" },
     { 8, "SET_GENDER" },
     { 9, "AFTER_LOGIN" },
@@ -211,12 +212,14 @@ public:
 
     void dispatch();
 
+    std::vector<int8_t> build() { return std::move(bytes_); }
+
     // Opcodes for OutPackets associated with version 83 of the game
     enum Opcode : uint16_t {
         /// Login
         LOGIN = 1,
-        CHARLIST_REQUEST = 5,
-        SERVERSTATUS_REQUEST = 6,
+        CHAR_LIST_REQUEST = 5,
+        SERVER_STATUS_REQUEST = 6,
         ACCEPT_TOS = 7,
         SET_GENDER = 8,
         SERVERLIST_REQUEST = 11,
@@ -231,7 +234,7 @@ public:
         LOGIN_START = 35,  // Custom name
 
         /// Gameplay 1
-        CHANGEMAP = 38,
+        CHANGE_MAP = 38,
         CHANGE_CHANNEL = 39,
         ENTER_CASHSHOP = 40,
         MOVE_PLAYER = 41,
@@ -257,6 +260,7 @@ public:
         MOVE_ITEM = 71,
         USE_ITEM = 72,
         SCROLL_EQUIP = 86,
+        DROP_MESOS = 94,
 
         /// Player
         SPEND_AP = 87,

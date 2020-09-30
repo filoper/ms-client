@@ -16,9 +16,14 @@
 #include "Session.h"
 
 #include "../Configuration.h"
+#include "PacketError.h"
 
 namespace ms {
-Session::Session() : length_(0), pos_(0), is_connected_(false) {}
+Session::Session(std::unique_ptr<Forwarder> packet_forwarder) :
+    packet_forwarder_(std::move(packet_forwarder)),
+    length_(0),
+    pos_(0),
+    is_connected_(false) {}
 
 Session::~Session() {
     if (is_connected_) {
@@ -86,7 +91,7 @@ void Session::process(const int8_t *bytes, size_t available) {
         cryptography_.decrypt(buffer_, length_);
 
         try {
-            packet_switch_.forward(buffer_, length_);
+            packet_forwarder_->forward(buffer_, length_);
         } catch (const PacketError &err) {
             std::cout << err.what() << std::endl;
         }

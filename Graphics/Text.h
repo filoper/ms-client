@@ -100,6 +100,8 @@ public:
 
     void change_text(const std::string &text);
 
+    void change_text(const std::vector<uint32_t> &t);
+
     void change_color(Color::Name color);
 
     void set_background(Background background);
@@ -131,6 +133,7 @@ private:
     uint16_t max_width_;
     bool formatted_;
     std::string text_;
+    std::vector<uint32_t> text_as_values_;
     int16_t line_adj_;
 };
 }  // namespace ms

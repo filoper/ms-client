@@ -145,7 +145,7 @@ UIRaceSelect::UIRaceSelect() :
 
     buttons_[Buttons::LEFT]->set_state(Button::State::DISABLED);
 
-    Sound(Sound::Name::RACESELECT).play();
+    Sound(Sound::Name::RACE_SELECT).play();
 }
 
 void UIRaceSelect::draw(float inter) const {
@@ -275,34 +275,34 @@ void UIRaceSelect::update() {
 
 Cursor::State UIRaceSelect::send_cursor(bool clicked,
                                         Point<int16_t> cursorpos) {
-    for (auto &btit : buttons_) {
-        if (btit.second->is_active()
-            && btit.second->bounds(position_).contains(cursorpos)) {
-            if (btit.second->get_state() == Button::State::NORMAL) {
-                Sound(Sound::Name::BUTTONOVER).play();
+    for (auto &[btnid, button] : buttons_) {
+        if (button->is_active()
+            && button->bounds(position_).contains(cursorpos)) {
+            if (button->get_state() == Button::State::NORMAL) {
+                Sound(Sound::Name::BUTTON_OVER).play();
 
-                if (btit.first >= Buttons::CLASS0) {
-                    mouseover_[btit.first - Buttons::CLASS0] = true;
+                if (btnid >= Buttons::CLASS0) {
+                    mouseover_[btnid - Buttons::CLASS0] = true;
                 }
 
-                btit.second->set_state(Button::State::MOUSEOVER);
-            } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
+                button->set_state(Button::State::MOUSEOVER);
+            } else if (button->get_state() == Button::State::MOUSEOVER) {
                 if (clicked) {
-                    Sound(Sound::Name::BUTTONCLICK).play();
+                    Sound(Sound::Name::BUTTON_CLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(btnid));
                 } else {
-                    if (btit.first >= Buttons::CLASS0) {
-                        mouseover_[btit.first - Buttons::CLASS0] = true;
+                    if (btnid >= Buttons::CLASS0) {
+                        mouseover_[btnid - Buttons::CLASS0] = true;
                     }
                 }
             }
-        } else if (btit.second->get_state() == Button::State::MOUSEOVER) {
-            if (btit.first >= Buttons::CLASS0) {
-                mouseover_[btit.first - Buttons::CLASS0] = false;
+        } else if (button->get_state() == Button::State::MOUSEOVER) {
+            if (btnid >= Buttons::CLASS0) {
+                mouseover_[btnid - Buttons::CLASS0] = false;
             }
 
-            btit.second->set_state(Button::State::NORMAL);
+            button->set_state(Button::State::NORMAL);
         }
     }
 
@@ -353,15 +353,15 @@ void UIRaceSelect::send_naming_result(bool nameused) {
     if (selected_class_ == Classes::EXPLORER) {
         if (auto explorercreation =
                 UI::get().get_element<UIExplorerCreation>()) {
-            explorercreation->send_naming_result(nameused);
+            explorercreation->get().send_naming_result(nameused);
         }
     } else if (selected_class_ == Classes::CYGNUSKNIGHTS) {
         if (auto cygnuscreation = UI::get().get_element<UICygnusCreation>()) {
-            cygnuscreation->send_naming_result(nameused);
+            cygnuscreation->get().send_naming_result(nameused);
         }
     } else if (selected_class_ == Classes::ARAN) {
         if (auto arancreation = UI::get().get_element<UIAranCreation>()) {
-            arancreation->send_naming_result(nameused);
+            arancreation->get().send_naming_result(nameused);
         }
     }
 }
@@ -376,7 +376,7 @@ Button::State UIRaceSelect::button_pressed(uint16_t buttonid) {
     if (buttonid == Buttons::MAKE) {
         auto okhandler = [&]() {
             if (!class_isdisabled_[selected_class_]) {
-                Sound(Sound::Name::SCROLLUP).play();
+                Sound(Sound::Name::SCROLL_UP).play();
 
                 deactivate();
 
@@ -469,7 +469,7 @@ void UIRaceSelect::select_class(uint8_t index) {
     selected_index_ = index;
 
     if (previous_index != selected_index_) {
-        Sound(Sound::Name::RACESELECT).play();
+        Sound(Sound::Name::RACE_SELECT).play();
 
         int size = sizeof(class_index_) / sizeof(class_index_[0]);
 
@@ -513,12 +513,12 @@ void UIRaceSelect::select_class(uint8_t index) {
 }
 
 void UIRaceSelect::show_charselect() {
-    Sound(Sound::Name::SCROLLUP).play();
+    Sound(Sound::Name::SCROLL_UP).play();
 
     deactivate();
 
     if (auto charselect = UI::get().get_element<UICharSelect>()) {
-        charselect->makeactive();
+        charselect->get().makeactive();
     }
 }
 

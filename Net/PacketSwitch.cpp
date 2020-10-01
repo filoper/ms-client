@@ -382,6 +382,7 @@ enum Opcode : uint16_t {
 
     SKILL_MACROS = 124,
     SET_FIELD = 125,
+    WHISPER = 135,
     FIELD_EFFECT = 138,
 
     /// MapObject
@@ -505,6 +506,7 @@ PacketSwitch::PacketSwitch() {
     emplace<SCROLL_RESULT, ScrollResultHandler>();
     emplace<SERVER_MESSAGE, ServerMessageHandler>();
     emplace<WEEK_EVENT_MESSAGE, WeekEventMessageHandler>();
+    emplace<WHISPER, WhisperReceivedHandler>();
     emplace<SHOW_ITEM_GAIN_INCHAT, ShowItemGainInChatHandler>();
 
     // Inventory Handlers

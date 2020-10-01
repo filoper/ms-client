@@ -27,7 +27,7 @@ public:
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 
-    enum LineType { UNK0, WHITE, RED, BLUE, YELLOW };
+    enum LineType { UNK0, WHITE, RED, BLUE, YELLOW, GREEN };
 
     UIChatBar();
 

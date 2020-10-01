@@ -180,6 +180,20 @@ void WeekEventMessageHandler::handle(InPacket &recv) const {
     }
 }
 
+void WhisperReceivedHandler::handle(InPacket &recv) const {
+    recv.read_byte();  // 0x12
+
+    std::string sender = recv.read_string();
+
+    int16_t ch = recv.read_short();
+
+    std::string message = recv.read_string();
+
+    if (auto chatbar = UI::get().get_element<UIChatBar>()) {
+        chatbar->get().send_chatline(sender + "<< " + message, UIChatBar::LineType::GREEN);
+    }
+}
+
 void ChatReceivedHandler::handle(InPacket &recv) const {
     int32_t charid = recv.read_int();
 

@@ -427,6 +427,7 @@ void UIChatBar::send_chatline(const std::string &line, LineType type) {
         case LineType::RED: color = Color::Name::DARKRED; break;
         case LineType::BLUE: color = Color::Name::MEDIUMBLUE; break;
         case LineType::YELLOW: color = Color::Name::YELLOW; break;
+        case LineType::GREEN: color = Color::Name::GREEN; break;
         default: color = Color::Name::WHITE; break;
     }
 

@@ -82,6 +82,6 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
         }
     }
 
-    return Cursor::State::IDLE;
+    return pressed ? Cursor::State::CLICKING : Cursor::State::IDLE;
 }
 }  // namespace ms

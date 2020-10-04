@@ -22,9 +22,11 @@
 #include "../IO/UI.h"
 #include "../IO/UITypes/UIStatusBar.h"
 #include "../Net/Packets/AttackAndSkillPackets.h"
+#include "../Net/Packets/PlayerInteractionPackets.h"
 #include "../Net/Packets/GameplayPackets.h"
 #include "../Util/Misc.h"
 #include "Timer.h"
+#include <IO\UITypes\UICharInfo.h>
 
 namespace ms {
 auto fn_take_damage = []<typename... T>(T && ... args) {
@@ -44,6 +46,9 @@ auto fn_admin_enter_map = []<typename... T>(T && ... args) {
 };
 auto fn_change_channel = []<typename... T>(T && ... args) {
     ChangeChannelPacket(std::forward<T>(args)...).dispatch();
+};
+auto fn_char_info_req = []<typename... T>(T && ... args) {
+    CharInfoRequestPacket(std::forward<T>(args)...).dispatch();
 };
 
 Stage::Stage() :
@@ -283,6 +288,18 @@ Cursor::State Stage::send_cursor(bool pressed, Point<int16_t> position) {
     }
 
     return npcs_.send_cursor(pressed, position, camera_.position());
+}
+
+void Stage::doubleclick(Point<int16_t> pos) {
+    auto chr = chars_.get_char(pos, camera_.position());
+
+    if (chr) {
+        fn_char_info_req(chr->get().get_oid());
+    } else if (chars_.inrange(player_.get_position(),
+                              pos,
+                              camera_.position())) {
+        fn_char_info_req(player_.get_oid());
+    }
 }
 
 bool Stage::is_player(int32_t cid) const {

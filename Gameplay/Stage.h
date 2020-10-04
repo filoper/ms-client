@@ -67,6 +67,8 @@ public:
     // Send mouse input to the stage.
     Cursor::State send_cursor(bool pressed, Point<int16_t> position);
 
+    void doubleclick(Point<int16_t> pos);
+
     // Check if the specified id is the player's id
     bool is_player(int32_t cid) const;
 

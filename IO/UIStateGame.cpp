@@ -151,6 +151,8 @@ void UIStateGame::remove_cursor(UIElement::Type t) {
 void UIStateGame::doubleclick(Point<int16_t> pos) {
     if (UIElement *front = get_front(pos)) {
         front->doubleclick(pos);
+    } else {
+        Stage::get().doubleclick(pos);
     }
 }
 

@@ -75,4 +75,29 @@ std::optional<std::reference_wrapper<OtherChar>> MapChars::get_char(
     int32_t cid) {
     return chars_.get<OtherChar>(cid);
 }
+
+std::optional<std::reference_wrapper<OtherChar>> MapChars::get_char(
+    Point<int16_t> position,
+    Point<int16_t> viewpos) {
+    for (auto &chr : chars_) {
+        if (inrange(chr.second->get_position(), position, viewpos)) {
+            return create_optional<OtherChar>(chr.second.get());
+        }
+    }
+
+    return {};
+}
+
+bool MapChars::inrange(Point<int16_t> char_pos,
+                       Point<int16_t> cursorpos,
+                       Point<int16_t> viewpos) const {
+    Point<int16_t> absp = char_pos + viewpos;
+    Point<int16_t> dim = Point<int16_t>();
+
+    return Rectangle<int16_t>(absp.x() - dim.x() / 2 - 20,
+                              absp.x() + dim.x() / 2 + 20,
+                              absp.y() - dim.y() - 70,
+                              absp.y())
+        .contains(cursorpos);
+}
 }  // namespace ms

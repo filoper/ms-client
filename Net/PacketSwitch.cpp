@@ -436,6 +436,7 @@ enum Opcode : uint16_t {
 
     /// Player Interaction
     CHAR_INFO = 61,
+    PLAYER_INTERACTION = 314,
 
     /// Cash Shop
     SET_CASH_SHOP = 127
@@ -520,6 +521,7 @@ PacketSwitch::PacketSwitch() {
 
     // Player Interaction
     emplace<CHAR_INFO, CharInfoHandler>();
+    emplace<PLAYER_INTERACTION, PlayerInteractionHandler>();
 
     // Cash Shop
     emplace<SET_CASH_SHOP, SetCashShopHandler>();

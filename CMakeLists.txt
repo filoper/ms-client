@@ -199,6 +199,7 @@ add_executable(msclient
     IO/UITypes/UIUserList.cpp
     IO/UITypes/UIWorldMap.cpp
     IO/UITypes/UIGaugeBoss.cpp
+    IO/UITypes/UINotification.cpp
     IO/UITypes/Login/UILogo.cpp
     IO/UITypes/Login/UILogin.cpp
     IO/UITypes/Login/UILoginWait.cpp

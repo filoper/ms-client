@@ -17,6 +17,7 @@
 
 #include "../../IO/UI.h"
 #include "../../IO/UITypes/UICharInfo.h"
+#include "../../IO/UITypes/UINotification.h"
 
 namespace ms {
 void CharInfoHandler::handle(InPacket &recv) const {
@@ -83,6 +84,67 @@ void CharInfoHandler::handle(InPacket &recv) const {
                                      character_fame,
                                      guild_name,
                                      alliance_name);
+        charinfo->get().makeactive();
+    } else {
+        UI::get().emplace<UICharInfo>(character_id);
+    }
+}
+
+void PlayerInteractionHandler::handle(InPacket &recv) const {
+    int8_t mode = recv.read_byte();
+    int8_t mode_specific = recv.read_byte();
+
+    switch (mode) {
+        case mode::INVITE: {
+            std::string char_name = recv.read_string();
+            UI::get().emplace<UINotification>(char_name);
+        } break;
+        case mode::EXIT: UI::get().remove(UIElement::Type::NOTIFICATION); break;
+        // TODO: below
+        case mode::CREATE:
+        case mode::DECLINE:
+        case mode::VISIT:
+        case mode::ROOM:  // open trade ui
+        case mode::CHAT:
+        case mode::CHAT_THING:
+        case mode::OPEN_STORE:
+        case mode::OPEN_CASH:
+        case mode::SET_ITEMS:
+        case mode::SET_MESO:
+        case mode::CONFIRM:
+        case mode::TRANSACTION:
+        case mode::ADD_ITEM:
+        case mode::BUY:
+        case mode::UPDATE_MERCHANT:
+        case mode::UPDATE_PLAYERSHOP:
+        case mode::REMOVE_ITEM:
+        case mode::BAN_PLAYER:
+        case mode::MERCHANT_THING:
+        case mode::OPEN_THING:
+        case mode::PUT_ITEM:
+        case mode::MERCHANT_BUY:
+        case mode::TAKE_ITEM_BACK:
+        case mode::MAINTENANCE_OFF:
+        case mode::MERCHANT_ORGANIZE:
+        case mode::CLOSE_MERCHANT:
+        case mode::REAL_CLOSE_MERCHANT:
+        case mode::MERCHANT_MESO:
+        case mode::SOMETHING:
+        case mode::VIEW_VISITORS:
+        case mode::BLACKLIST:
+        case mode::REQUEST_TIE:
+        case mode::ANSWER_TIE:
+        case mode::GIVE_UP:
+        case mode::EXIT_AFTER_GAME:
+        case mode::CANCEL_EXIT_AFTER_GAME:
+        case mode::READY:
+        case mode::UN_READY:
+        case mode::EXPEL:
+        case mode::START:
+        case mode::GET_RESULT:
+        case mode::MOVE_OMOK:
+        case mode::SELECT_CARD: break;
+        default: break;
     }
 }
 }  // namespace ms

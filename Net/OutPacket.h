@@ -252,6 +252,7 @@ public:
         NPC_SHOP_ACTION = 61,
 
         /// Player Interaction
+        GIVE_FAME = 95,
         CHAR_INFO_REQUEST = 97,
 
         /// Inventory

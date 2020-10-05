@@ -366,6 +366,7 @@ enum Opcode : uint16_t {
     CANCEL_BUFF = 33,
     RECALCULATE_STATS = 35,
     UPDATE_SKILL = 36,
+    FAME_RESPONSE = 38,
 
     /// Messaging 1
     SHOW_STATUS_INFO = 39,
@@ -499,6 +500,7 @@ PacketSwitch::PacketSwitch() {
     emplace<CANCEL_BUFF, CancelBuffHandler>();
     emplace<RECALCULATE_STATS, RecalculateStatsHandler>();
     emplace<UPDATE_SKILL, UpdateSkillHandler>();
+    emplace<FAME_RESPONSE, FameResponseHandler>();
     emplace<ADD_COOLDOWN, AddCooldownHandler>();
 
     // Messaging handlers

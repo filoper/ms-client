@@ -34,6 +34,10 @@ auto fn_trade_request = [](auto cid) {
         .dispatch();
 };
 
+auto fn_give_fame = []<typename... T>(T && ... args) {
+    GiveFamePacket(std::forward<T>(args)...).dispatch();
+};
+
 UICharInfo::UICharInfo(int32_t cid) :
     UIDragElement<PosCHARINFO>(),
     cid_(cid),
@@ -325,10 +329,14 @@ Button::State UICharInfo::button_pressed(uint16_t buttonid) {
             show_bottom_window(buttonid);
             return Button::State::NORMAL;
         case Buttons::BT_POP_DOWN:
-        case Buttons::BT_POP_UP:
-        case Buttons::BT_TRADE:
-            fn_trade_request(cid_);
+            fn_give_fame(target_character_->get_oid(),
+                         GiveFamePacket::mode::DECREASE);
             break;
+        case Buttons::BT_POP_UP:
+            fn_give_fame(target_character_->get_oid(),
+                         GiveFamePacket::mode::INCREASE);
+            break;
+        case Buttons::BT_TRADE: fn_trade_request(cid_); break;
         case Buttons::BT_FRIEND:
         case Buttons::BT_VISIT:
         default: break;

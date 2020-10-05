@@ -18,6 +18,19 @@
 #include "../OutPacket.h"
 
 namespace ms {
+// Packet to fame/defame a character
+// Opcode: GIVE_FAME(95)
+class GiveFamePacket : public OutPacket {
+public:
+    enum mode { INCREASE = 1, DECREASE = 0 };
+
+    GiveFamePacket(int32_t oid, mode mode) :
+        OutPacket(OutPacket::Opcode::GIVE_FAME) {
+        write_int(oid);
+        write_byte(mode);
+    }
+};
+
 // Packet to request character info
 // Opcode: CHAR_INFO_REQUEST(97)
 class CharInfoRequestPacket : public OutPacket {
@@ -90,8 +103,8 @@ public:
         SHOP2 = 5
     };
 
-    PlayerInteractionPacket(mode mode) : OutPacket(
-        OutPacket::Opcode::PLAYER_INTERACTION) {
+    PlayerInteractionPacket(mode mode) :
+        OutPacket(OutPacket::Opcode::PLAYER_INTERACTION) {
         write_byte(mode);
     }
 

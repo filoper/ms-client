@@ -82,9 +82,29 @@ public:
         SELECT_CARD = 0x44
     };
 
-    PlayerInteractionPacket(mode mode) :
+    enum CreateType {
+        OMOK = 1,
+        MATCHCARD = 2,
+        TRADE = 3,
+        SHOP1 = 4,
+        SHOP2 = 5
+    };
+
+    PlayerInteractionPacket(mode mode) : OutPacket(
+        OutPacket::Opcode::PLAYER_INTERACTION) {
+        write_byte(mode);
+    }
+
+    PlayerInteractionPacket(mode mode, CreateType type) :
         OutPacket(OutPacket::Opcode::PLAYER_INTERACTION) {
         write_byte(mode);
+        write_byte(type);
+    }
+
+    PlayerInteractionPacket(mode mode, int32_t cid) :
+        OutPacket(OutPacket::Opcode::PLAYER_INTERACTION) {
+        write_byte(mode);
+        write_int(cid);
     }
 };
 }  // namespace ms

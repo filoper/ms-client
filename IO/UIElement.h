@@ -70,6 +70,7 @@ public:
         CASHSHOP,
         GAUGE_BOSS,
         NOTIFICATION,
+        TRADE,
         NUM_TYPES
     };
 

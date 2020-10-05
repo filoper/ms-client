@@ -26,8 +26,17 @@ auto fn_char_info_request = []<typename... T>(T && ... args) {
     CharInfoRequestPacket(std::forward<T>(args)...).dispatch();
 };
 
+auto fn_trade_request = [](auto cid) {
+    PlayerInteractionPacket(PlayerInteractionPacket::mode::CREATE,
+                            PlayerInteractionPacket::CreateType::TRADE)
+        .dispatch();
+    PlayerInteractionPacket(PlayerInteractionPacket::mode::INVITE, cid)
+        .dispatch();
+};
+
 UICharInfo::UICharInfo(int32_t cid) :
     UIDragElement<PosCHARINFO>(),
+    cid_(cid),
     is_loading_(true),
     timestep_(Constants::TIMESTEP),
     personality_enabled_(false),
@@ -318,6 +327,8 @@ Button::State UICharInfo::button_pressed(uint16_t buttonid) {
         case Buttons::BT_POP_DOWN:
         case Buttons::BT_POP_UP:
         case Buttons::BT_TRADE:
+            fn_trade_request(cid_);
+            break;
         case Buttons::BT_FRIEND:
         case Buttons::BT_VISIT:
         default: break;
@@ -387,6 +398,7 @@ void UICharInfo::update_stats(int32_t character_id,
                               int16_t f,
                               const std::string &g,
                               const std::string &a) {
+    cid_ = character_id;
     int32_t player_id = Stage::get().get_player().get_oid();
 
     auto bt_state = character_id == player_id ? Button::State::DISABLED

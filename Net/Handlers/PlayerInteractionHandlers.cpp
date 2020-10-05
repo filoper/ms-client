@@ -18,6 +18,7 @@
 #include "../../IO/UI.h"
 #include "../../IO/UITypes/UICharInfo.h"
 #include "../../IO/UITypes/UINotification.h"
+#include "../../IO/UITypes/UITrade.h"
 
 namespace ms {
 void CharInfoHandler::handle(InPacket &recv) const {
@@ -99,12 +100,17 @@ void PlayerInteractionHandler::handle(InPacket &recv) const {
             std::string char_name = recv.read_string();
             UI::get().emplace<UINotification>(char_name);
         } break;
-        case mode::EXIT: UI::get().remove(UIElement::Type::NOTIFICATION); break;
+        case mode::EXIT:
+            UI::get().remove(UIElement::Type::NOTIFICATION);
+            UI::get().remove(UIElement::Type::TRADE);
+            break;
         // TODO: below
         case mode::CREATE:
         case mode::DECLINE:
         case mode::VISIT:
         case mode::ROOM:  // open trade ui
+            UI::get().emplace<UITrade>();
+            break;
         case mode::CHAT:
         case mode::CHAT_THING:
         case mode::OPEN_STORE:

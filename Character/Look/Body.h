@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../../Graphics/Texture.h"
 #include "BodyDrawInfo.h"
 
@@ -48,8 +50,11 @@ public:
     static Layer layer_by_name(const std::string &name);
 
 private:
-    std::unordered_map<uint8_t, Texture> stances_[Stance::Id::LENGTH]
-                                                 [Layer::NUM_LAYERS];
+    using MapTex = std::unordered_map<uint8_t, Texture>;
+
+    std::array<std::array<MapTex, Layer::NUM_LAYERS>, Stance::Id::LENGTH>
+        stances_;
+
     std::string name_;
 
     static const std::unordered_map<std::string, Layer> layers_by_name_;

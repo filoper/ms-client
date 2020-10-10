@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../UIDragElement.h"
 #include "Inventory.h"
 
@@ -94,12 +96,12 @@ private:
     EnumMap<EquipSlot::Id, std::unique_ptr<Icon>> icons_;
 
     uint16_t tab_;
-    std::string tab_source_[Buttons::BT_TABE];
+    std::array<std::string, Buttons::BT_TABE> tab_source_;
     Texture tab_bar_;
-    Texture background_[Buttons::BT_TABE];
+    std::array<Texture, Buttons::BT_TABE> background_;
     Texture disabled_;
     Texture disabled2_;
-    std::vector<Texture> slots_[Buttons::BT_TABE];
+    std::array<std::vector<Texture>, Buttons::BT_TABE> slots_;
 
     Point<int16_t> totem_dimensions_;
     Point<int16_t> totem_adj_;

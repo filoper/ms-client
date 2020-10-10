@@ -291,7 +291,7 @@ void Char::add_pet(uint8_t index,
                    Point<int16_t> pos,
                    uint8_t stance,
                    int32_t fhid) {
-    if (index > 2) {
+    if (index >= pets_.size()) {
         return;
     }
 
@@ -299,7 +299,7 @@ void Char::add_pet(uint8_t index,
 }
 
 void Char::remove_pet(uint8_t index, bool hunger) {
-    if (index > 2) {
+    if (index >= pets_.size()) {
         return;
     }
 

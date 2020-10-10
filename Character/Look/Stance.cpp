@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Stance.h"
 
+#include <array>
 #include <iostream>
 
 namespace ms {
@@ -25,8 +26,9 @@ Stance::Id Stance::by_state(int8_t state) {
         return WALK1;
     }
 
-    constexpr Id statevalues[10] = { WALK1, STAND1, JUMP, ALERT, PRONE,
-                                     FLY,   LADDER, ROPE, DEAD,  SIT };
+    constexpr std::array<Id, 10> statevalues = { WALK1, STAND1, JUMP,   ALERT,
+                                                 PRONE, FLY,    LADDER, ROPE,
+                                                 DEAD,  SIT };
 
     return statevalues[index];
 }

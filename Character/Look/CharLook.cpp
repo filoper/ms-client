@@ -59,12 +59,12 @@ void CharLook::draw(const DrawArgument &args,
                     Expression::Id interexpression,
                     uint8_t interframe,
                     uint8_t interexpframe) const {
-    Point<int16_t> faceshift = draw_info_.getfacepos(interstance, interframe);
+    Point<int16_t> faceshift = draw_info_.get_face_pos(interstance, interframe);
     DrawArgument faceargs =
         args + DrawArgument { faceshift, false, Point<int16_t> {} };
 
     if (Stance::Id::DEAD == interstance) {
-        Point<int16_t> faceshift = draw_info_.getfacepos(Stance::Id::STAND1, 1);
+        Point<int16_t> faceshift = draw_info_.get_face_pos(Stance::Id::STAND1, 1);
         DrawArgument faceargs =
             args + DrawArgument { faceshift, false, Point<int16_t> {} };
 
@@ -519,7 +519,7 @@ bool CharLook::update(uint16_t timestep) {
 
         if (timestep >= delta) {
             st_elapsed_ = timestep - delta;
-            actframe_ = draw_info_.next_actionframe(actionstr_, actframe_);
+            actframe_ = draw_info_.next_action_frame(actionstr_, actframe_);
 
             if (actframe_ > 0) {
                 action_ = draw_info_.get_action(actionstr_, actframe_);
@@ -744,7 +744,7 @@ uint16_t CharLook::get_delay(Stance::Id st, uint8_t fr) const {
 }
 
 uint8_t CharLook::getnextframe(Stance::Id st, uint8_t fr) const {
-    return draw_info_.nextframe(st, fr);
+    return draw_info_.next_frame(st, fr);
 }
 
 void CharLook::set_expression(Expression::Id newexpression) {
@@ -801,7 +801,7 @@ bool CharLook::is_twohanded(Stance::Id st) const {
 
 uint16_t CharLook::get_attackdelay(size_t no, uint8_t first_frame) const {
     if (action_) {
-        return draw_info_.get_attackdelay(actionstr_, no);
+        return draw_info_.get_attack_delay(actionstr_, no);
     }
     uint16_t delay = 0;
 

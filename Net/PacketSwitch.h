@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
 #include <memory>
 #include <string_view>
 
@@ -52,7 +53,7 @@ private:
     // Maximum number of handlers needed
     static constexpr size_t NUM_HANDLERS = 500;
 
-    std::unique_ptr<PacketHandler> handlers_[NUM_HANDLERS];
+    std::array<std::unique_ptr<PacketHandler>, NUM_HANDLERS> handlers_;
 
     /**
      * @brief Register a handler for the specified opcode

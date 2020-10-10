@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../../Graphics/Texture.h"
 #include "BodyDrawInfo.h"
 
@@ -87,7 +89,8 @@ private:
         }
     };
 
-    std::unordered_map<uint8_t, Frame> expressions_[Expression::Id::LENGTH];
+    std::array<std::unordered_map<uint8_t, Frame>, Expression::Id::LENGTH>
+        expressions_;
     std::string name_;
 };
 }  // namespace ms

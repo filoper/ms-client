@@ -15,11 +15,13 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "InventoryType.h"
 
+#include <array>
 #include <iostream>
 
 namespace ms {
 InventoryType::Id InventoryType::by_item_id(int32_t item_id) {
-    constexpr Id values_by_id[6] = { NONE, EQUIP, USE, SETUP, ETC, CASH };
+    constexpr std::array<Id, 6> values_by_id = { NONE,  EQUIP, USE,
+                                                 SETUP, ETC,   CASH };
 
     int32_t prefix = item_id / 1000000;
 
@@ -35,6 +37,7 @@ InventoryType::Id InventoryType::by_value(int8_t value) {
         case 3: return Id::SETUP;
         case 4: return Id::ETC;
         case 5: return Id::CASH;
+        default: break;
     }
 
     std::cout << "Unknown InventoryType::Id value: [" << value << "]"

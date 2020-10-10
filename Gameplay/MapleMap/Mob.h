@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
 #include <vector>
 
 #include "../../Audio/Audio.h"
@@ -45,9 +46,9 @@ public:
     };
 
     static std::string nameof(Stance stance) {
-        static const std::string stance_names[NUM_STANCES] = { "move", "stand",
-                                                               "jump", "hit1",
-                                                               "die1", "fly" };
+        static const std::array<std::string, NUM_STANCES> stance_names = {
+            "move", "stand", "jump", "hit1", "die1", "fly"
+        };
 
         size_t index = (stance - 1) / 2;
 

@@ -52,14 +52,14 @@ UIEvent::UIEvent() : UIDragElement<PosEVENT>() {
 
     events_.emplace_back(BoolPair<bool>(false, false));
 
-    for (size_t i = 0; i < 3; i++) {
+    for (size_t i = 0; i < event_title_.size(); i++) {
         event_title_[i] = ShadowText(Text::Font::A18M,
                                      Text::Alignment::LEFT,
                                      Color::Name::HALFANDHALF,
                                      Color::Name::ENDEAVOUR);
     }
 
-    for (size_t i = 0; i < 3; i++) {
+    for (size_t i = 0; i < event_date_.size(); i++) {
         event_date_[i] =
             Text(Text::Font::A12B, Text::Alignment::LEFT, Color::Name::WHITE);
     }

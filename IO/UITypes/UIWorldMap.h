@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../Components/AreaButton.h"
 #include "../Components/Textfield.h"
 #include "../UIDragElement.h"
@@ -95,7 +97,7 @@ private:
     Texture path_img_;
 
     Animation cur_pos_;
-    Animation npc_pos_[MAPSPOT_TYPE_MAX_];
+    std::array<Animation, MAPSPOT_TYPE_MAX_> npc_pos_;
 
     Textfield search_text_;
 

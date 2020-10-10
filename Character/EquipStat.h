@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
 #include <cstdint>
 
 #include "../Template/Enumeration.h"
@@ -44,5 +45,5 @@ Id by_id(size_t id);
 int32_t value_of(Id value);
 
 constexpr Enumeration<Id> values;
-extern const char *names[Id::LENGTH];
+extern std::array<const char *, Id::LENGTH> names;
 }  // namespace ms::EquipStat

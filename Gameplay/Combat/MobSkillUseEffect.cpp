@@ -23,10 +23,9 @@ MobSingleUseEffect::MobSingleUseEffect(const nl::node &src) :
     effect_(src["effect"]) {}
 
 void MobSingleUseEffect::apply(Mob &mob) const {
-    const std::function<void(Animation, int8_t, int8_t, bool)> func =
-        [&mob](const Animation &a, int8_t b, int8_t c, bool d) {
-            mob.show_effect(a, b, c, d);
-        };
+    const auto func = [&mob](const Animation &a, int8_t b, int8_t c, bool d) {
+        mob.show_effect(a, b, c, d);
+    };
     effect_.apply(func);
 }
 
@@ -47,10 +46,9 @@ MobMultiUseEffect::MobMultiUseEffect(const nl::node &src, bool area_warning) {
 }
 
 void MobMultiUseEffect::apply(Mob &mob) const {
-    const std::function<void(Animation, int8_t, int8_t, bool)> func =
-        [&mob](const Animation &a, int8_t b, int8_t c, bool d) {
-            mob.show_effect(a, b, c, d);
-        };
+    const auto func = [&mob](const Animation &a, int8_t b, int8_t c, bool d) {
+        mob.show_effect(a, b, c, d);
+    };
 
     for (const auto &effect : effects_) {
         effect.apply(func);

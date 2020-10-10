@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../UIElement.h"
 
 namespace ms {
@@ -40,7 +42,7 @@ protected:
 private:
     enum Buttons : uint16_t { NO, YES, SELECT };
 
-    Texture gender_sprites_[3];
+    std::array<Texture, 3> gender_sprites_;
     uint16_t cur_timestep_;
     std::function<void()> okhandler_;
 };

@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../Components/MapleComboBox.h"
 #include "../UIDragElement.h"
 
@@ -54,6 +56,6 @@ private:
     };
 
     uint16_t selected_tab_;
-    Texture tab_background_[Buttons::CANCEL];
+    std::array<Texture, Buttons::CANCEL> tab_background_;
 };
 }  // namespace ms

@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../IO/Components/Charset.h"
 #include "../Physics/PhysicsObject.h"
 #include "../Template/BoolPair.h"
@@ -56,6 +58,6 @@ private:
     MovingObject move_obj_;
     Linear<float> opacity_;
 
-    static BoolPair<Charset> charsets_[NUM_TYPES];
+    static std::array<BoolPair<Charset>, NUM_TYPES> charsets_;
 };
 }  // namespace ms

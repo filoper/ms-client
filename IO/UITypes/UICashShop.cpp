@@ -64,7 +64,7 @@ UICashShop::UICashShop() :
 
     best_new_dim_ = Texture(BestNew).get_dimensions();
 
-    for (size_t i = 0; i < 3; i++) {
+    for (size_t i = 0; i < preview_sprites_.size(); i++) {
         preview_sprites_[i] = Preview[i];
     }
 
@@ -86,7 +86,7 @@ UICashShop::UICashShop() :
         std::make_unique<MapleButton>(CSGLChargeNX["BtChargeRefresh"],
                                       Point<int16_t>(92, 554));
 
-    for (size_t i = 0; i < 9; i++) {
+    for (size_t i = 0; i < menu_tabs_.size(); i++) {
         menu_tabs_[i] = CSTab["Tab"][i];
     }
 
@@ -129,7 +129,7 @@ UICashShop::UICashShop() :
         std::make_unique<MapleButton>(CSPromotionBanner["BtPrev"],
                                       promotion_pos_);
 
-    for (size_t i = 0; i < 7; i++) {
+    for (size_t i = 0; i < mvp_sprites_.size(); i++) {
         mvp_sprites_[i] = CSMVPBanner["grade"][i];
     }
 
@@ -181,22 +181,22 @@ UICashShop::UICashShop() :
         item_labels_.emplace_back(item_label);
     }
 
-    items_.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
-    items_.push_back({ 5220000, Item::Label::HOT, 34000, 11 });
-    items_.push_back({ 5220000, Item::Label::HOT, 0, 0 });
-    items_.push_back({ 5220000, Item::Label::HOT, 0, 0 });
-    items_.push_back({ 5220000, Item::Label::HOT, 10000, 11 });
-    items_.push_back({ 5220000, Item::Label::NEW, 0, 0 });
-    items_.push_back({ 5220000, Item::Label::SALE, 7000, 0 });
-    items_.push_back({ 5220000, Item::Label::NEW, 13440, 0 });
-    items_.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
-    items_.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
-    items_.push_back({ 5220000, Item::Label::NEW, 7480, 0 });
-    items_.push_back({ 5220000, Item::Label::NONE, 12000, 11 });
-    items_.push_back({ 5220000, Item::Label::NONE, 22000, 11 });
-    items_.push_back({ 5220000, Item::Label::NONE, 0, 0 });
-    items_.push_back({ 5220000, Item::Label::NONE, 0, 0 });
-    items_.push_back({ 5220000, Item::Label::MASTER, 0, 15 });
+    items_.emplace_back(5220000, Item::Label::HOT, 34000, 11);
+    items_.emplace_back(5220000, Item::Label::HOT, 34000, 11);
+    items_.emplace_back(5220000, Item::Label::HOT, 0, 0);
+    items_.emplace_back(5220000, Item::Label::HOT, 0, 0);
+    items_.emplace_back(5220000, Item::Label::HOT, 10000, 11);
+    items_.emplace_back(5220000, Item::Label::NEW, 0, 0);
+    items_.emplace_back(5220000, Item::Label::SALE, 7000, 0);
+    items_.emplace_back(5220000, Item::Label::NEW, 13440, 0);
+    items_.emplace_back(5220000, Item::Label::NEW, 7480, 0);
+    items_.emplace_back(5220000, Item::Label::NEW, 7480, 0);
+    items_.emplace_back(5220000, Item::Label::NEW, 7480, 0);
+    items_.emplace_back(5220000, Item::Label::NONE, 12000, 11);
+    items_.emplace_back(5220000, Item::Label::NONE, 22000, 11);
+    items_.emplace_back(5220000, Item::Label::NONE, 0, 0);
+    items_.emplace_back(5220000, Item::Label::NONE, 0, 0);
+    items_.emplace_back(5220000, Item::Label::MASTER, 0, 15);
 
     for (size_t i = 0; i < MAX_ITEMS; i++) {
         div_t div = std::div(i, 7);

@@ -40,7 +40,7 @@ public:
 
                 return Cursor::State::CLICKING;
             }
-            if (indragrange(cursorpos)) {
+            if (is_in_drag_range(cursorpos)) {
                 cursor_offset_ = cursorpos - position_;
                 dragged_ = true;
 
@@ -69,7 +69,7 @@ protected:
     Point<int16_t> cursor_offset_;
 
 private:
-    virtual bool indragrange(Point<int16_t> cursorpos) const {
+    virtual bool is_in_drag_range(Point<int16_t> cursorpos) const {
         auto bounds = Rectangle<int16_t>(position_, position_ + drag_area_);
 
         return bounds.contains(cursorpos);

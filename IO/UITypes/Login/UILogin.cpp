@@ -102,7 +102,8 @@ UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
         password_.set_state(Textfield::State::FOCUSED);
     });
 
-    account_.set_enter_callback([&](const std::string &msg) { login(); });
+    account_.set_enter_callback(
+        [&](const std::string & /*unused*/) { login(); });
 
     accountbg_ = title["ID"];
 
@@ -118,7 +119,8 @@ UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
         password_.set_state(Textfield::State::NORMAL);
     });
 
-    password_.set_enter_callback([&](const std::string &msg) { login(); });
+    password_.set_enter_callback(
+        [&](const std::string & /*unused*/) { login(); });
 
     password_.set_cryptchar('*');
     passwordbg_ = title["PW"];

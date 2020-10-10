@@ -42,7 +42,7 @@ DamageNumber::DamageNumber(Type t, int32_t damage, int16_t starty, int16_t x) {
 
         for (size_t i = 0; i < rest_num_.length(); i++) {
             char c = rest_num_[i];
-            int16_t advance;
+            int16_t advance = 0;
 
             if (i < rest_num_.length() - 1) {
                 char n = rest_num_[i + 1];
@@ -182,5 +182,5 @@ void DamageNumber::init() {
         Charset::Alignment::LEFT);
 }
 
-BoolPair<Charset> DamageNumber::charsets_[NUM_TYPES];
+std::array<BoolPair<Charset>, DamageNumber::NUM_TYPES> DamageNumber::charsets_;
 }  // namespace ms

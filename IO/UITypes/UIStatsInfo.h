@@ -119,7 +119,7 @@ private:
 
     bool has_ap_;
 
-    Text stat_labels_[StatLabel::NUM_LABELS];
-    Point<int16_t> stat_offsets_[StatLabel::NUM_LABELS];
+    std::array<Text, StatLabel::NUM_LABELS> stat_labels_;
+    std::array<Point<int16_t>, StatLabel::NUM_LABELS> stat_offsets_;
 };
 }  // namespace ms

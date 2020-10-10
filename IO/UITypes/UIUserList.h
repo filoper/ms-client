@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../Components/Slider.h"
 #include "../Components/Textfield.h"
 #include "../UIDragElement.h"
@@ -106,8 +108,8 @@ private:
     // Party tab
     uint16_t party_tab_;
     Texture party_title_;
-    Texture party_mine_grid_[5];
-    Texture party_search_grid_[3];
+    std::array<Texture, 5> party_mine_grid_;
+    std::array<Texture, 3> party_search_grid_;
     Text party_mine_name_;
     Slider party_slider_;
 
@@ -116,7 +118,7 @@ private:
     int friend_count_ = 0;
     int friend_total_ = 50;
     std::vector<Sprite> friend_sprites_;
-    Texture friend_grid_[4];
+    std::array<Texture, 4> friend_grid_;
     Text friends_online_text_;
     Text friends_cur_location_;
     Text friends_name_;
@@ -129,7 +131,7 @@ private:
     // Blacklist tab
     uint16_t blacklist_tab_;
     Texture blacklist_title_;
-    Texture blacklist_grid_[3];
+    std::array<Texture, 3> blacklist_grid_;
     Text blacklist_name_;
 };
 }  // namespace ms

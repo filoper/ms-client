@@ -552,7 +552,7 @@ void PacketSwitch::forward(int8_t *bytes, size_t length) const {
         }
     }
 
-    if (opcode < NUM_HANDLERS) {
+    if (opcode < handlers_.size()) {
         if (const auto &handler = handlers_[opcode]) {
             // Handler is good, packet is passed on
 

@@ -38,7 +38,7 @@ UIGender::UIGender(std::function<void()> oh) :
     nl::node Gender = Login["Gender"];
     nl::node scroll = Gender["scroll"][0];
 
-    for (size_t i = 0; i < 3; i++) {
+    for (size_t i = 0; i < gender_sprites_.size(); i++) {
         gender_sprites_[i] = scroll[i];
     }
 

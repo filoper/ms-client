@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
 #include <unordered_map>
 #include <vector>
 
@@ -48,7 +49,7 @@ public:
 
     BodyAction() = default;
 
-    bool isattackframe() const { return attack_frame_; }
+    bool is_attack_frame() const { return attack_frame_; }
 
     uint8_t get_frame() const { return frame_; }
 
@@ -78,35 +79,33 @@ public:
 
     Point<int16_t> get_head_position(Stance::Id stance, uint8_t frame) const;
 
-    Point<int16_t> gethairpos(Stance::Id stance, uint8_t frame) const;
+    Point<int16_t> get_hair_pos(Stance::Id stance, uint8_t frame) const;
 
-    Point<int16_t> getfacepos(Stance::Id stance, uint8_t frame) const;
+    Point<int16_t> get_face_pos(Stance::Id stance, uint8_t frame) const;
 
-    uint8_t nextframe(Stance::Id stance, uint8_t frame) const;
+    uint8_t next_frame(Stance::Id stance, uint8_t frame) const;
 
     uint16_t get_delay(Stance::Id stance, uint8_t frame) const;
 
-    uint16_t get_attackdelay(const std::string &action, size_t no) const;
+    uint16_t get_attack_delay(const std::string &action, size_t no) const;
 
-    uint8_t next_actionframe(const std::string &action, uint8_t frame) const;
+    uint8_t next_action_frame(const std::string &action, uint8_t frame) const;
 
     const BodyAction *get_action(const std::string &action,
                                  uint8_t frame) const;
 
 private:
-    std::unordered_map<uint8_t, Point<int16_t>>
-        body_positions_[Stance::Id::LENGTH];
-    std::unordered_map<uint8_t, Point<int16_t>>
-        arm_positions_[Stance::Id::LENGTH];
-    std::unordered_map<uint8_t, Point<int16_t>>
-        hand_positions_[Stance::Id::LENGTH];
-    std::unordered_map<uint8_t, Point<int16_t>>
-        head_positions_[Stance::Id::LENGTH];
-    std::unordered_map<uint8_t, Point<int16_t>>
-        hair_positions_[Stance::Id::LENGTH];
-    std::unordered_map<uint8_t, Point<int16_t>>
-        face_positions_[Stance::Id::LENGTH];
-    std::unordered_map<uint8_t, uint16_t> stance_delays_[Stance::Id::LENGTH];
+    using MapPoint = std::unordered_map<uint8_t, Point<int16_t>>;
+
+    std::array<MapPoint, Stance::Id::LENGTH> body_positions_;
+    std::array<MapPoint, Stance::Id::LENGTH> arm_positions_;
+    std::array<MapPoint, Stance::Id::LENGTH> hand_positions_;
+    std::array<MapPoint, Stance::Id::LENGTH> head_positions_;
+    std::array<MapPoint, Stance::Id::LENGTH> hair_positions_;
+    std::array<MapPoint, Stance::Id::LENGTH> face_positions_;
+
+    std::array<std::unordered_map<uint8_t, uint16_t>, Stance::Id::LENGTH>
+        stance_delays_;
 
     std::unordered_map<std::string, std::unordered_map<uint8_t, BodyAction>>
         body_actions_;

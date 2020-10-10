@@ -101,7 +101,7 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
 
     for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++) {
         for (const auto &slot : Equip[tab_source_[i]]["Slots"]) {
-            if (slot.name().find("_") == std::string::npos) {
+            if (slot.name().find('_') == std::string::npos) {
                 slots_[i].emplace_back(slot);
             }
         }

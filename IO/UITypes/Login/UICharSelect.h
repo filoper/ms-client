@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
 #include <list>
 
 #include "../../Character/Look/CharLook.h"
@@ -113,7 +114,7 @@ private:
     uint8_t tab_index_;
     bool tab_active_;
     bool tab_move_;
-    Point<int16_t> tab_pos_[3];
+    std::array<Point<int16_t>, 3> tab_pos_;
     int16_t tab_move_pos_;
     std::map<uint8_t, uint16_t> tab_map_;
     Point<int16_t> world_dimensions_;
@@ -125,7 +126,7 @@ private:
     Texture pagebase_;
     Charset pagenumber_;
     nl::node pagenumber_pos_;
-    Texture sign_post_[3];
+    std::array<Texture, 3> sign_post_;
     nl::node nametag_;
     Charset level_set_;
     OutlinedText name_label_;
@@ -133,7 +134,7 @@ private:
     std::vector<NameTag> nametags_;
     Animation empty_slot_effect_;
     Texture empty_slot_;
-    Animation selected_slot_effect_[2];
+    std::array<Animation, 2> selected_slot_effect_;
     OutlinedText chat_slot_label_;
     int16_t timestamp_;
     uint16_t charslot_y_;
@@ -142,6 +143,6 @@ private:
 
     enum InfoLabel : uint8_t { JOB, STR, DEX, INT, LUK, NUM_LABELS };
 
-    OutlinedText info_labels_[UICharSelect::InfoLabel::NUM_LABELS];
+    std::array<OutlinedText, UICharSelect::InfoLabel::NUM_LABELS> info_labels_;
 };
 }  // namespace ms

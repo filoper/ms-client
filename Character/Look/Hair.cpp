@@ -51,7 +51,7 @@ Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
 
                 Point<int16_t> brow = layernode["map"]["brow"];
                 Point<int16_t> shift =
-                    drawinfo.gethairpos(stance, frame) - brow;
+                    drawinfo.get_hair_pos(stance, frame) - brow;
 
                 stances_[stance][layer]
                     .emplace(frame, layernode)

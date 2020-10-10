@@ -86,13 +86,7 @@ public:
 
         K first() const { return static_cast<K>(index_); }
 
-        T &second() {
-            if (!this) {
-                throw std::out_of_range("iterator out of range");
-            }
-
-            return *(value_ + index_);
-        }
+        T &second() { return *(value_ + index_); }
 
         base_iterator &operator++() {
             index_++;

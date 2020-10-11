@@ -475,6 +475,7 @@ void DropLootHandler::handle(InPacket &recv) const {
 
     bool playerdrop = !recv.read_bool();
 
+    // bug: plays sound when entering a map containing drops owned by self
     if (mode == 0 || (owner == Stage::get().is_player(owner) && !playerdrop)) {
         Sound(Sound::Name::DROP).play();
     }

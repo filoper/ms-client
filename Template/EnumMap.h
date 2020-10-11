@@ -61,9 +61,14 @@ public:
     const V &operator[](K key) const { return m_values_[key]; }
 
     template<typename T>
-    class base_iterator : public std::iterator<std::forward_iterator_tag, V> {
+    class base_iterator {
     public:
         using index_type = typename std::underlying_type<K>::type;
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = std::ptrdiff_t;
+        using pointer = T *;
+        using reference = T &;
 
         base_iterator(T *p, index_type i) : value_(p), index_(i) {}
 
@@ -108,8 +113,6 @@ public:
 
     using iterator = base_iterator<V>;
     using const_iterator = base_iterator<const V>;
-    using node = typename iterator::node;
-    using cnode = typename const_iterator::node;
 
     iterator find(K key) { return { m_values_.data(), key }; }
 

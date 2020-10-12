@@ -308,7 +308,7 @@ UIElement::Type UIChatBar::get_type() const {
 }
 
 Cursor::State UIChatBar::check_drag_top(bool clicking,
-                                       Point<int16_t> cursorpos) {
+                                        Point<int16_t> cursorpos) {
     Rectangle<int16_t> bounds = get_bounds(dimension_);
     Point<int16_t> bounds_lt = bounds.get_left_top();
     Point<int16_t> bounds_rb = bounds.get_right_bottom();

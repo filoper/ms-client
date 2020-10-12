@@ -323,7 +323,7 @@ void Combat::extract_effects(const Char &user,
             Point<int16_t> target =
                 user.get_position() + Point<int16_t>(xshift, -26);
 
-            for (uint8_t i = 0; i < result.hitcount; i++) {
+            for (int i = 0; i < result.hitcount; i++) {
                 DamageEffect effect { attack_user, {}, 0, false, 0, 0 };
                 bullet_effects_.emplace(user.get_attackdelay(i),
                                         std::move(effect),

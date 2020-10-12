@@ -51,7 +51,7 @@ void AttackHandler::handle(InPacket &recv) const {
     attack.mobcount = (count >> 4) & 0xF;
     attack.hitcount = count & 0xF;
 
-    for (uint8_t i = 0; i < attack.mobcount; i++) {
+    for (int i = 0; i < attack.mobcount; i++) {
         int32_t oid = recv.read_int();
 
         recv.skip(1);
@@ -60,7 +60,7 @@ void AttackHandler::handle(InPacket &recv) const {
                              ? recv.read_ubyte()
                              : attack.hitcount;
 
-        for (uint8_t j = 0; j < length; j++) {
+        for (int j = 0; j < length; j++) {
             int32_t damage = recv.read_int();
             bool critical = false;  // TODO: ?
             auto single_damage = std::make_pair(damage, critical);

@@ -60,7 +60,7 @@ void CharacterParser::parse_inventory(InPacket &recv, Inventory &invent) {
 void CharacterParser::parse_skillbook(InPacket &recv, SkillBook &skills) {
     int16_t size = recv.read_short();
 
-    for (int16_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         int32_t skill_id = recv.read_int();
         int32_t level = recv.read_int();
         int64_t expiration = recv.read_long();
@@ -73,7 +73,7 @@ void CharacterParser::parse_skillbook(InPacket &recv, SkillBook &skills) {
 void CharacterParser::parse_cooldowns(InPacket &recv, Player &player) {
     int16_t size = recv.read_short();
 
-    for (int16_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         int32_t skill_id = recv.read_int();
         int32_t cooltime = recv.read_short();
         player.add_cooldown(skill_id, cooltime);
@@ -83,7 +83,7 @@ void CharacterParser::parse_cooldowns(InPacket &recv, Player &player) {
 void CharacterParser::parse_questlog(InPacket &recv, QuestLog &quests) {
     int16_t size = recv.read_short();
 
-    for (int16_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         int16_t qid = recv.read_short();
         std::string qdata = recv.read_string();
 
@@ -99,7 +99,7 @@ void CharacterParser::parse_questlog(InPacket &recv, QuestLog &quests) {
     std::map<int16_t, int64_t> completed;
     size = recv.read_short();
 
-    for (int16_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         int16_t qid = recv.read_short();
         int64_t time = recv.read_long();
         quests.add_completed(qid, time);
@@ -109,7 +109,7 @@ void CharacterParser::parse_questlog(InPacket &recv, QuestLog &quests) {
 void CharacterParser::parse_ring1(InPacket &recv) {
     int16_t rsize = recv.read_short();
 
-    for (int16_t i = 0; i < rsize; i++) {
+    for (int i = 0; i < rsize; i++) {
         recv.read_int();
         recv.read_padded_string(13);
         recv.read_int();
@@ -122,7 +122,7 @@ void CharacterParser::parse_ring1(InPacket &recv) {
 void CharacterParser::parse_ring2(InPacket &recv) {
     int16_t rsize = recv.read_short();
 
-    for (int16_t i = 0; i < rsize; i++) {
+    for (int i = 0; i < rsize; i++) {
         recv.read_int();
         recv.read_padded_string(13);
         recv.read_int();
@@ -136,7 +136,7 @@ void CharacterParser::parse_ring2(InPacket &recv) {
 void CharacterParser::parse_ring3(InPacket &recv) {
     int16_t rsize = recv.read_short();
 
-    for (int16_t i = 0; i < rsize; i++) {
+    for (int i = 0; i < rsize; i++) {
         recv.read_int();
         recv.read_int();
         recv.read_int();
@@ -160,7 +160,7 @@ void CharacterParser::parse_monsterbook(InPacket &recv,
 
     int16_t size = recv.read_short();
 
-    for (int16_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         int16_t cid = recv.read_short();
         int8_t mblv = recv.read_byte();
 
@@ -170,11 +170,11 @@ void CharacterParser::parse_monsterbook(InPacket &recv,
 
 void CharacterParser::parse_teleportrock(InPacket &recv,
                                          TeleportRock &teleportrock) {
-    for (size_t i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {
         teleportrock.addlocation(recv.read_int());
     }
 
-    for (size_t i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
         teleportrock.addviplocation(recv.read_int());
     }
 }
@@ -182,7 +182,7 @@ void CharacterParser::parse_teleportrock(InPacket &recv,
 void CharacterParser::parse_nyinfo(InPacket &recv) {
     int16_t nysize = recv.read_short();
 
-    for (int16_t i = 0; i < nysize; i++) {
+    for (int i = 0; i < nysize; i++) {
         recv.read_int();     // NewYear Id
         recv.read_int();     // NewYear SenderId
         recv.read_string();  // NewYear SenderName
@@ -201,7 +201,7 @@ void CharacterParser::parse_areainfo(InPacket &recv) {
     std::map<int16_t, std::string> areainfo;
     int16_t arsize = recv.read_short();
 
-    for (int16_t i = 0; i < arsize; i++) {
+    for (int i = 0; i < arsize; i++) {
         int16_t area = recv.read_short();
         areainfo[area] = recv.read_string();
     }

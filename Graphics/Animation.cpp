@@ -253,7 +253,7 @@ uint16_t Animation::get_delay(int16_t frame_id) const {
 uint16_t Animation::getdelayuntil(int16_t frame_id) const {
     uint16_t total = 0;
 
-    for (int16_t i = 0; i < frame_id; i++) {
+    for (int i = 0; i < frame_id; i++) {
         if (i >= frames_.size()) {
             break;
         }

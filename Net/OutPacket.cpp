@@ -96,7 +96,7 @@ void OutPacket::write_string(const std::string &str) {
 
     write_short(length);
 
-    for (int16_t i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++) {
         write_byte(str[i]);
     }
 }
@@ -121,7 +121,7 @@ int32_t OutPacket::hex_to_dec(std::string hexVal) {
     int32_t base = 1;
     int32_t dec_val = 0;
 
-    for (int32_t i = len - 1; i >= 0; i--) {
+    for (int i = len - 1; i >= 0; i--) {
         if (hexVal[i] >= '0' && hexVal[i] <= '9') {
             dec_val += (hexVal[i] - 48) * base;
             base = base * 16;

@@ -75,7 +75,7 @@ FootholdTree::FootholdTree(const nl::node &src) {
                 int16_t start = foothold.l();
                 int16_t end = foothold.r();
 
-                for (int16_t i = start; i <= end; i++) {
+                for (int i = start; i <= end; i++) {
                     footholds_by_x_.emplace(i, id);
                 }
             }

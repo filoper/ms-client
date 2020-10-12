@@ -128,8 +128,8 @@ void Background::draw(double viewx, double viewy, float alpha) const {
     int16_t tw = cx_ * htile_;
     int16_t th = cy_ * vtile_;
 
-    for (int16_t tx = 0; tx < tw; tx += cx_) {
-        for (int16_t ty = 0; ty < th; ty += cy_) {
+    for (int tx = 0; tx < tw; tx += cx_) {
+        for (int ty = 0; ty < th; ty += cy_) {
             animation_.draw(DrawArgument(Point<int16_t>(ix + tx, iy + ty),
                                          flipped_,
                                          opacity_ / 255),

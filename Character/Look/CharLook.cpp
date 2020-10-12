@@ -64,7 +64,8 @@ void CharLook::draw(const DrawArgument &args,
         args + DrawArgument { faceshift, false, Point<int16_t> {} };
 
     if (Stance::Id::DEAD == interstance) {
-        Point<int16_t> faceshift = draw_info_.get_face_pos(Stance::Id::STAND1, 1);
+        Point<int16_t> faceshift =
+            draw_info_.get_face_pos(Stance::Id::STAND1, 1);
         DrawArgument faceargs =
             args + DrawArgument { faceshift, false, Point<int16_t> {} };
 
@@ -805,7 +806,7 @@ uint16_t CharLook::get_attackdelay(size_t no, uint8_t first_frame) const {
     }
     uint16_t delay = 0;
 
-    for (uint8_t frame = 0; frame < first_frame; frame++) {
+    for (int frame = 0; frame < first_frame; frame++) {
         delay += get_delay(stance_.get(), frame);
     }
 

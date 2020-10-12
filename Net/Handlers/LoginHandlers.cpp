@@ -157,7 +157,7 @@ void CharlistHandler::handle(InPacket &recv) const {
         std::vector<CharEntry> characters;
         int8_t charcount = recv.read_byte();
 
-        for (uint8_t i = 0; i < charcount; ++i) {
+        for (int i = 0; i < charcount; ++i) {
             characters.emplace_back(LoginParser::parse_charentry(recv));
         }
 
@@ -241,7 +241,7 @@ void RecommendedWorldsHandler::handle(InPacket &recv) const {
     if (auto worldselect = UI::get().get_element<UIWorldSelect>()) {
         int16_t count = recv.read_ubyte();
 
-        for (int32_t i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             RecommendedWorld world = LoginParser::parse_recommended_world(recv);
 
             if (world.wid != -1 && !world.message.empty()) {

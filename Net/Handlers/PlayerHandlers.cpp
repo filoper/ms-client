@@ -271,7 +271,7 @@ void FameResponseHandler::handle(InPacket &recv) const {
 void SkillMacrosHandler::handle(InPacket &recv) const {
     uint8_t size = recv.read_ubyte();
 
-    for (uint8_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         recv.read_string();  // name
         recv.read_byte();    // 'shout' byte
         recv.read_int();     // skill 1
@@ -290,7 +290,7 @@ void AddCooldownHandler::handle(InPacket &recv) const {
 void KeymapHandler::handle(InPacket &recv) const {
     recv.skip(1);
 
-    for (uint8_t i = 0; i < 90; i++) {
+    for (int i = 0; i < 90; i++) {
         uint8_t type = recv.read_ubyte();
         int32_t action = recv.read_int();
 

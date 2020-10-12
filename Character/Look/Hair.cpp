@@ -35,8 +35,7 @@ Hair::Hair(int32_t hairid, const BodyDrawInfo &drawinfo) {
             continue;
         }
 
-        for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
-             ++frame) {
+        for (int frame = 0; nl::node framenode = stancenode[frame]; ++frame) {
             for (const nl::node &layernode : framenode) {
                 std::string layername = layernode.name();
                 auto layer_iter = layers_by_name_.find(layername);

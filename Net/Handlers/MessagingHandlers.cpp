@@ -190,7 +190,8 @@ void WhisperReceivedHandler::handle(InPacket &recv) const {
     std::string message = recv.read_string();
 
     if (auto chatbar = UI::get().get_element<UIChatBar>()) {
-        chatbar->get().send_chatline(sender + "<< " + message, UIChatBar::LineType::GREEN);
+        chatbar->get().send_chatline(sender + "<< " + message,
+                                     UIChatBar::LineType::GREEN);
     }
 }
 

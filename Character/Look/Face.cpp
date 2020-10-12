@@ -53,8 +53,7 @@ Face::Face(int32_t faceid) {
             const std::string &expname = iter.second;
             nl::node expnode = facenode[expname];
 
-            for (uint8_t frame = 0; nl::node framenode = expnode[frame];
-                 ++frame) {
+            for (int frame = 0; nl::node framenode = expnode[frame]; ++frame) {
                 expressions_[exp].emplace(frame, framenode);
             }
         }

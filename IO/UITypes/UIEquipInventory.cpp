@@ -99,7 +99,7 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
     background_[Buttons::BT_TAB3] =
         Equip[tab_source_[Buttons::BT_TAB3]]["backgrnd"];
 
-    for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++) {
+    for (int i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++) {
         for (const auto &slot : Equip[tab_source_[i]]["Slots"]) {
             if (slot.name().find('_') == std::string::npos) {
                 slots_[i].emplace_back(slot);
@@ -145,7 +145,7 @@ UIEquipInventory::UIEquipInventory(const Inventory &invent) :
 
     nl::node Tab = Equip["Tab"];
 
-    for (uint16_t i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++) {
+    for (int i = Buttons::BT_TAB0; i < Buttons::BT_TABE; i++) {
         buttons_[Buttons::BT_TAB0 + i] =
             std::make_unique<TwoSpriteButton>(Tab["disabled"][i],
                                               Tab["enabled"][i],

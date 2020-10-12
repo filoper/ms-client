@@ -365,7 +365,7 @@ void UI::send_key(uint32_t unicode) {
         focused_text_field_->get().send_key(KeyType::Id::TEXT, unicode, true);
     }
 
-    is_key_down_[unicode] = true; // maybe remove
+    is_key_down_[unicode] = true;  // maybe remove
 }
 
 void UI::set_scrollnotice(const std::string &notice) {

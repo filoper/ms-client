@@ -59,7 +59,7 @@ void CharInfoHandler::handle(InPacket &recv) const {
 
     int8_t wishlist_size = recv.read_byte();
 
-    for (int8_t sn = 0; sn < wishlist_size; sn++) {
+    for (int sn = 0; sn < wishlist_size; sn++) {
         recv.skip_int();  // wishlist_item
     }
 
@@ -73,7 +73,7 @@ void CharInfoHandler::handle(InPacket &recv) const {
 
     int16_t medal_quests_size = recv.read_short();
 
-    for (int16_t s = 0; s < medal_quests_size; s++) {
+    for (int s = 0; s < medal_quests_size; s++) {
         recv.skip_short();  // medal_quest
     }
 

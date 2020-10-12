@@ -329,13 +329,10 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid) {
             return Button::State::NORMAL;
         case Buttons::BT_COIN: {
             const std::string question = "How many do you want to drop?";
-            auto onenter = [](auto amount) {
-                fn_drop_mesos(amount);
-            };
+            auto onenter = [](auto amount) { fn_drop_mesos(amount); };
 
             UI::get().emplace<UIEnterNumber>(question, onenter, 50000, 10);
-        }
-            break;
+        } break;
         case Buttons::BT_COIN_SM:
         case Buttons::BT_POINT:
         case Buttons::BT_POINT_SM:

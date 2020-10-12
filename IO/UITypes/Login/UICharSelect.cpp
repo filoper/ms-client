@@ -256,8 +256,8 @@ void UICharSelect::draw(float inter) const {
 
     std::list<uint8_t> fliplist = { 2, 3, 6, 7 };
 
-    for (uint8_t i = 0; i < PAGESIZE_; i++) {
-        uint8_t index = i + selected_page * PAGESIZE_;
+    for (int i = 0; i < PAGESIZE_; i++) {
+        auto index = i + selected_page * PAGESIZE_;
         bool flip_character =
             std::find(fliplist.begin(), fliplist.end(), i) != fliplist.end();
         bool selectedslot = index == selected_character_;
@@ -836,8 +836,8 @@ Button::State UICharSelect::button_pressed(uint16_t buttonid) {
 }
 
 void UICharSelect::update_buttons() {
-    for (uint8_t i = 0; i < PAGESIZE_; i++) {
-        uint8_t index = i + selected_page * PAGESIZE_;
+    for (int i = 0; i < PAGESIZE_; i++) {
+        auto index = i + selected_page * PAGESIZE_;
 
         if (index < characters_count_) {
             buttons_[Buttons::CHARACTER_SLOT0 + i]->set_state(
@@ -887,8 +887,8 @@ void UICharSelect::update_selected_character() {
 }
 
 void UICharSelect::select_last_slot() {
-    for (uint8_t i = PAGESIZE_ - 1; i >= 0; i--) {
-        uint8_t index = i + selected_page * PAGESIZE_;
+    for (int i = PAGESIZE_ - 1; i >= 0; i--) {
+        auto index = i + selected_page * PAGESIZE_;
 
         if (index < characters_count_) {
             button_pressed(i + Buttons::CHARACTER_SLOT0);

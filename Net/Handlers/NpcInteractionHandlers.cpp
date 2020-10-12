@@ -65,7 +65,7 @@ void OpenNpcShopHandler::handle(InPacket &recv) const {
 
     int16_t size = recv.read_short();
 
-    for (int16_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         int32_t itemid = recv.read_int();
         int32_t price = recv.read_int();
         int32_t pitch = recv.read_int();

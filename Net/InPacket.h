@@ -137,7 +137,7 @@ private:
         std::string str;
         str.reserve(count);
 
-        for (uint16_t i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             if (char chr = bytes_[pos_]; chr != '\0') {
                 str.push_back(chr);
             }

@@ -40,12 +40,12 @@ public:
 
     bool update();
 
-    static int16_t rowheight(bool critical);
+    static int16_t row_height(bool critical);
 
     static void init();
 
 private:
-    int16_t getadvance(char c, bool first) const;
+    int16_t get_advance(char c, bool first) const;
 
     static constexpr uint16_t FADE_TIME = 500;
 

@@ -24,9 +24,7 @@
 #include "../Configuration.h"
 
 namespace ms {
-Sound::Sound(Name name) {
-    id_ = soundids_[name];
-}
+Sound::Sound(Name name) : id_(soundids_[name]) {}
 
 Sound::Sound(int32_t itemid) {
     auto fitemid = format_id(itemid);
@@ -45,13 +43,9 @@ Sound::Sound(int32_t itemid) {
     }
 }
 
-Sound::Sound(const nl::node &src) {
-    id_ = add_sound(src);
-}
+Sound::Sound(const nl::node &src) : id_(add_sound(src)) {}
 
-Sound::Sound() {
-    id_ = 0;
-}
+Sound::Sound() : id_(0) {}
 
 void Sound::play() const {
     if (id_ > 0) {

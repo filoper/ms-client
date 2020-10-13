@@ -29,9 +29,8 @@ Portal::Portal(const Animation *a,
     type_(t),
     name_(nm),
     position_(p),
-    warp_info_(tid, intramap, std::move(tnm), nm) {
-    touched_ = false;
-}
+    warp_info_(tid, intramap, std::move(tnm), nm),
+    touched_(false) {}
 
 Portal::Portal() : Portal(nullptr, SPAWN, "", false, Point<int16_t>(), 0, "") {}
 

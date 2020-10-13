@@ -139,12 +139,8 @@ Animation::Animation(const nl::node &src) {
     reset();
 }
 
-Animation::Animation() {
-    animated_ = false;
-    zigzag_ = false;
-
+Animation::Animation() : animated_(false), zigzag_(false) {
     frames_.emplace_back();
-
     reset();
 }
 

@@ -26,9 +26,7 @@
 #include "OptionalCreator.h"
 
 namespace ms {
-MapDrops::MapDrops() {
-    loot_enabled_ = false;
-}
+MapDrops::MapDrops() : loot_enabled_(false) {}
 
 void MapDrops::init() {
     nl::node src = nl::nx::item["Special"]["0900.img"];

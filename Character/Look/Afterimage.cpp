@@ -51,10 +51,7 @@ Afterimage::Afterimage(int32_t skill_id,
     }
 }
 
-Afterimage::Afterimage() {
-    first_frame_ = 0;
-    displayed_ = true;
-}
+Afterimage::Afterimage() : first_frame_(0), displayed_(true) {}
 
 void Afterimage::draw(uint8_t stframe,
                       const DrawArgument &args,

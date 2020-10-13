@@ -52,10 +52,12 @@ auto fn_char_info_req = []<typename... T>(T && ... args) {
 };
 
 Stage::Stage() :
+    state_(State::INACTIVE),
+    map_id_(10000),
+    level_before_(1),
     combat_(player_, chars_, mobs_, reactors_),
-    mob_combat_(player_, chars_, mobs_) {
-    state_ = State::INACTIVE;
-}
+    mob_combat_(player_, chars_, mobs_),
+    exp_before_(0) {}
 
 void Stage::init() {
     drops_.init();
@@ -73,9 +75,9 @@ void Stage::load(int32_t mapid, int8_t portalid) {
     state_ = State::ACTIVE;
 }
 
-void Stage::loadplayer(const CharEntry &entry,
-                       uint8_t wid,
-                       uint8_t channel_id) {
+void Stage::load_player(const CharEntry &entry,
+                        uint8_t wid,
+                        uint8_t channel_id) {
     player_ = Player(entry, wid, channel_id);
     playable_ = player_;
 

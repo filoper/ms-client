@@ -365,7 +365,7 @@ std::vector<DamageNumber> Combat::place_numbers(
                                               : DamageNumber::Type::NORMAL;
         numbers.emplace_back(type, amount, head);
 
-        head -= DamageNumber::rowheight(is_critical);
+        head -= DamageNumber::row_height(is_critical);
     }
 
     return numbers;

@@ -21,6 +21,7 @@
 #include "../Gameplay/Stage.h"
 #include "../Net/Packets/NpcInteractionPackets.h"
 #include "../UI.h"
+#include "../Util/Misc.h"
 
 namespace ms {
 auto fn_npc_talk_more = []<typename... T>(T && ... args) {
@@ -310,6 +311,77 @@ std::string UINpcTalk::format_text(const std::string &tx,
                 nl::nx::string["Consume.img"][itemid]["name"];
 
             formatted_text.replace(begin, end - begin, itemname);
+        }
+    }
+
+    // temp fix for taxi cab below
+    begin = formatted_text.find("#m");
+
+    if (begin != std::string::npos) {
+        size_t end = formatted_text.find("#", begin + 1);
+
+        if (end != std::string::npos) {
+            size_t b = begin + std::string("#m").length();
+            int32_t mapid = std::stoi(formatted_text.substr(b, end - b));
+            auto map_info = NxHelper::Map::get_map_info_by_id(mapid);
+
+            formatted_text.replace(begin-2, end - begin + 2, map_info.name);
+        }
+    }
+
+    begin = formatted_text.find("#m");
+
+    if (begin != std::string::npos) {
+        size_t end = formatted_text.find("#", begin + 1);
+
+        if (end != std::string::npos) {
+            size_t b = begin + std::string("#m").length();
+            int32_t mapid = std::stoi(formatted_text.substr(b, end - b));
+            auto map_info = NxHelper::Map::get_map_info_by_id(mapid);
+
+            formatted_text.replace(begin-2, end - begin + 2, map_info.name);
+        }
+    }
+
+    begin = formatted_text.find("#m");
+
+    if (begin != std::string::npos) {
+        size_t end = formatted_text.find("#", begin + 1);
+
+        if (end != std::string::npos) {
+            size_t b = begin + std::string("#m").length();
+            int32_t mapid = std::stoi(formatted_text.substr(b, end - b));
+            auto map_info = NxHelper::Map::get_map_info_by_id(mapid);
+
+            formatted_text.replace(begin-2, end - begin + 2, map_info.name);
+        }
+    }
+
+    begin = formatted_text.find("#m");
+
+    if (begin != std::string::npos) {
+        size_t end = formatted_text.find("#", begin + 1);
+
+        if (end != std::string::npos) {
+            size_t b = begin + std::string("#m").length();
+            int32_t mapid = std::stoi(formatted_text.substr(b, end - b));
+            auto map_info = NxHelper::Map::get_map_info_by_id(mapid);
+
+            formatted_text.replace(begin-2, end - begin + 2, map_info.name);
+        }
+    }
+
+    begin = formatted_text.find("#m");
+
+    if (begin != std::string::npos) {
+        size_t end = formatted_text.find("#", begin + 1);
+
+        if (end != std::string::npos) {
+            size_t b = begin + std::string("#m").length();
+            int32_t mapid = std::stoi(formatted_text.substr(b, end - b));
+            auto map_info = NxHelper::Map::get_map_info_by_id(mapid);
+
+            formatted_text.replace(begin-2, end - begin + 2, map_info.name);
         }
     }
 

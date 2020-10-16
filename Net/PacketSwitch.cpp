@@ -423,6 +423,7 @@ enum Opcode : uint16_t {
     SHOW_MOB_HP = 250,
     SPAWN_NPC = 257,
     SPAWN_NPC_C = 259,
+    SET_NPC_SCRIPTABLE = 263,
     DROP_LOOT = 268,
     REMOVE_LOOT = 269,
     HIT_REACTOR = 277,
@@ -472,6 +473,7 @@ PacketSwitch::PacketSwitch() {
     emplace<SPAWN_PET, SpawnPetHandler>();
     emplace<SPAWN_NPC, SpawnNpcHandler>();
     emplace<SPAWN_NPC_C, SpawnNpcControllerHandler>();
+    emplace<SET_NPC_SCRIPTABLE, SetNpcScriptableHandler>();
     emplace<SPAWN_MOB, SpawnMobHandler>();
     emplace<SPAWN_MOB_C, SpawnMobControllerHandler>();
     emplace<MOB_MOVED, MobMovedHandler>();

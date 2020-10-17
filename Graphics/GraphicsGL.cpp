@@ -683,6 +683,17 @@ size_t GraphicsGL::LayoutBuilder::add(const unsigned int *text,
     if (!linebreak) {
         for (size_t i = first; i < last; i++) {
             auto c = text[i];
+
+            if (c < 32) {
+                if (c == 10) { // 10 = line feed
+                    linebreak = true;
+                } else if (c == 13) { // 13 = carriage return
+                    linebreak = ax_ > 0;
+                }
+
+                continue;
+            }
+
             wordwidth += font_.chars[c].ax;
 
             if (wordwidth > max_width_) {
@@ -722,6 +733,10 @@ size_t GraphicsGL::LayoutBuilder::add(const unsigned int *text,
         advances_.push_back(ax_);
 
         if (pos < first + skip || newline && c == ' ') {
+            continue;
+        }
+
+        if (c < 32) {
             continue;
         }
 

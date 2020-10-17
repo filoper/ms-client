@@ -17,6 +17,8 @@
 
 #include "../Net/Packets/NpcInteractionPackets.h"
 #include "Npc.h"
+#include "UI.h"
+#include "UINpcTalk.h"
 
 namespace ms {
 auto fn_talk_to_npc = []<typename... T>(T && ... args) {
@@ -73,7 +75,19 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
 
         if (npc && npc->is_active() && npc->inrange(position, viewpos)) {
             if (pressed) {
-                // TODO: Try finding dialog first
+                npc->talk([](int id,
+                             int msgtype,
+                             int b0,
+                             int b1,
+                             int speaker,
+                             std::string str) {
+                    UI::get().emplace<UINpcTalk>();
+                    if (auto npctalk = UI::get().get_element<UINpcTalk>()) {
+                        npctalk->get()
+                            .change_text(id, msgtype, b0, b1, speaker, str);
+                    }
+                });
+
                 fn_talk_to_npc(npc->get_oid());
 
                 return Cursor::State::IDLE;

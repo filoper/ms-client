@@ -45,6 +45,11 @@ Npc::Npc(int32_t id,
     mouse_only_ = info["talkMouseOnly"].get_bool();
     scripted_ = info["script"].size() > 0 || info["shop"].get_bool();
 
+    for (int i = 0; strsrc['d' + std::to_string(i)]; ++i) {
+        std::string key = 'd' + std::to_string(i);
+        dialogue_[key].push_back(strsrc[key].get_string());
+    }
+
     for (const auto &npcnode : src) {
         std::string state = npcnode.name();
 

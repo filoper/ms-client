@@ -91,8 +91,7 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
             continue;
         }
 
-        for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
-             ++frame) {
+        for (int frame = 0; nl::node framenode = stancenode[frame]; ++frame) {
             for (const nl::node &partnode : framenode) {
                 std::string part = partnode.name();
 
@@ -140,7 +139,8 @@ Clothing::Clothing(int32_t id, const BodyDrawInfo &drawinfo) : item_id_(id) {
                     case EquipSlot::Id::HAT:
                     case EquipSlot::Id::EARACC:
                     case EquipSlot::Id::EYE_ACC:
-                        shift = drawinfo.getfacepos(stance, frame) - parentpos;
+                        shift =
+                            drawinfo.get_face_pos(stance, frame) - parentpos;
                         break;
                     case EquipSlot::Id::SHIELD:
                     case EquipSlot::Id::WEAPON:

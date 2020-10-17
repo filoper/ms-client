@@ -158,7 +158,7 @@ void ServerMessageHandler::handle(InPacket &recv) const {
         recv.read_byte();  // channel
         recv.read_bool();  // megaphone
     } else if (type == 4) {
-        UI::get().set_scrollnotice(message);
+        UI::get().set_scrollnotice(message + " msclient v0.4.0");
     } else if (type == 7) {
         recv.read_int();  // npcid
     }
@@ -177,6 +177,21 @@ void WeekEventMessageHandler::handle(InPacket &recv) const {
 
     if (auto chatbar = UI::get().get_element<UIChatBar>()) {
         chatbar->get().send_chatline(message, UIChatBar::LineType::YELLOW);
+    }
+}
+
+void WhisperReceivedHandler::handle(InPacket &recv) const {
+    recv.read_byte();  // 0x12
+
+    std::string sender = recv.read_string();
+
+    int16_t ch = recv.read_short();
+
+    std::string message = recv.read_string();
+
+    if (auto chatbar = UI::get().get_element<UIChatBar>()) {
+        chatbar->get().send_chatline(sender + "<< " + message,
+                                     UIChatBar::LineType::GREEN);
     }
 }
 

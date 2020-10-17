@@ -81,6 +81,7 @@ private:
     Text alliance_;
 
     Char *target_character_;
+    int32_t cid_;
 
     /// Sub Windows
     Point<int16_t> bottom_window_adj_;

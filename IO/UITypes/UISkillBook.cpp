@@ -193,17 +193,17 @@ UISkillBook::UISkillBook(const CharStats &in_stats,
     nl::node enabled = Tab["enabled"];
     nl::node disabled = Tab["disabled"];
 
-    for (uint16_t i = Buttons::BT_TAB0; i <= Buttons::BT_TAB4; ++i) {
-        uint16_t tabid = i - Buttons::BT_TAB0;
+    for (int i = Buttons::BT_TAB0; i <= Buttons::BT_TAB4; ++i) {
+        auto tabid = i - Buttons::BT_TAB0;
         buttons_[i] =
             std::make_unique<TwoSpriteButton>(disabled[tabid], enabled[tabid]);
     }
 
     uint16_t y_adj = 0;
 
-    for (uint16_t i = Buttons::BT_SPUP0; i <= Buttons::BT_SPUP11; ++i) {
+    for (int i = Buttons::BT_SPUP0; i <= Buttons::BT_SPUP11; ++i) {
         uint16_t x_adj = 0;
-        uint16_t spupid = i - Buttons::BT_SPUP0;
+        auto spupid = i - Buttons::BT_SPUP0;
 
         if (spupid % 2) {
             x_adj = ROW_WIDTH_;
@@ -583,7 +583,7 @@ void UISkillBook::change_job(uint16_t id) {
 
     Job::Level level = job_.get_level();
 
-    for (uint16_t i = 0; i <= Job::Level::FOURTH; i++) {
+    for (int i = 0; i <= Job::Level::FOURTH; i++) {
         buttons_[Buttons::BT_TAB0 + i]->set_active(i <= level);
     }
 
@@ -640,7 +640,7 @@ void UISkillBook::change_tab(uint16_t new_tab) {
     book_icon_ = data.get_icon();
     book_text_.change_text(data.get_name());
 
-    for (int32_t skill_id : data.get_skills()) {
+    for (int skill_id : data.get_skills()) {
         int32_t level = skillbook_.get_level(skill_id);
         int32_t masterlevel = skillbook_.get_masterlevel(skill_id);
 
@@ -662,9 +662,9 @@ void UISkillBook::change_tab(uint16_t new_tab) {
 void UISkillBook::change_offset(uint16_t new_offset) {
     offset_ = new_offset;
 
-    for (int16_t i = 0; i < ROWS_; i++) {
-        uint16_t index = Buttons::BT_SPUP0 + i;
-        uint16_t row = offset_ + i;
+    for (int i = 0; i < ROWS_; i++) {
+        auto index = Buttons::BT_SPUP0 + i;
+        auto row = offset_ + i;
         buttons_[index]->set_active(row < skill_count_);
 
         if (row < skills_.size()) {

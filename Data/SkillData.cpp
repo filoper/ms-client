@@ -35,7 +35,7 @@ SkillData::SkillData(int32_t id) {
     name_ = std::string(strsrc["name"]);
     desc_ = std::string(strsrc["desc"]);
 
-    for (int32_t level = 1; nl::node sub = strsrc["h" + std::to_string(level)];
+    for (int level = 1; nl::node sub = strsrc["h" + std::to_string(level)];
          level++) {
         levels_.emplace(level, sub);
     }

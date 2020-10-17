@@ -448,6 +448,21 @@ void SpawnNpcControllerHandler::handle(InPacket &recv) const {
     }
 }
 
+void SetNpcScriptableHandler::handle(InPacket &recv) const {
+    int size = recv.read_byte();
+
+    for (int i = 0; i < size; ++i) {
+        int id = recv.read_int();
+        std::string name = recv.read_string();
+        int start_time = recv.read_int();
+        int end_time = recv.read_int();
+    }
+
+    std::cerr << std::endl
+              << "Opcode [263] Error: Handler exists but is not implemented."
+              << std::endl;
+}
+
 void DropLootHandler::handle(InPacket &recv) const {
     int8_t mode = recv.read_byte();
     int32_t oid = recv.read_int();
@@ -475,6 +490,7 @@ void DropLootHandler::handle(InPacket &recv) const {
 
     bool playerdrop = !recv.read_bool();
 
+    // bug: plays sound when entering a map containing drops owned by self
     if (mode == 0 || (owner == Stage::get().is_player(owner) && !playerdrop)) {
         Sound(Sound::Name::DROP).play();
     }

@@ -23,7 +23,9 @@
 #include "../IO/UITypes/UIStatusBar.h"
 #include "../Net/Packets/AttackAndSkillPackets.h"
 #include "../Net/Packets/GameplayPackets.h"
+#include "../Net/Packets/PlayerInteractionPackets.h"
 #include "../Util/Misc.h"
+#include "IO/UITypes/UICharInfo.h"
 #include "Timer.h"
 
 namespace ms {
@@ -45,12 +47,17 @@ auto fn_admin_enter_map = []<typename... T>(T && ... args) {
 auto fn_change_channel = []<typename... T>(T && ... args) {
     ChangeChannelPacket(std::forward<T>(args)...).dispatch();
 };
+auto fn_char_info_req = []<typename... T>(T && ... args) {
+    CharInfoRequestPacket(std::forward<T>(args)...).dispatch();
+};
 
 Stage::Stage() :
+    state_(State::INACTIVE),
+    map_id_(10000),
+    level_before_(1),
     combat_(player_, chars_, mobs_, reactors_),
-    mob_combat_(player_, chars_, mobs_) {
-    state_ = State::INACTIVE;
-}
+    mob_combat_(player_, chars_, mobs_),
+    exp_before_(0) {}
 
 void Stage::init() {
     drops_.init();
@@ -68,9 +75,9 @@ void Stage::load(int32_t mapid, int8_t portalid) {
     state_ = State::ACTIVE;
 }
 
-void Stage::loadplayer(const CharEntry &entry,
-                       uint8_t wid,
-                       uint8_t channel_id) {
+void Stage::load_player(const CharEntry &entry,
+                        uint8_t wid,
+                        uint8_t channel_id) {
     player_ = Player(entry, wid, channel_id);
     playable_ = player_;
 
@@ -283,6 +290,18 @@ Cursor::State Stage::send_cursor(bool pressed, Point<int16_t> position) {
     }
 
     return npcs_.send_cursor(pressed, position, camera_.position());
+}
+
+void Stage::doubleclick(Point<int16_t> pos) {
+    auto chr = chars_.get_char(pos, camera_.position());
+
+    if (chr) {
+        fn_char_info_req(chr->get().get_oid());
+    } else if (chars_.inrange(player_.get_position(),
+                              pos,
+                              camera_.position())) {
+        fn_char_info_req(player_.get_oid());
+    }
 }
 
 bool Stage::is_player(int32_t cid) const {

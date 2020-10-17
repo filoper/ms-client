@@ -17,8 +17,8 @@
 
 #include <utility>
 
-#include "GraphicsGL.h"
 #include "../Util/StringHandling.h"
+#include "GraphicsGL.h"
 
 namespace ms {
 Text::Text(Font f,

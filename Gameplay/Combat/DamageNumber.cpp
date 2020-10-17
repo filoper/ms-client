@@ -38,17 +38,17 @@ DamageNumber::DamageNumber(Type t, int32_t damage, int16_t starty, int16_t x) {
             multiple_ = false;
         }
 
-        int16_t total = getadvance(first_num_, true);
+        int16_t total = get_advance(first_num_, true);
 
         for (size_t i = 0; i < rest_num_.length(); i++) {
             char c = rest_num_[i];
-            int16_t advance;
+            int16_t advance = 0;
 
             if (i < rest_num_.length() - 1) {
                 char n = rest_num_[i + 1];
-                advance = (getadvance(c, false) + getadvance(n, false)) / 2;
+                advance = (get_advance(c, false) + get_advance(n, false)) / 2;
             } else {
-                advance = getadvance(c, false);
+                advance = get_advance(c, false);
             }
 
             total += advance;
@@ -79,7 +79,7 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const {
         charsets_[type_][false].draw(first_num_, { position, interopc });
 
         if (multiple_) {
-            int16_t first_advance = getadvance(first_num_, true);
+            int16_t first_advance = get_advance(first_num_, true);
             position.shift_x(first_advance);
 
             for (size_t i = 0; i < rest_num_.length(); i++) {
@@ -91,11 +91,11 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const {
 
                 if (i < rest_num_.length() - 1) {
                     char n = rest_num_[i + 1];
-                    int16_t c_advance = getadvance(c, false);
-                    int16_t n_advance = getadvance(n, false);
+                    int16_t c_advance = get_advance(c, false);
+                    int16_t n_advance = get_advance(n, false);
                     advance = (c_advance + n_advance) / 2;
                 } else {
-                    advance = getadvance(c, false);
+                    advance = get_advance(c, false);
                 }
 
                 position.shift_x(advance);
@@ -104,7 +104,7 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const {
     }
 }
 
-int16_t DamageNumber::getadvance(char c, bool first) const {
+int16_t DamageNumber::get_advance(char c, bool first) const {
     constexpr size_t LENGTH = 10;
 
     constexpr int16_t advances[LENGTH] = { 24, 20, 22, 22, 24,
@@ -151,7 +151,7 @@ bool DamageNumber::update() {
     return opacity_.last() <= 0.0f;
 }
 
-int16_t DamageNumber::rowheight(bool critical) {
+int16_t DamageNumber::row_height(bool critical) {
     return critical ? 36 : 30;
 }
 
@@ -182,5 +182,5 @@ void DamageNumber::init() {
         Charset::Alignment::LEFT);
 }
 
-BoolPair<Charset> DamageNumber::charsets_[NUM_TYPES];
+std::array<BoolPair<Charset>, DamageNumber::NUM_TYPES> DamageNumber::charsets_;
 }  // namespace ms

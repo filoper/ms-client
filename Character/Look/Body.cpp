@@ -34,8 +34,7 @@ Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {
             continue;
         }
 
-        for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
-             ++frame) {
+        for (int frame = 0; nl::node framenode = stancenode[frame]; ++frame) {
             for (const auto &partnode : framenode) {
                 std::string part = partnode.name();
 

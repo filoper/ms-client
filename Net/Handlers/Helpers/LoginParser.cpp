@@ -61,7 +61,7 @@ World LoginParser::parse_world(InPacket &recv) {
     std::vector<int32_t> chloads;
     uint8_t channelcount = recv.read_ubyte();
 
-    for (uint8_t i = 0; i < channelcount; ++i) {
+    for (int i = 0; i < channelcount; ++i) {
         recv.read_string();  // channel name
 
         chloads.push_back(recv.read_int());
@@ -121,7 +121,7 @@ StatsEntry LoginParser::parse_stats(InPacket &recv) {
     recv.read_int();   // face
     recv.read_int();   // hair
 
-    for (uint8_t i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         statsentry.petids.push_back(recv.read_long());
     }
 
@@ -179,7 +179,7 @@ LookEntry LoginParser::parse_look(InPacket &recv) {
 
     look.maskedequips[-111] = recv.read_int();
 
-    for (uint8_t i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         look.petids.push_back(recv.read_int());
     }
 

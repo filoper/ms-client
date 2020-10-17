@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../IO/Components/Charset.h"
 #include "../Physics/PhysicsObject.h"
 #include "../Template/BoolPair.h"
@@ -38,12 +40,12 @@ public:
 
     bool update();
 
-    static int16_t rowheight(bool critical);
+    static int16_t row_height(bool critical);
 
     static void init();
 
 private:
-    int16_t getadvance(char c, bool first) const;
+    int16_t get_advance(char c, bool first) const;
 
     static constexpr uint16_t FADE_TIME = 500;
 
@@ -56,6 +58,6 @@ private:
     MovingObject move_obj_;
     Linear<float> opacity_;
 
-    static BoolPair<Charset> charsets_[NUM_TYPES];
+    static std::array<BoolPair<Charset>, NUM_TYPES> charsets_;
 };
 }  // namespace ms

@@ -50,7 +50,7 @@ public:
     void clear_channel_objects();
 
     // Construct the player from a character entry.
-    void loadplayer(const CharEntry &entry, uint8_t wid, uint8_t channel_id);
+    void load_player(const CharEntry &entry, uint8_t wid, uint8_t channel_id);
 
     // Call 'draw()' of all objects on stage
     void draw(float alpha) const;
@@ -66,6 +66,8 @@ public:
 
     // Send mouse input to the stage.
     Cursor::State send_cursor(bool pressed, Point<int16_t> position);
+
+    void doubleclick(Point<int16_t> pos);
 
     // Check if the specified id is the player's id
     bool is_player(int32_t cid) const;

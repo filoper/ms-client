@@ -41,6 +41,12 @@ class WeekEventMessageHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 
+// Show a whisper message
+// WHISPER(135)
+class WhisperReceivedHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
 // Show a chat message
 // CHAT_RECEIVED(162)
 class ChatReceivedHandler : public PacketHandler {

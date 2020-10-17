@@ -73,6 +73,22 @@ class UpdateSkillHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 
+// Response to attempt to fame a character
+// Opcode: FAME_RESPONSE(38)
+class FameResponseHandler : public PacketHandler {
+    enum Result {
+        SUCCESS_GIVE = 0,
+        INCORRECT_USERNAME = 1,
+        TOO_LOW_LEVEL = 2,  // min lvl 15
+        ALREADY_FAMED_TODAY = 3,
+        FAMED_CHAR_TOO_RECENTLY = 4,  // month cd same character
+        SUCCESS_RECV = 5,
+        UNEXPECTED_ERROR = 6
+    };
+
+    void handle(InPacket &recv) const override;
+};
+
 // Parses skill macros
 // Opcode: SKILL_MACROS(124)
 class SkillMacrosHandler : public PacketHandler {

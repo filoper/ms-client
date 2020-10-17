@@ -55,7 +55,7 @@ void ModifyInventoryHandler::handle(InPacket &recv) const {
 
     int8_t size = recv.read_byte();
 
-    for (int8_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         Mod mod;
         mod.mode = recv.read_byte();
         mod.type = InventoryType::by_value(recv.read_byte());

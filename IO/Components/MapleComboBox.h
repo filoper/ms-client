@@ -15,6 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
 #include <memory>
 
 #include "../Graphics/Geometry.h"
@@ -78,7 +79,7 @@ private:
         OPTION10
     };
 
-    Texture textures_[Button::State::NUM_STATES][3];
+    std::array<std::array<Texture, 3>, Button::State::NUM_STATES> textures_;
     std::vector<std::string> options_;
     std::vector<Text> option_text_;
     Text selected_;

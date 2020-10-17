@@ -69,6 +69,8 @@ public:
         CHAR_INFO,
         CASHSHOP,
         GAUGE_BOSS,
+        NOTIFICATION,
+        TRADE,
         NUM_TYPES
     };
 

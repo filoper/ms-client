@@ -334,7 +334,7 @@ void UI::send_key(int32_t keycode, bool pressed) {
             auto chatbar = UI::get().get_element<UIChatBar>();
 
             if (escape) {
-                if (chatbar && chatbar->get().is_chatopen()) {
+                if (chatbar && chatbar->get().is_chat_open()) {
                     chatbar->get().send_key(mapping.action, pressed, escape);
                 } else {
                     state_->send_key(mapping.type,
@@ -365,7 +365,7 @@ void UI::send_key(uint32_t unicode) {
         focused_text_field_->get().send_key(KeyType::Id::TEXT, unicode, true);
     }
 
-    is_key_down_[unicode] = true; // maybe remove
+    is_key_down_[unicode] = true;  // maybe remove
 }
 
 void UI::set_scrollnotice(const std::string &notice) {

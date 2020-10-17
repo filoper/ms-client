@@ -55,7 +55,7 @@ void UIJoypad::draw(float inter) const {
     int16_t y = 24;
     int16_t y_adj = 18;
 
-    for (size_t i = 0; i < Setting::SETTING_NUM; i++) {
+    for (size_t i = 0; i < key_text_.size(); i++) {
         if (i == 0) {
             key_text_[i].draw(position_ + Point<int16_t>(x, y));
         } else if (i > 0 && i < 4) {

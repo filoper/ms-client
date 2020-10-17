@@ -366,6 +366,7 @@ enum Opcode : uint16_t {
     CANCEL_BUFF = 33,
     RECALCULATE_STATS = 35,
     UPDATE_SKILL = 36,
+    FAME_RESPONSE = 38,
 
     /// Messaging 1
     SHOW_STATUS_INFO = 39,
@@ -382,6 +383,7 @@ enum Opcode : uint16_t {
 
     SKILL_MACROS = 124,
     SET_FIELD = 125,
+    WHISPER = 135,
     FIELD_EFFECT = 138,
 
     /// MapObject
@@ -421,6 +423,7 @@ enum Opcode : uint16_t {
     SHOW_MOB_HP = 250,
     SPAWN_NPC = 257,
     SPAWN_NPC_C = 259,
+    SET_NPC_SCRIPTABLE = 263,
     DROP_LOOT = 268,
     REMOVE_LOOT = 269,
     HIT_REACTOR = 277,
@@ -435,6 +438,7 @@ enum Opcode : uint16_t {
 
     /// Player Interaction
     CHAR_INFO = 61,
+    PLAYER_INTERACTION = 314,
 
     /// Cash Shop
     SET_CASH_SHOP = 127
@@ -469,6 +473,7 @@ PacketSwitch::PacketSwitch() {
     emplace<SPAWN_PET, SpawnPetHandler>();
     emplace<SPAWN_NPC, SpawnNpcHandler>();
     emplace<SPAWN_NPC_C, SpawnNpcControllerHandler>();
+    emplace<SET_NPC_SCRIPTABLE, SetNpcScriptableHandler>();
     emplace<SPAWN_MOB, SpawnMobHandler>();
     emplace<SPAWN_MOB_C, SpawnMobControllerHandler>();
     emplace<MOB_MOVED, MobMovedHandler>();
@@ -497,6 +502,7 @@ PacketSwitch::PacketSwitch() {
     emplace<CANCEL_BUFF, CancelBuffHandler>();
     emplace<RECALCULATE_STATS, RecalculateStatsHandler>();
     emplace<UPDATE_SKILL, UpdateSkillHandler>();
+    emplace<FAME_RESPONSE, FameResponseHandler>();
     emplace<ADD_COOLDOWN, AddCooldownHandler>();
 
     // Messaging handlers
@@ -505,6 +511,7 @@ PacketSwitch::PacketSwitch() {
     emplace<SCROLL_RESULT, ScrollResultHandler>();
     emplace<SERVER_MESSAGE, ServerMessageHandler>();
     emplace<WEEK_EVENT_MESSAGE, WeekEventMessageHandler>();
+    emplace<WHISPER, WhisperReceivedHandler>();
     emplace<SHOW_ITEM_GAIN_INCHAT, ShowItemGainInChatHandler>();
 
     // Inventory Handlers
@@ -518,6 +525,7 @@ PacketSwitch::PacketSwitch() {
 
     // Player Interaction
     emplace<CHAR_INFO, CharInfoHandler>();
+    emplace<PLAYER_INTERACTION, PlayerInteractionHandler>();
 
     // Cash Shop
     emplace<SET_CASH_SHOP, SetCashShopHandler>();
@@ -546,7 +554,7 @@ void PacketSwitch::forward(int8_t *bytes, size_t length) const {
         }
     }
 
-    if (opcode < NUM_HANDLERS) {
+    if (opcode < handlers_.size()) {
         if (const auto &handler = handlers_[opcode]) {
             // Handler is good, packet is passed on
 

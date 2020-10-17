@@ -52,6 +52,14 @@ public:
 
     std::optional<std::reference_wrapper<OtherChar>> get_char(int32_t cid);
 
+    std::optional<std::reference_wrapper<OtherChar>> get_char(
+        Point<int16_t> position,
+        Point<int16_t> viewpos);
+
+    bool inrange(Point<int16_t> char_pos,
+                 Point<int16_t> cursorpos,
+                 Point<int16_t> viewpos) const;
+
 private:
     MapObjects chars_;
 

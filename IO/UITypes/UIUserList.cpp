@@ -52,7 +52,7 @@ UIUserList::UIUserList(uint16_t t) :
     party_tab_ = Tab::PARTY_MINE;
     party_title_ = Party["title"];
 
-    for (size_t i = 0; i <= 4; i++) {
+    for (size_t i = 0; i < party_mine_grid_.size(); i++) {
         party_mine_grid_[i] = user_list_["Sheet2"][i];
     }
 
@@ -120,7 +120,7 @@ UIUserList::UIUserList(uint16_t t) :
                                       Point<int16_t>(13, 118));
     buttons_[Buttons::BT_FRIEND_GROUP_0]->set_active(false);
 
-    for (size_t i = 0; i <= 3; i++) {
+    for (size_t i = 0; i < friend_grid_.size(); i++) {
         friend_grid_[i] = user_list_["Sheet1"][i];
     }
 
@@ -225,7 +225,7 @@ UIUserList::UIUserList(uint16_t t) :
 
     blacklist_title_ = Blacklist["base"];
 
-    for (size_t i = 0; i <= 3; i++) {
+    for (size_t i = 0; i < blacklist_grid_.size(); i++) {
         blacklist_grid_[i] = user_list_["Sheet6"][i];
     }
 

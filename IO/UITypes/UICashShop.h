@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../../Data/ItemData.h"
 #include "../../Graphics/Text.h"
 #include "../Components/Charset.h"
@@ -121,10 +123,10 @@ private:
 
     Point<int16_t> best_new_dim_;
 
-    Sprite preview_sprites_[3];
+    std::array<Sprite, 3> preview_sprites_;
     uint8_t preview_index_;
 
-    Sprite menu_tabs_[9];
+    std::array<Sprite, 9> menu_tabs_;
     uint8_t menu_index_;
 
     Text job_label_;
@@ -134,7 +136,7 @@ private:
     Point<int16_t> promotion_pos_;
     int8_t promotion_index_;
 
-    Sprite mvp_sprites_[7];
+    std::array<Sprite, 7> mvp_sprites_;
     Point<int16_t> mvp_pos_;
     uint8_t mvp_grade_;
     Gauge mvp_gauge_;
@@ -147,10 +149,10 @@ private:
     Sprite item_none_;
     std::vector<Sprite> item_labels_;
     std::vector<Item> items_;
-    Text item_name_[MAX_ITEMS];
-    Text item_price_[MAX_ITEMS];
-    Text item_discount_[MAX_ITEMS];
-    Text item_percent_[MAX_ITEMS];
+    std::array<Text, MAX_ITEMS> item_name_;
+    std::array<Text, MAX_ITEMS> item_price_;
+    std::array<Text, MAX_ITEMS> item_discount_;
+    std::array<Text, MAX_ITEMS> item_percent_;
 
     Slider list_slider_;
     int16_t list_offset_;

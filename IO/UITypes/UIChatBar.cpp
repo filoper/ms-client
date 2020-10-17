@@ -26,9 +26,9 @@ auto fn_general_chat = []<typename... T>(T && ... args) {
 };
 
 UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
-    chatopen_ = Setting<Chatopen>::get().load();
-    chatopen_persist_ = chatopen_;
-    chatfield_open_ = false;
+    is_chat_open_ = Setting<Chatopen>::get().load();
+    should_chat_open_persist_ = is_chat_open_;
+    is_chatfield_open_ = false;
     chat_rows_ = 5;
     last_pos_ = 0;
     row_pos_ = 0;
@@ -45,7 +45,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
     chatspace_[2] = view["min"]["bottom"];
     chatspace_[3] = view["drag"];
 
-    int16_t chattop_y = getchattop(true) - 33;
+    int16_t chattop_y = get_chat_top(true) - 33;
     closechat_ = Point<int16_t>(387, 21);
 
     buttons_[Buttons::BT_OPEN_CHAT] =
@@ -63,11 +63,11 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
         std::make_unique<MapleButton>(input["button:help"],
                                       Point<int16_t>(386, -8));
 
-    buttons_[chatopen_ ? Buttons::BT_OPEN_CHAT : Buttons::BT_CLOSE_CHAT]
+    buttons_[is_chat_open_ ? Buttons::BT_OPEN_CHAT : Buttons::BT_CLOSE_CHAT]
         ->set_active(false);
-    buttons_[Buttons::BT_CHAT]->set_active(chatopen_ ? true : false);
-    buttons_[Buttons::BT_LINK]->set_active(chatopen_ ? true : false);
-    buttons_[Buttons::BT_HELP]->set_active(chatopen_ ? true : false);
+    buttons_[Buttons::BT_CHAT]->set_active(is_chat_open_);
+    buttons_[Buttons::BT_LINK]->set_active(is_chat_open_);
+    buttons_[Buttons::BT_HELP]->set_active(is_chat_open_);
 
     chattab_x_ = 6;
     chattab_y_ = chattop_y;
@@ -77,7 +77,7 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
         buttons_[Buttons::BT_TAB_0 + i] = std::make_unique<MapleButton>(
             view["tab"],
             Point<int16_t>(chattab_x_ + (i * chattab_span_), chattab_y_));
-        buttons_[Buttons::BT_TAB_0 + i]->set_active(chatopen_ ? true : false);
+        buttons_[Buttons::BT_TAB_0 + i]->set_active(is_chat_open_);
         chattab_text_[ChatTab::CHT_ALL + i] = Text(Text::Font::A12M,
                                                    Text::Alignment::CENTER,
                                                    Color::Name::DUSTYGRAY,
@@ -92,11 +92,11 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
             Point<int16_t>(chattab_x_ + (ChatTab::NUM_CHATTAB * chattab_span_),
                            chattab_y_));
     buttons_[Buttons::BT_TAB_0 + ChatTab::NUM_CHATTAB]->set_active(
-        chatopen_ ? true : false);
+        is_chat_open_);
 
     buttons_[Buttons::BT_CHAT_TARGET] =
         std::make_unique<MapleButton>(chatTarget["all"], Point<int16_t>(5, -8));
-    buttons_[Buttons::BT_CHAT_TARGET]->set_active(chatopen_ ? true : false);
+    buttons_[Buttons::BT_CHAT_TARGET]->set_active(is_chat_open_);
 
     chatenter_ = input["layer:chatEnter"];
     chatcover_ = input["layer:backgrnd"];
@@ -107,8 +107,8 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
         Color::Name::WHITE,
         Rectangle<int16_t>(Point<int16_t>(62, -9), Point<int16_t>(330, 8)),
         0);
-    chatfield_.set_state(chatopen_ ? Textfield::State::NORMAL
-                                   : Textfield::State::DISABLED);
+    chatfield_.set_state(is_chat_open_ ? Textfield::State::NORMAL
+                                       : Textfield::State::DISABLED);
 
     chatfield_.set_enter_callback([&](std::string msg) {
         if (!msg.empty()) {
@@ -161,18 +161,18 @@ UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
 
     dimension_ = Point<int16_t>(410, DIMENSION_Y_);
 
-    // if (chatopen_)
-    //	dimension.shift_y(getchatbarheight());
+    // if (is_chat_open_)
+    //	dimension.shift_y(get_chatbar_height());
 }
 
 void UIChatBar::draw(float inter) const {
     UIElement::draw_sprites(inter);
 
-    if (chatopen_) {
-        int16_t chattop = getchattop(chatopen_);
+    if (is_chat_open_) {
+        int16_t chattop = get_chat_top(is_chat_open_);
 
         auto pos_adj =
-            chatfield_open_ ? Point<int16_t>(0, 0) : Point<int16_t>(0, 28);
+            is_chatfield_open_ ? Point<int16_t>(0, 0) : Point<int16_t>(0, 28);
 
         chatspace_[0].draw(position_ + Point<int16_t>(0, chattop) + pos_adj);
 
@@ -207,12 +207,12 @@ void UIChatBar::draw(float inter) const {
 
             row_texts_.at(rowid).draw(
                 position_
-                + Point<int16_t>(9, getchattop(chatopen_) - yshift - 21)
+                + Point<int16_t>(9, get_chat_top(is_chat_open_) - yshift - 21)
                 + pos_adj);
         }
     } else {
         auto pos_adj =
-            chatfield_open_ ? Point<int16_t>(0, -28) : Point<int16_t>(0, 0);
+            is_chatfield_open_ ? Point<int16_t>(0, -28) : Point<int16_t>(0, 0);
 
         chatspace_[0].draw(position_ + Point<int16_t>(0, -1) + pos_adj);
         chatspace_[1].draw(position_ + Point<int16_t>(0, -1) + pos_adj);
@@ -225,7 +225,7 @@ void UIChatBar::draw(float inter) const {
         }
     }
 
-    if (chatfield_open_) {
+    if (is_chatfield_open_) {
         chatcover_.draw(DrawArgument(position_ + Point<int16_t>(0, -13),
                                      Point<int16_t>(409, 0)));
         chatenter_.draw(DrawArgument(position_ + Point<int16_t>(0, -13),
@@ -235,9 +235,10 @@ void UIChatBar::draw(float inter) const {
 
     UIElement::draw_buttons(inter);
 
-    if (chatopen_) {
-        auto pos_adj = chatopen_ && !chatfield_open_ ? Point<int16_t>(0, 28)
-                                                     : Point<int16_t>(0, 0);
+    if (is_chat_open_) {
+        auto pos_adj = is_chat_open_ && !is_chatfield_open_
+                           ? Point<int16_t>(0, 28)
+                           : Point<int16_t>(0, 0);
 
         for (size_t i = 0; i < ChatTab::NUM_CHATTAB; i++) {
             chattab_text_[ChatTab::CHT_ALL + i].draw(
@@ -252,8 +253,8 @@ void UIChatBar::draw(float inter) const {
 void UIChatBar::update() {
     UIElement::update();
 
-    auto pos_adj = chatopen_ && !chatfield_open_ ? Point<int16_t>(0, 28)
-                                                 : Point<int16_t>(0, 0);
+    auto pos_adj = is_chat_open_ && !is_chatfield_open_ ? Point<int16_t>(0, 28)
+                                                        : Point<int16_t>(0, 0);
 
     for (size_t i = 0; i < ChatTab::NUM_CHATTAB; i++) {
         buttons_[BT_TAB_0 + i]->set_position(
@@ -286,18 +287,18 @@ void UIChatBar::send_key(int32_t keycode, bool pressed, bool escape) {
 }
 
 bool UIChatBar::is_in_range(Point<int16_t> cursorpos) const {
-    auto bounds = getbounds(dimension_);
+    auto bounds = get_bounds(dimension_);
     return bounds.contains(cursorpos);
 }
 
 Cursor::State UIChatBar::send_cursor(bool clicking, Point<int16_t> cursorpos) {
-    if (chatopen_) {
+    if (is_chat_open_) {
         if (Cursor::State new_state =
                 chatfield_.send_cursor(cursorpos, clicking)) {
             return new_state;
         }
 
-        return check_dragtop(clicking, cursorpos);
+        return check_drag_top(clicking, cursorpos);
     }
     return UIDragElement::send_cursor(clicking, cursorpos);
 }
@@ -306,9 +307,9 @@ UIElement::Type UIChatBar::get_type() const {
     return TYPE;
 }
 
-Cursor::State UIChatBar::check_dragtop(bool clicking,
-                                       Point<int16_t> cursorpos) {
-    Rectangle<int16_t> bounds = getbounds(dimension_);
+Cursor::State UIChatBar::check_drag_top(bool clicking,
+                                        Point<int16_t> cursorpos) {
+    Rectangle<int16_t> bounds = get_bounds(dimension_);
     Point<int16_t> bounds_lt = bounds.get_left_top();
     Point<int16_t> bounds_rb = bounds.get_right_bottom();
 
@@ -340,7 +341,7 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
     bool in_chatleft = chatleft.contains(cursorpos);
     bool in_chatright = chatright.contains(cursorpos);
 
-    if (drag_chat_top_) {
+    if (should_drag_chat_top_) {
         if (clicking) {
             int16_t ydelta = cursorpos.y() - bounds_rb_y + 10;
 
@@ -358,16 +359,16 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
             // slider_.setvertical(Range<int16_t>(0, CHAT_ROW_HEIGHT_ *
             // chat_rows_ - 14));
 
-            chattab_y_ = getchattop(chatopen_) - 33;
-            // dimension.set_y(getchatbarheight());
+            chattab_y_ = get_chat_top(is_chat_open_) - 33;
+            // dimension.set_y(get_chatbar_height());
 
             return Cursor::State::CLICKING;
         }
-        drag_chat_top_ = false;
+        should_drag_chat_top_ = false;
 
     } else if (in_chattop) {
         if (clicking) {
-            drag_chat_top_ = true;
+            should_drag_chat_top_ = true;
 
             return Cursor::State::CLICKING;
         }
@@ -409,24 +410,25 @@ Cursor::State UIChatBar::check_dragtop(bool clicking,
     return UIDragElement::send_cursor(clicking, cursorpos);
 }
 
-bool UIChatBar::indragrange(Point<int16_t> cursorpos) const {
-    auto bounds = getbounds(drag_area_);
+bool UIChatBar::is_in_drag_range(Point<int16_t> cursorpos) const {
+    auto bounds = get_bounds(drag_area_);
 
     return bounds.contains(cursorpos);
 }
 
-void UIChatBar::send_chatline(const std::string &line, LineType type) {    
+void UIChatBar::send_chatline(const std::string &line, LineType type) {
     row_max_++;
     row_pos_ = row_max_;
 
     // slider_.setrows(row_pos_, chat_rows_, row_max_);
 
-    Color::Name color;
+    Color::Name color = Color::Name::WHITE;
 
     switch (type) {
         case LineType::RED: color = Color::Name::DARKRED; break;
         case LineType::BLUE: color = Color::Name::MEDIUMBLUE; break;
         case LineType::YELLOW: color = Color::Name::YELLOW; break;
+        case LineType::GREEN: color = Color::Name::GREEN; break;
         default: color = Color::Name::WHITE; break;
     }
 
@@ -451,18 +453,18 @@ void UIChatBar::display_message(Messages::Type line, UIChatBar::LineType type) {
 }
 
 void UIChatBar::toggle_chat() {
-    chatopen_persist_ = !chatopen_persist_;
-    toggle_chat(chatopen_persist_);
+    should_chat_open_persist_ = !should_chat_open_persist_;
+    toggle_chat(should_chat_open_persist_);
 }
 
 void UIChatBar::toggle_chat(bool chat_open) {
-    if (!chat_open && chatopen_persist_) {
+    if (!chat_open && should_chat_open_persist_) {
         return;
     }
 
-    chatopen_ = chat_open;
+    is_chat_open_ = chat_open;
 
-    if (!chatopen_ && chatfield_open_) {
+    if (!is_chat_open_ && is_chatfield_open_) {
         toggle_chatfield();
     }
 
@@ -477,8 +479,8 @@ void UIChatBar::toggle_chat(bool chat_open) {
 }
 
 void UIChatBar::toggle_chatfield() {
-    chatfield_open_ = !chatfield_open_;
-    toggle_chatfield(chatfield_open_);
+    is_chatfield_open_ = !is_chatfield_open_;
+    toggle_chatfield(is_chatfield_open_);
 }
 
 void UIChatBar::toggle_chatfield(bool chatfield_open) {
@@ -494,7 +496,7 @@ void UIChatBar::toggle_chatfield(bool chatfield_open) {
 
         chatfield_.set_state(Textfield::State::FOCUSED);
 
-        // dimension.shift_y(getchatbarheight());
+        // dimension.shift_y(get_chatbar_height());
     } else {
         buttons_[Buttons::BT_CHAT]->set_active(false);
         buttons_[Buttons::BT_HELP]->set_active(false);
@@ -508,12 +510,12 @@ void UIChatBar::toggle_chatfield(bool chatfield_open) {
     }
 }
 
-bool UIChatBar::is_chatopen() {
-    return chatopen_;
+bool UIChatBar::is_chat_open() {
+    return is_chat_open_;
 }
 
-bool UIChatBar::is_chatfieldopen() {
-    return chatfield_open_;
+bool UIChatBar::is_chatfield_open() {
+    return is_chatfield_open_;
 }
 
 Button::State UIChatBar::button_pressed(uint16_t buttonid) {
@@ -539,26 +541,26 @@ Button::State UIChatBar::button_pressed(uint16_t buttonid) {
             return Button::State::PRESSED;
     }
 
-    Setting<Chatopen>::get().save(chatopen_);
+    Setting<Chatopen>::get().save(is_chat_open_);
 
     return Button::State::NORMAL;
 }
 
-int16_t UIChatBar::getchattop(bool chat_open) const {
+int16_t UIChatBar::get_chat_top(bool chat_open) const {
     if (chat_open) {
-        return getchatbarheight() * -1;
+        return get_chatbar_height() * -1;
     }
     return -1;
 }
 
-int16_t UIChatBar::getchatbarheight() const {
+int16_t UIChatBar::get_chatbar_height() const {
     return 15 + chat_rows_ * CHAT_ROW_HEIGHT_;
 }
 
-Rectangle<int16_t> UIChatBar::getbounds(Point<int16_t> additional_area) const {
-    int16_t screen_adj = (chatopen_) ? 35 : 16;
+Rectangle<int16_t> UIChatBar::get_bounds(Point<int16_t> additional_area) const {
+    int16_t screen_adj = (is_chat_open_) ? 35 : 16;
 
-    auto absp = position_ + Point<int16_t>(0, getchattop(chatopen_));
+    auto absp = position_ + Point<int16_t>(0, get_chat_top(is_chat_open_));
     auto da = absp + additional_area;
 
     absp = Point<int16_t>(absp.x(), absp.y() - screen_adj);

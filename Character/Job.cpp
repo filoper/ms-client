@@ -42,7 +42,7 @@ void Job::change_job(uint16_t i) {
 }
 
 bool Job::is_sub_job(uint16_t subid) const {
-    for (int32_t lvit = BEGINNER; lvit <= FOURTH; lvit++) {
+    for (int lvit = BEGINNER; lvit <= FOURTH; lvit++) {
         Level lv = static_cast<Level>(lvit);
 
         if (subid == get_subjob(lv)) {

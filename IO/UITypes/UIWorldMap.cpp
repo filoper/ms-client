@@ -33,7 +33,7 @@ UIWorldMap::UIWorldMap() : UIDragElement<PosMAP>() {
 
     cur_pos_ = MapHelper["curPos"];
 
-    for (size_t i = 0; i < MAPSPOT_TYPE_MAX_; i++) {
+    for (size_t i = 0; i < npc_pos_.size(); i++) {
         npc_pos_[i] = MapHelper["npcPos" + std::to_string(i)];
     }
 
@@ -158,8 +158,8 @@ void UIWorldMap::update() {
         search_text_.update(position_);
     }
 
-    for (size_t i = 0; i < MAPSPOT_TYPE_MAX_; i++) {
-        npc_pos_[i].update(1);
+    for (auto &npc_po : npc_pos_) {
+        npc_po.update(1);
     }
 
     cur_pos_.update();

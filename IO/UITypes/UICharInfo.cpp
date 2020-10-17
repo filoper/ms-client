@@ -26,8 +26,21 @@ auto fn_char_info_request = []<typename... T>(T && ... args) {
     CharInfoRequestPacket(std::forward<T>(args)...).dispatch();
 };
 
+auto fn_trade_request = [](auto cid) {
+    PlayerInteractionPacket(PlayerInteractionPacket::mode::CREATE,
+                            PlayerInteractionPacket::CreateType::TRADE)
+        .dispatch();
+    PlayerInteractionPacket(PlayerInteractionPacket::mode::INVITE, cid)
+        .dispatch();
+};
+
+auto fn_give_fame = []<typename... T>(T && ... args) {
+    GiveFamePacket(std::forward<T>(args)...).dispatch();
+};
+
 UICharInfo::UICharInfo(int32_t cid) :
     UIDragElement<PosCHARINFO>(),
+    cid_(cid),
     is_loading_(true),
     timestep_(Constants::TIMESTEP),
     personality_enabled_(false),
@@ -316,8 +329,14 @@ Button::State UICharInfo::button_pressed(uint16_t buttonid) {
             show_bottom_window(buttonid);
             return Button::State::NORMAL;
         case Buttons::BT_POP_DOWN:
+            fn_give_fame(target_character_->get_oid(),
+                         GiveFamePacket::mode::DECREASE);
+            break;
         case Buttons::BT_POP_UP:
-        case Buttons::BT_TRADE:
+            fn_give_fame(target_character_->get_oid(),
+                         GiveFamePacket::mode::INCREASE);
+            break;
+        case Buttons::BT_TRADE: fn_trade_request(cid_); break;
         case Buttons::BT_FRIEND:
         case Buttons::BT_VISIT:
         default: break;
@@ -387,17 +406,21 @@ void UICharInfo::update_stats(int32_t character_id,
                               int16_t f,
                               const std::string &g,
                               const std::string &a) {
+    cid_ = character_id;
     int32_t player_id = Stage::get().get_player().get_oid();
 
-    if (character_id == player_id) {
-        buttons_[Buttons::BT_PARTY]->set_state(Button::State::DISABLED);
-        buttons_[Buttons::BT_POP_DOWN]->set_state(Button::State::DISABLED);
-        buttons_[Buttons::BT_POP_UP]->set_state(Button::State::DISABLED);
-        buttons_[Buttons::BT_FRIEND]->set_state(Button::State::DISABLED);
-    }
+    auto bt_state = character_id == player_id ? Button::State::DISABLED
+                                              : Button::State::NORMAL;
+
+    buttons_[Buttons::BT_PARTY]->set_state(bt_state);
+    buttons_[Buttons::BT_TRADE]->set_state(bt_state);
+    buttons_[Buttons::BT_POP_DOWN]->set_state(bt_state);
+    buttons_[Buttons::BT_POP_UP]->set_state(bt_state);
+    buttons_[Buttons::BT_FRIEND]->set_state(bt_state);
 
     Job character_job = Job(job_id);
 
+    target_character_ = &Stage::get().get_character(character_id)->get();
     name_.change_text(target_character_->get_name());
     job_.change_text(character_job.get_name());
     level_.change_text(std::to_string(lv));
@@ -410,22 +433,30 @@ void UICharInfo::update_stats(int32_t character_id,
 }
 
 void UICharInfo::show_bottom_window(uint16_t buttonid) {
+    bool was_personality_enabled = personality_enabled_;
+    bool was_collect_enabled = collect_enabled_;
+    bool was_damage_enabled = damage_enabled_;
     personality_enabled_ = false;
     collect_enabled_ = false;
     damage_enabled_ = false;
 
     switch (buttonid) {
-        case Buttons::BT_PERSONALITY: personality_enabled_ = true; break;
-        case Buttons::BT_COLLECT: collect_enabled_ = true; break;
-        case Buttons::BT_DAMAGE: damage_enabled_ = true; break;
+        case Buttons::BT_PERSONALITY:
+            personality_enabled_ = !was_personality_enabled;
+            break;
+        case Buttons::BT_COLLECT:
+            collect_enabled_ = !was_collect_enabled;
+            break;
+        case Buttons::BT_DAMAGE: damage_enabled_ = !was_damage_enabled; break;
     }
 }
 
 void UICharInfo::show_right_window(uint16_t buttonid) {
+    bool was_item_enabled = item_enabled_;
     item_enabled_ = false;
 
     switch (buttonid) {
-        case Buttons::BT_ITEM: item_enabled_ = true; break;
+        case Buttons::BT_ITEM: item_enabled_ = !was_item_enabled; break;
     }
 }
 }  // namespace ms

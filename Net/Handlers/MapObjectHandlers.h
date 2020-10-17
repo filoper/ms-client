@@ -142,6 +142,12 @@ class SpawnNpcControllerHandler : public PacketHandler {
     void handle(InPacket &recv) const override;
 };
 
+// Spawn an NPC on the current stage and take control of it
+// Opcode: SET_NPC_SCRIPTABLE(263)
+class SetNpcScriptableHandler : public PacketHandler {
+    void handle(InPacket &recv) const override;
+};
+
 // Drop an item on the stage
 // Opcode: DROP_LOOT(268)
 class DropLootHandler : public PacketHandler {

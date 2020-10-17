@@ -496,7 +496,8 @@ void UIStatusBar::draw(float alpha) const {
     }
 
     Point<int16_t> pos;
-    uint8_t button_count, menutitle_index;
+    uint8_t button_count = 0;
+    uint8_t menutitle_index = 0;
 
     if (character_active_) {
         pos = character_pos_;

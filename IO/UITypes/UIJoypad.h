@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../Components/Textfield.h"
 #include "../Template/BoolPair.h"
 #include "../UIDragElement.h"
@@ -68,6 +70,6 @@ private:
         SETTING_NUM
     };
 
-    Text key_text_[UIJoypad::Setting::SETTING_NUM];
+    std::array<Text, UIJoypad::Setting::SETTING_NUM> key_text_;
 };
 }  // namespace ms

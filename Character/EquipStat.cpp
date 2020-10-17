@@ -24,22 +24,24 @@ int32_t value_of(Id value) {
     return value;
 }
 
-const char *names[Id::LENGTH] = { "STR",
-                                  "DEX",
-                                  "INT",
-                                  "LUK",
-                                  "MaxHP",
-                                  "MaxMP",
-                                  "Attack Power",
-                                  "Magic Attack",
-                                  "Defense",
+std::array<const char *, Id::LENGTH> names = {
+    "STR",
+    "DEX",
+    "INT",
+    "LUK",
+    "MaxHP",
+    "MaxMP",
+    "Attack Power",
+    "Magic Attack",
+    "Defense",
 
-                                  // TODO: Does current GMS use these anymore?
-                                  "MAGIC DEFENSE",
-                                  "ACCURACY",
-                                  "AVOID",
-                                  "HANDS",
+    // TODO: Does current GMS use these anymore?
+    "MAGIC DEFENSE",
+    "ACCURACY",
+    "AVOID",
+    "HANDS",
 
-                                  "Speed",
-                                  "Jump" };
+    "Speed",
+    "Jump"
+};
 }  // namespace ms::EquipStat

@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../Components/Slider.h"
 #include "../Graphics/SpecialText.h"
 #include "../UIDragElement.h"
@@ -60,8 +62,8 @@ private:
 
     int16_t offset_;
     int16_t event_count_;
-    ShadowText event_title_[3];
-    Text event_date_[3];
+    std::array<ShadowText, 3> event_title_;
+    std::array<Text, 3> event_date_;
     Slider slider_;
     Texture item_reward_;
     Texture text_reward_;

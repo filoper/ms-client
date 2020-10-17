@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../Gameplay/Combat/DamageNumber.h"
 #include "../Gameplay/MapleMap/MapObject.h"
 #include "../Graphics/EffectLayer.h"
@@ -180,7 +182,7 @@ protected:
 
     CharLook look_;
     CharLook look_preview_;
-    PetLook pets_[3];
+    std::array<PetLook, 3> pets_;
 
     State state_;
     bool attacking_;

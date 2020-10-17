@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../../Character/CharStats.h"
 #include "../../Graphics/SpecialText.h"
 #include "../Components/Charset.h"
@@ -121,9 +123,9 @@ private:
     Charset stat_set_;
     Charset hpmp_set_;
     Charset level_set_;
-    Texture quickslot_[2];
-    Texture menu_title_[5];
-    Texture menu_background_[3];
+    std::array<Texture, 2> quickslot_;
+    std::array<Texture, 5> menu_title_;
+    std::array<Texture, 3> menu_background_;
     OutlinedText name_label_;
     std::vector<Sprite> hpmp_sprites_;
 

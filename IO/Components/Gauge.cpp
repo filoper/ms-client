@@ -20,9 +20,8 @@ Gauge::Gauge(Type type, Texture front, int16_t max, float percent) :
     type_(type),
     bar_front_(front),
     maximum_(max),
-    percentage_(percent) {
-    target_ = percentage_;
-}
+    percentage_(percent),
+    target_(percent) {}
 
 Gauge::Gauge(Type type,
              Texture front,
@@ -33,9 +32,8 @@ Gauge::Gauge(Type type,
     bar_front_(front),
     bar_mid_(mid),
     maximum_(max),
-    percentage_(percent) {
-    target_ = percentage_;
-}
+    percentage_(percent),
+    target_(percent) {}
 
 Gauge::Gauge(Type type,
              Texture front,
@@ -48,9 +46,8 @@ Gauge::Gauge(Type type,
     bar_mid_(mid),
     bar_end_(end),
     maximum_(max),
-    percentage_(percent) {
-    target_ = percentage_;
-}
+    percentage_(percent),
+    target_(percent) {}
 
 Gauge::Gauge() = default;
 

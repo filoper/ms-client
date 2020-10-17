@@ -114,7 +114,7 @@ void ChatBalloonHorizontal::draw(Point<int16_t> position) const {
     north_west_.draw(DrawArgument(left, top));
     south_west_.draw(DrawArgument(left, bottom));
 
-    for (int16_t y = top; y < bottom; y += ytile_) {
+    for (int y = top; y < bottom; y += ytile_) {
         west_.draw(DrawArgument(left, y));
         east_.draw(DrawArgument(right, y));
     }
@@ -122,7 +122,7 @@ void ChatBalloonHorizontal::draw(Point<int16_t> position) const {
     center_.draw(DrawArgument(Point<int16_t>(left - 8, top),
                               Point<int16_t>(width + 8, height)));
 
-    for (int16_t x = left; x < right; x += xtile_) {
+    for (int x = left; x < right; x += xtile_) {
         north_.draw(DrawArgument(x, top));
         south_.draw(DrawArgument(x, bottom));
     }

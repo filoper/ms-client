@@ -252,6 +252,7 @@ public:
         NPC_SHOP_ACTION = 61,
 
         /// Player Interaction
+        GIVE_FAME = 95,
         CHAR_INFO_REQUEST = 97,
 
         /// Inventory
@@ -271,6 +272,7 @@ public:
         USE_SKILL = 91,
 
         /// Gameplay 2
+        PLAYER_INTERACTION = 123,
         PARTY_OPERATION = 124,
         ADMIN_COMMAND = 128,
         MOVE_MONSTER = 188,

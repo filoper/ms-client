@@ -75,7 +75,7 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     nl::node sellen = src["TabSell"]["enabled"];
     nl::node selldis = src["TabSell"]["disabled"];
 
-    for (uint16_t i = Buttons::EQUIP; i <= Buttons::CASH; i++) {
+    for (int i = Buttons::EQUIP; i <= Buttons::CASH; i++) {
         std::string tabnum = std::to_string(i - Buttons::EQUIP);
         buttons_[i] =
             std::make_unique<TwoSpriteButton>(selldis[tabnum], sellen[tabnum]);
@@ -87,7 +87,7 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     buy_x_ = 8;
     buy_width_ = 257;
 
-    for (uint16_t i = Buttons::BUY0; i <= Buttons::BUY8; i++) {
+    for (int i = Buttons::BUY0; i <= Buttons::BUY8; i++) {
         Point<int16_t> pos(buy_x_, item_y + 42 * (i - Buttons::BUY0));
         Point<int16_t> dim(buy_width_, item_height);
         buttons_[i] = std::make_unique<AreaButton>(pos, dim);
@@ -96,7 +96,7 @@ UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     sell_x_ = 284;
     sell_width_ = 200;
 
-    for (uint16_t i = Buttons::SELL0; i <= Buttons::SELL8; i++) {
+    for (int i = Buttons::SELL0; i <= Buttons::SELL8; i++) {
         Point<int16_t> pos(sell_x_, item_y + 42 * (i - Buttons::SELL0));
         Point<int16_t> dim(sell_width_, item_height);
         buttons_[i] = std::make_unique<AreaButton>(pos, dim);
@@ -631,8 +631,8 @@ void UIShop::BuyState::reset() {
 
 void UIShop::BuyState::draw(Point<int16_t> parentpos,
                             const Texture &selected) const {
-    for (int16_t i = 0; i < 9; i++) {
-        int16_t slot = i + offset;
+    for (int i = 0; i < 9; i++) {
+        auto slot = i + offset;
 
         if (slot >= last_slot) {
             break;
@@ -728,7 +728,7 @@ void UIShop::SellState::change_tab(const Inventory &inventory,
 
     int16_t slots = inventory.get_slotmax(tab);
 
-    for (int16_t i = 1; i <= slots; i++) {
+    for (int i = 1; i <= slots; i++) {
         if (int32_t item_id = inventory.get_item_id(tab, i)) {
             int16_t count = inventory.get_item_count(tab, i);
             items.emplace_back(item_id,
@@ -744,8 +744,8 @@ void UIShop::SellState::change_tab(const Inventory &inventory,
 
 void UIShop::SellState::draw(Point<int16_t> parentpos,
                              const Texture &selected) const {
-    for (int16_t i = 0; i <= 8; i++) {
-        int16_t slot = i + offset;
+    for (int i = 0; i <= 8; i++) {
+        auto slot = i + offset;
 
         if (slot >= last_slot) {
             break;

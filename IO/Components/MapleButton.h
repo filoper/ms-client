@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <array>
+
 #include "../Graphics/Animation.h"
 #include "Button.h"
 
@@ -43,7 +45,7 @@ public:
     }
 
 private:
-    Texture textures_[Button::State::NUM_STATES];
-    Animation animations_[Button::State::NUM_STATES];
+    std::array<Texture, Button::State::NUM_STATES> textures_;
+    std::array<Animation, Button::State::NUM_STATES> animations_;
 };
 }  // namespace ms

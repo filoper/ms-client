@@ -876,7 +876,7 @@ void UIMiniMap::draw_npclist(Point<int16_t> minimap_dims, float alpha) const {
     Point<int16_t> listNpc_pos =
         position_ + Point<int16_t>(minimap_dims.x() + 10, 23);
 
-    for (int8_t i = 0; i + list_npc_offset_ < list_npc_list_.size() && i < 8;
+    for (int i = 0; i + list_npc_offset_ < list_npc_list_.size() && i < 8;
          i++) {
         if (selected_ - list_npc_offset_ == i) {
             ColorBox highlight = ColorBox(

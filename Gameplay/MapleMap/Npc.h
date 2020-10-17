@@ -15,6 +15,8 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
+#include <functional>
+
 #include "../../Graphics/Animation.h"
 #include "../../Graphics/Text.h"
 #include "../../Util/Randomizer.h"
@@ -55,9 +57,24 @@ public:
     // Returns the NPC's function description or title.
     std::string get_func();
 
+    int get_id() const { return npc_id_; }
+
+    void talk(
+        std::function<void(int, int, int, int, int, std::string)> talk_func) {
+        if (scripted_) {
+            return;
+        }
+
+        if (!dialogue_["d0"].empty()) {
+            talk_func(npc_id_, 0, 0, 1, 0, dialogue_["d0"].at(0));
+        }
+    }
+
 private:
     std::map<std::string, Animation> animations_;
     std::map<std::string, std::vector<std::string>> lines_;
+    std::map<std::string, std::vector<std::string>> dialogue_;
+    std::string talk_state = "d0";
     std::vector<std::string> states_;
     std::string name_;
     std::string func_;

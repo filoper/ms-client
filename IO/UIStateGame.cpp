@@ -151,6 +151,8 @@ void UIStateGame::remove_cursor(UIElement::Type t) {
 void UIStateGame::doubleclick(Point<int16_t> pos) {
     if (UIElement *front = get_front(pos)) {
         front->doubleclick(pos);
+    } else {
+        Stage::get().doubleclick(pos);
     }
 }
 
@@ -259,7 +261,7 @@ void UIStateGame::send_key(KeyType::Id type,
                     case KeyAction::Id::CASHSHOP: fn_enter_cashshop(); break;
                     case KeyAction::Id::TOGGLE_CHAT:
                         if (auto chatbar = UI::get().get_element<UIChatBar>()) {
-                            if (!chatbar->get().is_chatfieldopen()) {
+                            if (!chatbar->get().is_chatfield_open()) {
                                 chatbar->get().toggle_chat();
                             }
                         }

@@ -23,6 +23,7 @@
 #include "../../IO/UITypes/UIStatsInfo.h"
 #include "../../IO/Window.h"
 #include "Helpers/LoginParser.h"
+#include "IO/UITypes/UIChatBar.h"
 
 namespace ms {
 void transition(int32_t mapid, uint8_t portalid) {
@@ -223,10 +224,54 @@ void UpdateSkillHandler::handle(InPacket &recv) const {
     UI::get().enable();
 }
 
+void FameResponseHandler::handle(InPacket &recv) const {
+    std::string message;
+
+    switch (auto result = recv.read_byte()) {
+        case FameResponseHandler::Result::SUCCESS_GIVE: {
+            auto char_name = recv.read_string();
+            int8_t mode = recv.read_byte();
+            auto new_fame = recv.read_ushort();
+            std::string mode_str = mode == 1 ? "famed " : "defamed ";
+            recv.skip_byte();
+            message = "You " + mode_str + char_name + '.';
+        } break;
+        case FameResponseHandler::Result::SUCCESS_RECV: {
+            auto from_char_name = recv.read_string();
+            int8_t mode = recv.read_byte();
+            std::string mode_str = mode == 1 ? "fame " : "defame ";
+            message =
+                "You received " + mode_str + "from " + from_char_name + '.';
+        } break;
+        case FameResponseHandler::Result::ALREADY_FAMED_TODAY:
+            message = "You can't raise or drop fame anymore today.";
+            break;
+        case FameResponseHandler::Result::FAMED_CHAR_TOO_RECENTLY:
+            message = "You have famed this character too recently.";
+            break;
+        case FameResponseHandler::Result::TOO_LOW_LEVEL:
+            message = "You must be at least level 15 to fame someone.";
+            break;
+        case FameResponseHandler::Result::INCORRECT_USERNAME:
+            message = "Incorrect user.";
+            break;
+        case FameResponseHandler::Result::UNEXPECTED_ERROR:
+            message = "An unexpected error occurred.";
+            break;
+        default: break;
+    }
+
+    if (auto chatbar = UI::get().get_element<UIChatBar>()) {
+        if (!message.empty()) {
+            chatbar->get().send_chatline(message, UIChatBar::LineType::RED);
+        }
+    }
+}
+
 void SkillMacrosHandler::handle(InPacket &recv) const {
     uint8_t size = recv.read_ubyte();
 
-    for (uint8_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         recv.read_string();  // name
         recv.read_byte();    // 'shout' byte
         recv.read_int();     // skill 1
@@ -245,7 +290,7 @@ void AddCooldownHandler::handle(InPacket &recv) const {
 void KeymapHandler::handle(InPacket &recv) const {
     recv.skip(1);
 
-    for (uint8_t i = 0; i < 90; i++) {
+    for (int i = 0; i < 90; i++) {
         uint8_t type = recv.read_ubyte();
         int32_t action = recv.read_int();
 

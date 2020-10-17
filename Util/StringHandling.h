@@ -44,13 +44,13 @@ inline std::string to_utf8_string(uint32_t value) {
 
     if (value < 0x00000800) {
         std::stringstream ss;
-        char byte1 = 0b11000000;
-        char byte0 = 0b10000000;
+        unsigned char byte1 = 0b11000000;
+        unsigned char byte0 = 0b10000000;
 
-        auto aa = value & 0b00000000000000000000011111000000;
-        auto bb = value & 0b00000000000000000000000000111111;
+        uint32_t aa = value & uint32_t(0b00000000000000000000011111000000);
+        uint32_t bb = value & uint32_t(0b00000000000000000000000000111111);
 
-        aa >>= 6;
+        aa >>= uint32_t(6);
 
         byte1 |= aa;
         byte0 |= bb;
@@ -63,16 +63,16 @@ inline std::string to_utf8_string(uint32_t value) {
 
     if (value < 0x00010000) {
         std::stringstream ss;
-        char byte2 = 0b11100000;
-        char byte1 = 0b10000000;
-        char byte0 = 0b10000000;
+        unsigned char byte2 = 0b11100000;
+        unsigned char byte1 = 0b10000000;
+        unsigned char byte0 = 0b10000000;
 
-        auto aa = value & 0b1111000000000000;
-        auto bb = value & 0b0000111111000000;
-        auto cc = value & 0b0000000000111111;
+        uint32_t aa = value & uint32_t(0b1111000000000000);
+        uint32_t bb = value & uint32_t(0b0000111111000000);
+        uint32_t cc = value & uint32_t(0b0000000000111111);
 
-        aa >>= 11;
-        bb >>= 6;
+        aa >>= uint32_t(11);
+        bb >>= uint32_t(6);
 
         byte2 |= aa;
         byte1 |= bb;
@@ -86,19 +86,19 @@ inline std::string to_utf8_string(uint32_t value) {
     }
 
     std::stringstream ss;
-    char byte3 = 0b11110000;
-    char byte2 = 0b10000000;
-    char byte1 = 0b10000000;
-    char byte0 = 0b10000000;
+    unsigned char byte3 = 0b11110000;
+    unsigned char byte2 = 0b10000000;
+    unsigned char byte1 = 0b10000000;
+    unsigned char byte0 = 0b10000000;
 
-    auto aa = value & 0b00000000000111000000000000000000;
-    auto bb = value & 0b00000000000000111111000000000000;
-    auto cc = value & 0b00000000000000000000111111000000;
-    auto dd = value & 0b00000000000000000000000000111111;
+    uint32_t aa = value & uint32_t(0b00000000000111000000000000000000);
+    uint32_t bb = value & uint32_t(0b00000000000000111111000000000000);
+    uint32_t cc = value & uint32_t(0b00000000000000000000111111000000);
+    uint32_t dd = value & uint32_t(0b00000000000000000000000000111111);
 
-    aa >>= 19;
-    bb >>= 12;
-    cc >>= 6;
+    aa >>= uint32_t(19);
+    bb >>= uint32_t(12);
+    cc >>= uint32_t(6);
 
     byte3 |= aa;
     byte2 |= bb;
@@ -119,31 +119,33 @@ inline std::vector<uint32_t> to_utf8_vector(const std::string &text) {
     for (size_t i = 0; i < text.length(); i++) {
         uint32_t val = 0;
 
-        if ((text[i] & 0b11110000) == 0b11110000) {
+        if ((uint8_t(text[i]) & uint8_t(0b11110000)) == 0b11110000) {
             val = uint32_t(
-                (text[i] & 0b00000111) << 18 | (text[i + 1] & 0b00111111) << 12
-                | (text[i + 2] & 0b00111111) << 6 | (text[i + 3] & 0b00111111));
+                (uint8_t(text[i]) & uint32_t(0b00000111)) << uint32_t(18)
+                | (uint8_t(text[i + 1]) & uint32_t(0b00111111)) << uint32_t(12)
+                | (uint8_t(text[i + 2]) & uint32_t(0b00111111)) << uint32_t(6)
+                | (uint8_t(text[i + 3]) & uint32_t(0b00111111)));
 
             i += 3;
-        } else if ((text[i] & 0b11100000) == 0b11100000) {
-            uint32_t hi = uint8_t(text[i] << 4);
-            uint32_t lo1 = text[i + 1] & 0b00111111;
-            uint32_t lo0 = text[i + 2] & 0b00111111;
+        } else if ((uint8_t(text[i]) & uint8_t(0b11100000)) == 0b11100000) {
+            uint32_t hi = uint8_t(uint8_t(text[i]) << uint8_t(4));
+            uint32_t lo1 = uint8_t(text[i + 1]) & uint8_t(0b00111111);
+            uint32_t lo0 = uint8_t(text[i + 2]) & uint8_t(0b00111111);
 
-            val = hi << 8;      // hi are bits 12-15
-            val |= (lo1 << 6);  // lo1 are bits 6-11
-            val |= lo0;         // lo0 are bits 0-5
+            val = hi << uint32_t(8);      // hi are bits 12-15
+            val |= (lo1 << uint32_t(6));  // lo1 are bits 6-11
+            val |= lo0;                   // lo0 are bits 0-5
 
             i += 2;
-        } else if ((text[i] & 0b11000000) == 0b11000000) {
-            uint32_t hi = uint8_t(text[i] << 3);
-            uint32_t lo = uint8_t(text[i + 1] & 0b00111111);
+        } else if ((uint8_t(text[i]) & uint8_t(0b11000000)) == 0b11000000) {
+            uint32_t hi = uint8_t(uint8_t(text[i]) << uint8_t(3));
+            uint32_t lo = uint8_t(uint8_t(text[i + 1]) & uint8_t(0b00111111));
 
-            val = hi << 3;  // hi are bits 6-10
-            val |= lo;      // lo are bits 0-5
+            val = hi << uint32_t(3);  // hi are bits 6-10
+            val |= lo;                // lo are bits 0-5
 
             i += 1;
-        } else if ((text[i] & 0b10000000) == 0) {
+        } else if ((uint32_t(text[i]) & uint32_t(0b10000000)) == 0) {
             val = static_cast<uint8_t>(text[i]);  // 1 byte character
         }
 

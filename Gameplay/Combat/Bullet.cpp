@@ -18,9 +18,9 @@
 #include <utility>
 
 namespace ms {
-Bullet::Bullet(Animation a, Point<int16_t> origin, bool toleft) {
-    animation_ = std::move(a);
-
+Bullet::Bullet(Animation a, Point<int16_t> origin, bool toleft) :
+    animation_(std::move(a)),
+    flip_(toleft) {
     move_obj_.set_x(origin.x() + (toleft ? -30.0 : 30.0));
     move_obj_.set_y(origin.y() - 26.0);
 }

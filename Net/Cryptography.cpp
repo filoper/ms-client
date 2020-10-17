@@ -58,7 +58,7 @@ void Cryptography::create_header(int8_t *buffer, size_t length) const {
 #else
     int32_t length = static_cast<int32_t>(slength);
 
-    for (int32_t i = 0; i < HEADERLEN; i++) {
+    for (int i = 0; i < HEADERLEN; i++) {
         buffer[i] = static_cast<int8_t>(length);
         length = length >> 8;
     }
@@ -77,7 +77,7 @@ size_t Cryptography::check_length(const int8_t *bytes) const {
 #else
     size_t length = 0;
 
-    for (int32_t i = 0; i < HEADERLEN; i++) {
+    for (int i = 0; i < HEADERLEN; i++) {
         length += static_cast<uint8_t>(bytes[i]) << (8 * i);
     }
 
@@ -280,7 +280,7 @@ void Cryptography::addroundkey(uint8_t *bytes, uint8_t round) const {
 
     uint8_t offset = round * 16;
 
-    for (uint8_t i = 0; i < 16; i++) {
+    for (int i = 0; i < 16; i++) {
         bytes[i] ^= maplekey[i + offset];
     }
 }
@@ -312,7 +312,7 @@ void Cryptography::subbytes(uint8_t *bytes) const {
         0xB0, 0x54, 0xBB, 0x16
     };
 
-    for (uint8_t i = 0; i < 16; i++) {
+    for (int i = 0; i < 16; i++) {
         bytes[i] = subbox[bytes[i]];
     }
 }
@@ -344,7 +344,7 @@ uint8_t Cryptography::gmul(uint8_t x) const {
 }
 
 void Cryptography::mixcolumns(uint8_t *bytes) const {
-    for (uint8_t i = 0; i < 16; i += 4) {
+    for (int i = 0; i < 16; i += 4) {
         uint8_t cpy0 = bytes[i];
         uint8_t cpy1 = bytes[i + 1];
         uint8_t cpy2 = bytes[i + 2];

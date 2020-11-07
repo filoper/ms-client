@@ -30,35 +30,35 @@ class EnumMap {
 public:
     template<typename... Args>
     // Initialize with an initializer list.
-    EnumMap(Args &&... args) : m_values_ { { std::forward<Args>(args)... } } {
+    EnumMap(Args &&...args) : values_ { { std::forward<Args>(args)... } } {
         static_assert(std::is_enum<K>::value,
                       "Template parameter 'K' for EnumMap must be an enum.");
 
         for (size_t i = 0; i < LENGTH; i++) {
-            m_keys_[i] = static_cast<K>(i);
+            keys_[i] = static_cast<K>(i);
         }
     }
 
     void clear() {
         for (size_t i = 0; i < LENGTH; i++) {
-            m_values_[i] = V();
+            values_[i] = V();
         }
     }
 
     void erase(K key) {
         if (key >= 0 && key < LENGTH) {
-            m_values_[key] = V();
+            values_[key] = V();
         }
     }
 
     template<typename... Args>
-    void emplace(K key, Args &&... args) {
-        m_values_[key] = { std::forward<Args>(args)... };
+    void emplace(K key, Args &&...args) {
+        values_[key] = { std::forward<Args>(args)... };
     }
 
-    V &operator[](K key) { return m_values_[key]; }
+    V &operator[](K key) { return values_[key]; }
 
-    const V &operator[](K key) const { return m_values_[key]; }
+    const V &operator[](K key) const { return values_[key]; }
 
     template<typename T>
     class base_iterator {
@@ -114,26 +114,26 @@ public:
     using iterator = base_iterator<V>;
     using const_iterator = base_iterator<const V>;
 
-    iterator find(K key) { return { m_values_.data(), key }; }
+    iterator find(K key) { return { values_.data(), key }; }
 
-    const_iterator find(K key) const { return { m_values_.data(), key }; }
+    const_iterator find(K key) const { return { values_.data(), key }; }
 
-    iterator begin() { return { m_values_.data(), 0 }; }
+    iterator begin() { return { values_.data(), 0 }; }
 
-    iterator end() { return { m_values_.data(), LENGTH }; }
+    iterator end() { return { values_.data(), LENGTH }; }
 
-    const_iterator begin() const { return { m_values_.data(), 0 }; }
+    const_iterator begin() const { return { values_.data(), 0 }; }
 
-    const_iterator end() const { return { m_values_.data(), LENGTH }; }
+    const_iterator end() const { return { values_.data(), LENGTH }; }
 
-    const std::array<K, LENGTH> &keys() const { return m_keys_; }
+    const std::array<K, LENGTH> &keys() const { return keys_; }
 
-    std::array<V, LENGTH> &values() { return m_values_; }
+    std::array<V, LENGTH> &values() { return values_; }
 
-    const std::array<V, LENGTH> &values() const { return m_values_; }
+    const std::array<V, LENGTH> &values() const { return values_; }
 
 private:
-    std::array<K, LENGTH> m_keys_;
-    std::array<V, LENGTH> m_values_;
+    std::array<K, LENGTH> keys_;
+    std::array<V, LENGTH> values_;
 };
 }  // namespace ms

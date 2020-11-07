@@ -20,51 +20,52 @@ template<class T>
 class Range {
 public:
     // Construct a range from the specified values
-    constexpr Range(const T &first, const T &second) : a(first), b(second) {}
+    constexpr Range(const T &first, const T &second) : a_(first), b_(second) {}
 
     // Construct a range of (0, 0)
     constexpr Range() : Range(0, 0) {}
 
     // Return the first value
-    constexpr const T &first() const { return a; }
+    constexpr const T &first() const { return a_; }
 
     // Return the second value
-    constexpr const T &second() const { return b; }
+    constexpr const T &second() const { return b_; }
 
     // Return the greater value
-    constexpr const T &greater() const { return (a > b) ? a : b; }
+    constexpr const T &greater() const { return (a_ > b_) ? a_ : b_; }
 
     // Return the smaller value
-    constexpr const T &smaller() const { return (a < b) ? a : b; }
+    constexpr const T &smaller() const { return (a_ < b_) ? a_ : b_; }
 
     // Return the difference between the values
-    constexpr T delta() const { return b - a; }
+    constexpr T delta() const { return b_ - a_; }
 
     // Return the absolute difference between the values
     constexpr T length() const { return greater() - smaller(); }
 
     // Return the mean of both values
-    constexpr T center() const { return (a + b) / 2; }
+    constexpr T center() const { return (a_ + b_) / 2; }
 
     // Check if both values are equal
-    constexpr bool empty() const { return a == b; }
+    constexpr bool empty() const { return a_ == b_; }
 
     // Check if the range contains a value
-    constexpr bool contains(const T &v) const { return v >= a && v <= b; }
+    constexpr bool contains(const T &v) const { return v >= a_ && v <= b_; }
 
     // Check if the range contains another range
     constexpr bool contains(const Range<T> &v) const {
-        return v.a >= a && v.b <= b;
+        return v.a_ >= a_ && v.b_ <= b_;
     }
 
     // Check if the ranges overlap
     constexpr bool overlaps(const Range<T> &v) const {
-        return contains(v.a) || contains(v.b) || v.contains(a) || v.contains(b);
+        return contains(v.a_) || contains(v.b_) || v.contains(a_)
+               || v.contains(b_);
     }
 
     // Check whether the range is equivalent to another range
     constexpr bool operator==(const Range<T> &v) const {
-        return a == v.a && b == v.b;
+        return a_ == v.a_ && b_ == v.b_;
     }
 
     // Check whether the range is not equivalent to another range
@@ -72,16 +73,16 @@ public:
 
     // Shift this range by the amounts defined by another range
     constexpr Range<T> operator+(const Range<T> &v) const {
-        return { a + v.a, b + v.b };
+        return { a_ + v.a_, b_ + v.b_ };
     }
 
     // Shift this range by the negative amounts defined by another range
     constexpr Range<T> operator-(const Range<T> &v) const {
-        return { a - v.a, b - v.b };
+        return { a_ - v.a_, b_ - v.b_ };
     }
 
     // Return the negative of this range
-    constexpr Range<T> operator-() const { return { -a, -b }; }
+    constexpr Range<T> operator-() const { return { -a_, -b_ }; }
 
     // Construct a symmetric range around mid
     static Range<T> symmetric(const T &mid, const T &tail) {
@@ -89,7 +90,7 @@ public:
     }
 
 private:
-    T a;
-    T b;
+    T a_;
+    T b_;
 };
 }  // namespace ms

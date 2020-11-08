@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
 
+if (APPLE)
+  if (CMAKE_CXX_COMPILER MATCHES "clang")
+    message(WARNING "You may need to configure linker version when using Clang or AppleClang.")
+    set(CMAKE_CXX_FLAGS "-mlinker-version=450")
+    set(CMAKE_C_FLAGS "-mlinker-version=450")
+  endif()
+endif()
+
 project(msclient)
 
 # Set project options
@@ -11,47 +19,17 @@ include(cmake/StaticAnalyzers.cmake)
 
 if (APPLE)
   if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
-    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
-    set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=505")
+    set(MSCLIENT_COMPILE_FLAGS -Wno-c++11-narrowing -mlinker-version=505)
+
   elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing -mlinker-version=450")
-    set(CMAKE_C_FLAGS "-Wno-c++11-narrowing -mlinker-version=450")
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "-isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/x86_64-apple-darwin18 -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/../../../../../../include/c++/9.3.0/backward -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include -isystem  /usr/local/Cellar/gcc/9.3.0_1/lib/gcc/9/gcc/x86_64-apple-darwin18/9.3.0/include-fixed -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks")
-  else()
-    message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+    set(MSCLIENT_COMPILE_FLAGS -fsanitize=address -fno-omit-frame-pointer -Wno-c++11-narrowing -mlinker-version=450)
   endif()
 
 elseif (UNIX AND NOT APPLE)
   if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "-Wno-c++11-narrowing")
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  else()
-    message(AUTHOR_WARNING "No compiler flags set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+    set(MSCLIENT_COMPILE_FLAGS -Wno-c++11-narrowing)
   endif()
 endif()
-
-include_directories(.)
-include_directories(Audio)
-include_directories(Character)
-include_directories(Character/Inventory)
-include_directories(Character/Look)
-include_directories(Data)
-include_directories(Gameplay)
-include_directories(Gameplay/Combat)
-include_directories(Gameplay/MapleMap)
-include_directories(Gameplay/Physics)
-include_directories(Graphics)
-include_directories(IO)
-include_directories(IO/Components)
-include_directories(IO/UITypes)
-include_directories(IO/UITypes/Login)
-include_directories(Net)
-include_directories(Net/Handlers)
-include_directories(Net/Handlers/Helpers)
-include_directories(Net/Packets)
-include_directories(Template)
-include_directories(Util)
 
 add_executable(msclient
     Audio/Audio.cpp
@@ -253,6 +231,33 @@ add_executable(msclient
     Configuration.cpp
     MSClient.cpp
     Game.cpp
+)
+
+TARGET_COMPILE_OPTIONS(msclient PRIVATE ${MSCLIENT_COMPILE_FLAGS})
+
+TARGET_INCLUDE_DIRECTORIES(msclient 
+  PRIVATE
+    .
+    Audio
+    Character
+    Character/Inventory
+    Character/Look
+    Data
+    Gameplay
+    Gameplay/Combat
+    Gameplay/MapleMap
+    Gameplay/Physics
+    Graphics
+    IO
+    IO/Components
+    IO/UITypes
+    IO/UITypes/Login
+    Net
+    Net/Handlers
+    Net/Handlers/Helpers
+    Net/Packets
+    Template
+    Util
 )
 
 IF (WIN32)

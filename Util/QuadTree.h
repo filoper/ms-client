@@ -25,10 +25,9 @@ class QuadTree {
 public:
     enum Direction { LEFT, RIGHT, UP, DOWN };
 
-    QuadTree(std::function<Direction(const V &, const V &)> c) {
-        root_ = 0;
-        comparator_ = c;
-    }
+    QuadTree(std::function<Direction(const V &, const V &)> c) :
+        root_(0),
+        comparator_(c) {}
 
     QuadTree() : QuadTree(nullptr) {}
 

@@ -22,7 +22,7 @@ if (APPLE)
     set(MSCLIENT_COMPILE_FLAGS -Wno-c++11-narrowing -mlinker-version=505)
 
   elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(MSCLIENT_COMPILE_FLAGS -fsanitize=address -fno-omit-frame-pointer -Wno-c++11-narrowing -mlinker-version=450)
+    set(MSCLIENT_COMPILE_FLAGS -Wno-c++11-narrowing -mlinker-version=450)
   endif()
 
 elseif (UNIX AND NOT APPLE)

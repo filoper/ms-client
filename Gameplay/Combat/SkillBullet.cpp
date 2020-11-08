@@ -16,7 +16,7 @@
 #include "SkillBullet.h"
 
 #include "../Data/BulletData.h"
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 Animation RegularBullet::get(const Char &, int32_t bulletid) const {

@@ -19,7 +19,7 @@
 
 #include "Template/Singleton.h"
 #include "Template/TypeMap.h"
-#include "Util/Misc.h"
+#include "Util/StringHandling.h"
 
 namespace ms {
 // Manages the 'Settings' file which contains configurations set by user

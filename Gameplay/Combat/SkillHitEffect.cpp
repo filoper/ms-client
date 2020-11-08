@@ -15,7 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "SkillHitEffect.h"
 
-#include "../../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 SingleHitEffect::SingleHitEffect(const nl::node &src) :

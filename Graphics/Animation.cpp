@@ -18,7 +18,7 @@
 #include <set>
 
 #include "../Constants.h"
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 Frame::Frame(const nl::node &src) {

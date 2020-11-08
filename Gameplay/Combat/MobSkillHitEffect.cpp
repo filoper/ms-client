@@ -15,7 +15,6 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "MobSkillHitEffect.h"
 
-#include "../../Util/Misc.h"
 #include "../MapleMap/Mob.h"
 
 namespace ms {

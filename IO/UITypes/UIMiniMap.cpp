@@ -21,6 +21,7 @@
 #include "../Gameplay/MapleMap/Npc.h"
 #include "../UI.h"
 #include "UIWorldMap.h"
+#include "GameInfo.h"
 
 namespace ms {
 UIMiniMap::UIMiniMap(const CharStats &stats) :

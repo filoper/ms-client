@@ -64,7 +64,7 @@ void Text::reset_layout() {
 }
 
 void Text::change_text(const std::string &t) {
-    change_text(to_utf8_vector(t));
+    change_text(string_conversion::to_utf8_vector(t));
     text_ = t;
 }
 

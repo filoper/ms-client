@@ -19,7 +19,7 @@
 
 #include "../../Character/SkillId.h"
 #include "../../Data/SkillData.h"
-#include "../../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 Skill::Skill(int32_t id) : skill_id_(id) {

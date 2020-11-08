@@ -17,7 +17,7 @@
 
 #include <nlnx/nx.hpp>
 
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 Reactor::Reactor(int32_t o, int32_t r, int8_t s, Point<int16_t> p) :

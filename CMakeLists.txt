@@ -226,7 +226,8 @@ add_executable(msclient
     Net/Session.cpp
     Net/SocketAsio.cpp
     Net/SocketWinsock.cpp
-    Util/Misc.cpp
+    Util/GameInfo.cpp
+    Util/StringHandling.cpp
     Util/NxFiles.cpp
     Configuration.cpp
     MSClient.cpp

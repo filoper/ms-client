@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 
 #include "../../Constants.h"
-#include "../../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 MapPortals::MapPortals(const nl::node &src, int32_t mapid) {

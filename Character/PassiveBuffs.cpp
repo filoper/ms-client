@@ -17,7 +17,7 @@
 
 #include <nlnx/nx.hpp>
 
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 #include "SkillId.h"
 
 namespace ms {

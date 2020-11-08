@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 
 #include "../../Net/Packets/GameplayPackets.h"
-#include "../../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 auto fn_move_mob = []<typename... T>(T && ... args) {

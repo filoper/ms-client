@@ -172,7 +172,7 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed) {
 }
 
 void Textfield::add_string(const std::string &str) {
-    add_string(to_utf8_vector(str));
+    add_string(string_conversion::to_utf8_vector(str));
 }
 
 void Textfield::add_string(const std::vector<uint32_t> &str) {
@@ -191,7 +191,7 @@ void Textfield::add_string(const std::vector<uint32_t> &str) {
 void Textfield::modify_text(const std::vector<uint32_t> &str) {
     text_.clear();
     for (auto val : str) {
-        for (auto c : to_utf8_string(val)) {
+        for (auto c : string_conversion::to_utf8_string(val)) {
             text_.push_back(c);
         }
     }
@@ -231,7 +231,7 @@ Cursor::State Textfield::send_cursor(Point<int16_t> cursorpos, bool clicked) {
 }
 
 void Textfield::change_text(const std::string &t) {
-    modify_text(to_utf8_vector(t));
+    modify_text(string_conversion::to_utf8_vector(t));
     marker_pos_ = text_as_values_.size();
 }
 

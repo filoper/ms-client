@@ -19,7 +19,7 @@
 #include <nlnx/nx.hpp>
 
 #include "../Data/ItemData.h"
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 BuffIcon::BuffIcon(int32_t buff, int32_t dur) :

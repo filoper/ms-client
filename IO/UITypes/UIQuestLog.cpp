@@ -62,7 +62,7 @@ UIQuestLog::UIQuestLog(const QuestLog &ql) :
     auto search_pos_adj = Point<int16_t>(29, 0);
     auto search_dim_adj = Point<int16_t>(-80, 0);
 
-    auto search_pos = position_ + search_area_origin + search_pos_adj;
+    auto search_pos = search_area_origin + search_pos_adj;
     auto search_dim = search_pos + search_area_dim + search_dim_adj;
 
     search_ = Textfield(Text::Font::A11M,
@@ -109,7 +109,7 @@ void UIQuestLog::draw(float alpha) const {
 
     if (tab_ != Buttons::TAB2) {
         search_area_.draw(position_);
-        search_.draw(Point<int16_t>(0, 0));
+        search_.draw(position_);
 
         if (search_.get_state() == Textfield::State::NORMAL
             && search_.empty()) {
@@ -144,6 +144,8 @@ Cursor::State UIQuestLog::send_cursor(bool clicking, Point<int16_t> cursorpos) {
     if (Cursor::State new_state = search_.send_cursor(cursorpos, clicking)) {
         return new_state;
     }
+
+    search_.update(position_);
 
     return UIDragElement::send_cursor(clicking, cursorpos);
 }

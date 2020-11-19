@@ -387,6 +387,7 @@ IF (WIN32)
     FILES
       Icon.png
       ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.dll
+      ${PROJECT_SOURCE_DIR}/thirdparty/bass24/x64/bass.dll
     DESTINATION
       ${CMAKE_INSTALL_BINDIR}
   )

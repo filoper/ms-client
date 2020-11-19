@@ -16,6 +16,7 @@ include(cmake/Utils.cmake)
 include(cmake/Doxygen.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/StaticAnalyzers.cmake)
+include(thirdparty/Deps.cmake)
 
 if (APPLE)
   if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
@@ -275,10 +276,9 @@ add_clang_format_target()
 
 TARGET_INCLUDE_DIRECTORIES(msclient 
   SYSTEM PRIVATE
-    ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx
+    ${PROJECT_SOURCE_DIR}/thirdparty/
     ${PROJECT_SOURCE_DIR}/thirdparty/asio/asio/include
     ${PROJECT_SOURCE_DIR}/thirdparty/stb
-    ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/include
 )
 
 IF (UNIX)
@@ -290,8 +290,8 @@ IF (UNIX)
 
     TARGET_LINK_LIBRARIES(msclient 
       ${FREETYPE_LIBRARIES}
-      ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/libglad.a
-      ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a
+      glad
+      NoLifeNx
     )
 ENDIF()
 
@@ -336,19 +336,19 @@ ELSEIF (WIN32)
 
     IF (MSVC)
         TARGET_LINK_LIBRARIES(msclient 
-          ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/glad.lib
-          ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/glfw3.lib
-          ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/NoLifeNx.lib
           ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib
           ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a
+          glad
+          NoLifeNx
+          glfw
         )
     ELSE()
         TARGET_LINK_LIBRARIES(msclient 
-          ${PROJECT_SOURCE_DIR}/thirdparty/glad/build/libglad.a
-          ${PROJECT_SOURCE_DIR}/thirdparty/glfw/build/src/libglfw3.a
-          ${PROJECT_SOURCE_DIR}/thirdparty/NoLifeNx/nlnx/build/libNoLifeNx.a
           ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib
           ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a
+          glad
+          NoLifeNx
+          glfw
         )
     ENDIF()
 ELSE()

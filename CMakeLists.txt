@@ -355,6 +355,14 @@ ELSE()
     message(FATAL_ERROR "Error: Unknown platform.")
 ENDIF()
 
+if (APPLE)
+  set(CMAKE_INSTALL_RPATH @loader_path @executable_path)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ELSEIF (UNIX AND NOT APPLE)
+  set(CMAKE_INSTALL_RPATH "$ORIGIN")
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ENDIF()
+
 include(GNUInstallDirs)
 install(
   TARGETS
@@ -374,9 +382,28 @@ install(
     ${CMAKE_INSTALL_BINDIR}
 )
 
-install(
-  FILES
-    Icon.png
-  DESTINATION
-    ${CMAKE_INSTALL_BINDIR}
-)
+IF (WIN32)
+  install(
+    FILES
+      Icon.png
+      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.dll
+    DESTINATION
+      ${CMAKE_INSTALL_BINDIR}
+  )
+ELSEIF (APPLE)
+  install(
+    FILES
+      Icon.png
+      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx/libbass.dylib
+    DESTINATION
+      ${CMAKE_INSTALL_BINDIR}
+  )
+ELSEIF (UNIX AND NOT APPLE)
+  install(
+    FILES
+      Icon.png
+      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux/x64/libbass.so
+    DESTINATION
+      ${CMAKE_INSTALL_BINDIR}
+  )
+ENDIF()

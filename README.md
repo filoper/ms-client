@@ -14,7 +14,7 @@ Download and install the following:
 
 * **Git**
 
-* **CMake v3.15+** - found at [https://cmake.org/](https://cmake.org/)
+* **CMake v3.14+** - found at [https://cmake.org/](https://cmake.org/)
 
 * **Ninja v1.9.0+**
 
@@ -34,28 +34,12 @@ git clone https://github.com/filoper/ms-client.git
 ### Dependencies
 Download the required NX files from here [https://github.com/HeavenClient/HeavenClient/tree/master#required-files](https://github.com/HeavenClient/HeavenClient/tree/master#required-files)
 
-See install instructions below for your platform.
+See install instructions for your platform below.
 
 #### Windows
-```bash
-Download and compile lz4 static library https://github.com/lz4/lz4/archive/v1.9.2.zip
-Navigate to `visual/VS2017/liblz4` open the project and retarget it to VS2019 before compiling.
-
-Copy the content of `lz4-1.9.2/lib` to `thirdparty/lz4/include`.
-Copy the compiled library to `thirdparty/lz4/dll`.
-
-In msclient CMakeLists.txt change
-TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a) 
-to
-TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/lz4.lib)
-```
 
 ```bash
 Download BASS from https://www.un4seen.com/download.php?bass24 and place inside `ms-client/thirdparty`.
-```
-
-```bash
-Download https://github.com/ubawurinna/freetype-windows-binaries/archive/v2.10.2.zip and place inside `ms-client/thirdparty`.
 ```
 
 #### Mac
@@ -109,7 +93,7 @@ cmake --build build --target install --config Debug
 ## Run
 Place all the Nx files in the install location of msclient.
 
-Start your server, probably HeavenMS, and then run
+Start your server, probably HeavenMS, then run
 
 ```bash
 ./msclient

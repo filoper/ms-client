@@ -14,7 +14,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   nlnx
   GIT_REPOSITORY    https://github.com/filoper/NoLifeNx.git
-  GIT_TAG           aee212e7b0995ee4aaee58393f83c592f4a718a6
+  GIT_TAG           1ff52e4a4e298a0f71cea7f4bee1d79c731f0357
   PREFIX            "${PROJECT_SOURCE_DIR}/thirdparty"
   SOURCE_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/nlnx"
   BINARY_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/nlnx-build"
@@ -26,7 +26,6 @@ FetchContent_Declare(
   GIT_TAG           b42009b3b9d4ca35bc703f5310eedc74f584be58
   PREFIX            "${PROJECT_SOURCE_DIR}/thirdparty"
   SOURCE_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/stb"
-  BINARY_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/stb-build"
 )
 
 FetchContent_Declare(
@@ -35,7 +34,6 @@ FetchContent_Declare(
   GIT_TAG           5fb2ea03ac6df7d65fc0101745e01ecff0bbd5fe
   PREFIX            "${PROJECT_SOURCE_DIR}/thirdparty"
   SOURCE_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/asio"
-  BINARY_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/asio-build"
 )
 
 IF (WIN32)
@@ -48,8 +46,27 @@ IF (WIN32)
       BINARY_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/glfw-build"
     )
 
-    FetchContent_MakeAvailable(glfw)
-ENDIF()
+    FetchContent_Declare(
+      lz4
+      URL               https://github.com/lz4/lz4/archive/v1.9.3.zip
+      URL_MD5           72defe037b2c3db7a69affe7fe4bffd6
+      PREFIX            "${PROJECT_SOURCE_DIR}/thirdparty"
+      SOURCE_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/lz4"
+      BINARY_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/lz4-build"
+      SOURCE_SUBDIR     build/cmake
+    )
 
-FetchContent_MakeAvailable(glad nlnx asio stb)
+    FetchContent_Declare(
+      freetype
+      URL               https://github.com/ubawurinna/freetype-windows-binaries/archive/v2.10.2.zip
+      URL_MD5           e1edf9f185eb96d4493538ccb9237bc6
+      PREFIX            "${PROJECT_SOURCE_DIR}/thirdparty"
+      SOURCE_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2"
+    )
+
+    FetchContent_MakeAvailable(lz4 nlnx glad freetype glfw stb asio)
+
+ELSE()
+    FetchContent_MakeAvailable(glad nlnx asio stb)
+ENDIF()
 

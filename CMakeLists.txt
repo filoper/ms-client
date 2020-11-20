@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 3.14)
+if (WIN32)
+    cmake_minimum_required(VERSION 3.18)
+else()
+    cmake_minimum_required(VERSION 3.14)
+endif()
 
 if (APPLE)
   if (CMAKE_CXX_COMPILER MATCHES "clang")
@@ -337,7 +341,7 @@ ELSEIF (WIN32)
     IF (MSVC)
         TARGET_LINK_LIBRARIES(msclient 
           ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib
-          ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a
+          ${PROJECT_SOURCE_DIR}/thirdparty/lz4-build/lz4.lib
           glad
           NoLifeNx
           glfw

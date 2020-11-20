@@ -45,10 +45,6 @@ jobs:
 
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@v1
-      
-    - name: Set system environment variables 2017
-      if: matrix.config.os == 'windows-2016'
-      run: .github/workflows/winenv2017.bat
 
     - name: Set system environment variables
       if: matrix.config.os == 'windows-latest'
@@ -58,20 +54,6 @@ jobs:
       run: |
         cd thirdparty
         git clone https://github.com/filoper/bass24.git
-
-    - name: Install lz4
-      run: |
-        cd thirdparty
-        Invoke-WebRequest -Uri https://github.com/lz4/lz4/releases/download/v1.9.2/lz4_win64_v1_9_2.zip -OutFile lz4.zip
-        Expand-Archive ./lz4.zip -DestinationPath ./lz4
-        Remove-Item lz4.zip
-
-    - name: Install Freetype
-      run: |
-        cd thirdparty
-        Invoke-WebRequest -Uri https://github.com/ubawurinna/freetype-windows-binaries/archive/v2.10.2.zip -OutFile freetype.zip
-        Expand-Archive ./freetype.zip -DestinationPath ./freetype
-        Remove-Item freetype.zip
 
     - name: Install GoogleTest
       run: |

@@ -14,14 +14,14 @@ Download and install the following:
 
 * **Git**
 
-* **CMake v3.14+** - found at [https://cmake.org/](https://cmake.org/)
+* **CMake v3.14+ (3.18+ for Windows)** - found at [https://cmake.org/](https://cmake.org/)
 
 * **Ninja v1.9.0+**
 
 * **C++ Compiler** - needs to support at least the **C++20** standard, i.e. *MSVC*,
 *GCC*, *Clang*
 
-* **Homebrew (Mac OS ONLY)** - found at [https://brew.sh/](https://brew.sh/)
+* **Homebrew (MacOS ONLY)** - found at [https://brew.sh/](https://brew.sh/)
 
 * **Visual Studio 2019 (Windows ONLY)**
 
@@ -53,6 +53,10 @@ brew install lz4
 
 ```bash
 brew install glfw
+```
+
+```bash
+brew install freetype
 ```
 
 #### Linux

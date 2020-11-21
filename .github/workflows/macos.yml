@@ -59,7 +59,9 @@ jobs:
       run: cmake -Bbuild -GNinja -DCMAKE_PREFIX_PATH=$INSTALL_LOCATION -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DENABLE_CODE_COVERAGE=1 -DBOOST_ROOT=$BOOST_ROOT_1_72_0
     
     - name: Build
-      run: cmake --build build --config $BUILD_TYPE
+      run: | 
+        cmake --build build --config $BUILD_TYPE
+        cmake --install build --config $BUILD_TYPE
 
     - name: Run tests
       run: |
@@ -68,4 +70,11 @@ jobs:
 
     - name: Code coverage using Codecov
       if: runner.os == 'Linux'
-      run: bash <(curl -s https://codecov.io/bash) 
+      run: bash <(curl -s https://codecov.io/bash)
+
+    - uses: actions/upload-artifact@v2
+      if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
+      with:
+        name: msclient-mac
+        path: |
+          ${{github.workspace}}/installed/bin/

@@ -69,8 +69,8 @@ jobs:
 
     - name: Build
       run: | 
-      cmake --build build --config "$env:BUILD_TYPE"
-      cmake --install build --config "$env:BUILD_TYPE"
+        cmake --build build --config "$env:BUILD_TYPE"
+        cmake --install build --config "$env:BUILD_TYPE"
     
     - name: Run tests
       run: |

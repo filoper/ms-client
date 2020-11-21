@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 
 #include "../Constants.h"
-#include "../Util/Misc.h"
+#include "GameInfo.h"
 
 namespace ms {
 MapTooltip::MapTooltip() :

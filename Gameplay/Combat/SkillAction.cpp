@@ -15,7 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "SkillAction.h"
 
-#include "../../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 void RegularAction::apply(Char &target, Attack::Type atype) const {

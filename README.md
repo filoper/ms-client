@@ -14,7 +14,7 @@ Download and install the following:
 
 * **Git**
 
-* **CMake v3.15+** - found at [https://cmake.org/](https://cmake.org/)
+* **CMake v3.14+** - found at [https://cmake.org/](https://cmake.org/)
 
 * **Ninja v1.9.0+**
 
@@ -31,79 +31,20 @@ Download and install the following:
 git clone https://github.com/filoper/ms-client.git
 ```
 
-Finally, create a new folder called `thirdparty` inside `ms-client` folder.
-
 ### Dependencies
 Download the required NX files from here [https://github.com/HeavenClient/HeavenClient/tree/master#required-files](https://github.com/HeavenClient/HeavenClient/tree/master#required-files)
 
-See install instructions below for your platform.
-> ***Note:*** *Place all folders created through `git clone` inside the `thirdparty` folder.*
+See install instructions for your platform below.
 
 #### Windows
-Start Visual Studio 2019 x64 developer terminal.
 
 ```bash
-Download and compile lz4 static library https://github.com/lz4/lz4/archive/v1.9.2.zip
-Navigate to `visual/VS2017/liblz4` open the project and retarget it to VS2019 before compiling.
-
-Copy the content of `lz4-1.9.2/lib` to `thirdparty/lz4/include`.
-Copy the compiled library to `thirdparty/lz4/dll`.
-
-In msclient CMakeLists.txt change
-TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a) 
-to
-TARGET_LINK_LIBRARIES(msclient ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/lz4.lib)
-```
-
-```bash
-Download BASS from https://www.un4seen.com/download.php?bass24 and place inside `thirdparty`.
-```
-
-```bash
-mkdir NoLifeNx
-cd NoLifeNx
-git clone https://github.com/filoper/NoLifeNx.git nlnx
-cd nlnx
-cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-```
-
-```bash
-Download https://github.com/ubawurinna/freetype-windows-binaries/archive/v2.10.2.zip 
-```
-
-```bash
-git clone https://github.com/Dav1dde/glad.git
-cd glad
-cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-```
-
-```bash
-git clone https://github.com/glfw/glfw 
-cd glfw
-cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-```
-
-```bash
-git clone https://github.com/chriskohlhoff/asio.git
-```
-
-```bash
-git clone https://github.com/nothings/stb.git
+Download BASS from https://www.un4seen.com/download.php?bass24 and place inside `ms-client/thirdparty`.
 ```
 
 #### Mac
 ```bash
-Download BASS from https://www.un4seen.com and place inside `thirdparty`.
-```
-
-```bash
-git clone https://github.com/Dav1dde/glad.git
-cd glad
-cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
+Download BASS from https://www.un4seen.com and place inside `ms-client/thirdparty`.
 ```
 
 ```bash
@@ -111,40 +52,16 @@ brew install lz4
 ```
 
 ```bash
-mkdir NoLifeNx
-cd NoLifeNx
-git clone https://github.com/filoper/NoLifeNx.git nlnx
-cd nlnx
-cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
-```
-
-```bash
 brew install glfw
-```
-
-```bash
-git clone https://github.com/chriskohlhoff/asio.git
-```
-
-```bash
-git clone https://github.com/nothings/stb.git
 ```
 
 #### Linux
 ```bash
-Download BASS from https://www.un4seen.com and place inside `thirdparty`.
+Download BASS from https://www.un4seen.com and place inside `ms-client/thirdparty`.
 ```
 
 ```bash
 sudo apt-get install liblz4-dev
-```
-```bash
-mkdir NoLifeNx
-cd NoLifeNx
-git clone https://github.com/filoper/NoLifeNx.git nlnx
-cd nlnx
-cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
 ```
 
 ```bash
@@ -155,36 +72,28 @@ sudo apt-get install libglfw3-dev
 sudo apt-get install libfreetype-dev
 ```
 
-```bash
-git clone https://github.com/chriskohlhoff/asio.git
-```
-
-```bash
-git clone https://github.com/nothings/stb.git
-```
-
 ## Build
 
 ### Windows
 Start Visual Studio 2019 x64 developer terminal.
 
 ```bash
-cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=c:\msclient-install
-cmake --build build --config Release
-cmake --build build --target install --config Release
+cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=c:\msclient-install
+cmake --build build --config Debug
+cmake --build build --target install --config Debug
 ```
 
 ### Mac or Linux
 ```bash
 cmake -Bbuild -GNinja -DCMAKE_INSTALL_PREFIX=./msclient-install
-cmake --build build --config Release
-cmake --build build --target install --config Release
+cmake --build build --config Debug
+cmake --build build --target install --config Debug
 ```
 
 ## Run
 Place all the Nx files in the install location of msclient.
 
-Start your server, probably HeavenMS, and then run
+Start your server, probably HeavenMS, then run
 
 ```bash
 ./msclient

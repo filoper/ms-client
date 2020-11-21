@@ -19,7 +19,7 @@
 #include <nlnx/nx.hpp>
 #include <string>
 
-#include "../../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 Body::Body(int32_t skin, const BodyDrawInfo &drawinfo) {

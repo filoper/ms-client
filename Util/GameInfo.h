@@ -15,49 +15,12 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include <iostream>
+#include <cstdint>
+#include <nlnx/node.hpp>
+#include <string>
 #include <unordered_map>
 
-#include "../Graphics/Text.h"
-
-namespace ms {
-namespace string_conversion {
-template<typename T>
-inline T or_default(const std::string &str, T def) {
-    try {
-        int32_t intval = std::stoi(str);
-        return static_cast<T>(intval);
-    } catch (const std::exception &ex) {
-        std::cout << __func__ << ": " << ex.what() << std::endl;
-
-        return def;
-    }
-}
-
-template<typename T>
-inline T or_zero(const std::string &str) {
-    return or_default<T>(str, T(0));
-}
-}  // namespace string_conversion
-
-namespace string_format {
-// Format a number string so that each 3 decimal points
-// are seperated by a ',' character.
-void split_number(std::string &input);
-
-// Prefix an id with zeros so that it has the minimum specified length
-std::string extend_id(int32_t id, size_t length);
-
-// Cut off a string at a specified length with an ellipsis
-void format_with_ellipsis(Text &input, size_t length);
-}  // namespace string_format
-
-namespace bytecode {
-// Check if a bit mask contains the specified value
-bool compare(int32_t mask, int32_t value);
-}  // namespace bytecode
-
-namespace NxHelper::Map {
+namespace ms::NxHelper::Map {
 struct MapInfo {
     std::string description;
     std::string name;
@@ -77,5 +40,4 @@ get_life_on_map(int32_t mapid);
 
 // Returns the name of the node, under which the argument map id is in
 nl::node get_map_node_name(int32_t mapid);
-}  // namespace NxHelper::Map
-}  // namespace ms
+}  // namespace ms::NxHelper::Map

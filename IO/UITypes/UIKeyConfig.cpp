@@ -1315,7 +1315,7 @@ void UIKeyConfig::unstage_mapping(Keyboard::Mapping mapping) {
         }
     }
 
-    for (auto const &[mkey, staged_mapping] : staged_mappings_) {
+    for (auto [mkey, staged_mapping] : staged_mappings_) {
         if (staged_mapping == mapping) {
             if (mkey == KeyConfig::Key::LEFT_CONTROL
                 || mkey == KeyConfig::Key::RIGHT_CONTROL) {

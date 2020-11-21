@@ -20,7 +20,7 @@
 #include "../Gameplay/Stage.h"
 #include "../IO/Components/MapleButton.h"
 #include "../UI.h"
-#include "../Util/Misc.h"
+#include "GameInfo.h"
 
 namespace ms {
 UIWorldMap::UIWorldMap() : UIDragElement<PosMAP>() {

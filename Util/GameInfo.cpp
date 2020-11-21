@@ -13,45 +13,12 @@
 //
 //	You should have received a copy of the GNU Affero General Public License
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#include "Misc.h"
+#include "GameInfo.h"
+#include "StringHandling.h"
 
 #include <nlnx/nx.hpp>
 
-namespace ms {
-namespace string_format {
-void split_number(std::string &input) {
-    for (size_t i = input.size(); i > 3; i -= 3) {
-        input.insert(i - 3, 1, ',');
-    }
-}
-
-std::string extend_id(int32_t id, size_t length) {
-    std::string strid = std::to_string(id);
-
-    if (strid.size() < length) {
-        strid.insert(0, length - strid.size(), '0');
-    }
-
-    return strid;
-}
-
-void format_with_ellipsis(Text &input, size_t length) {
-    std::string text = input.get_text();
-
-    while (input.width() > length) {
-        text.pop_back();
-        input.change_text(text + "..");
-    }
-}
-}  // namespace string_format
-
-namespace bytecode {
-bool compare(int32_t mask, int32_t value) {
-    return (mask & value) != 0;
-}
-}  // namespace bytecode
-
-namespace NxHelper::Map {
+namespace ms::NxHelper::Map {
 MapInfo get_map_info_by_id(int32_t mapid) {
     std::string map_category = get_map_category(mapid);
     nl::node map_info = nl::nx::string["Map.img"][map_category][mapid];
@@ -158,5 +125,4 @@ nl::node get_map_node_name(int32_t mapid) {
 
     return nl::nx::map["Map"]["Map" + prefix][mapid_str + ".img"];
 }
-}  // namespace NxHelper::Map
-}  // namespace ms
+}  // namespace ms::NxHelper::Map

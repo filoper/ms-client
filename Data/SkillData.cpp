@@ -18,7 +18,7 @@
 #include <nlnx/nx.hpp>
 
 #include "../Character/SkillId.h"
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 SkillData::SkillData(int32_t id) {

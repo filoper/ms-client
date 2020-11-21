@@ -18,7 +18,7 @@
 #include <nlnx/node.hpp>
 #include <nlnx/nx.hpp>
 
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 JobData::JobData(int32_t id) {

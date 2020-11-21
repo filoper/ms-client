@@ -1,4 +1,4 @@
-Checks: '*,-modernize-use-trailing-return-type,-fuchsia-*'
+Checks: '*,-modernize-use-trailing-return-type,-fuchsia-*,-llvmlibc-callee-namespace'
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 FormatStyle: file

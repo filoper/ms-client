@@ -57,6 +57,7 @@ bld/
 [Ll]og/
 
 # deps
-thirdparty**
+thirdparty/**
+!/thirdparty/Deps.cmake
 
 .vagrant/

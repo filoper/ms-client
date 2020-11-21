@@ -15,7 +15,7 @@
 //	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "SkillUseEffect.h"
 
-#include "../../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 SingleUseEffect::SingleUseEffect(const nl::node &src) :

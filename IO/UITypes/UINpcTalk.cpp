@@ -21,7 +21,7 @@
 #include "../Gameplay/Stage.h"
 #include "../Net/Packets/NpcInteractionPackets.h"
 #include "../UI.h"
-#include "../Util/Misc.h"
+#include "GameInfo.h"
 
 namespace ms {
 auto fn_npc_talk_more = []<typename... T>(T && ... args) {

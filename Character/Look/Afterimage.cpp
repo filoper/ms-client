@@ -17,7 +17,7 @@
 
 #include <nlnx/nx.hpp>
 
-#include "../Util/Misc.h"
+#include "StringHandling.h"
 
 namespace ms {
 Afterimage::Afterimage(int32_t skill_id,

@@ -21,20 +21,16 @@ include(cmake/Doxygen.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/StaticAnalyzers.cmake)
 include(thirdparty/Deps.cmake)
-
-if (APPLE)
-  if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
-    set(MSCLIENT_COMPILE_FLAGS -Wno-c++11-narrowing -mlinker-version=505)
-
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(MSCLIENT_COMPILE_FLAGS -Wno-c++11-narrowing -mlinker-version=450)
-  endif()
-
-elseif (UNIX AND NOT APPLE)
-  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(MSCLIENT_COMPILE_FLAGS -Wno-c++11-narrowing)
-  endif()
+include(GNUInstallDirs)
+if (UNIX)
+    include(FindFreetype)
 endif()
+
+set(MSCLIENT_COMPILE_FLAGS
+      $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-c++11-narrowing>
+      $<$<AND:$<CXX_COMPILER_ID:Clang,$<PLATFORM_ID:Darwin>>>:-mlinker-version=450>
+      $<$<AND:$<CXX_COMPILER_ID:AppleClang,$<PLATFORM_ID:Darwin>>>:-mlinker-version=505>
+)
 
 add_executable(msclient
     Audio/Audio.cpp
@@ -237,11 +233,18 @@ add_executable(msclient
     Configuration.cpp
     MSClient.cpp
     Game.cpp
+    $<$<PLATFORM_ID:Windows>:MSClient.rc>
 )
 
-TARGET_COMPILE_OPTIONS(msclient PRIVATE ${MSCLIENT_COMPILE_FLAGS})
+target_compile_options(msclient PRIVATE ${MSCLIENT_COMPILE_FLAGS})
+set_property(TARGET msclient PROPERTY CXX_STANDARD 20)
+set_property(TARGET msclient PROPERTY CXX_STANDARD_REQUIRED ON)
 
-TARGET_INCLUDE_DIRECTORIES(msclient 
+# Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)
+add_clang_format_target()
+set_project_warnings(${PROJECT_NAME})
+
+target_include_directories(msclient 
   PRIVATE
     .
     Audio
@@ -264,110 +267,58 @@ TARGET_INCLUDE_DIRECTORIES(msclient
     Net/Packets
     Template
     Util
-)
 
-IF (WIN32)
-    target_sources(msclient PUBLIC MSClient.rc)
-ENDIF()
-
-set_property(TARGET msclient PROPERTY CXX_STANDARD 20)
-set_property(TARGET msclient PROPERTY CXX_STANDARD_REQUIRED ON)
-
-set_project_warnings(${PROJECT_NAME})
-
-# Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)
-add_clang_format_target()
-
-TARGET_INCLUDE_DIRECTORIES(msclient 
   SYSTEM PRIVATE
     ${PROJECT_SOURCE_DIR}/thirdparty/
     ${PROJECT_SOURCE_DIR}/thirdparty/asio/asio/include
     ${PROJECT_SOURCE_DIR}/thirdparty/stb
+
+    $<$<PLATFORM_ID:Darwin>:${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx>
+    $<$<PLATFORM_ID:Darwin>:/usr/local/Cellar/glfw/3.3.2/include>
+
+    $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux>
+
+    $<$<PLATFORM_ID:Linux,Darwin>:${FREETYPE_INCLUDE_DIRS}>
+
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/bass24/c>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/glfw/include>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/include>
 )
 
-IF (UNIX)
-    INCLUDE(FindFreetype)
-    TARGET_INCLUDE_DIRECTORIES(msclient 
-      SYSTEM PRIVATE
-        ${FREETYPE_INCLUDE_DIRS}
-    )
+target_link_libraries(msclient 
+    glad
+    NoLifeNx
+)
 
-    TARGET_LINK_LIBRARIES(msclient 
-      ${FREETYPE_LIBRARIES}
-      glad
-      NoLifeNx
-    )
-ENDIF()
+target_link_libraries(msclient 
+      $<$<PLATFORM_ID:Darwin>:${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx/libbass.dylib>
+      $<$<PLATFORM_ID:Darwin>:/usr/local/Cellar/lz4/1.9.3/lib/liblz4.a>
+      $<$<PLATFORM_ID:Darwin>:/usr/local/Cellar/glfw/3.3.2/lib/libglfw.dylib>
 
-IF (APPLE)
-    TARGET_INCLUDE_DIRECTORIES(msclient 
-      SYSTEM PRIVATE
-        ${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx
-        /usr/local/Cellar/glfw/3.3.2/include
-    )
+      $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux/x64/libbass.so>
+      $<$<PLATFORM_ID:Linux>:/usr/lib/x86_64-linux-gnu/libglfw.so>
+      $<$<PLATFORM_ID:Linux>:/usr/lib/x86_64-linux-gnu/liblz4.a>
+      $<$<PLATFORM_ID:Linux>:${CMAKE_DL_LIBS}>
+      $<$<PLATFORM_ID:Linux>:pthread>
 
-    TARGET_LINK_LIBRARIES(msclient 
-      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx/libbass.dylib
-      /usr/local/Cellar/lz4/1.9.2/lib/liblz4.a
-      /usr/local/Cellar/glfw/3.3.2/lib/libglfw.dylib
-    )
-ELSEIF (UNIX AND NOT APPLE)
-    TARGET_INCLUDE_DIRECTORIES(msclient 
-      SYSTEM PRIVATE
-        ${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux
-    )
+      $<$<PLATFORM_ID:Linux,Darwin>:${FREETYPE_LIBRARIES}>
 
-    TARGET_LINK_LIBRARIES(msclient 
-      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux/x64/libbass.so
-      /usr/lib/x86_64-linux-gnu/libglfw.so
-      /usr/lib/x86_64-linux-gnu/liblz4.a
-      dl
-      pthread
-    )
-ELSEIF (WIN32)
-    TARGET_INCLUDE_DIRECTORIES(msclient 
-      SYSTEM PRIVATE
-        ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c
-        ${PROJECT_SOURCE_DIR}/thirdparty/glfw/include
-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/include
-    )
-
-    TARGET_LINK_LIBRARIES(msclient 
-      ${PROJECT_SOURCE_DIR}/thirdparty/bass24/c/x64/bass.lib
-      wsock32
-      ws2_32
-    )
-
-    IF (MSVC)
-        TARGET_LINK_LIBRARIES(msclient 
-          ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib
-          ${PROJECT_SOURCE_DIR}/thirdparty/lz4-build/lz4.lib
-          glad
-          NoLifeNx
-          glfw
-        )
-    ELSE()
-        TARGET_LINK_LIBRARIES(msclient 
-          ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib
-          ${PROJECT_SOURCE_DIR}/thirdparty/lz4/dll/liblz4.dll.a
-          glad
-          NoLifeNx
-          glfw
-        )
-    ENDIF()
-ELSE()
-    message(FATAL_ERROR "Error: Unknown platform.")
-ENDIF()
+      $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/bass24/c/x64/bass.lib>
+      $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.lib>
+      $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/lz4-build/lz4.lib>
+      $<$<PLATFORM_ID:Windows>:glfw>
+      $<$<PLATFORM_ID:Windows>:wsock32>
+      $<$<PLATFORM_ID:Windows>:ws2_32>
+)
 
 if (APPLE)
   set(CMAKE_INSTALL_RPATH @loader_path @executable_path)
   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-ELSEIF (UNIX AND NOT APPLE)
+elseif (UNIX AND NOT APPLE)
   set(CMAKE_INSTALL_RPATH "$ORIGIN")
   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-ENDIF()
+endif()
 
-include(GNUInstallDirs)
 install(
   TARGETS
     msclient
@@ -381,34 +332,18 @@ install(
 
 install(
   DIRECTORY
-    fonts
+    ${PROJECT_SOURCE_DIR}/fonts
   DESTINATION
     ${CMAKE_INSTALL_BINDIR}
 )
 
-IF (WIN32)
-  install(
-    FILES
-      Icon.png
-      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.dll
-      ${PROJECT_SOURCE_DIR}/thirdparty/bass24/x64/bass.dll
-    DESTINATION
-      ${CMAKE_INSTALL_BINDIR}
-  )
-ELSEIF (APPLE)
-  install(
-    FILES
-      Icon.png
-      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx/libbass.dylib
-    DESTINATION
-      ${CMAKE_INSTALL_BINDIR}
-  )
-ELSEIF (UNIX AND NOT APPLE)
-  install(
-    FILES
-      Icon.png
-      ${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux/x64/libbass.so
-    DESTINATION
-      ${CMAKE_INSTALL_BINDIR}
-  )
-ENDIF()
+install(
+  FILES
+    ${PROJECT_SOURCE_DIR}/Icon.png
+    $<$<PLATFORM_ID:Darwin>:${PROJECT_SOURCE_DIR}/thirdparty/bass24-osx/libbass.dylib>
+    $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/thirdparty/bass24-linux/x64/libbass.so>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/freetype/freetype-windows-binaries-2.10.2/win64/freetype.dll>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/thirdparty/bass24/x64/bass.dll>
+  DESTINATION
+    ${CMAKE_INSTALL_BINDIR}
+)

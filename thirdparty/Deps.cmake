@@ -14,7 +14,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   nlnx
   GIT_REPOSITORY    https://github.com/filoper/NoLifeNx.git
-  GIT_TAG           1ff52e4a4e298a0f71cea7f4bee1d79c731f0357
+  GIT_TAG           0f485975a5d0b430270855fa59970f6b097ea793
   PREFIX            "${PROJECT_SOURCE_DIR}/thirdparty"
   SOURCE_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/nlnx"
   BINARY_DIR        "${PROJECT_SOURCE_DIR}/thirdparty/nlnx-build"

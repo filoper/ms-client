@@ -78,7 +78,7 @@ jobs:
         ctest -C $BUILD_TYPE -VV
 
     - uses: actions/upload-artifact@v2
-      if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       with:
         name: msclient-win
         path: |

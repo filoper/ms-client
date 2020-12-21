@@ -14,7 +14,7 @@ on:
     
 env:
   BUILD_TYPE: Release
-  INSTALL_LOCATION: ${{github.workspace}}/.local
+  INSTALL_LOCATION: ${{github.workspace}}/installed
   ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
 jobs:

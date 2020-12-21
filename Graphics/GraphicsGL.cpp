@@ -249,7 +249,7 @@ bool GraphicsGL::add_font(const char *name,
     FT_Face face;
 
     if (FT_New_Face(ft_library_, name, 0, &face)) {
-        std::cerr << "Error: Failed to create new fsce." << std::endl;
+        std::cerr << "Error: Failed to create new face." << std::endl;
         return false;
     }
 

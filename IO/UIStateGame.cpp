@@ -42,9 +42,11 @@
 #include "UITypes/UIWorldMap.h"
 
 namespace ms {
-auto fn_enter_cashshop = []<typename... T>(T && ... args) {
+namespace {
+auto fn_enter_cashshop = []<typename... T>(T && ...args) {
     EnterCashShopPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIStateGame::UIStateGame(uint8_t channel_count) :
     stats_(Stage::get().get_player().get_stats()),
@@ -472,7 +474,7 @@ void UIStateGame::show_map(Tooltip::Parent parent,
 }
 
 template<class T, typename... Args>
-void UIStateGame::emplace(Args &&... args) {
+void UIStateGame::emplace(Args &&...args) {
     if (auto iter = pre_add(T::TYPE, T::TOGGLED, T::FOCUSED)) {
         (*iter).second = std::make_unique<T>(std::forward<Args>(args)...);
 

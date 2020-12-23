@@ -28,27 +28,29 @@
 #include "Timer.h"
 
 namespace ms {
-auto fn_take_damage = []<typename... T>(T && ... args) {
+namespace {
+auto fn_take_damage = []<typename... T>(T && ...args) {
     TakeDamagePacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_change_map = []<typename... T>(T && ... args) {
+auto fn_change_map = []<typename... T>(T && ...args) {
     ChangeMapPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_pickup_item = []<typename... T>(T && ... args) {
+auto fn_pickup_item = []<typename... T>(T && ...args) {
     PickupItemPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_player_map_transfer = []<typename... T>(T && ... args) {
+auto fn_player_map_transfer = []<typename... T>(T && ...args) {
     PlayerMapTransferPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_admin_enter_map = []<typename... T>(T && ... args) {
+auto fn_admin_enter_map = []<typename... T>(T && ...args) {
     AdminEnterMapPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_change_channel = []<typename... T>(T && ... args) {
+auto fn_change_channel = []<typename... T>(T && ...args) {
     ChangeChannelPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_char_info_req = []<typename... T>(T && ... args) {
+auto fn_char_info_req = []<typename... T>(T && ...args) {
     CharInfoRequestPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 Stage::Stage() :
     state_(State::INACTIVE),

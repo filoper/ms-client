@@ -26,9 +26,11 @@
 #include "../UI.h"
 
 namespace ms {
-auto fn_spend_sp = []<typename... T>(T && ... args) {
+namespace {
+auto fn_spend_sp = []<typename... T>(T && ...args) {
     SpendSpPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UISkillBook::SkillIcon::SkillIcon(int32_t id) : skill_id_(id) {}
 

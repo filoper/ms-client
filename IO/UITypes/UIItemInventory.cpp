@@ -27,27 +27,29 @@
 #include "UINotice.h"
 
 namespace ms {
-auto fn_gather_items = []<typename... T>(T && ... args) {
+namespace {
+auto fn_gather_items = []<typename... T>(T && ...args) {
     GatherItemsPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_sort_items = []<typename... T>(T && ... args) {
+auto fn_sort_items = []<typename... T>(T && ...args) {
     SortItemsPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_equip_item = []<typename... T>(T && ... args) {
+auto fn_equip_item = []<typename... T>(T && ...args) {
     EquipItemPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_use_item = []<typename... T>(T && ... args) {
+auto fn_use_item = []<typename... T>(T && ...args) {
     UseItemPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_move_item = []<typename... T>(T && ... args) {
+auto fn_move_item = []<typename... T>(T && ...args) {
     MoveItemPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_scroll_equip = []<typename... T>(T && ... args) {
+auto fn_scroll_equip = []<typename... T>(T && ...args) {
     ScrollEquipPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_drop_mesos = []<typename... T>(T && ... args) {
+auto fn_drop_mesos = []<typename... T>(T && ...args) {
     DropMesosPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIItemInventory::UIItemInventory(const Inventory &invent) :
     UIDragElement<PosINV>(),

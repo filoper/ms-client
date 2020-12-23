@@ -36,25 +36,27 @@
 #include <utility>
 
 namespace ms {
-auto fn_select_char_pic = []<typename... T>(T && ... args) {
+namespace {
+auto fn_select_char_pic = []<typename... T>(T && ...args) {
     SelectCharPicPacket(std::forward<T>(args)...).dispatch();
 };
 
-auto fn_select_char = []<typename... T>(T && ... args) {
+auto fn_select_char = []<typename... T>(T && ...args) {
     SelectCharPacket(std::forward<T>(args)...).dispatch();
 };
 
-auto fn_delete_char_pic = []<typename... T>(T && ... args) {
+auto fn_delete_char_pic = []<typename... T>(T && ...args) {
     DeleteCharPicPacket(std::forward<T>(args)...).dispatch();
 };
 
-auto fn_delete_char = []<typename... T>(T && ... args) {
+auto fn_delete_char = []<typename... T>(T && ...args) {
     DeleteCharPacket(std::forward<T>(args)...).dispatch();
 };
 
-auto fn_register_pic = []<typename... T>(T && ... args) {
+auto fn_register_pic = []<typename... T>(T && ...args) {
     RegisterPicPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UICharSelect::UICharSelect(std::vector<CharEntry> c,
                            int8_t char_count,

@@ -21,15 +21,17 @@
 #include "../../Net/Packets/GameplayPackets.h"
 
 namespace ms {
-auto fn_attack = []<typename... T>(T && ... args) {
+namespace {
+auto fn_attack = []<typename... T>(T && ...args) {
     AttackPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_damage_reactor = []<typename... T>(T && ... args) {
+auto fn_damage_reactor = []<typename... T>(T && ...args) {
     DamageReactorPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_use_skill = []<typename... T>(T && ... args) {
+auto fn_use_skill = []<typename... T>(T && ...args) {
     UseSkillPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 Combat::Combat(Player &player,
                MapChars &chars,

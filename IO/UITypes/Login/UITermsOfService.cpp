@@ -24,7 +24,9 @@
 #include "UILoginWait.h"
 
 namespace ms {
+namespace {
 auto fn_tos = []() { TOSPacket().dispatch(); };
+}
 
 UITermsOfService::UITermsOfService(std::function<void()> oh) :
     okhandler_(std::move(oh)),

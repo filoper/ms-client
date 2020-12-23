@@ -21,9 +21,11 @@
 #include "StringHandling.h"
 
 namespace ms {
-auto fn_move_mob = []<typename... T>(T && ... args) {
+namespace {
+auto fn_move_mob = []<typename... T>(T && ...args) {
     MoveMobPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 Mob::Mob(int32_t oi,
          int32_t mid,

@@ -21,9 +21,11 @@
 #include "../Net/Packets/PlayerInteractionPackets.h"
 
 namespace ms {
-auto fn_player_interaction = []<typename... T>(T && ... args) {
+namespace {
+auto fn_player_interaction = []<typename... T>(T && ...args) {
     PlayerInteractionPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UITrade::UITrade() {
     nl::node src = nl::nx::ui["UIWindow2.img"]["TradingRoom"];

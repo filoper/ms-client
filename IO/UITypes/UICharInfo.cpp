@@ -22,10 +22,10 @@
 #include "../Components/MapleButton.h"
 
 namespace ms {
-auto fn_char_info_request = []<typename... T>(T && ... args) {
+namespace {
+auto fn_char_info_request = []<typename... T>(T && ...args) {
     CharInfoRequestPacket(std::forward<T>(args)...).dispatch();
 };
-
 auto fn_trade_request = [](auto cid) {
     PlayerInteractionPacket(PlayerInteractionPacket::mode::CREATE,
                             PlayerInteractionPacket::CreateType::TRADE)
@@ -33,10 +33,10 @@ auto fn_trade_request = [](auto cid) {
     PlayerInteractionPacket(PlayerInteractionPacket::mode::INVITE, cid)
         .dispatch();
 };
-
-auto fn_give_fame = []<typename... T>(T && ... args) {
+auto fn_give_fame = []<typename... T>(T && ...args) {
     GiveFamePacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UICharInfo::UICharInfo(int32_t cid) :
     UIDragElement<PosCHARINFO>(),

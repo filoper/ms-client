@@ -21,9 +21,11 @@
 #include "UINpcTalk.h"
 
 namespace ms {
-auto fn_talk_to_npc = []<typename... T>(T && ... args) {
+namespace {
+auto fn_talk_to_npc = []<typename... T>(T && ...args) {
     TalkToNPCPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 void MapNpcs::draw(Layer::Id layer,
                    double viewx,

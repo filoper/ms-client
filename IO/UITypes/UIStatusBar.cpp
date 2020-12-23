@@ -39,9 +39,11 @@
 #include "UIWorldSelect.h"
 
 namespace ms {
-auto fn_enter_cashshop = []<typename... T>(T && ... args) {
+namespace {
+auto fn_enter_cashshop = []<typename... T>(T && ...args) {
     EnterCashShopPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIStatusBar::UIStatusBar(const CharStats &st, uint8_t channel_count) :
     stats_(st),

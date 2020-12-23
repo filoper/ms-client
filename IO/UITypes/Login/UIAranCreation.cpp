@@ -28,13 +28,15 @@
 #include "UIRaceSelect.h"
 
 namespace ms {
-auto fn_create_char = []<typename... T>(T && ... args) {
+namespace {
+auto fn_create_char = []<typename... T>(T && ...args) {
     CreateCharPacket(std::forward<T>(args)...).dispatch();
 };
 
-auto fn_name_char = []<typename... T>(T && ... args) {
+auto fn_name_char = []<typename... T>(T && ...args) {
     NameCharPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIAranCreation::UIAranCreation() :
     UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {

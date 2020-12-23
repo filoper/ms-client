@@ -21,9 +21,11 @@
 #include "../Components/MapleButton.h"
 
 namespace ms {
-auto fn_general_chat = []<typename... T>(T && ... args) {
+namespace {
+auto fn_general_chat = []<typename... T>(T && ...args) {
     GeneralChatPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIChatBar::UIChatBar() : UIDragElement<PosCHAT>(Point<int16_t>(410, -5)) {
     is_chat_open_ = Setting<Chatopen>::get().load();

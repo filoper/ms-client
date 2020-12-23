@@ -25,12 +25,14 @@
 #include "../UITypes/UIItemInventory.h"
 
 namespace ms {
-auto fn_equip_item = []<typename... T>(T && ... args) {
+namespace {
+auto fn_equip_item = []<typename... T>(T && ...args) {
     EquipItemPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_unequip_item = []<typename... T>(T && ... args) {
+auto fn_unequip_item = []<typename... T>(T && ...args) {
     UnequipItemPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIEquipInventory::UIEquipInventory(const Inventory &invent) :
     UIDragElement<PosEQINV>(),

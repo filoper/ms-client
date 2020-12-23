@@ -28,9 +28,11 @@
 #include "UIRaceSelect.h"
 
 namespace ms {
-auto fn_create_char = []<typename... T>(T && ... args) {
+namespace {
+auto fn_create_char = []<typename... T>(T && ...args) {
     CreateCharPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 auto fn_name_char = [](auto name) { NameCharPacket(name).dispatch(); };
 

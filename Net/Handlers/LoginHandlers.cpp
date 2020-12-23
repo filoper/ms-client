@@ -28,12 +28,14 @@
 #include "Helpers/LoginParser.h"
 
 namespace ms {
-auto fn_server_req = []<typename... T>(T && ... args) {
+namespace {
+auto fn_server_req = []<typename... T>(T && ...args) {
     ServerRequestPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_player_login = []<typename... T>(T && ... args) {
+auto fn_player_login = []<typename... T>(T && ...args) {
     PlayerLoginPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 void LoginResultHandler::handle(InPacket &recv) const {
     auto loginwait = UI::get().get_element<UILoginWait>();

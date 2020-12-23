@@ -30,11 +30,13 @@
 #include <nlnx/nx.hpp>
 
 namespace ms {
+namespace {
 auto fn_login_start = []() { LoginStartPacket().dispatch(); };
 
-auto fn_login = []<typename... T>(T && ... args) {
+auto fn_login = []<typename... T>(T && ...args) {
     LoginPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UILogin::UILogin() : UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {
     fn_login_start();

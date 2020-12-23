@@ -28,9 +28,11 @@
 #include "UINotice.h"
 
 namespace ms {
-auto fn_npc_shop_action = []<typename... T>(T && ... args) {
+namespace {
+auto fn_npc_shop_action = []<typename... T>(T && ...args) {
     NpcShopActionPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIShop::UIShop(const CharLook &in_charlook, const Inventory &in_inventory) :
     UIDragElement<PosSHOP>(),

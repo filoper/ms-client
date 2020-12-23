@@ -28,13 +28,15 @@
 #include "UIRegion.h"
 
 namespace ms {
-auto fn_charlist_req = []<typename... T>(T && ... args) {
+namespace {
+auto fn_charlist_req = []<typename... T>(T && ...args) {
     CharlistRequestPacket(std::forward<T>(args)...).dispatch();
 };
 
-auto fn_server_status_req = []<typename... T>(T && ... args) {
+auto fn_server_status_req = []<typename... T>(T && ...args) {
     ServerStatusRequestPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIWorldSelect::UIWorldSelect() :
     UIElement(Point<int16_t>(0, 0), Point<int16_t>(800, 600)) {

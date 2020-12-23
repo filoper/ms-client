@@ -24,9 +24,11 @@
 #include "GameInfo.h"
 
 namespace ms {
-auto fn_npc_talk_more = []<typename... T>(T && ... args) {
+namespace {
+auto fn_npc_talk_more = []<typename... T>(T && ...args) {
     NpcTalkMorePacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UINpcTalk::UINpcTalk() :
     offset_(0),

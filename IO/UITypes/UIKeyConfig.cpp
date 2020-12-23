@@ -27,9 +27,11 @@
 #include "../UITypes/UINotice.h"
 
 namespace ms {
-auto fn_change_keymap = []<typename... T>(T && ... args) {
+namespace {
+auto fn_change_keymap = []<typename... T>(T && ...args) {
     ChangeKeyMapPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIKeyConfig::UIKeyConfig(const Inventory &in_inventory,
                          const SkillBook &in_skillbook) :

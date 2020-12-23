@@ -23,12 +23,14 @@
 #include "PlayerStates.h"
 
 namespace ms {
-auto fn_move_player = []<typename... T>(T && ... args) {
+namespace {
+auto fn_move_player = []<typename... T>(T && ...args) {
     MovePlayerPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_use_item = []<typename... T>(T && ... args) {
+auto fn_use_item = []<typename... T>(T && ...args) {
     UseItemPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 const PlayerNullState nullstate;
 

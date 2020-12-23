@@ -25,9 +25,11 @@
 #include "UILoginWait.h"
 
 namespace ms {
-auto fn_gender = []<typename... T>(T && ... args) {
+namespace {
+auto fn_gender = []<typename... T>(T && ...args) {
     GenderPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIGender::UIGender(std::function<void()> oh) :
     UIElement(Point<int16_t>(0, 15), Point<int16_t>(0, 0)),

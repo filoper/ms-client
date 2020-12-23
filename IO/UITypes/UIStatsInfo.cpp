@@ -24,9 +24,11 @@
 #include "UINotice.h"
 
 namespace ms {
-auto fn_spend_ap = []<typename... T>(T && ... args) {
+namespace {
+auto fn_spend_ap = []<typename... T>(T && ...args) {
     SpendApPacket(std::forward<T>(args)...).dispatch();
 };
+}  // namespace
 
 UIStatsInfo::UIStatsInfo(const CharStats &st) :
     UIDragElement<PosSTATS>(Point<int16_t>(212, 20)),

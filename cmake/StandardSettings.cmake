@@ -31,7 +31,6 @@ option(${PROJECT_NAME}_ENABLE_DOXYGEN "Enable Doxygen documentation builds of so
 # Miscellaneous options
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Generate compile_commands.json for clang based tools
 
-option(${PROJECT_NAME}_VERBOSE_OUTPUT "Enable verbose output, allowing for a better understanding of each step taken." ON)
 option(${PROJECT_NAME}_GENERATE_EXPORT_HEADER "Create a `project_export.h` file containing all exported symbols." OFF)
 
 # Export all symbols when building a shared library

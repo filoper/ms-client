@@ -34,6 +34,12 @@ jobs:
             version: "9.3.0"
 
           - os: ubuntu-latest
+            compiler: gcc
+            cc: gcc-10
+            cxx: g++-10
+            version: "10"
+
+          - os: ubuntu-latest
             compiler: clang
             cc: clang-10
             cxx: clang++-10
@@ -73,11 +79,11 @@ jobs:
     - name: Install GoogleTest
       run: |
         cd thirdparty
-        git clone https://github.com/google/googletest.git --branch release-1.10.0
-        cd googletest
-        cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
-        cmake --build build --config $BUILD_TYPE
-        cmake --build build --target install --config $BUILD_TYPE
+       # git clone https://github.com/google/googletest.git --branch release-1.10.0
+       # cd googletest
+       # cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION
+       # cmake --build build --config $BUILD_TYPE
+       # cmake --build build --target install --config $BUILD_TYPE
 
     - name: Configure
       run: cmake -Bbuild -GNinja -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_PREFIX_PATH=$INSTALL_LOCATION -DCMAKE_INSTALL_PREFIX=$INSTALL_LOCATION -DENABLE_CODE_COVERAGE=1 -DBOOST_ROOT=$BOOST_ROOT_1_72_0

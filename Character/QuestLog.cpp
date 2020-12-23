@@ -32,11 +32,15 @@ void QuestLog::add_completed(int16_t qid, int64_t time) {
     completed_[qid] = time;
 }
 
-bool QuestLog::is_started(int16_t qid) {
+bool QuestLog::is_started(int16_t qid) const {
     return started_.count(qid) > 0;
 }
 
-int16_t QuestLog::get_last_started() {
+bool QuestLog::is_completed(int16_t qid) const {
+    return completed_.count(qid) > 0;
+}
+
+int16_t QuestLog::get_last_started() const {
     auto qend = started_.end();
     qend--;
 

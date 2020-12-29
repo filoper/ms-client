@@ -9,22 +9,22 @@ if(${PROJECT_NAME}_ENABLE_DOXYGEN)
     find_package(Doxygen REQUIRED dot)
     doxygen_add_docs(
         doxygen
-        ${PROJECT_SOURCE_DIR}/Audio
-        ${PROJECT_SOURCE_DIR}/Character
-        ${PROJECT_SOURCE_DIR}/Data
-        ${PROJECT_SOURCE_DIR}/Gameplay
-        ${PROJECT_SOURCE_DIR}/Graphics
-        ${PROJECT_SOURCE_DIR}/IO
-        ${PROJECT_SOURCE_DIR}/Net
-        ${PROJECT_SOURCE_DIR}/Template
-        ${PROJECT_SOURCE_DIR}/Util
-        ${PROJECT_SOURCE_DIR}/Configuration.h
-        ${PROJECT_SOURCE_DIR}/Constants.h
-        ${PROJECT_SOURCE_DIR}/Error.h
-        ${PROJECT_SOURCE_DIR}/MSClient.h
-        ${PROJECT_SOURCE_DIR}/resource.h
-        ${PROJECT_SOURCE_DIR}/Timer.h
-        ${PROJECT_SOURCE_DIR}/MSClient.cpp
-        ${PROJECT_SOURCE_DIR}/Game.cpp
-        ${PROJECT_SOURCE_DIR}/Game.h)
+        ${PROJECT_SOURCE_DIR}/src/Audio
+        ${PROJECT_SOURCE_DIR}/src/Character
+        ${PROJECT_SOURCE_DIR}/src/Data
+        ${PROJECT_SOURCE_DIR}/src/Gameplay
+        ${PROJECT_SOURCE_DIR}/src/Graphics
+        ${PROJECT_SOURCE_DIR}/src/IO
+        ${PROJECT_SOURCE_DIR}/src/Net
+        ${PROJECT_SOURCE_DIR}/src/Template
+        ${PROJECT_SOURCE_DIR}/src/Util
+        ${PROJECT_SOURCE_DIR}/src/Configuration.h
+        ${PROJECT_SOURCE_DIR}/src/Constants.h
+        ${PROJECT_SOURCE_DIR}/src/Error.h
+        ${PROJECT_SOURCE_DIR}/src/MSClient.h
+        ${PROJECT_SOURCE_DIR}/src/resource.h
+        ${PROJECT_SOURCE_DIR}/src/Timer.h
+        ${PROJECT_SOURCE_DIR}/src/MSClient.cpp
+        ${PROJECT_SOURCE_DIR}/src/Game.cpp
+        ${PROJECT_SOURCE_DIR}/src/Game.h)
 endif()

@@ -11,37 +11,37 @@ if(${PROJECT_NAME}_ENABLE_CLANG_TIDY)
          --fix
          --format-style=file 
          --checks=-*,performance-unnecessary-value-param,modernize-pass-by-value,modernize-use-equals-default,modernize-use-override,readability-redundant-smartptr-get,modernize-concat-nested-namespaces,readability-container-size-empty,readability-else-after-return,google-readability-braces-around-statements,llvm-qualified-auto,performance-for-range-copy
-         ${PROJECT_SOURCE_DIR}/*.h
-         ${PROJECT_SOURCE_DIR}/*.cpp
-         ${PROJECT_SOURCE_DIR}/Character/*.h
-         ${PROJECT_SOURCE_DIR}/Character/*.cpp
-         ${PROJECT_SOURCE_DIR}/Character/*/*.h
-         ${PROJECT_SOURCE_DIR}/Character/*/*.cpp
-         ${PROJECT_SOURCE_DIR}/Data/*.h
-         ${PROJECT_SOURCE_DIR}/Data/*.cpp
-         ${PROJECT_SOURCE_DIR}/Graphics/*.h
-         ${PROJECT_SOURCE_DIR}/Graphics/*.cpp
-         ${PROJECT_SOURCE_DIR}/IO/*.h
-         ${PROJECT_SOURCE_DIR}/IO/*.cpp
-         ${PROJECT_SOURCE_DIR}/IO/*/*.h
-         ${PROJECT_SOURCE_DIR}/IO/*/*.cpp
-         ${PROJECT_SOURCE_DIR}/IO/*/*/*.h
-         ${PROJECT_SOURCE_DIR}/IO/*/*/*.cpp
-         ${PROJECT_SOURCE_DIR}/Net/*.h
-         ${PROJECT_SOURCE_DIR}/Net/*.cpp
-         ${PROJECT_SOURCE_DIR}/Net/*/*.h
-         ${PROJECT_SOURCE_DIR}/Net/*/*.cpp
-         ${PROJECT_SOURCE_DIR}/Net/*/*/*.h
-         ${PROJECT_SOURCE_DIR}/Net/*/*/*.cpp
-         ${PROJECT_SOURCE_DIR}/Util/*.h
-         ${PROJECT_SOURCE_DIR}/Util/*.cpp
-         ${PROJECT_SOURCE_DIR}/Template/*.h
-         ${PROJECT_SOURCE_DIR}/Gameplay/*.h
-         ${PROJECT_SOURCE_DIR}/Gameplay/*.cpp
-         ${PROJECT_SOURCE_DIR}/Gameplay/*/*.h
-         ${PROJECT_SOURCE_DIR}/Gameplay/*/*.cpp
-         ${PROJECT_SOURCE_DIR}/Audio/*.cpp 
-         ${PROJECT_SOURCE_DIR}/Audio/*.h
+         ${PROJECT_SOURCE_DIR}/src/*.h
+         ${PROJECT_SOURCE_DIR}/src/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Character/*.h
+         ${PROJECT_SOURCE_DIR}/src/Character/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Character/*/*.h
+         ${PROJECT_SOURCE_DIR}/src/Character/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Data/*.h
+         ${PROJECT_SOURCE_DIR}/src/Data/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Graphics/*.h
+         ${PROJECT_SOURCE_DIR}/src/Graphics/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/IO/*.h
+         ${PROJECT_SOURCE_DIR}/src/IO/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/IO/*/*.h
+         ${PROJECT_SOURCE_DIR}/src/IO/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/IO/*/*/*.h
+         ${PROJECT_SOURCE_DIR}/src/IO/*/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Net/*.h
+         ${PROJECT_SOURCE_DIR}/src/Net/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Net/*/*.h
+         ${PROJECT_SOURCE_DIR}/src/Net/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Net/*/*/*.h
+         ${PROJECT_SOURCE_DIR}/src/Net/*/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Util/*.h
+         ${PROJECT_SOURCE_DIR}/src/Util/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Template/*.h
+         ${PROJECT_SOURCE_DIR}/src/Gameplay/*.h
+         ${PROJECT_SOURCE_DIR}/src/Gameplay/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Gameplay/*/*.h
+         ${PROJECT_SOURCE_DIR}/src/Gameplay/*/*.cpp
+         ${PROJECT_SOURCE_DIR}/src/Audio/*.cpp 
+         ${PROJECT_SOURCE_DIR}/src/Audio/*.h
     )
   else()
     message(SEND_ERROR "Clang-Tidy requested but executable not found.")

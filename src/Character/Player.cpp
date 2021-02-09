@@ -59,6 +59,7 @@ const PlayerState *get_state(Char::State state) {
 Player::Player(const CharEntry &entry, uint8_t wid, uint8_t channel_id) :
     Char(entry.id, entry.look, entry.stats.name),
     stats_(entry.stats),
+    cid_(entry.id),
     wid_(wid),
     channel_id_(channel_id) {
     attacking_ = false;
@@ -497,5 +498,9 @@ MonsterBook &Player::get_monsterbook() {
 
 std::optional<std::reference_wrapper<const Ladder>> Player::get_ladder() const {
     return ladder_;
+}
+
+int32_t Player::get_cid() const {
+    return cid_;
 }
 }  // namespace ms

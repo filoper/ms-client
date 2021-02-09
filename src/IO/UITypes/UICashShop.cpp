@@ -34,9 +34,6 @@ namespace {
 auto fn_change_map = []<typename... T>(T && ...args) {
     ChangeMapPacket(std::forward<T>(args)...).dispatch();
 };
-auto fn_player_login = []<typename... T>(T && ...args) {
-    PlayerLoginPacket(std::forward<T>(args)...).dispatch();
-};
 }  // namespace
 
 UICashShop::UICashShop() :
@@ -435,26 +432,6 @@ Cursor::State UICashShop::send_cursor(bool clicked, Point<int16_t> cursorpos) {
 
 UIElement::Type UICashShop::get_type() const {
     return TYPE;
-}
-
-void UICashShop::exit_cashshop() {
-    UI &ui = UI::get();
-    ui.change_state(UI::State::GAME);
-
-    Stage &stage = Stage::get();
-    Player &player = stage.get_player();
-
-    fn_player_login(player.get_oid());
-
-    int32_t mapid = player.get_stats().get_mapid();
-    uint8_t portalid = player.get_stats().get_portal();
-
-    stage.load(mapid, portalid);
-    stage.transfer_player();
-
-    ui.enable();
-    Timer::get().start();
-    GraphicsGL::get().unlock();
 }
 
 void UICashShop::update_items() {

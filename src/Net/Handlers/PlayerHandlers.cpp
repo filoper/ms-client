@@ -24,8 +24,16 @@
 #include "../../IO/Window.h"
 #include "Helpers/LoginParser.h"
 #include "IO/UITypes/UIChatBar.h"
+#include "LoginPackets.h"
+#include "Net/PacketProcessor.h"
 
 namespace ms {
+namespace {
+auto fn_player_login = []<typename... T>(T && ...args) {
+    PlayerLoginPacket(std::forward<T>(args)...).dispatch();
+};
+}  // namespace
+
 void transition(int32_t mapid, uint8_t portalid) {
     float fadestep = 0.025f;
 
@@ -36,24 +44,28 @@ void transition(int32_t mapid, uint8_t portalid) {
         GraphicsGL::get().unlock();
     });
 
+    UI::get().disable();
     GraphicsGL::get().lock();
     Stage::get().clear_channel_objects();
 }
 
 void ChangeChannelHandler::handle(InPacket &recv) const {
-    LoginParser::parse_login(recv);
+    auto [ip, port] = LoginParser::parse_login(recv);
 
-    auto cashshop = UI::get().get_element<UICashShop>();
+    Player &player = Stage::get().get_player();
+    int32_t mapid = player.get_stats().get_mapid();
+    uint8_t portalid = player.get_stats().get_portal();
 
-    if (cashshop) {
-        cashshop->get().exit_cashshop();
-    } else {
-        Player &player = Stage::get().get_player();
-        int32_t mapid = player.get_stats().get_mapid();
-        uint8_t portalid = player.get_stats().get_portal();
-
-        transition(mapid, portalid);
+    if (UI::get().get_element<UICashShop>()) {
+        UI::get().change_state(UI::State::GAME);
     }
+
+    // Attempt to connect to the server
+    PacketProcessor::get().reconnect(ip, port);
+
+    fn_player_login(player.get_cid());
+
+    transition(mapid, portalid);
 }
 
 void ChangeStatsHandler::handle(InPacket &recv) const {

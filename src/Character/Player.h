@@ -182,6 +182,8 @@ public:
     // Obtain a reference to the player's monsterbook.
     MonsterBook &get_monsterbook();
 
+    int32_t get_cid() const;
+
 private:
     CharStats stats_;
     Inventory inventory_;
@@ -206,6 +208,7 @@ private:
 
     bool underwater_;
 
+    int32_t cid_;
     uint8_t wid_;
     uint8_t channel_id_;
 };

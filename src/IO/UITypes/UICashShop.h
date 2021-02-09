@@ -42,8 +42,6 @@ public:
 
     UIElement::Type get_type() const override;
 
-    void exit_cashshop();
-
 private:
     void update_items();
 
